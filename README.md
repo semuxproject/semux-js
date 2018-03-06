@@ -6,6 +6,17 @@ This library aims to providing javascript utilities for Semux client-side applic
 
 Visit [issues](https://github.com/semuxproject/semux.js/issues) page to see planned features or propose a feature request.
 
+# Install
+
+```
+npm install --save https://github.com/semuxproject/semux.js.git
+```
+
+# Usage
+
+- [Hash](https://github.com/semuxproject/semux.js/blob/master/lib/Hash.spec.js)
+- [Key & Signature](https://github.com/semuxproject/semux.js/blob/master/lib/Key.spec.js)
+
 # Development
 
 ## Install Modules
