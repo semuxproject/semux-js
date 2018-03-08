@@ -1,6 +1,6 @@
 {
   "name": "semux",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Semux Javascript Library",
   "main": "index.js",
   "engines": {
