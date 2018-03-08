@@ -7,5 +7,5 @@ module.exports = {
   Transaction: require('./lib/Transaction'),
   TransactionType: require('./lib/TransactionType'),
   SimpleDecoder: require('./lib/SimpleDecoder'),
-  SimpleEncoder: require('./lib/SimpleEncoder'),
+  SimpleEncoder: require('./lib/SimpleEncoder')
 };
