@@ -1,6 +1,7 @@
-[![Build Status](https://travis-ci.org/semuxproject/semux.js.svg?branch=master)](https://travis-ci.org/semuxproject/semux.js)
-
 # semux.js (Under Development)
+
+[![Build Status](https://travis-ci.org/semuxproject/semux.js.svg?branch=master)](https://travis-ci.org/semuxproject/semux.js)
+[![Coverage Status](https://coveralls.io/repos/github/semuxproject/semux.js/badge.svg?branch=master)](https://coveralls.io/github/semuxproject/semux.js?branch=master)
 
 This library aims to providing javascript utilities for Semux client-side applications, such as web wallet.
 
