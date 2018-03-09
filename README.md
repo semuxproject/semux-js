@@ -1,6 +1,7 @@
-[![Build Status](https://travis-ci.org/semuxproject/semux.js.svg?branch=master)](https://travis-ci.org/semuxproject/semux.js)
-
 # semux.js (Under Development)
+
+[![Build Status](https://travis-ci.org/semuxproject/semux.js.svg?branch=master)](https://travis-ci.org/semuxproject/semux.js)
+[![Coverage Status](https://coveralls.io/repos/github/semuxproject/semux.js/badge.svg?branch=master)](https://coveralls.io/github/semuxproject/semux.js?branch=master)
 
 This library aims to providing javascript utilities for Semux client-side applications, such as web wallet.
 
@@ -14,8 +15,10 @@ npm install --save https://github.com/semuxproject/semux.js.git
 
 # Usage
 
-- [Hash](https://github.com/semuxproject/semux.js/blob/master/lib/Hash.spec.js)
-- [Key & Signature](https://github.com/semuxproject/semux.js/blob/master/lib/Key.spec.js)
+- [Hash](lib/Hash.spec.js)
+- [Key & Signature](lib/Key.spec.js)
+- [Transaction Signing, Encoding or Decoding](lib/Transaction.spec.js)
+- [Byte Encoder](lib/SimpleEncoder.spec.js) / [Byte Decoder](lib/SimpleDecoder.spec.js)
 
 # Development
 
