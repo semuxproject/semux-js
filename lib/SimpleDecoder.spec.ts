@@ -1,7 +1,7 @@
-const SimpleDecoder = require('./SimpleDecoder');
-const {Buffer} = require('buffer');
-const Assert = require('assert');
-const Long = require('long');
+import SimpleDecoder from "./SimpleDecoder";
+import { Buffer } from "buffer";
+import Assert from "assert";
+import Long from "long";
 
 describe("SimpleDecoder", () => {
 
@@ -30,8 +30,8 @@ describe("SimpleDecoder", () => {
     const BYTES_SIZES = Buffer.from("007F8100C000FF7F818000FFFF7F81808000C0808000FFFFFF7F", "hex");
 
     const decoder = new SimpleDecoder(BYTES_SIZES, 0, BYTES_SIZES.length);
-    for (let size of SIZES) {
-      Assert.deepEqual(decoder.readSize(), size);
+    for (let i : number = 0;i < SIZES.length;i++) {
+      Assert.deepEqual(decoder.readSize(), SIZES[i]);
     }
     Assert.strictEqual(decoder.getReadIndex(), BYTES_SIZES.length);
   });

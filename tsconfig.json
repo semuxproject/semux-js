@@ -1,0 +1,37 @@
+{
+  "files": [
+    "index.ts"
+  ],
+  "include": [
+    "lib/**/*"
+  ],
+  "exclude": [
+    "dist",
+    "node_modules",
+    "lib/**/*.spec.ts"
+  ],
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "declaration": true,
+    "outDir": "./dist",
+    "strict": true,
+    "alwaysStrict": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictPropertyInitialization": true,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": false,
+    "esModuleInterop": true,
+    "typeRoots": ["node_modules/@types", "types"],
+    "lib": ["es5", "es6"],
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true
+  }
+}

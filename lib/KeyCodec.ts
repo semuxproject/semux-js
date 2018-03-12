@@ -10,15 +10,12 @@ const IDLEN_BYTE = 6;
  * Private key format: PKCS#8
  * Public key format: X.509
  */
-class KeyCodec {
+export default class KeyCodec {
+
   /**
    * Encode a private key into PKCS8 format.
-   *
-   * @param {Uint8Array} privateKey
-   * @param {Uint8Array} seed
-   * @returns {Uint8Array}
    */
-  static encodePrivateKey (privateKey, seed) {
+  public static encodePrivateKey(seed: Uint8Array): Uint8Array {
     const totlen = 16 + seed.length;
     const rv = new Uint8Array(totlen);
     let idx = 0;
@@ -56,11 +53,8 @@ class KeyCodec {
 
   /**
    * Decode a PKCS8 encoded private key.
-   *
-   * @param {Uint8Array} privateKey
-   * @returns {Uint8Array}
    */
-  static decodePrivateKey (d) {
+  public static decodePrivateKey(d: Uint8Array): Uint8Array {
     //
     // Setup and OID check
     //
@@ -77,14 +71,14 @@ class KeyCodec {
         idlen = 7;
       }
     } else {
-      throw new Error('unsupported key spec');
+      throw new Error("unsupported key spec");
     }
 
     //
     // Pre-decoding check
     //
     if (d.length !== totlen) {
-      throw new Error('invalid key spec length');
+      throw new Error("invalid key spec length");
     }
 
     //
@@ -102,7 +96,7 @@ class KeyCodec {
       d[idx++] !== 3 ||
       d[idx++] !== (1 * 40) + 3 ||
       d[idx++] !== 101) {
-      throw new Error('unsupported key spec');
+      throw new Error("unsupported key spec");
     }
     idx++; // OID, checked above
     // parameters only with old OID
@@ -110,7 +104,7 @@ class KeyCodec {
       if (d[idx++] !== 0x0a ||
         d[idx++] !== 1 ||
         d[idx++] !== 1) {
-        throw new Error('unsupported key spec');
+        throw new Error("unsupported key spec");
       }
     } else {
       // Handle parameter value of NULL
@@ -125,18 +119,18 @@ class KeyCodec {
       if (idlen === 7) {
         if (d[idx++] !== 0x05 ||
           d[idx++] !== 0) {
-          throw new Error('unsupported key spec');
+          throw new Error("unsupported key spec");
         }
       }
       // PrivateKey wrapping the CurvePrivateKey
       if (d[idx++] !== 0x04 ||
         d[idx++] !== 34) {
-        throw new Error('unsupported key spec');
+        throw new Error("unsupported key spec");
       }
     }
     if (d[idx++] !== 0x04 ||
       d[idx++] !== 32) {
-      throw new Error('unsupported key spec');
+      throw new Error("unsupported key spec");
     }
     const rv = new Uint8Array(32);
     rv.set(d.slice(idx, idx + 32), 0);
@@ -145,11 +139,8 @@ class KeyCodec {
 
   /**
    * Encode a public key into X.059 format.
-   *
-   * @param {Uint8Array} publicKey
-   * @returns {Uint8Array}
    */
-  static encodePublicKey (publicKey) {
+  public static encodePublicKey(publicKey: Uint8Array): Uint8Array {
     const totlen = 12 + publicKey.length;
     const rv = new Uint8Array(totlen);
     let idx = 0;

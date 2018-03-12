@@ -1,7 +1,6 @@
-const Assert = require('assert');
-const SimpleEncoder = require('./SimpleEncoder');
-const _ = require('lodash');
-const Long = require('long');
+import Assert from "assert";
+import SimpleEncoder from "./SimpleEncoder";
+import Long from "long";
 
 describe("SimpleEncoder", () => {
 
@@ -15,7 +14,7 @@ describe("SimpleEncoder", () => {
 
   it("encodes a byte", () => {
     const encoder = new SimpleEncoder();
-    for (let i = -128;i <= 127;i++) {
+    for (let i = -128; i <= 127; i++) {
       encoder.writeByte(i);
     }
     Assert.deepEqual(encoder.toBytes(), Buffer.from("808182838485868788898a8b8c8d8e8f909192939495969798999a9b9c9d9e9fa0a1a2a3a4a5a6a7a8a9aaabacadaeafb0b1b2b3b4b5b6b7b8b9babbbcbdbebfc0c1c2c3c4c5c6c7c8c9cacbcccdcecfd0d1d2d3d4d5d6d7d8d9dadbdcdddedfe0e1e2e3e4e5e6e7e8e9eaebecedeeeff0f1f2f3f4f5f6f7f8f9fafbfcfdfeff000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f404142434445464748494a4b4c4d4e4f505152535455565758595a5b5c5d5e5f606162636465666768696a6b6c6d6e6f707172737475767778797a7b7c7d7e7f", "hex"));
@@ -24,13 +23,13 @@ describe("SimpleEncoder", () => {
   it("encodes a 16-bit integer", () => {
     const tests = {
       "0000": 0,
+      "258e": 9614,
       "7fff": 32767,
       "8000": -32768,
-      "258e": 9614,
-      "a66d": -22931
+      "a66d": -22931,
     };
 
-    for (let bytes in tests) {
+    for (const bytes in tests) {
       const encoder = new SimpleEncoder();
       encoder.writeShort(tests[bytes]);
       Assert.deepEqual(encoder.toBytes(), Buffer.from(bytes, "hex"));
@@ -44,10 +43,10 @@ describe("SimpleEncoder", () => {
       "7fffffff": 2147483647,
       "80000000": -2147483648,
       "4c29385f": 1277769823,
-      "b15c848c": -1319336820
+      "b15c848c": -1319336820,
     };
 
-    for (let bytes in tests) {
+    for (const bytes in tests) {
       const encoder = new SimpleEncoder();
       encoder.writeInt(tests[bytes]);
       Assert.deepEqual(encoder.toBytes(), Buffer.from(bytes, "hex"));
@@ -61,10 +60,10 @@ describe("SimpleEncoder", () => {
       "7fffffffffffffff": Long.fromString("9223372036854775807", false, 10),
       "8000000000000000": Long.fromString("-9223372036854775808", false, 10),
       "161b065167181c00": Long.fromString("1592873839897353216", false, 10),
-      "b5ff50cb88001000": Long.fromString("-5332454598693089280", false, 10)
+      "b5ff50cb88001000": Long.fromString("-5332454598693089280", false, 10),
     };
 
-    for (let hex in tests) {
+    for (const hex in tests) {
       const encoder = new SimpleEncoder();
       encoder.writeLong(tests[hex]);
       Assert.deepEqual(encoder.toBytes(), Buffer.from(hex, "hex"));
@@ -78,7 +77,7 @@ describe("SimpleEncoder", () => {
       "10999bd0a27aea7e6db940ba126d8ccf46": [-103, -101, -48, -94, 122, -22, 126, 109, -71, 64, -70, 18, 109, -116, -49, 70],
     };
 
-    for (let hex in tests) {
+    for (const hex in tests) {
       const encoder = new SimpleEncoder();
       encoder.writeBytes(new Uint8Array(tests[hex]));
       Assert.deepEqual(encoder.toBytes(), Buffer.from(hex, "hex"));
@@ -89,7 +88,7 @@ describe("SimpleEncoder", () => {
     const TEST_STRING = "😀😁😂😃😄😅😆😉😢";
     const TEST_STRING_HEX = "24f09f9880f09f9881f09f9882f09f9883f09f9884f09f9885f09f9886f09f9889f09f98a2";
 
-    const encoder = new SimpleEncoder()
+    const encoder = new SimpleEncoder();
     encoder.writeString(TEST_STRING);
     Assert.deepEqual(encoder.toBytes(), Buffer.from(TEST_STRING_HEX, "hex"));
   });
@@ -121,8 +120,8 @@ describe("SimpleEncoder", () => {
     const SIZES_ENCODED = Buffer.from("007F8100C000FF7F818000FFFF7F81808000C0808000FFFFFF7F", "hex");
 
     const encoder = new SimpleEncoder();
-    for (let size of SIZES) {
-      encoder.writeSize(size);
+    for (let i : number = 0;i < SIZES.length;i++) {
+      encoder.writeSize(SIZES[i]);
     }
 
     Assert.deepEqual(encoder.toBytes(), SIZES_ENCODED);

@@ -1,63 +1,44 @@
-const _ = require('lodash');
-const {Buffer} = require('buffer');
-const Long = require('long');
-const {int16, int32} = require('./Cast');
+import { Buffer } from "buffer";
+import Long from "long";
+import Cast from "./Cast";
 
 /**
  * Semux byte encoder.
  * Ported from: https://github.com/semuxproject/semux/blob/master/src/main/java/org/semux/util/SimpleEncoder.java
  */
-class SimpleEncoder {
-  constructor () {
+export default class SimpleEncoder {
+
+  /**
+   * Output buffer.
+   */
+  private out: Uint8Array;
+
+  public constructor() {
     this.out = new Uint8Array(0);
   }
 
-  /**
-   * @param {boolean} b
-   */
-  writeBoolean (b) {
+  public writeBoolean(b: boolean): void {
     this.writeByte(b ? 1 : 0);
   }
 
-  /**
-   * @param {number} b
-   */
-  writeByte (b) {
-    if (!_.isNumber(b)) {
-      throw new Error('b must be a number');
-    }
-
+  public writeByte(b: number): void {
     const newOut = new Uint8Array(this.out.length + 1);
     newOut.set(this.out, 0);
     newOut[newOut.length - 1] = b;
     this.out = newOut;
   }
 
-  /**
-   * @param {number} i
-   */
-  writeShort (i) {
-    if (!_.isNumber(i)) {
-      throw new Error('i must be a number');
-    }
-
+  public writeShort(i: number): void {
     // cast i to int16
-    const i16 = int16(i);
+    const i16 = Cast.int16(i);
 
     this.writeByte(0xFF & (i16 >>> 8));
     this.writeByte(0xFF & (i16 >>> 0));
   }
 
-  /**
-   * @param {number} i
-   */
-  writeInt (i) {
-    if (!_.isNumber(i)) {
-      throw new Error('i must be a number');
-    }
-
+  public writeInt(i: number): void {
     // cast i to int32
-    const i32 = int32(i);
+    const i32 = Cast.int32(i);
 
     this.writeByte(0xFF & (i32 >>> 24));
     this.writeByte(0xFF & (i32 >>> 16));
@@ -65,26 +46,12 @@ class SimpleEncoder {
     this.writeByte(0xFF & (i32 >>> 0));
   }
 
-  /**
-   * @param {Long} l
-   */
-  writeLong (l) {
-    if (!Long.isLong(l)) {
-      throw new Error('l must be a Long object');
-    }
-
+  public writeLong(l: Long): void {
     this.writeInt(l.shr(32).toInt());
     this.writeInt(l.toInt());
   }
 
-  /**
-   * @param {Uint8Array} bytes
-   */
-  writeBytes (bytes) {
-    if (!_.isObject(bytes) || !(bytes instanceof Uint8Array)) {
-      throw new Error('bytes must be an Uint8Array object.');
-    }
-
+  public writeBytes(bytes: Uint8Array): void {
     // write size
     this.writeSize(bytes.length);
 
@@ -95,31 +62,19 @@ class SimpleEncoder {
     this.out = newOut;
   }
 
-  /**
-   * @param {string} s
-   */
-  writeString (s) {
-    this.writeBytes(Buffer.from(s, 'utf-8'));
+  public writeString(s: string): void {
+    this.writeBytes(Buffer.from(s, "utf-8"));
   }
 
-  /**
-   * @returns {Uint8Array}
-   */
-  toBytes () {
+  public toBytes(): Uint8Array {
     return new Uint8Array(this.out);
   }
 
-  /**
-   * @returns {number}
-   */
-  getWriteIndex () {
+  public getWriteIndex(): number {
     return this.out.length;
   }
 
-  /**
-   * @param {number} size
-   */
-  writeSize (size) {
+  public writeSize(size: number): void {
     if (size < 0) {
       throw new Error("Size can't be negative: " + size);
     } else if (size > 0x0FFFFFFF) {
@@ -142,5 +97,3 @@ class SimpleEncoder {
     }
   }
 }
-
-module.exports = SimpleEncoder;
