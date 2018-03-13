@@ -14,7 +14,7 @@ module.exports = function(config) {
       "karma-sourcemap-loader"
     ],
 
-    browsers: ['Chrome', "Firefox", "Electron"],
+    browsers: ["Chrome"],
 
     client: {
       useIframe: false,
@@ -49,5 +49,7 @@ module.exports = function(config) {
     singleRun: true,
 
     concurrency: 8,
-})
+
+    browserNoActivityTimeout: 100000
+  })
 }
