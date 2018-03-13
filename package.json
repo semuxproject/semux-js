@@ -15,7 +15,7 @@
     "prebuild": "cross-env-shell \"npm run format:check && rimraf dist coverage .nyc_output\"",
     "build": "cross-env-shell \"rollup -c rollup.config.js\"",
     "build:docs": "cross-env-shell \"rimraf docs && typedoc --name semux.js --out docs --target es5 --theme default --mode file --excludeNotExported --exclude node_modules --ignoreCompilerErrors lib\"",
-    "build:test": "cross-env-shell \"npm run prebuild && rollup -c rollup.test.config.js\"",
+    "build:test": "cross-env-shell \"rollup -c rollup.test.config.js\"",
     "test": "cross-env-shell \"npm run build:test && mocha --opts mocha.opts test/index.js\"",
     "test:browser": "cross-env-shell \"karma start --single-run\"",
     "test:coverage": "cross-env-shell \"npm run build:test && nyc mocha --opts mocha.opts test/index.js\"",

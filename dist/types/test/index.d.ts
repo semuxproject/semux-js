@@ -1,2 +1,2 @@
-import "core-js/shim";
+import "../index";
 import "../lib/*.spec.ts";
