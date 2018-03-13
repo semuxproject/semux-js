@@ -1,7 +1,7 @@
 {
   "name": "semux",
   "version": "1.0.1",
-  "description": "Semux Javascript Library",
+  "description": "Semux Javascript SDK Library",
   "main": "dist/semux.umd.js",
   "module": "dist/semux.es6.js",
   "typings": "dist/types/index.d.ts",
@@ -14,18 +14,20 @@
   "scripts": {
     "prebuild": "cross-env-shell \"npm run format:check && rimraf dist coverage .nyc_output\"",
     "build": "cross-env-shell \"rollup -c rollup.config.js\"",
-    "build:docs": "cross-env-shell \"rimraf docs && typedoc --name semux.js --out docs --target es5 --theme default --mode file --excludeNotExported --exclude node_modules --ignoreCompilerErrors lib\"",
+    "build:docs": "cross-env-shell \"rimraf docs && typedoc index.ts\"",
     "build:test": "cross-env-shell \"rollup -c rollup.test.config.js\"",
+    "build:swagger": "cross-env-shell \"swagger-codegen-cli generate -i semux/target/swagger-ui/swagger.json -c swagger/swagger-codegen.json -l typescript-fetch --additional-properties=classname=SemuxApi -t swagger/templates -o lib/api\"",
     "test": "cross-env-shell \"npm run build:test && mocha --opts mocha.opts test/index.js\"",
     "test:browser": "cross-env-shell \"karma start --single-run\"",
     "test:browserstack": "cross-env-shell \"karma start karma.browserstack.conf.js --single-run\"",
     "test:coverage": "cross-env-shell \"npm run build:test && nyc mocha --opts mocha.opts test/index.js\"",
     "format": "cross-env-shell \"tslint --project . --fix\"",
-    "format:check": "cross-env-shell \"tslint --project .\""
+    "format:check": "cross-env-shell \"tslint --project .\"",
+    "release": "npm run format:check && npm run build:swagger && npm run build && npm run build:docs"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/semuxproject/semux.js.git"
+    "url": "git+https://github.com/semuxproject/semux-js-sdk.git"
   },
   "keywords": [
     "semux"
@@ -33,18 +35,21 @@
   "author": "dev@semux.org",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/semuxproject/semux.js/issues"
+    "url": "https://github.com/semuxproject/semux-js-sdk/issues"
   },
-  "homepage": "https://github.com/semuxproject/semux.js#readme",
+  "homepage": "https://github.com/semuxproject/semux-js-sdk#readme",
   "dependencies": {
     "blakejs": "^1.1.0",
+    "btoa": "^1.1.2",
     "buffer": "^5.1.0",
     "core-js": "^2.5.3",
     "detect-node": "^2.0.3",
     "lodash": "^4.17.5",
     "long": "^4.0.0",
     "ripemd160": "^2.0.1",
-    "tweetnacl": "^1.0.0"
+    "tweetnacl": "^1.0.0",
+    "unfetch": "^3.0.0",
+    "xmlhttprequest": "^1.8.0"
   },
   "devDependencies": {
     "@types/chai": "^4.1.2",
@@ -83,6 +88,7 @@
     "karma-sourcemap-loader": "^0.3.7",
     "karma-transform-path-preprocessor": "0.0.3",
     "karma-typescript": "^3.0.12",
+    "maven": "^4.4.0",
     "mocha": "^5.0.1",
     "mocha-lcov-reporter": "^1.3.0",
     "mocha-typescript": "^1.1.12",
@@ -95,12 +101,13 @@
     "rollup-plugin-istanbul": "^2.0.1",
     "rollup-plugin-json": "^2.3.0",
     "rollup-plugin-node-builtins": "^2.1.2",
-    "rollup-plugin-node-globals": "^1.1.0",
+    "rollup-plugin-node-globals": "^1.2.0",
     "rollup-plugin-node-resolve": "^3.2.0",
     "rollup-plugin-sourcemaps": "^0.4.2",
     "rollup-plugin-typescript2": "^0.12.0",
     "source-map-support": "^0.5.3",
     "static-module": "^2.2.2",
+    "swagger-nodegen-cli": "^2.3.1",
     "ts-node": "^5.0.1",
     "ts-runtime": "^0.1.35",
     "tsconfig-paths": "^3.1.1",
@@ -108,6 +115,7 @@
     "tslint-config-prettier": "^1.9.0",
     "tslint-eslint-rules": "^5.1.0",
     "typedoc": "^0.11.1",
+    "typedoc-plugin-internal-external": "^1.0.10",
     "typescript": "^2.7.2",
     "typescript-eslint-parser": "^14.0.0"
   },

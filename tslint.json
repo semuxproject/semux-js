@@ -6,6 +6,9 @@
   "lintOptions": {
     "typeCheck": true
   },
+  "linterOptions": {
+    "exclude": ["lib/api/*"]
+  },
   "rules": {
     "no-bitwise": false,
     "no-var-requires": false,

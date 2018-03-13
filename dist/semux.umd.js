@@ -2903,7 +2903,7 @@ var _task = {
 var macrotask = _task.set;
 var Observer = _global.MutationObserver || _global.WebKitMutationObserver;
 var process$1 = _global.process;
-var Promise = _global.Promise;
+var Promise$1 = _global.Promise;
 var isNode = _cof(process$1) == 'process';
 
 var _microtask = function () {
@@ -2940,8 +2940,8 @@ var _microtask = function () {
       node.data = toggle = !toggle;
     };
   // environments with maybe non-completely correct, but existent Promise
-  } else if (Promise && Promise.resolve) {
-    var promise = Promise.resolve();
+  } else if (Promise$1 && Promise$1.resolve) {
+    var promise = Promise$1.resolve();
     notify = function () {
       promise.then(flush);
     };
@@ -5871,1368 +5871,320 @@ for (var collections = _objectKeys(DOMIterables), i$2 = 0; i$2 < collections.len
   }
 }
 
+/*! *****************************************************************************
+Copyright (c) Microsoft Corporation. All rights reserved.
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at http://www.apache.org/licenses/LICENSE-2.0
+
+THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
+WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
+MERCHANTABLITY OR NON-INFRINGEMENT.
+
+See the Apache Version 2.0 License for specific language governing permissions
+and limitations under the License.
+***************************************************************************** */
+/* global Reflect, Promise */
+
+var extendStatics = Object.setPrototypeOf ||
+    ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+    function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+
+function __extends(d, b) {
+    extendStatics(d, b);
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+}
+
+/*! https://mths.be/punycode v1.4.1 by @mathias */
+
+
+/** Highest positive signed 32-bit float value */
+var maxInt = 2147483647; // aka. 0x7FFFFFFF or 2^31-1
+
+/** Bootstring parameters */
+var base = 36;
+var tMin = 1;
+var tMax = 26;
+var skew = 38;
+var damp = 700;
+var initialBias = 72;
+var initialN = 128; // 0x80
+var delimiter = '-'; // '\x2D'
+var regexNonASCII = /[^\x20-\x7E]/; // unprintable ASCII chars + non-ASCII chars
+var regexSeparators = /[\x2E\u3002\uFF0E\uFF61]/g; // RFC 3490 separators
+
+/** Error messages */
+var errors = {
+  'overflow': 'Overflow: input needs wider integers to process',
+  'not-basic': 'Illegal input >= 0x80 (not a basic code point)',
+  'invalid-input': 'Invalid input'
+};
+
+/** Convenience shortcuts */
+var baseMinusTMin = base - tMin;
+var floor$3 = Math.floor;
+var stringFromCharCode = String.fromCharCode;
+
+/*--------------------------------------------------------------------------*/
+
 /**
- * Utility class of byte operations on Uint8Array.
+ * A generic error utility function.
+ * @private
+ * @param {String} type The error type.
+ * @returns {Error} Throws a `RangeError` with the applicable error message.
  */
-var Bytes = /** @class */ (function () {
-    function Bytes() {
-    }
-    /**
-     * Merge 2 Uint8Array.
-     */
-    Bytes.merge = function (b1, b2) {
-        var res = new Uint8Array(b1.length + b2.length);
-        res.set(b1);
-        res.set(b2, b1.length);
-        return res;
-    };
-    /**
-     * Check whether 2 Uint8Array are equal.
-     */
-    Bytes.equal = function (b1, b2) {
-        if (b1.length !== b2.length) {
-            return false;
-        }
-        for (var i = 0; i < b1.length; i++) {
-            if (b1[i] !== b2[i]) {
-                return false;
-            }
-        }
-        return true;
-    };
-    return Bytes;
-}());
-
-var long_1 = Long;
-
-/**
- * wasm optimizations, to do native i64 multiplication and divide
- */
-var wasm = null;
-
-try {
-  wasm = new WebAssembly.Instance(new WebAssembly.Module(new Uint8Array([
-    0, 97, 115, 109, 1, 0, 0, 0, 1, 13, 2, 96, 0, 1, 127, 96, 4, 127, 127, 127, 127, 1, 127, 3, 7, 6, 0, 1, 1, 1, 1, 1, 6, 6, 1, 127, 1, 65, 0, 11, 7, 50, 6, 3, 109, 117, 108, 0, 1, 5, 100, 105, 118, 95, 115, 0, 2, 5, 100, 105, 118, 95, 117, 0, 3, 5, 114, 101, 109, 95, 115, 0, 4, 5, 114, 101, 109, 95, 117, 0, 5, 8, 103, 101, 116, 95, 104, 105, 103, 104, 0, 0, 10, 191, 1, 6, 4, 0, 35, 0, 11, 36, 1, 1, 126, 32, 0, 173, 32, 1, 173, 66, 32, 134, 132, 32, 2, 173, 32, 3, 173, 66, 32, 134, 132, 126, 34, 4, 66, 32, 135, 167, 36, 0, 32, 4, 167, 11, 36, 1, 1, 126, 32, 0, 173, 32, 1, 173, 66, 32, 134, 132, 32, 2, 173, 32, 3, 173, 66, 32, 134, 132, 127, 34, 4, 66, 32, 135, 167, 36, 0, 32, 4, 167, 11, 36, 1, 1, 126, 32, 0, 173, 32, 1, 173, 66, 32, 134, 132, 32, 2, 173, 32, 3, 173, 66, 32, 134, 132, 128, 34, 4, 66, 32, 135, 167, 36, 0, 32, 4, 167, 11, 36, 1, 1, 126, 32, 0, 173, 32, 1, 173, 66, 32, 134, 132, 32, 2, 173, 32, 3, 173, 66, 32, 134, 132, 129, 34, 4, 66, 32, 135, 167, 36, 0, 32, 4, 167, 11, 36, 1, 1, 126, 32, 0, 173, 32, 1, 173, 66, 32, 134, 132, 32, 2, 173, 32, 3, 173, 66, 32, 134, 132, 130, 34, 4, 66, 32, 135, 167, 36, 0, 32, 4, 167, 11
-  ])), {}).exports;
-} catch (e) {
-  // no wasm support :(
+function error(type) {
+  throw new RangeError(errors[type]);
 }
 
 /**
- * Constructs a 64 bit two's-complement integer, given its low and high 32 bit values as *signed* integers.
- *  See the from* functions below for more convenient ways of constructing Longs.
- * @exports Long
- * @class A Long class for representing a 64 bit two's-complement integer value.
- * @param {number} low The low (signed) 32 bits of the long
- * @param {number} high The high (signed) 32 bits of the long
- * @param {boolean=} unsigned Whether unsigned or not, defaults to signed
- * @constructor
+ * A generic `Array#map` utility function.
+ * @private
+ * @param {Array} array The array to iterate over.
+ * @param {Function} callback The function that gets called for every array
+ * item.
+ * @returns {Array} A new array of values returned by the callback function.
  */
-function Long(low, high, unsigned) {
-
-    /**
-     * The low 32 bits as a signed value.
-     * @type {number}
-     */
-    this.low = low | 0;
-
-    /**
-     * The high 32 bits as a signed value.
-     * @type {number}
-     */
-    this.high = high | 0;
-
-    /**
-     * Whether unsigned or not.
-     * @type {boolean}
-     */
-    this.unsigned = !!unsigned;
-}
-
-Object.defineProperty(Long.prototype, "__isLong__", { value: true });
-
-/**
- * @function
- * @param {*} obj Object
- * @returns {boolean}
- * @inner
- */
-function isLong(obj) {
-    return (obj && obj["__isLong__"]) === true;
+function map(array, fn) {
+  var length = array.length;
+  var result = [];
+  while (length--) {
+    result[length] = fn(array[length]);
+  }
+  return result;
 }
 
 /**
- * Tests if the specified object is a Long.
- * @function
- * @param {*} obj Object
- * @returns {boolean}
+ * A simple `Array#map`-like wrapper to work with domain name strings or email
+ * addresses.
+ * @private
+ * @param {String} domain The domain name or email address.
+ * @param {Function} callback The function that gets called for every
+ * character.
+ * @returns {Array} A new string of characters returned by the callback
+ * function.
  */
-Long.isLong = isLong;
+function mapDomain(string, fn) {
+  var parts = string.split('@');
+  var result = '';
+  if (parts.length > 1) {
+    // In email addresses, only the domain name should be punycoded. Leave
+    // the local part (i.e. everything up to `@`) intact.
+    result = parts[0] + '@';
+    string = parts[1];
+  }
+  // Avoid `split(regex)` for IE8 compatibility. See #17.
+  string = string.replace(regexSeparators, '\x2E');
+  var labels = string.split('.');
+  var encoded = map(labels, fn).join('.');
+  return result + encoded;
+}
 
 /**
- * A cache of the Long representations of small integer values.
- * @type {!Object}
- * @inner
+ * Creates an array containing the numeric code points of each Unicode
+ * character in the string. While JavaScript uses UCS-2 internally,
+ * this function will convert a pair of surrogate halves (each of which
+ * UCS-2 exposes as separate characters) into a single code point,
+ * matching UTF-16.
+ * @see `punycode.ucs2.encode`
+ * @see <https://mathiasbynens.be/notes/javascript-encoding>
+ * @memberOf punycode.ucs2
+ * @name decode
+ * @param {String} string The Unicode input string (UCS-2).
+ * @returns {Array} The new array of code points.
  */
-var INT_CACHE = {};
-
-/**
- * A cache of the Long representations of small unsigned integer values.
- * @type {!Object}
- * @inner
- */
-var UINT_CACHE = {};
-
-/**
- * @param {number} value
- * @param {boolean=} unsigned
- * @returns {!Long}
- * @inner
- */
-function fromInt(value, unsigned) {
-    var obj, cachedObj, cache;
-    if (unsigned) {
-        value >>>= 0;
-        if (cache = (0 <= value && value < 256)) {
-            cachedObj = UINT_CACHE[value];
-            if (cachedObj)
-                return cachedObj;
-        }
-        obj = fromBits(value, (value | 0) < 0 ? -1 : 0, true);
-        if (cache)
-            UINT_CACHE[value] = obj;
-        return obj;
+function ucs2decode(string) {
+  var output = [],
+    counter = 0,
+    length = string.length,
+    value,
+    extra;
+  while (counter < length) {
+    value = string.charCodeAt(counter++);
+    if (value >= 0xD800 && value <= 0xDBFF && counter < length) {
+      // high surrogate, and there is a next character
+      extra = string.charCodeAt(counter++);
+      if ((extra & 0xFC00) == 0xDC00) { // low surrogate
+        output.push(((value & 0x3FF) << 10) + (extra & 0x3FF) + 0x10000);
+      } else {
+        // unmatched surrogate; only append this code unit, in case the next
+        // code unit is the high surrogate of a surrogate pair
+        output.push(value);
+        counter--;
+      }
     } else {
-        value |= 0;
-        if (cache = (-128 <= value && value < 128)) {
-            cachedObj = INT_CACHE[value];
-            if (cachedObj)
-                return cachedObj;
-        }
-        obj = fromBits(value, value < 0 ? -1 : 0, false);
-        if (cache)
-            INT_CACHE[value] = obj;
-        return obj;
+      output.push(value);
     }
+  }
+  return output;
 }
 
 /**
- * Returns a Long representing the given 32 bit integer value.
- * @function
- * @param {number} value The 32 bit integer in question
- * @param {boolean=} unsigned Whether unsigned or not, defaults to signed
- * @returns {!Long} The corresponding Long value
+ * Converts a digit/integer into a basic code point.
+ * @see `basicToDigit()`
+ * @private
+ * @param {Number} digit The numeric value of a basic code point.
+ * @returns {Number} The basic code point whose value (when used for
+ * representing integers) is `digit`, which needs to be in the range
+ * `0` to `base - 1`. If `flag` is non-zero, the uppercase form is
+ * used; else, the lowercase form is used. The behavior is undefined
+ * if `flag` is non-zero and `digit` has no uppercase form.
  */
-Long.fromInt = fromInt;
-
-/**
- * @param {number} value
- * @param {boolean=} unsigned
- * @returns {!Long}
- * @inner
- */
-function fromNumber(value, unsigned) {
-    if (isNaN(value))
-        return unsigned ? UZERO : ZERO$1;
-    if (unsigned) {
-        if (value < 0)
-            return UZERO;
-        if (value >= TWO_PWR_64_DBL)
-            return MAX_UNSIGNED_VALUE;
-    } else {
-        if (value <= -TWO_PWR_63_DBL)
-            return MIN_VALUE;
-        if (value + 1 >= TWO_PWR_63_DBL)
-            return MAX_VALUE;
-    }
-    if (value < 0)
-        return fromNumber(-value, unsigned).neg();
-    return fromBits((value % TWO_PWR_32_DBL) | 0, (value / TWO_PWR_32_DBL) | 0, unsigned);
+function digitToBasic(digit, flag) {
+  //  0..25 map to ASCII a..z or A..Z
+  // 26..35 map to ASCII 0..9
+  return digit + 22 + 75 * (digit < 26) - ((flag != 0) << 5);
 }
 
 /**
- * Returns a Long representing the given value, provided that it is a finite number. Otherwise, zero is returned.
- * @function
- * @param {number} value The number in question
- * @param {boolean=} unsigned Whether unsigned or not, defaults to signed
- * @returns {!Long} The corresponding Long value
+ * Bias adaptation function as per section 3.4 of RFC 3492.
+ * https://tools.ietf.org/html/rfc3492#section-3.4
+ * @private
  */
-Long.fromNumber = fromNumber;
-
-/**
- * @param {number} lowBits
- * @param {number} highBits
- * @param {boolean=} unsigned
- * @returns {!Long}
- * @inner
- */
-function fromBits(lowBits, highBits, unsigned) {
-    return new Long(lowBits, highBits, unsigned);
+function adapt(delta, numPoints, firstTime) {
+  var k = 0;
+  delta = firstTime ? floor$3(delta / damp) : delta >> 1;
+  delta += floor$3(delta / numPoints);
+  for ( /* no initialization */ ; delta > baseMinusTMin * tMax >> 1; k += base) {
+    delta = floor$3(delta / baseMinusTMin);
+  }
+  return floor$3(k + (baseMinusTMin + 1) * delta / (delta + skew));
 }
 
 /**
- * Returns a Long representing the 64 bit integer that comes by concatenating the given low and high bits. Each is
- *  assumed to use 32 bits.
- * @function
- * @param {number} lowBits The low 32 bits
- * @param {number} highBits The high 32 bits
- * @param {boolean=} unsigned Whether unsigned or not, defaults to signed
- * @returns {!Long} The corresponding Long value
+ * Converts a string of Unicode symbols (e.g. a domain name label) to a
+ * Punycode string of ASCII-only symbols.
+ * @memberOf punycode
+ * @param {String} input The string of Unicode symbols.
+ * @returns {String} The resulting Punycode string of ASCII-only symbols.
  */
-Long.fromBits = fromBits;
+function encode(input) {
+  var n,
+    delta,
+    handledCPCount,
+    basicLength,
+    bias,
+    j,
+    m,
+    q,
+    k,
+    t,
+    currentValue,
+    output = [],
+    /** `inputLength` will hold the number of code points in `input`. */
+    inputLength,
+    /** Cached calculation results */
+    handledCPCountPlusOne,
+    baseMinusT,
+    qMinusT;
 
-/**
- * @function
- * @param {number} base
- * @param {number} exponent
- * @returns {number}
- * @inner
- */
-var pow_dbl = Math.pow; // Used 4 times (4*8 to 15+4)
+  // Convert the input in UCS-2 to Unicode
+  input = ucs2decode(input);
 
-/**
- * @param {string} str
- * @param {(boolean|number)=} unsigned
- * @param {number=} radix
- * @returns {!Long}
- * @inner
- */
-function fromString(str, unsigned, radix) {
-    if (str.length === 0)
-        throw Error('empty string');
-    if (str === "NaN" || str === "Infinity" || str === "+Infinity" || str === "-Infinity")
-        return ZERO$1;
-    if (typeof unsigned === 'number') {
-        // For goog.math.long compatibility
-        radix = unsigned, unsigned = false;
-    } else {
-        unsigned = !! unsigned;
+  // Cache the length
+  inputLength = input.length;
+
+  // Initialize the state
+  n = initialN;
+  delta = 0;
+  bias = initialBias;
+
+  // Handle the basic code points
+  for (j = 0; j < inputLength; ++j) {
+    currentValue = input[j];
+    if (currentValue < 0x80) {
+      output.push(stringFromCharCode(currentValue));
     }
-    radix = radix || 10;
-    if (radix < 2 || 36 < radix)
-        throw RangeError('radix');
+  }
 
-    var p;
-    if ((p = str.indexOf('-')) > 0)
-        throw Error('interior hyphen');
-    else if (p === 0) {
-        return fromString(str.substring(1), unsigned, radix).neg();
-    }
+  handledCPCount = basicLength = output.length;
 
-    // Do several (8) digits each time through the loop, so as to
-    // minimize the calls to the very expensive emulated div.
-    var radixToPower = fromNumber(pow_dbl(radix, 8));
+  // `handledCPCount` is the number of code points that have been handled;
+  // `basicLength` is the number of basic code points.
 
-    var result = ZERO$1;
-    for (var i = 0; i < str.length; i += 8) {
-        var size = Math.min(8, str.length - i),
-            value = parseInt(str.substring(i, i + size), radix);
-        if (size < 8) {
-            var power = fromNumber(pow_dbl(radix, size));
-            result = result.mul(power).add(fromNumber(value));
-        } else {
-            result = result.mul(radixToPower);
-            result = result.add(fromNumber(value));
-        }
-    }
-    result.unsigned = unsigned;
-    return result;
-}
+  // Finish the basic string - if it is not empty - with a delimiter
+  if (basicLength) {
+    output.push(delimiter);
+  }
 
-/**
- * Returns a Long representation of the given string, written using the specified radix.
- * @function
- * @param {string} str The textual representation of the Long
- * @param {(boolean|number)=} unsigned Whether unsigned or not, defaults to signed
- * @param {number=} radix The radix in which the text is written (2-36), defaults to 10
- * @returns {!Long} The corresponding Long value
- */
-Long.fromString = fromString;
+  // Main encoding loop:
+  while (handledCPCount < inputLength) {
 
-/**
- * @function
- * @param {!Long|number|string|!{low: number, high: number, unsigned: boolean}} val
- * @param {boolean=} unsigned
- * @returns {!Long}
- * @inner
- */
-function fromValue(val, unsigned) {
-    if (typeof val === 'number')
-        return fromNumber(val, unsigned);
-    if (typeof val === 'string')
-        return fromString(val, unsigned);
-    // Throws for non-objects, converts non-instanceof Long:
-    return fromBits(val.low, val.high, typeof unsigned === 'boolean' ? unsigned : val.unsigned);
-}
-
-/**
- * Converts the specified value to a Long using the appropriate from* function for its type.
- * @function
- * @param {!Long|number|string|!{low: number, high: number, unsigned: boolean}} val Value
- * @param {boolean=} unsigned Whether unsigned or not, defaults to signed
- * @returns {!Long}
- */
-Long.fromValue = fromValue;
-
-// NOTE: the compiler should inline these constant values below and then remove these variables, so there should be
-// no runtime penalty for these.
-
-/**
- * @type {number}
- * @const
- * @inner
- */
-var TWO_PWR_16_DBL = 1 << 16;
-
-/**
- * @type {number}
- * @const
- * @inner
- */
-var TWO_PWR_24_DBL = 1 << 24;
-
-/**
- * @type {number}
- * @const
- * @inner
- */
-var TWO_PWR_32_DBL = TWO_PWR_16_DBL * TWO_PWR_16_DBL;
-
-/**
- * @type {number}
- * @const
- * @inner
- */
-var TWO_PWR_64_DBL = TWO_PWR_32_DBL * TWO_PWR_32_DBL;
-
-/**
- * @type {number}
- * @const
- * @inner
- */
-var TWO_PWR_63_DBL = TWO_PWR_64_DBL / 2;
-
-/**
- * @type {!Long}
- * @const
- * @inner
- */
-var TWO_PWR_24 = fromInt(TWO_PWR_24_DBL);
-
-/**
- * @type {!Long}
- * @inner
- */
-var ZERO$1 = fromInt(0);
-
-/**
- * Signed zero.
- * @type {!Long}
- */
-Long.ZERO = ZERO$1;
-
-/**
- * @type {!Long}
- * @inner
- */
-var UZERO = fromInt(0, true);
-
-/**
- * Unsigned zero.
- * @type {!Long}
- */
-Long.UZERO = UZERO;
-
-/**
- * @type {!Long}
- * @inner
- */
-var ONE = fromInt(1);
-
-/**
- * Signed one.
- * @type {!Long}
- */
-Long.ONE = ONE;
-
-/**
- * @type {!Long}
- * @inner
- */
-var UONE = fromInt(1, true);
-
-/**
- * Unsigned one.
- * @type {!Long}
- */
-Long.UONE = UONE;
-
-/**
- * @type {!Long}
- * @inner
- */
-var NEG_ONE = fromInt(-1);
-
-/**
- * Signed negative one.
- * @type {!Long}
- */
-Long.NEG_ONE = NEG_ONE;
-
-/**
- * @type {!Long}
- * @inner
- */
-var MAX_VALUE = fromBits(0xFFFFFFFF|0, 0x7FFFFFFF|0, false);
-
-/**
- * Maximum signed value.
- * @type {!Long}
- */
-Long.MAX_VALUE = MAX_VALUE;
-
-/**
- * @type {!Long}
- * @inner
- */
-var MAX_UNSIGNED_VALUE = fromBits(0xFFFFFFFF|0, 0xFFFFFFFF|0, true);
-
-/**
- * Maximum unsigned value.
- * @type {!Long}
- */
-Long.MAX_UNSIGNED_VALUE = MAX_UNSIGNED_VALUE;
-
-/**
- * @type {!Long}
- * @inner
- */
-var MIN_VALUE = fromBits(0, 0x80000000|0, false);
-
-/**
- * Minimum signed value.
- * @type {!Long}
- */
-Long.MIN_VALUE = MIN_VALUE;
-
-/**
- * @alias Long.prototype
- * @inner
- */
-var LongPrototype = Long.prototype;
-
-/**
- * Converts the Long to a 32 bit integer, assuming it is a 32 bit integer.
- * @returns {number}
- */
-LongPrototype.toInt = function toInt() {
-    return this.unsigned ? this.low >>> 0 : this.low;
-};
-
-/**
- * Converts the Long to a the nearest floating-point representation of this value (double, 53 bit mantissa).
- * @returns {number}
- */
-LongPrototype.toNumber = function toNumber() {
-    if (this.unsigned)
-        return ((this.high >>> 0) * TWO_PWR_32_DBL) + (this.low >>> 0);
-    return this.high * TWO_PWR_32_DBL + (this.low >>> 0);
-};
-
-/**
- * Converts the Long to a string written in the specified radix.
- * @param {number=} radix Radix (2-36), defaults to 10
- * @returns {string}
- * @override
- * @throws {RangeError} If `radix` is out of range
- */
-LongPrototype.toString = function toString(radix) {
-    radix = radix || 10;
-    if (radix < 2 || 36 < radix)
-        throw RangeError('radix');
-    if (this.isZero())
-        return '0';
-    if (this.isNegative()) { // Unsigned Longs are never negative
-        if (this.eq(MIN_VALUE)) {
-            // We need to change the Long value before it can be negated, so we remove
-            // the bottom-most digit in this base and then recurse to do the rest.
-            var radixLong = fromNumber(radix),
-                div = this.div(radixLong),
-                rem1 = div.mul(radixLong).sub(this);
-            return div.toString(radix) + rem1.toInt().toString(radix);
-        } else
-            return '-' + this.neg().toString(radix);
+    // All non-basic code points < n have been handled already. Find the next
+    // larger one:
+    for (m = maxInt, j = 0; j < inputLength; ++j) {
+      currentValue = input[j];
+      if (currentValue >= n && currentValue < m) {
+        m = currentValue;
+      }
     }
 
-    // Do several (6) digits each time through the loop, so as to
-    // minimize the calls to the very expensive emulated div.
-    var radixToPower = fromNumber(pow_dbl(radix, 6), this.unsigned),
-        rem = this;
-    var result = '';
-    while (true) {
-        var remDiv = rem.div(radixToPower),
-            intval = rem.sub(remDiv.mul(radixToPower)).toInt() >>> 0,
-            digits = intval.toString(radix);
-        rem = remDiv;
-        if (rem.isZero())
-            return digits + result;
-        else {
-            while (digits.length < 6)
-                digits = '0' + digits;
-            result = '' + digits + result;
-        }
+    // Increase `delta` enough to advance the decoder's <n,i> state to <m,0>,
+    // but guard against overflow
+    handledCPCountPlusOne = handledCPCount + 1;
+    if (m - n > floor$3((maxInt - delta) / handledCPCountPlusOne)) {
+      error('overflow');
     }
-};
 
-/**
- * Gets the high 32 bits as a signed integer.
- * @returns {number} Signed high bits
- */
-LongPrototype.getHighBits = function getHighBits() {
-    return this.high;
-};
+    delta += (m - n) * handledCPCountPlusOne;
+    n = m;
 
-/**
- * Gets the high 32 bits as an unsigned integer.
- * @returns {number} Unsigned high bits
- */
-LongPrototype.getHighBitsUnsigned = function getHighBitsUnsigned() {
-    return this.high >>> 0;
-};
+    for (j = 0; j < inputLength; ++j) {
+      currentValue = input[j];
 
-/**
- * Gets the low 32 bits as a signed integer.
- * @returns {number} Signed low bits
- */
-LongPrototype.getLowBits = function getLowBits() {
-    return this.low;
-};
+      if (currentValue < n && ++delta > maxInt) {
+        error('overflow');
+      }
 
-/**
- * Gets the low 32 bits as an unsigned integer.
- * @returns {number} Unsigned low bits
- */
-LongPrototype.getLowBitsUnsigned = function getLowBitsUnsigned() {
-    return this.low >>> 0;
-};
-
-/**
- * Gets the number of bits needed to represent the absolute value of this Long.
- * @returns {number}
- */
-LongPrototype.getNumBitsAbs = function getNumBitsAbs() {
-    if (this.isNegative()) // Unsigned Longs are never negative
-        return this.eq(MIN_VALUE) ? 64 : this.neg().getNumBitsAbs();
-    var val = this.high != 0 ? this.high : this.low;
-    for (var bit = 31; bit > 0; bit--)
-        if ((val & (1 << bit)) != 0)
+      if (currentValue == n) {
+        // Represent delta as a generalized variable-length integer
+        for (q = delta, k = base; /* no condition */ ; k += base) {
+          t = k <= bias ? tMin : (k >= bias + tMax ? tMax : k - bias);
+          if (q < t) {
             break;
-    return this.high != 0 ? bit + 33 : bit + 1;
-};
-
-/**
- * Tests if this Long's value equals zero.
- * @returns {boolean}
- */
-LongPrototype.isZero = function isZero() {
-    return this.high === 0 && this.low === 0;
-};
-
-/**
- * Tests if this Long's value equals zero. This is an alias of {@link Long#isZero}.
- * @returns {boolean}
- */
-LongPrototype.eqz = LongPrototype.isZero;
-
-/**
- * Tests if this Long's value is negative.
- * @returns {boolean}
- */
-LongPrototype.isNegative = function isNegative() {
-    return !this.unsigned && this.high < 0;
-};
-
-/**
- * Tests if this Long's value is positive.
- * @returns {boolean}
- */
-LongPrototype.isPositive = function isPositive() {
-    return this.unsigned || this.high >= 0;
-};
-
-/**
- * Tests if this Long's value is odd.
- * @returns {boolean}
- */
-LongPrototype.isOdd = function isOdd() {
-    return (this.low & 1) === 1;
-};
-
-/**
- * Tests if this Long's value is even.
- * @returns {boolean}
- */
-LongPrototype.isEven = function isEven() {
-    return (this.low & 1) === 0;
-};
-
-/**
- * Tests if this Long's value equals the specified's.
- * @param {!Long|number|string} other Other value
- * @returns {boolean}
- */
-LongPrototype.equals = function equals(other) {
-    if (!isLong(other))
-        other = fromValue(other);
-    if (this.unsigned !== other.unsigned && (this.high >>> 31) === 1 && (other.high >>> 31) === 1)
-        return false;
-    return this.high === other.high && this.low === other.low;
-};
-
-/**
- * Tests if this Long's value equals the specified's. This is an alias of {@link Long#equals}.
- * @function
- * @param {!Long|number|string} other Other value
- * @returns {boolean}
- */
-LongPrototype.eq = LongPrototype.equals;
-
-/**
- * Tests if this Long's value differs from the specified's.
- * @param {!Long|number|string} other Other value
- * @returns {boolean}
- */
-LongPrototype.notEquals = function notEquals(other) {
-    return !this.eq(/* validates */ other);
-};
-
-/**
- * Tests if this Long's value differs from the specified's. This is an alias of {@link Long#notEquals}.
- * @function
- * @param {!Long|number|string} other Other value
- * @returns {boolean}
- */
-LongPrototype.neq = LongPrototype.notEquals;
-
-/**
- * Tests if this Long's value differs from the specified's. This is an alias of {@link Long#notEquals}.
- * @function
- * @param {!Long|number|string} other Other value
- * @returns {boolean}
- */
-LongPrototype.ne = LongPrototype.notEquals;
-
-/**
- * Tests if this Long's value is less than the specified's.
- * @param {!Long|number|string} other Other value
- * @returns {boolean}
- */
-LongPrototype.lessThan = function lessThan(other) {
-    return this.comp(/* validates */ other) < 0;
-};
-
-/**
- * Tests if this Long's value is less than the specified's. This is an alias of {@link Long#lessThan}.
- * @function
- * @param {!Long|number|string} other Other value
- * @returns {boolean}
- */
-LongPrototype.lt = LongPrototype.lessThan;
-
-/**
- * Tests if this Long's value is less than or equal the specified's.
- * @param {!Long|number|string} other Other value
- * @returns {boolean}
- */
-LongPrototype.lessThanOrEqual = function lessThanOrEqual(other) {
-    return this.comp(/* validates */ other) <= 0;
-};
-
-/**
- * Tests if this Long's value is less than or equal the specified's. This is an alias of {@link Long#lessThanOrEqual}.
- * @function
- * @param {!Long|number|string} other Other value
- * @returns {boolean}
- */
-LongPrototype.lte = LongPrototype.lessThanOrEqual;
-
-/**
- * Tests if this Long's value is less than or equal the specified's. This is an alias of {@link Long#lessThanOrEqual}.
- * @function
- * @param {!Long|number|string} other Other value
- * @returns {boolean}
- */
-LongPrototype.le = LongPrototype.lessThanOrEqual;
-
-/**
- * Tests if this Long's value is greater than the specified's.
- * @param {!Long|number|string} other Other value
- * @returns {boolean}
- */
-LongPrototype.greaterThan = function greaterThan(other) {
-    return this.comp(/* validates */ other) > 0;
-};
-
-/**
- * Tests if this Long's value is greater than the specified's. This is an alias of {@link Long#greaterThan}.
- * @function
- * @param {!Long|number|string} other Other value
- * @returns {boolean}
- */
-LongPrototype.gt = LongPrototype.greaterThan;
-
-/**
- * Tests if this Long's value is greater than or equal the specified's.
- * @param {!Long|number|string} other Other value
- * @returns {boolean}
- */
-LongPrototype.greaterThanOrEqual = function greaterThanOrEqual(other) {
-    return this.comp(/* validates */ other) >= 0;
-};
-
-/**
- * Tests if this Long's value is greater than or equal the specified's. This is an alias of {@link Long#greaterThanOrEqual}.
- * @function
- * @param {!Long|number|string} other Other value
- * @returns {boolean}
- */
-LongPrototype.gte = LongPrototype.greaterThanOrEqual;
-
-/**
- * Tests if this Long's value is greater than or equal the specified's. This is an alias of {@link Long#greaterThanOrEqual}.
- * @function
- * @param {!Long|number|string} other Other value
- * @returns {boolean}
- */
-LongPrototype.ge = LongPrototype.greaterThanOrEqual;
-
-/**
- * Compares this Long's value with the specified's.
- * @param {!Long|number|string} other Other value
- * @returns {number} 0 if they are the same, 1 if the this is greater and -1
- *  if the given one is greater
- */
-LongPrototype.compare = function compare(other) {
-    if (!isLong(other))
-        other = fromValue(other);
-    if (this.eq(other))
-        return 0;
-    var thisNeg = this.isNegative(),
-        otherNeg = other.isNegative();
-    if (thisNeg && !otherNeg)
-        return -1;
-    if (!thisNeg && otherNeg)
-        return 1;
-    // At this point the sign bits are the same
-    if (!this.unsigned)
-        return this.sub(other).isNegative() ? -1 : 1;
-    // Both are positive if at least one is unsigned
-    return (other.high >>> 0) > (this.high >>> 0) || (other.high === this.high && (other.low >>> 0) > (this.low >>> 0)) ? -1 : 1;
-};
-
-/**
- * Compares this Long's value with the specified's. This is an alias of {@link Long#compare}.
- * @function
- * @param {!Long|number|string} other Other value
- * @returns {number} 0 if they are the same, 1 if the this is greater and -1
- *  if the given one is greater
- */
-LongPrototype.comp = LongPrototype.compare;
-
-/**
- * Negates this Long's value.
- * @returns {!Long} Negated Long
- */
-LongPrototype.negate = function negate() {
-    if (!this.unsigned && this.eq(MIN_VALUE))
-        return MIN_VALUE;
-    return this.not().add(ONE);
-};
-
-/**
- * Negates this Long's value. This is an alias of {@link Long#negate}.
- * @function
- * @returns {!Long} Negated Long
- */
-LongPrototype.neg = LongPrototype.negate;
-
-/**
- * Returns the sum of this and the specified Long.
- * @param {!Long|number|string} addend Addend
- * @returns {!Long} Sum
- */
-LongPrototype.add = function add(addend) {
-    if (!isLong(addend))
-        addend = fromValue(addend);
-
-    // Divide each number into 4 chunks of 16 bits, and then sum the chunks.
-
-    var a48 = this.high >>> 16;
-    var a32 = this.high & 0xFFFF;
-    var a16 = this.low >>> 16;
-    var a00 = this.low & 0xFFFF;
-
-    var b48 = addend.high >>> 16;
-    var b32 = addend.high & 0xFFFF;
-    var b16 = addend.low >>> 16;
-    var b00 = addend.low & 0xFFFF;
-
-    var c48 = 0, c32 = 0, c16 = 0, c00 = 0;
-    c00 += a00 + b00;
-    c16 += c00 >>> 16;
-    c00 &= 0xFFFF;
-    c16 += a16 + b16;
-    c32 += c16 >>> 16;
-    c16 &= 0xFFFF;
-    c32 += a32 + b32;
-    c48 += c32 >>> 16;
-    c32 &= 0xFFFF;
-    c48 += a48 + b48;
-    c48 &= 0xFFFF;
-    return fromBits((c16 << 16) | c00, (c48 << 16) | c32, this.unsigned);
-};
-
-/**
- * Returns the difference of this and the specified Long.
- * @param {!Long|number|string} subtrahend Subtrahend
- * @returns {!Long} Difference
- */
-LongPrototype.subtract = function subtract(subtrahend) {
-    if (!isLong(subtrahend))
-        subtrahend = fromValue(subtrahend);
-    return this.add(subtrahend.neg());
-};
-
-/**
- * Returns the difference of this and the specified Long. This is an alias of {@link Long#subtract}.
- * @function
- * @param {!Long|number|string} subtrahend Subtrahend
- * @returns {!Long} Difference
- */
-LongPrototype.sub = LongPrototype.subtract;
-
-/**
- * Returns the product of this and the specified Long.
- * @param {!Long|number|string} multiplier Multiplier
- * @returns {!Long} Product
- */
-LongPrototype.multiply = function multiply(multiplier) {
-    if (this.isZero())
-        return ZERO$1;
-    if (!isLong(multiplier))
-        multiplier = fromValue(multiplier);
-
-    // use wasm support if present
-    if (wasm) {
-        var low = wasm.mul(this.low,
-                           this.high,
-                           multiplier.low,
-                           multiplier.high);
-        return fromBits(low, wasm.get_high(), this.unsigned);
-    }
-
-    if (multiplier.isZero())
-        return ZERO$1;
-    if (this.eq(MIN_VALUE))
-        return multiplier.isOdd() ? MIN_VALUE : ZERO$1;
-    if (multiplier.eq(MIN_VALUE))
-        return this.isOdd() ? MIN_VALUE : ZERO$1;
-
-    if (this.isNegative()) {
-        if (multiplier.isNegative())
-            return this.neg().mul(multiplier.neg());
-        else
-            return this.neg().mul(multiplier).neg();
-    } else if (multiplier.isNegative())
-        return this.mul(multiplier.neg()).neg();
-
-    // If both longs are small, use float multiplication
-    if (this.lt(TWO_PWR_24) && multiplier.lt(TWO_PWR_24))
-        return fromNumber(this.toNumber() * multiplier.toNumber(), this.unsigned);
-
-    // Divide each long into 4 chunks of 16 bits, and then add up 4x4 products.
-    // We can skip products that would overflow.
-
-    var a48 = this.high >>> 16;
-    var a32 = this.high & 0xFFFF;
-    var a16 = this.low >>> 16;
-    var a00 = this.low & 0xFFFF;
-
-    var b48 = multiplier.high >>> 16;
-    var b32 = multiplier.high & 0xFFFF;
-    var b16 = multiplier.low >>> 16;
-    var b00 = multiplier.low & 0xFFFF;
-
-    var c48 = 0, c32 = 0, c16 = 0, c00 = 0;
-    c00 += a00 * b00;
-    c16 += c00 >>> 16;
-    c00 &= 0xFFFF;
-    c16 += a16 * b00;
-    c32 += c16 >>> 16;
-    c16 &= 0xFFFF;
-    c16 += a00 * b16;
-    c32 += c16 >>> 16;
-    c16 &= 0xFFFF;
-    c32 += a32 * b00;
-    c48 += c32 >>> 16;
-    c32 &= 0xFFFF;
-    c32 += a16 * b16;
-    c48 += c32 >>> 16;
-    c32 &= 0xFFFF;
-    c32 += a00 * b32;
-    c48 += c32 >>> 16;
-    c32 &= 0xFFFF;
-    c48 += a48 * b00 + a32 * b16 + a16 * b32 + a00 * b48;
-    c48 &= 0xFFFF;
-    return fromBits((c16 << 16) | c00, (c48 << 16) | c32, this.unsigned);
-};
-
-/**
- * Returns the product of this and the specified Long. This is an alias of {@link Long#multiply}.
- * @function
- * @param {!Long|number|string} multiplier Multiplier
- * @returns {!Long} Product
- */
-LongPrototype.mul = LongPrototype.multiply;
-
-/**
- * Returns this Long divided by the specified. The result is signed if this Long is signed or
- *  unsigned if this Long is unsigned.
- * @param {!Long|number|string} divisor Divisor
- * @returns {!Long} Quotient
- */
-LongPrototype.divide = function divide(divisor) {
-    if (!isLong(divisor))
-        divisor = fromValue(divisor);
-    if (divisor.isZero())
-        throw Error('division by zero');
-
-    // use wasm support if present
-    if (wasm) {
-        // guard against signed division overflow: the largest
-        // negative number / -1 would be 1 larger than the largest
-        // positive number, due to two's complement.
-        if (!this.unsigned &&
-            this.high === -0x80000000 &&
-            divisor.low === -1 && divisor.high === -1) {
-            // be consistent with non-wasm code path
-            return this;
-        }
-        var low = (this.unsigned ? wasm.div_u : wasm.div_s)(
-            this.low,
-            this.high,
-            divisor.low,
-            divisor.high
-        );
-        return fromBits(low, wasm.get_high(), this.unsigned);
-    }
-
-    if (this.isZero())
-        return this.unsigned ? UZERO : ZERO$1;
-    var approx, rem, res;
-    if (!this.unsigned) {
-        // This section is only relevant for signed longs and is derived from the
-        // closure library as a whole.
-        if (this.eq(MIN_VALUE)) {
-            if (divisor.eq(ONE) || divisor.eq(NEG_ONE))
-                return MIN_VALUE;  // recall that -MIN_VALUE == MIN_VALUE
-            else if (divisor.eq(MIN_VALUE))
-                return ONE;
-            else {
-                // At this point, we have |other| >= 2, so |this/other| < |MIN_VALUE|.
-                var halfThis = this.shr(1);
-                approx = halfThis.div(divisor).shl(1);
-                if (approx.eq(ZERO$1)) {
-                    return divisor.isNegative() ? ONE : NEG_ONE;
-                } else {
-                    rem = this.sub(divisor.mul(approx));
-                    res = approx.add(rem.div(divisor));
-                    return res;
-                }
-            }
-        } else if (divisor.eq(MIN_VALUE))
-            return this.unsigned ? UZERO : ZERO$1;
-        if (this.isNegative()) {
-            if (divisor.isNegative())
-                return this.neg().div(divisor.neg());
-            return this.neg().div(divisor).neg();
-        } else if (divisor.isNegative())
-            return this.div(divisor.neg()).neg();
-        res = ZERO$1;
-    } else {
-        // The algorithm below has not been made for unsigned longs. It's therefore
-        // required to take special care of the MSB prior to running it.
-        if (!divisor.unsigned)
-            divisor = divisor.toUnsigned();
-        if (divisor.gt(this))
-            return UZERO;
-        if (divisor.gt(this.shru(1))) // 15 >>> 1 = 7 ; with divisor = 8 ; true
-            return UONE;
-        res = UZERO;
-    }
-
-    // Repeat the following until the remainder is less than other:  find a
-    // floating-point that approximates remainder / other *from below*, add this
-    // into the result, and subtract it from the remainder.  It is critical that
-    // the approximate value is less than or equal to the real value so that the
-    // remainder never becomes negative.
-    rem = this;
-    while (rem.gte(divisor)) {
-        // Approximate the result of division. This may be a little greater or
-        // smaller than the actual value.
-        approx = Math.max(1, Math.floor(rem.toNumber() / divisor.toNumber()));
-
-        // We will tweak the approximate result by changing it in the 48-th digit or
-        // the smallest non-fractional digit, whichever is larger.
-        var log2 = Math.ceil(Math.log(approx) / Math.LN2),
-            delta = (log2 <= 48) ? 1 : pow_dbl(2, log2 - 48),
-
-        // Decrease the approximation until it is smaller than the remainder.  Note
-        // that if it is too large, the product overflows and is negative.
-            approxRes = fromNumber(approx),
-            approxRem = approxRes.mul(divisor);
-        while (approxRem.isNegative() || approxRem.gt(rem)) {
-            approx -= delta;
-            approxRes = fromNumber(approx, this.unsigned);
-            approxRem = approxRes.mul(divisor);
+          }
+          qMinusT = q - t;
+          baseMinusT = base - t;
+          output.push(
+            stringFromCharCode(digitToBasic(t + qMinusT % baseMinusT, 0))
+          );
+          q = floor$3(qMinusT / baseMinusT);
         }
 
-        // We know the answer can't be zero... and actually, zero would cause
-        // infinite recursion since we would make no progress.
-        if (approxRes.isZero())
-            approxRes = ONE;
-
-        res = res.add(approxRes);
-        rem = rem.sub(approxRem);
-    }
-    return res;
-};
-
-/**
- * Returns this Long divided by the specified. This is an alias of {@link Long#divide}.
- * @function
- * @param {!Long|number|string} divisor Divisor
- * @returns {!Long} Quotient
- */
-LongPrototype.div = LongPrototype.divide;
-
-/**
- * Returns this Long modulo the specified.
- * @param {!Long|number|string} divisor Divisor
- * @returns {!Long} Remainder
- */
-LongPrototype.modulo = function modulo(divisor) {
-    if (!isLong(divisor))
-        divisor = fromValue(divisor);
-
-    // use wasm support if present
-    if (wasm) {
-        var low = (this.unsigned ? wasm.rem_u : wasm.rem_s)(
-            this.low,
-            this.high,
-            divisor.low,
-            divisor.high
-        );
-        return fromBits(low, wasm.get_high(), this.unsigned);
+        output.push(stringFromCharCode(digitToBasic(q, 0)));
+        bias = adapt(delta, handledCPCountPlusOne, handledCPCount == basicLength);
+        delta = 0;
+        ++handledCPCount;
+      }
     }
 
-    return this.sub(this.div(divisor).mul(divisor));
-};
+    ++delta;
+    ++n;
+
+  }
+  return output.join('');
+}
 
 /**
- * Returns this Long modulo the specified. This is an alias of {@link Long#modulo}.
- * @function
- * @param {!Long|number|string} divisor Divisor
- * @returns {!Long} Remainder
+ * Converts a Unicode string representing a domain name or an email address to
+ * Punycode. Only the non-ASCII parts of the domain name will be converted,
+ * i.e. it doesn't matter if you call it with a domain that's already in
+ * ASCII.
+ * @memberOf punycode
+ * @param {String} input The domain name or email address to convert, as a
+ * Unicode string.
+ * @returns {String} The Punycode representation of the given domain name or
+ * email address.
  */
-LongPrototype.mod = LongPrototype.modulo;
-
-/**
- * Returns this Long modulo the specified. This is an alias of {@link Long#modulo}.
- * @function
- * @param {!Long|number|string} divisor Divisor
- * @returns {!Long} Remainder
- */
-LongPrototype.rem = LongPrototype.modulo;
-
-/**
- * Returns the bitwise NOT of this Long.
- * @returns {!Long}
- */
-LongPrototype.not = function not() {
-    return fromBits(~this.low, ~this.high, this.unsigned);
-};
-
-/**
- * Returns the bitwise AND of this Long and the specified.
- * @param {!Long|number|string} other Other Long
- * @returns {!Long}
- */
-LongPrototype.and = function and(other) {
-    if (!isLong(other))
-        other = fromValue(other);
-    return fromBits(this.low & other.low, this.high & other.high, this.unsigned);
-};
-
-/**
- * Returns the bitwise OR of this Long and the specified.
- * @param {!Long|number|string} other Other Long
- * @returns {!Long}
- */
-LongPrototype.or = function or(other) {
-    if (!isLong(other))
-        other = fromValue(other);
-    return fromBits(this.low | other.low, this.high | other.high, this.unsigned);
-};
-
-/**
- * Returns the bitwise XOR of this Long and the given one.
- * @param {!Long|number|string} other Other Long
- * @returns {!Long}
- */
-LongPrototype.xor = function xor(other) {
-    if (!isLong(other))
-        other = fromValue(other);
-    return fromBits(this.low ^ other.low, this.high ^ other.high, this.unsigned);
-};
-
-/**
- * Returns this Long with bits shifted to the left by the given amount.
- * @param {number|!Long} numBits Number of bits
- * @returns {!Long} Shifted Long
- */
-LongPrototype.shiftLeft = function shiftLeft(numBits) {
-    if (isLong(numBits))
-        numBits = numBits.toInt();
-    if ((numBits &= 63) === 0)
-        return this;
-    else if (numBits < 32)
-        return fromBits(this.low << numBits, (this.high << numBits) | (this.low >>> (32 - numBits)), this.unsigned);
-    else
-        return fromBits(0, this.low << (numBits - 32), this.unsigned);
-};
-
-/**
- * Returns this Long with bits shifted to the left by the given amount. This is an alias of {@link Long#shiftLeft}.
- * @function
- * @param {number|!Long} numBits Number of bits
- * @returns {!Long} Shifted Long
- */
-LongPrototype.shl = LongPrototype.shiftLeft;
-
-/**
- * Returns this Long with bits arithmetically shifted to the right by the given amount.
- * @param {number|!Long} numBits Number of bits
- * @returns {!Long} Shifted Long
- */
-LongPrototype.shiftRight = function shiftRight(numBits) {
-    if (isLong(numBits))
-        numBits = numBits.toInt();
-    if ((numBits &= 63) === 0)
-        return this;
-    else if (numBits < 32)
-        return fromBits((this.low >>> numBits) | (this.high << (32 - numBits)), this.high >> numBits, this.unsigned);
-    else
-        return fromBits(this.high >> (numBits - 32), this.high >= 0 ? 0 : -1, this.unsigned);
-};
-
-/**
- * Returns this Long with bits arithmetically shifted to the right by the given amount. This is an alias of {@link Long#shiftRight}.
- * @function
- * @param {number|!Long} numBits Number of bits
- * @returns {!Long} Shifted Long
- */
-LongPrototype.shr = LongPrototype.shiftRight;
-
-/**
- * Returns this Long with bits logically shifted to the right by the given amount.
- * @param {number|!Long} numBits Number of bits
- * @returns {!Long} Shifted Long
- */
-LongPrototype.shiftRightUnsigned = function shiftRightUnsigned(numBits) {
-    if (isLong(numBits))
-        numBits = numBits.toInt();
-    numBits &= 63;
-    if (numBits === 0)
-        return this;
-    else {
-        var high = this.high;
-        if (numBits < 32) {
-            var low = this.low;
-            return fromBits((low >>> numBits) | (high << (32 - numBits)), high >>> numBits, this.unsigned);
-        } else if (numBits === 32)
-            return fromBits(high, 0, this.unsigned);
-        else
-            return fromBits(high >>> (numBits - 32), 0, this.unsigned);
-    }
-};
-
-/**
- * Returns this Long with bits logically shifted to the right by the given amount. This is an alias of {@link Long#shiftRightUnsigned}.
- * @function
- * @param {number|!Long} numBits Number of bits
- * @returns {!Long} Shifted Long
- */
-LongPrototype.shru = LongPrototype.shiftRightUnsigned;
-
-/**
- * Returns this Long with bits logically shifted to the right by the given amount. This is an alias of {@link Long#shiftRightUnsigned}.
- * @function
- * @param {number|!Long} numBits Number of bits
- * @returns {!Long} Shifted Long
- */
-LongPrototype.shr_u = LongPrototype.shiftRightUnsigned;
-
-/**
- * Converts this Long to signed.
- * @returns {!Long} Signed long
- */
-LongPrototype.toSigned = function toSigned() {
-    if (!this.unsigned)
-        return this;
-    return fromBits(this.low, this.high, false);
-};
-
-/**
- * Converts this Long to unsigned.
- * @returns {!Long} Unsigned long
- */
-LongPrototype.toUnsigned = function toUnsigned() {
-    if (this.unsigned)
-        return this;
-    return fromBits(this.low, this.high, true);
-};
-
-/**
- * Converts this Long to its byte representation.
- * @param {boolean=} le Whether little or big endian, defaults to big endian
- * @returns {!Array.<number>} Byte representation
- */
-LongPrototype.toBytes = function toBytes(le) {
-    return le ? this.toBytesLE() : this.toBytesBE();
-};
-
-/**
- * Converts this Long to its little endian byte representation.
- * @returns {!Array.<number>} Little endian byte representation
- */
-LongPrototype.toBytesLE = function toBytesLE() {
-    var hi = this.high,
-        lo = this.low;
-    return [
-        lo        & 0xff,
-        lo >>>  8 & 0xff,
-        lo >>> 16 & 0xff,
-        lo >>> 24       ,
-        hi        & 0xff,
-        hi >>>  8 & 0xff,
-        hi >>> 16 & 0xff,
-        hi >>> 24
-    ];
-};
-
-/**
- * Converts this Long to its big endian byte representation.
- * @returns {!Array.<number>} Big endian byte representation
- */
-LongPrototype.toBytesBE = function toBytesBE() {
-    var hi = this.high,
-        lo = this.low;
-    return [
-        hi >>> 24       ,
-        hi >>> 16 & 0xff,
-        hi >>>  8 & 0xff,
-        hi        & 0xff,
-        lo >>> 24       ,
-        lo >>> 16 & 0xff,
-        lo >>>  8 & 0xff,
-        lo        & 0xff
-    ];
-};
-
-/**
- * Creates a Long from its byte representation.
- * @param {!Array.<number>} bytes Byte representation
- * @param {boolean=} unsigned Whether unsigned or not, defaults to signed
- * @param {boolean=} le Whether little or big endian, defaults to big endian
- * @returns {Long} The corresponding Long value
- */
-Long.fromBytes = function fromBytes(bytes, unsigned, le) {
-    return le ? Long.fromBytesLE(bytes, unsigned) : Long.fromBytesBE(bytes, unsigned);
-};
-
-/**
- * Creates a Long from its little endian byte representation.
- * @param {!Array.<number>} bytes Little endian byte representation
- * @param {boolean=} unsigned Whether unsigned or not, defaults to signed
- * @returns {Long} The corresponding Long value
- */
-Long.fromBytesLE = function fromBytesLE(bytes, unsigned) {
-    return new Long(
-        bytes[0]       |
-        bytes[1] <<  8 |
-        bytes[2] << 16 |
-        bytes[3] << 24,
-        bytes[4]       |
-        bytes[5] <<  8 |
-        bytes[6] << 16 |
-        bytes[7] << 24,
-        unsigned
-    );
-};
-
-/**
- * Creates a Long from its big endian byte representation.
- * @param {!Array.<number>} bytes Big endian byte representation
- * @param {boolean=} unsigned Whether unsigned or not, defaults to signed
- * @returns {Long} The corresponding Long value
- */
-Long.fromBytesBE = function fromBytesBE(bytes, unsigned) {
-    return new Long(
-        bytes[4] << 24 |
-        bytes[5] << 16 |
-        bytes[6] <<  8 |
-        bytes[7],
-        bytes[0] << 24 |
-        bytes[1] << 16 |
-        bytes[2] <<  8 |
-        bytes[3],
-        unsigned
-    );
-};
-
-/**
- * Type casting utils.
- */
-var Cast = /** @class */ (function () {
-    function Cast() {
-    }
-    Cast.byte = function (n) {
-        return new Int8Array([n])[0];
-    };
-    /**
-     * @param {number} n
-     * @returns {number}
-     */
-    Cast.int16 = function (n) {
-        return new Int16Array([n])[0];
-    };
-    /**
-     * @param {number} n
-     * @returns {number}
-     */
-    Cast.int32 = function (n) {
-        return new Int32Array([n])[0];
-    };
-    /**
-     * @param {number} n
-     * @returns {Long}
-     */
-    Cast.int64 = function (n) {
-        return long_1.fromInt(n);
-    };
-    return Cast;
-}());
+function toASCII(input) {
+  return mapDomain(input, function(string) {
+    return regexNonASCII.test(string) ?
+      'xn--' + encode(string) :
+      string;
+  });
+}
 
 var global$1 = typeof global !== "undefined" ? global :
             typeof self !== "undefined" ? self :
@@ -7539,7 +6491,7 @@ function from (that, value, encodingOrOffset, length) {
   }
 
   if (typeof value === 'string') {
-    return fromString$1(that, value, encodingOrOffset)
+    return fromString(that, value, encodingOrOffset)
   }
 
   return fromObject(that, value)
@@ -7618,7 +6570,7 @@ Buffer.allocUnsafeSlow = function (size) {
   return allocUnsafe(null, size)
 };
 
-function fromString$1 (that, string, encoding) {
+function fromString (that, string, encoding) {
   if (typeof encoding !== 'string' || encoding === '') {
     encoding = 'utf8';
   }
@@ -9199,567 +8151,6 @@ function isSlowBuffer (obj) {
   return typeof obj.readFloatLE === 'function' && typeof obj.slice === 'function' && isFastBuffer(obj.slice(0, 0))
 }
 
-var ERROR_MSG_INPUT = 'Input must be an string, Buffer or Uint8Array';
-
-// For convenience, let people hash a string, not just a Uint8Array
-function normalizeInput (input) {
-  var ret;
-  if (input instanceof Uint8Array) {
-    ret = input;
-  } else if (input instanceof Buffer) {
-    ret = new Uint8Array(input);
-  } else if (typeof (input) === 'string') {
-    ret = new Uint8Array(Buffer.from(input, 'utf8'));
-  } else {
-    throw new Error(ERROR_MSG_INPUT)
-  }
-  return ret
-}
-
-// Converts a Uint8Array to a hexadecimal string
-// For example, toHex([255, 0, 255]) returns "ff00ff"
-function toHex$1 (bytes) {
-  return Array.prototype.map.call(bytes, function (n) {
-    return (n < 16 ? '0' : '') + n.toString(16)
-  }).join('')
-}
-
-// Converts any value in [0...2^32-1] to an 8-character hex string
-function uint32ToHex (val) {
-  return (0x100000000 + val).toString(16).substring(1)
-}
-
-// For debugging: prints out hash state in the same format as the RFC
-// sample computation exactly, so that you can diff
-function debugPrint (label, arr, size) {
-  var msg = '\n' + label + ' = ';
-  for (var i = 0; i < arr.length; i += 2) {
-    if (size === 32) {
-      msg += uint32ToHex(arr[i]).toUpperCase();
-      msg += ' ';
-      msg += uint32ToHex(arr[i + 1]).toUpperCase();
-    } else if (size === 64) {
-      msg += uint32ToHex(arr[i + 1]).toUpperCase();
-      msg += uint32ToHex(arr[i]).toUpperCase();
-    } else throw new Error('Invalid size ' + size)
-    if (i % 6 === 4) {
-      msg += '\n' + new Array(label.length + 4).join(' ');
-    } else if (i < arr.length - 2) {
-      msg += ' ';
-    }
-  }
-  console.log(msg);
-}
-
-// For performance testing: generates N bytes of input, hashes M times
-// Measures and prints MB/second hash performance each time
-function testSpeed (hashFn, N, M) {
-  var startMs = new Date().getTime();
-
-  var input = new Uint8Array(N);
-  for (var i = 0; i < N; i++) {
-    input[i] = i % 256;
-  }
-  var genMs = new Date().getTime();
-  console.log('Generated random input in ' + (genMs - startMs) + 'ms');
-  startMs = genMs;
-
-  for (i = 0; i < M; i++) {
-    var hashHex = hashFn(input);
-    var hashMs = new Date().getTime();
-    var ms = hashMs - startMs;
-    startMs = hashMs;
-    console.log('Hashed in ' + ms + 'ms: ' + hashHex.substring(0, 20) + '...');
-    console.log(Math.round(N / (1 << 20) / (ms / 1000) * 100) / 100 + ' MB PER SECOND');
-  }
-}
-
-var util = {
-  normalizeInput: normalizeInput,
-  toHex: toHex$1,
-  debugPrint: debugPrint,
-  testSpeed: testSpeed
-};
-
-// Blake2B in pure Javascript
-// Adapted from the reference implementation in RFC7693
-// Ported to Javascript by DC - https://github.com/dcposch
-
-
-
-// 64-bit unsigned addition
-// Sets v[a,a+1] += v[b,b+1]
-// v should be a Uint32Array
-function ADD64AA (v, a, b) {
-  var o0 = v[a] + v[b];
-  var o1 = v[a + 1] + v[b + 1];
-  if (o0 >= 0x100000000) {
-    o1++;
-  }
-  v[a] = o0;
-  v[a + 1] = o1;
-}
-
-// 64-bit unsigned addition
-// Sets v[a,a+1] += b
-// b0 is the low 32 bits of b, b1 represents the high 32 bits
-function ADD64AC (v, a, b0, b1) {
-  var o0 = v[a] + b0;
-  if (b0 < 0) {
-    o0 += 0x100000000;
-  }
-  var o1 = v[a + 1] + b1;
-  if (o0 >= 0x100000000) {
-    o1++;
-  }
-  v[a] = o0;
-  v[a + 1] = o1;
-}
-
-// Little-endian byte access
-function B2B_GET32 (arr, i) {
-  return (arr[i] ^
-  (arr[i + 1] << 8) ^
-  (arr[i + 2] << 16) ^
-  (arr[i + 3] << 24))
-}
-
-// G Mixing function
-// The ROTRs are inlined for speed
-function B2B_G (a, b, c, d, ix, iy) {
-  var x0 = m[ix];
-  var x1 = m[ix + 1];
-  var y0 = m[iy];
-  var y1 = m[iy + 1];
-
-  ADD64AA(v, a, b); // v[a,a+1] += v[b,b+1] ... in JS we must store a uint64 as two uint32s
-  ADD64AC(v, a, x0, x1); // v[a, a+1] += x ... x0 is the low 32 bits of x, x1 is the high 32 bits
-
-  // v[d,d+1] = (v[d,d+1] xor v[a,a+1]) rotated to the right by 32 bits
-  var xor0 = v[d] ^ v[a];
-  var xor1 = v[d + 1] ^ v[a + 1];
-  v[d] = xor1;
-  v[d + 1] = xor0;
-
-  ADD64AA(v, c, d);
-
-  // v[b,b+1] = (v[b,b+1] xor v[c,c+1]) rotated right by 24 bits
-  xor0 = v[b] ^ v[c];
-  xor1 = v[b + 1] ^ v[c + 1];
-  v[b] = (xor0 >>> 24) ^ (xor1 << 8);
-  v[b + 1] = (xor1 >>> 24) ^ (xor0 << 8);
-
-  ADD64AA(v, a, b);
-  ADD64AC(v, a, y0, y1);
-
-  // v[d,d+1] = (v[d,d+1] xor v[a,a+1]) rotated right by 16 bits
-  xor0 = v[d] ^ v[a];
-  xor1 = v[d + 1] ^ v[a + 1];
-  v[d] = (xor0 >>> 16) ^ (xor1 << 16);
-  v[d + 1] = (xor1 >>> 16) ^ (xor0 << 16);
-
-  ADD64AA(v, c, d);
-
-  // v[b,b+1] = (v[b,b+1] xor v[c,c+1]) rotated right by 63 bits
-  xor0 = v[b] ^ v[c];
-  xor1 = v[b + 1] ^ v[c + 1];
-  v[b] = (xor1 >>> 31) ^ (xor0 << 1);
-  v[b + 1] = (xor0 >>> 31) ^ (xor1 << 1);
-}
-
-// Initialization Vector
-var BLAKE2B_IV32 = new Uint32Array([
-  0xF3BCC908, 0x6A09E667, 0x84CAA73B, 0xBB67AE85,
-  0xFE94F82B, 0x3C6EF372, 0x5F1D36F1, 0xA54FF53A,
-  0xADE682D1, 0x510E527F, 0x2B3E6C1F, 0x9B05688C,
-  0xFB41BD6B, 0x1F83D9AB, 0x137E2179, 0x5BE0CD19
-]);
-
-var SIGMA8 = [
-  0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
-  14, 10, 4, 8, 9, 15, 13, 6, 1, 12, 0, 2, 11, 7, 5, 3,
-  11, 8, 12, 0, 5, 2, 15, 13, 10, 14, 3, 6, 7, 1, 9, 4,
-  7, 9, 3, 1, 13, 12, 11, 14, 2, 6, 5, 10, 4, 0, 15, 8,
-  9, 0, 5, 7, 2, 4, 10, 15, 14, 1, 11, 12, 6, 8, 3, 13,
-  2, 12, 6, 10, 0, 11, 8, 3, 4, 13, 7, 5, 15, 14, 1, 9,
-  12, 5, 1, 15, 14, 13, 4, 10, 0, 7, 6, 3, 9, 2, 8, 11,
-  13, 11, 7, 14, 12, 1, 3, 9, 5, 0, 15, 4, 8, 6, 2, 10,
-  6, 15, 14, 9, 11, 3, 0, 8, 12, 2, 13, 7, 1, 4, 10, 5,
-  10, 2, 8, 4, 7, 6, 1, 5, 15, 11, 9, 14, 3, 12, 13, 0,
-  0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
-  14, 10, 4, 8, 9, 15, 13, 6, 1, 12, 0, 2, 11, 7, 5, 3
-];
-
-// These are offsets into a uint64 buffer.
-// Multiply them all by 2 to make them offsets into a uint32 buffer,
-// because this is Javascript and we don't have uint64s
-var SIGMA82 = new Uint8Array(SIGMA8.map(function (x) { return x * 2 }));
-
-// Compression function. 'last' flag indicates last block.
-// Note we're representing 16 uint64s as 32 uint32s
-var v = new Uint32Array(32);
-var m = new Uint32Array(32);
-function blake2bCompress (ctx, last) {
-  var i = 0;
-
-  // init work variables
-  for (i = 0; i < 16; i++) {
-    v[i] = ctx.h[i];
-    v[i + 16] = BLAKE2B_IV32[i];
-  }
-
-  // low 64 bits of offset
-  v[24] = v[24] ^ ctx.t;
-  v[25] = v[25] ^ (ctx.t / 0x100000000);
-  // high 64 bits not supported, offset may not be higher than 2**53-1
-
-  // last block flag set ?
-  if (last) {
-    v[28] = ~v[28];
-    v[29] = ~v[29];
-  }
-
-  // get little-endian words
-  for (i = 0; i < 32; i++) {
-    m[i] = B2B_GET32(ctx.b, 4 * i);
-  }
-
-  // twelve rounds of mixing
-  // uncomment the DebugPrint calls to log the computation
-  // and match the RFC sample documentation
-  // util.debugPrint('          m[16]', m, 64)
-  for (i = 0; i < 12; i++) {
-    // util.debugPrint('   (i=' + (i < 10 ? ' ' : '') + i + ') v[16]', v, 64)
-    B2B_G(0, 8, 16, 24, SIGMA82[i * 16 + 0], SIGMA82[i * 16 + 1]);
-    B2B_G(2, 10, 18, 26, SIGMA82[i * 16 + 2], SIGMA82[i * 16 + 3]);
-    B2B_G(4, 12, 20, 28, SIGMA82[i * 16 + 4], SIGMA82[i * 16 + 5]);
-    B2B_G(6, 14, 22, 30, SIGMA82[i * 16 + 6], SIGMA82[i * 16 + 7]);
-    B2B_G(0, 10, 20, 30, SIGMA82[i * 16 + 8], SIGMA82[i * 16 + 9]);
-    B2B_G(2, 12, 22, 24, SIGMA82[i * 16 + 10], SIGMA82[i * 16 + 11]);
-    B2B_G(4, 14, 16, 26, SIGMA82[i * 16 + 12], SIGMA82[i * 16 + 13]);
-    B2B_G(6, 8, 18, 28, SIGMA82[i * 16 + 14], SIGMA82[i * 16 + 15]);
-  }
-  // util.debugPrint('   (i=12) v[16]', v, 64)
-
-  for (i = 0; i < 16; i++) {
-    ctx.h[i] = ctx.h[i] ^ v[i] ^ v[i + 16];
-  }
-  // util.debugPrint('h[8]', ctx.h, 64)
-}
-
-// Creates a BLAKE2b hashing context
-// Requires an output length between 1 and 64 bytes
-// Takes an optional Uint8Array key
-function blake2bInit (outlen, key) {
-  if (outlen === 0 || outlen > 64) {
-    throw new Error('Illegal output length, expected 0 < length <= 64')
-  }
-  if (key && key.length > 64) {
-    throw new Error('Illegal key, expected Uint8Array with 0 < length <= 64')
-  }
-
-  // state, 'param block'
-  var ctx = {
-    b: new Uint8Array(128),
-    h: new Uint32Array(16),
-    t: 0, // input count
-    c: 0, // pointer within buffer
-    outlen: outlen // output length in bytes
-  };
-
-  // initialize hash state
-  for (var i = 0; i < 16; i++) {
-    ctx.h[i] = BLAKE2B_IV32[i];
-  }
-  var keylen = key ? key.length : 0;
-  ctx.h[0] ^= 0x01010000 ^ (keylen << 8) ^ outlen;
-
-  // key the hash, if applicable
-  if (key) {
-    blake2bUpdate(ctx, key);
-    // at the end
-    ctx.c = 128;
-  }
-
-  return ctx
-}
-
-// Updates a BLAKE2b streaming hash
-// Requires hash context and Uint8Array (byte array)
-function blake2bUpdate (ctx, input) {
-  for (var i = 0; i < input.length; i++) {
-    if (ctx.c === 128) { // buffer full ?
-      ctx.t += ctx.c; // add counters
-      blake2bCompress(ctx, false); // compress (not last)
-      ctx.c = 0; // counter to zero
-    }
-    ctx.b[ctx.c++] = input[i];
-  }
-}
-
-// Completes a BLAKE2b streaming hash
-// Returns a Uint8Array containing the message digest
-function blake2bFinal (ctx) {
-  ctx.t += ctx.c; // mark last block offset
-
-  while (ctx.c < 128) { // fill up with zeros
-    ctx.b[ctx.c++] = 0;
-  }
-  blake2bCompress(ctx, true); // final block flag = 1
-
-  // little endian convert and store
-  var out = new Uint8Array(ctx.outlen);
-  for (var i = 0; i < ctx.outlen; i++) {
-    out[i] = ctx.h[i >> 2] >> (8 * (i & 3));
-  }
-  return out
-}
-
-// Computes the BLAKE2B hash of a string or byte array, and returns a Uint8Array
-//
-// Returns a n-byte Uint8Array
-//
-// Parameters:
-// - input - the input bytes, as a string, Buffer or Uint8Array
-// - key - optional key Uint8Array, up to 64 bytes
-// - outlen - optional output length in bytes, default 64
-function blake2b (input, key, outlen) {
-  // preprocess inputs
-  outlen = outlen || 64;
-  input = util.normalizeInput(input);
-
-  // do the math
-  var ctx = blake2bInit(outlen, key);
-  blake2bUpdate(ctx, input);
-  return blake2bFinal(ctx)
-}
-
-// Computes the BLAKE2B hash of a string or byte array
-//
-// Returns an n-byte hash in hex, all lowercase
-//
-// Parameters:
-// - input - the input bytes, as a string, Buffer, or Uint8Array
-// - key - optional key Uint8Array, up to 64 bytes
-// - outlen - optional output length in bytes, default 64
-function blake2bHex (input, key, outlen) {
-  var output = blake2b(input, key, outlen);
-  return util.toHex(output)
-}
-
-var blake2b_1 = {
-  blake2b: blake2b,
-  blake2bHex: blake2bHex,
-  blake2bInit: blake2bInit,
-  blake2bUpdate: blake2bUpdate,
-  blake2bFinal: blake2bFinal
-};
-
-// BLAKE2s hash function in pure Javascript
-// Adapted from the reference implementation in RFC7693
-// Ported to Javascript by DC - https://github.com/dcposch
-
-
-
-// Little-endian byte access.
-// Expects a Uint8Array and an index
-// Returns the little-endian uint32 at v[i..i+3]
-function B2S_GET32 (v, i) {
-  return v[i] ^ (v[i + 1] << 8) ^ (v[i + 2] << 16) ^ (v[i + 3] << 24)
-}
-
-// Mixing function G.
-function B2S_G (a, b, c, d, x, y) {
-  v$1[a] = v$1[a] + v$1[b] + x;
-  v$1[d] = ROTR32(v$1[d] ^ v$1[a], 16);
-  v$1[c] = v$1[c] + v$1[d];
-  v$1[b] = ROTR32(v$1[b] ^ v$1[c], 12);
-  v$1[a] = v$1[a] + v$1[b] + y;
-  v$1[d] = ROTR32(v$1[d] ^ v$1[a], 8);
-  v$1[c] = v$1[c] + v$1[d];
-  v$1[b] = ROTR32(v$1[b] ^ v$1[c], 7);
-}
-
-// 32-bit right rotation
-// x should be a uint32
-// y must be between 1 and 31, inclusive
-function ROTR32 (x, y) {
-  return (x >>> y) ^ (x << (32 - y))
-}
-
-// Initialization Vector.
-var BLAKE2S_IV = new Uint32Array([
-  0x6A09E667, 0xBB67AE85, 0x3C6EF372, 0xA54FF53A,
-  0x510E527F, 0x9B05688C, 0x1F83D9AB, 0x5BE0CD19]);
-
-var SIGMA = new Uint8Array([
-  0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
-  14, 10, 4, 8, 9, 15, 13, 6, 1, 12, 0, 2, 11, 7, 5, 3,
-  11, 8, 12, 0, 5, 2, 15, 13, 10, 14, 3, 6, 7, 1, 9, 4,
-  7, 9, 3, 1, 13, 12, 11, 14, 2, 6, 5, 10, 4, 0, 15, 8,
-  9, 0, 5, 7, 2, 4, 10, 15, 14, 1, 11, 12, 6, 8, 3, 13,
-  2, 12, 6, 10, 0, 11, 8, 3, 4, 13, 7, 5, 15, 14, 1, 9,
-  12, 5, 1, 15, 14, 13, 4, 10, 0, 7, 6, 3, 9, 2, 8, 11,
-  13, 11, 7, 14, 12, 1, 3, 9, 5, 0, 15, 4, 8, 6, 2, 10,
-  6, 15, 14, 9, 11, 3, 0, 8, 12, 2, 13, 7, 1, 4, 10, 5,
-  10, 2, 8, 4, 7, 6, 1, 5, 15, 11, 9, 14, 3, 12, 13, 0]);
-
-// Compression function. "last" flag indicates last block
-var v$1 = new Uint32Array(16);
-var m$1 = new Uint32Array(16);
-function blake2sCompress (ctx, last) {
-  var i = 0;
-  for (i = 0; i < 8; i++) { // init work variables
-    v$1[i] = ctx.h[i];
-    v$1[i + 8] = BLAKE2S_IV[i];
-  }
-
-  v$1[12] ^= ctx.t; // low 32 bits of offset
-  v$1[13] ^= (ctx.t / 0x100000000); // high 32 bits
-  if (last) { // last block flag set ?
-    v$1[14] = ~v$1[14];
-  }
-
-  for (i = 0; i < 16; i++) { // get little-endian words
-    m$1[i] = B2S_GET32(ctx.b, 4 * i);
-  }
-
-  // ten rounds of mixing
-  // uncomment the DebugPrint calls to log the computation
-  // and match the RFC sample documentation
-  // util.debugPrint('          m[16]', m, 32)
-  for (i = 0; i < 10; i++) {
-    // util.debugPrint('   (i=' + i + ')  v[16]', v, 32)
-    B2S_G(0, 4, 8, 12, m$1[SIGMA[i * 16 + 0]], m$1[SIGMA[i * 16 + 1]]);
-    B2S_G(1, 5, 9, 13, m$1[SIGMA[i * 16 + 2]], m$1[SIGMA[i * 16 + 3]]);
-    B2S_G(2, 6, 10, 14, m$1[SIGMA[i * 16 + 4]], m$1[SIGMA[i * 16 + 5]]);
-    B2S_G(3, 7, 11, 15, m$1[SIGMA[i * 16 + 6]], m$1[SIGMA[i * 16 + 7]]);
-    B2S_G(0, 5, 10, 15, m$1[SIGMA[i * 16 + 8]], m$1[SIGMA[i * 16 + 9]]);
-    B2S_G(1, 6, 11, 12, m$1[SIGMA[i * 16 + 10]], m$1[SIGMA[i * 16 + 11]]);
-    B2S_G(2, 7, 8, 13, m$1[SIGMA[i * 16 + 12]], m$1[SIGMA[i * 16 + 13]]);
-    B2S_G(3, 4, 9, 14, m$1[SIGMA[i * 16 + 14]], m$1[SIGMA[i * 16 + 15]]);
-  }
-  // util.debugPrint('   (i=10) v[16]', v, 32)
-
-  for (i = 0; i < 8; i++) {
-    ctx.h[i] ^= v$1[i] ^ v$1[i + 8];
-  }
-  // util.debugPrint('h[8]', ctx.h, 32)
-}
-
-// Creates a BLAKE2s hashing context
-// Requires an output length between 1 and 32 bytes
-// Takes an optional Uint8Array key
-function blake2sInit (outlen, key) {
-  if (!(outlen > 0 && outlen <= 32)) {
-    throw new Error('Incorrect output length, should be in [1, 32]')
-  }
-  var keylen = key ? key.length : 0;
-  if (key && !(keylen > 0 && keylen <= 32)) {
-    throw new Error('Incorrect key length, should be in [1, 32]')
-  }
-
-  var ctx = {
-    h: new Uint32Array(BLAKE2S_IV), // hash state
-    b: new Uint32Array(64), // input block
-    c: 0, // pointer within block
-    t: 0, // input count
-    outlen: outlen // output length in bytes
-  };
-  ctx.h[0] ^= 0x01010000 ^ (keylen << 8) ^ outlen;
-
-  if (keylen > 0) {
-    blake2sUpdate(ctx, key);
-    ctx.c = 64; // at the end
-  }
-
-  return ctx
-}
-
-// Updates a BLAKE2s streaming hash
-// Requires hash context and Uint8Array (byte array)
-function blake2sUpdate (ctx, input) {
-  for (var i = 0; i < input.length; i++) {
-    if (ctx.c === 64) { // buffer full ?
-      ctx.t += ctx.c; // add counters
-      blake2sCompress(ctx, false); // compress (not last)
-      ctx.c = 0; // counter to zero
-    }
-    ctx.b[ctx.c++] = input[i];
-  }
-}
-
-// Completes a BLAKE2s streaming hash
-// Returns a Uint8Array containing the message digest
-function blake2sFinal (ctx) {
-  ctx.t += ctx.c; // mark last block offset
-  while (ctx.c < 64) { // fill up with zeros
-    ctx.b[ctx.c++] = 0;
-  }
-  blake2sCompress(ctx, true); // final block flag = 1
-
-  // little endian convert and store
-  var out = new Uint8Array(ctx.outlen);
-  for (var i = 0; i < ctx.outlen; i++) {
-    out[i] = (ctx.h[i >> 2] >> (8 * (i & 3))) & 0xFF;
-  }
-  return out
-}
-
-// Computes the BLAKE2S hash of a string or byte array, and returns a Uint8Array
-//
-// Returns a n-byte Uint8Array
-//
-// Parameters:
-// - input - the input bytes, as a string, Buffer, or Uint8Array
-// - key - optional key Uint8Array, up to 32 bytes
-// - outlen - optional output length in bytes, default 64
-function blake2s (input, key, outlen) {
-  // preprocess inputs
-  outlen = outlen || 32;
-  input = util.normalizeInput(input);
-
-  // do the math
-  var ctx = blake2sInit(outlen, key);
-  blake2sUpdate(ctx, input);
-  return blake2sFinal(ctx)
-}
-
-// Computes the BLAKE2S hash of a string or byte array
-//
-// Returns an n-byte hash in hex, all lowercase
-//
-// Parameters:
-// - input - the input bytes, as a string, Buffer, or Uint8Array
-// - key - optional key Uint8Array, up to 32 bytes
-// - outlen - optional output length in bytes, default 64
-function blake2sHex (input, key, outlen) {
-  var output = blake2s(input, key, outlen);
-  return util.toHex(output)
-}
-
-var blake2s_1 = {
-  blake2s: blake2s,
-  blake2sHex: blake2sHex,
-  blake2sInit: blake2sInit,
-  blake2sUpdate: blake2sUpdate,
-  blake2sFinal: blake2sFinal
-};
-
-var blakejs = {
-  blake2b: blake2b_1.blake2b,
-  blake2bHex: blake2b_1.blake2bHex,
-  blake2bInit: blake2b_1.blake2bInit,
-  blake2bUpdate: blake2b_1.blake2bUpdate,
-  blake2bFinal: blake2b_1.blake2bFinal,
-  blake2s: blake2s_1.blake2s,
-  blake2sHex: blake2s_1.blake2sHex,
-  blake2sInit: blake2s_1.blake2sInit,
-  blake2sUpdate: blake2s_1.blake2sUpdate,
-  blake2sFinal: blake2s_1.blake2sFinal
-};
-var blakejs_1 = blakejs.blake2b;
-
 // shim for using process in browser
 // based off https://github.com/defunctzombie/node-process/blob/master/browser.js
 
@@ -9898,7 +8289,7 @@ var platform = 'browser';
 var browser = true;
 var env = {};
 var argv = [];
-var version = ''; // empty string to avoid regexp issues
+var version$1 = ''; // empty string to avoid regexp issues
 var versions = {};
 var release = {};
 var config = {};
@@ -9962,7 +8353,7 @@ var process$4 = {
   browser: browser,
   env: env,
   argv: argv,
-  version: version,
+  version: version$1,
   versions: versions,
   on: on,
   addListener: addListener,
@@ -10539,7 +8930,7 @@ function hasOwnProperty$1(obj, prop) {
   return Object.prototype.hasOwnProperty.call(obj, prop);
 }
 
-var util$1 = {
+var util = {
   inherits: inherits$1,
   _extend: _extend,
   log: log$1,
@@ -10565,7 +8956,7 @@ var util$1 = {
 }
 
 
-var util$2 = Object.freeze({
+var util$1 = Object.freeze({
 	format: format,
 	deprecate: deprecate,
 	debuglog: debuglog,
@@ -10588,8 +8979,4814 @@ var util$2 = Object.freeze({
 	log: log$1,
 	inherits: inherits$1,
 	_extend: _extend,
-	default: util$1
+	default: util
 });
+
+// Copyright Joyent, Inc. and other Node contributors.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a
+// copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to permit
+// persons to whom the Software is furnished to do so, subject to the
+// following conditions:
+//
+// The above copyright notice and this permission notice shall be included
+// in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+// USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+
+// If obj.hasOwnProperty has been overridden, then calling
+// obj.hasOwnProperty(prop) will break.
+// See: https://github.com/joyent/node/issues/1707
+function hasOwnProperty$2(obj, prop) {
+  return Object.prototype.hasOwnProperty.call(obj, prop);
+}
+var isArray$2 = Array.isArray || function (xs) {
+  return Object.prototype.toString.call(xs) === '[object Array]';
+};
+function stringifyPrimitive(v) {
+  switch (typeof v) {
+    case 'string':
+      return v;
+
+    case 'boolean':
+      return v ? 'true' : 'false';
+
+    case 'number':
+      return isFinite(v) ? v : '';
+
+    default:
+      return '';
+  }
+}
+
+function stringify (obj, sep, eq, name) {
+  sep = sep || '&';
+  eq = eq || '=';
+  if (obj === null) {
+    obj = undefined;
+  }
+
+  if (typeof obj === 'object') {
+    return map$1(objectKeys(obj), function(k) {
+      var ks = encodeURIComponent(stringifyPrimitive(k)) + eq;
+      if (isArray$2(obj[k])) {
+        return map$1(obj[k], function(v) {
+          return ks + encodeURIComponent(stringifyPrimitive(v));
+        }).join(sep);
+      } else {
+        return ks + encodeURIComponent(stringifyPrimitive(obj[k]));
+      }
+    }).join(sep);
+
+  }
+
+  if (!name) return '';
+  return encodeURIComponent(stringifyPrimitive(name)) + eq +
+         encodeURIComponent(stringifyPrimitive(obj));
+}
+function map$1 (xs, f) {
+  if (xs.map) return xs.map(f);
+  var res = [];
+  for (var i = 0; i < xs.length; i++) {
+    res.push(f(xs[i], i));
+  }
+  return res;
+}
+
+var objectKeys = Object.keys || function (obj) {
+  var res = [];
+  for (var key in obj) {
+    if (Object.prototype.hasOwnProperty.call(obj, key)) res.push(key);
+  }
+  return res;
+};
+
+function parse(qs, sep, eq, options) {
+  sep = sep || '&';
+  eq = eq || '=';
+  var obj = {};
+
+  if (typeof qs !== 'string' || qs.length === 0) {
+    return obj;
+  }
+
+  var regexp = /\+/g;
+  qs = qs.split(sep);
+
+  var maxKeys = 1000;
+  if (options && typeof options.maxKeys === 'number') {
+    maxKeys = options.maxKeys;
+  }
+
+  var len = qs.length;
+  // maxKeys <= 0 means that we should not limit keys count
+  if (maxKeys > 0 && len > maxKeys) {
+    len = maxKeys;
+  }
+
+  for (var i = 0; i < len; ++i) {
+    var x = qs[i].replace(regexp, '%20'),
+        idx = x.indexOf(eq),
+        kstr, vstr, k, v;
+
+    if (idx >= 0) {
+      kstr = x.substr(0, idx);
+      vstr = x.substr(idx + 1);
+    } else {
+      kstr = x;
+      vstr = '';
+    }
+
+    k = decodeURIComponent(kstr);
+    v = decodeURIComponent(vstr);
+
+    if (!hasOwnProperty$2(obj, k)) {
+      obj[k] = v;
+    } else if (isArray$2(obj[k])) {
+      obj[k].push(v);
+    } else {
+      obj[k] = [obj[k], v];
+    }
+  }
+
+  return obj;
+}
+
+// Copyright Joyent, Inc. and other Node contributors.
+var url = {
+  parse: urlParse,
+  resolve: urlResolve,
+  resolveObject: urlResolveObject,
+  format: urlFormat,
+  Url: Url
+}
+function Url() {
+  this.protocol = null;
+  this.slashes = null;
+  this.auth = null;
+  this.host = null;
+  this.port = null;
+  this.hostname = null;
+  this.hash = null;
+  this.search = null;
+  this.query = null;
+  this.pathname = null;
+  this.path = null;
+  this.href = null;
+}
+
+// Reference: RFC 3986, RFC 1808, RFC 2396
+
+// define these here so at least they only have to be
+// compiled once on the first module load.
+var protocolPattern = /^([a-z0-9.+-]+:)/i,
+  portPattern = /:[0-9]*$/,
+
+  // Special case for a simple path URL
+  simplePathPattern = /^(\/\/?(?!\/)[^\?\s]*)(\?[^\s]*)?$/,
+
+  // RFC 2396: characters reserved for delimiting URLs.
+  // We actually just auto-escape these.
+  delims = ['<', '>', '"', '`', ' ', '\r', '\n', '\t'],
+
+  // RFC 2396: characters not allowed for various reasons.
+  unwise = ['{', '}', '|', '\\', '^', '`'].concat(delims),
+
+  // Allowed by RFCs, but cause of XSS attacks.  Always escape these.
+  autoEscape = ['\''].concat(unwise),
+  // Characters that are never ever allowed in a hostname.
+  // Note that any invalid chars are also handled, but these
+  // are the ones that are *expected* to be seen, so we fast-path
+  // them.
+  nonHostChars = ['%', '/', '?', ';', '#'].concat(autoEscape),
+  hostEndingChars = ['/', '?', '#'],
+  hostnameMaxLen = 255,
+  hostnamePartPattern = /^[+a-z0-9A-Z_-]{0,63}$/,
+  hostnamePartStart = /^([+a-z0-9A-Z_-]{0,63})(.*)$/,
+  // protocols that can allow "unsafe" and "unwise" chars.
+  unsafeProtocol = {
+    'javascript': true,
+    'javascript:': true
+  },
+  // protocols that never have a hostname.
+  hostlessProtocol = {
+    'javascript': true,
+    'javascript:': true
+  },
+  // protocols that always contain a // bit.
+  slashedProtocol = {
+    'http': true,
+    'https': true,
+    'ftp': true,
+    'gopher': true,
+    'file': true,
+    'http:': true,
+    'https:': true,
+    'ftp:': true,
+    'gopher:': true,
+    'file:': true
+  };
+
+function urlParse(url, parseQueryString, slashesDenoteHost) {
+  if (url && isObject(url) && url instanceof Url) return url;
+
+  var u = new Url;
+  u.parse(url, parseQueryString, slashesDenoteHost);
+  return u;
+}
+Url.prototype.parse = function(url, parseQueryString, slashesDenoteHost) {
+  return parse$1(this, url, parseQueryString, slashesDenoteHost);
+};
+
+function parse$1(self, url, parseQueryString, slashesDenoteHost) {
+  if (!isString(url)) {
+    throw new TypeError('Parameter \'url\' must be a string, not ' + typeof url);
+  }
+
+  // Copy chrome, IE, opera backslash-handling behavior.
+  // Back slashes before the query string get converted to forward slashes
+  // See: https://code.google.com/p/chromium/issues/detail?id=25916
+  var queryIndex = url.indexOf('?'),
+    splitter =
+    (queryIndex !== -1 && queryIndex < url.indexOf('#')) ? '?' : '#',
+    uSplit = url.split(splitter),
+    slashRegex = /\\/g;
+  uSplit[0] = uSplit[0].replace(slashRegex, '/');
+  url = uSplit.join(splitter);
+
+  var rest = url;
+
+  // trim before proceeding.
+  // This is to support parse stuff like "  http://foo.com  \n"
+  rest = rest.trim();
+
+  if (!slashesDenoteHost && url.split('#').length === 1) {
+    // Try fast path regexp
+    var simplePath = simplePathPattern.exec(rest);
+    if (simplePath) {
+      self.path = rest;
+      self.href = rest;
+      self.pathname = simplePath[1];
+      if (simplePath[2]) {
+        self.search = simplePath[2];
+        if (parseQueryString) {
+          self.query = parse(self.search.substr(1));
+        } else {
+          self.query = self.search.substr(1);
+        }
+      } else if (parseQueryString) {
+        self.search = '';
+        self.query = {};
+      }
+      return self;
+    }
+  }
+
+  var proto = protocolPattern.exec(rest);
+  if (proto) {
+    proto = proto[0];
+    var lowerProto = proto.toLowerCase();
+    self.protocol = lowerProto;
+    rest = rest.substr(proto.length);
+  }
+
+  // figure out if it's got a host
+  // user@server is *always* interpreted as a hostname, and url
+  // resolution will treat //foo/bar as host=foo,path=bar because that's
+  // how the browser resolves relative URLs.
+  if (slashesDenoteHost || proto || rest.match(/^\/\/[^@\/]+@[^@\/]+/)) {
+    var slashes = rest.substr(0, 2) === '//';
+    if (slashes && !(proto && hostlessProtocol[proto])) {
+      rest = rest.substr(2);
+      self.slashes = true;
+    }
+  }
+  var i, hec, l, p;
+  if (!hostlessProtocol[proto] &&
+    (slashes || (proto && !slashedProtocol[proto]))) {
+
+    // there's a hostname.
+    // the first instance of /, ?, ;, or # ends the host.
+    //
+    // If there is an @ in the hostname, then non-host chars *are* allowed
+    // to the left of the last @ sign, unless some host-ending character
+    // comes *before* the @-sign.
+    // URLs are obnoxious.
+    //
+    // ex:
+    // http://a@b@c/ => user:a@b host:c
+    // http://a@b?@c => user:a host:c path:/?@c
+
+    // v0.12 TODO(isaacs): This is not quite how Chrome does things.
+    // Review our test case against browsers more comprehensively.
+
+    // find the first instance of any hostEndingChars
+    var hostEnd = -1;
+    for (i = 0; i < hostEndingChars.length; i++) {
+      hec = rest.indexOf(hostEndingChars[i]);
+      if (hec !== -1 && (hostEnd === -1 || hec < hostEnd))
+        hostEnd = hec;
+    }
+
+    // at this point, either we have an explicit point where the
+    // auth portion cannot go past, or the last @ char is the decider.
+    var auth, atSign;
+    if (hostEnd === -1) {
+      // atSign can be anywhere.
+      atSign = rest.lastIndexOf('@');
+    } else {
+      // atSign must be in auth portion.
+      // http://a@b/c@d => host:b auth:a path:/c@d
+      atSign = rest.lastIndexOf('@', hostEnd);
+    }
+
+    // Now we have a portion which is definitely the auth.
+    // Pull that off.
+    if (atSign !== -1) {
+      auth = rest.slice(0, atSign);
+      rest = rest.slice(atSign + 1);
+      self.auth = decodeURIComponent(auth);
+    }
+
+    // the host is the remaining to the left of the first non-host char
+    hostEnd = -1;
+    for (i = 0; i < nonHostChars.length; i++) {
+      hec = rest.indexOf(nonHostChars[i]);
+      if (hec !== -1 && (hostEnd === -1 || hec < hostEnd))
+        hostEnd = hec;
+    }
+    // if we still have not hit it, then the entire thing is a host.
+    if (hostEnd === -1)
+      hostEnd = rest.length;
+
+    self.host = rest.slice(0, hostEnd);
+    rest = rest.slice(hostEnd);
+
+    // pull out port.
+    parseHost(self);
+
+    // we've indicated that there is a hostname,
+    // so even if it's empty, it has to be present.
+    self.hostname = self.hostname || '';
+
+    // if hostname begins with [ and ends with ]
+    // assume that it's an IPv6 address.
+    var ipv6Hostname = self.hostname[0] === '[' &&
+      self.hostname[self.hostname.length - 1] === ']';
+
+    // validate a little.
+    if (!ipv6Hostname) {
+      var hostparts = self.hostname.split(/\./);
+      for (i = 0, l = hostparts.length; i < l; i++) {
+        var part = hostparts[i];
+        if (!part) continue;
+        if (!part.match(hostnamePartPattern)) {
+          var newpart = '';
+          for (var j = 0, k = part.length; j < k; j++) {
+            if (part.charCodeAt(j) > 127) {
+              // we replace non-ASCII char with a temporary placeholder
+              // we need this to make sure size of hostname is not
+              // broken by replacing non-ASCII by nothing
+              newpart += 'x';
+            } else {
+              newpart += part[j];
+            }
+          }
+          // we test again with ASCII char only
+          if (!newpart.match(hostnamePartPattern)) {
+            var validParts = hostparts.slice(0, i);
+            var notHost = hostparts.slice(i + 1);
+            var bit = part.match(hostnamePartStart);
+            if (bit) {
+              validParts.push(bit[1]);
+              notHost.unshift(bit[2]);
+            }
+            if (notHost.length) {
+              rest = '/' + notHost.join('.') + rest;
+            }
+            self.hostname = validParts.join('.');
+            break;
+          }
+        }
+      }
+    }
+
+    if (self.hostname.length > hostnameMaxLen) {
+      self.hostname = '';
+    } else {
+      // hostnames are always lower case.
+      self.hostname = self.hostname.toLowerCase();
+    }
+
+    if (!ipv6Hostname) {
+      // IDNA Support: Returns a punycoded representation of "domain".
+      // It only converts parts of the domain name that
+      // have non-ASCII characters, i.e. it doesn't matter if
+      // you call it with a domain that already is ASCII-only.
+      self.hostname = toASCII(self.hostname);
+    }
+
+    p = self.port ? ':' + self.port : '';
+    var h = self.hostname || '';
+    self.host = h + p;
+    self.href += self.host;
+
+    // strip [ and ] from the hostname
+    // the host field still retains them, though
+    if (ipv6Hostname) {
+      self.hostname = self.hostname.substr(1, self.hostname.length - 2);
+      if (rest[0] !== '/') {
+        rest = '/' + rest;
+      }
+    }
+  }
+
+  // now rest is set to the post-host stuff.
+  // chop off any delim chars.
+  if (!unsafeProtocol[lowerProto]) {
+
+    // First, make 100% sure that any "autoEscape" chars get
+    // escaped, even if encodeURIComponent doesn't think they
+    // need to be.
+    for (i = 0, l = autoEscape.length; i < l; i++) {
+      var ae = autoEscape[i];
+      if (rest.indexOf(ae) === -1)
+        continue;
+      var esc = encodeURIComponent(ae);
+      if (esc === ae) {
+        esc = escape(ae);
+      }
+      rest = rest.split(ae).join(esc);
+    }
+  }
+
+
+  // chop off from the tail first.
+  var hash = rest.indexOf('#');
+  if (hash !== -1) {
+    // got a fragment string.
+    self.hash = rest.substr(hash);
+    rest = rest.slice(0, hash);
+  }
+  var qm = rest.indexOf('?');
+  if (qm !== -1) {
+    self.search = rest.substr(qm);
+    self.query = rest.substr(qm + 1);
+    if (parseQueryString) {
+      self.query = parse(self.query);
+    }
+    rest = rest.slice(0, qm);
+  } else if (parseQueryString) {
+    // no query string, but parseQueryString still requested
+    self.search = '';
+    self.query = {};
+  }
+  if (rest) self.pathname = rest;
+  if (slashedProtocol[lowerProto] &&
+    self.hostname && !self.pathname) {
+    self.pathname = '/';
+  }
+
+  //to support http.request
+  if (self.pathname || self.search) {
+    p = self.pathname || '';
+    var s = self.search || '';
+    self.path = p + s;
+  }
+
+  // finally, reconstruct the href based on what has been validated.
+  self.href = format$1(self);
+  return self;
+}
+
+// format a parsed object into a url string
+function urlFormat(obj) {
+  // ensure it's an object, and not a string url.
+  // If it's an obj, this is a no-op.
+  // this way, you can call url_format() on strings
+  // to clean up potentially wonky urls.
+  if (isString(obj)) obj = parse$1({}, obj);
+  return format$1(obj);
+}
+
+function format$1(self) {
+  var auth = self.auth || '';
+  if (auth) {
+    auth = encodeURIComponent(auth);
+    auth = auth.replace(/%3A/i, ':');
+    auth += '@';
+  }
+
+  var protocol = self.protocol || '',
+    pathname = self.pathname || '',
+    hash = self.hash || '',
+    host = false,
+    query = '';
+
+  if (self.host) {
+    host = auth + self.host;
+  } else if (self.hostname) {
+    host = auth + (self.hostname.indexOf(':') === -1 ?
+      self.hostname :
+      '[' + this.hostname + ']');
+    if (self.port) {
+      host += ':' + self.port;
+    }
+  }
+
+  if (self.query &&
+    isObject(self.query) &&
+    Object.keys(self.query).length) {
+    query = stringify(self.query);
+  }
+
+  var search = self.search || (query && ('?' + query)) || '';
+
+  if (protocol && protocol.substr(-1) !== ':') protocol += ':';
+
+  // only the slashedProtocols get the //.  Not mailto:, xmpp:, etc.
+  // unless they had them to begin with.
+  if (self.slashes ||
+    (!protocol || slashedProtocol[protocol]) && host !== false) {
+    host = '//' + (host || '');
+    if (pathname && pathname.charAt(0) !== '/') pathname = '/' + pathname;
+  } else if (!host) {
+    host = '';
+  }
+
+  if (hash && hash.charAt(0) !== '#') hash = '#' + hash;
+  if (search && search.charAt(0) !== '?') search = '?' + search;
+
+  pathname = pathname.replace(/[?#]/g, function(match) {
+    return encodeURIComponent(match);
+  });
+  search = search.replace('#', '%23');
+
+  return protocol + host + pathname + search + hash;
+}
+
+Url.prototype.format = function() {
+  return format$1(this);
+};
+
+function urlResolve(source, relative) {
+  return urlParse(source, false, true).resolve(relative);
+}
+
+Url.prototype.resolve = function(relative) {
+  return this.resolveObject(urlParse(relative, false, true)).format();
+};
+
+function urlResolveObject(source, relative) {
+  if (!source) return relative;
+  return urlParse(source, false, true).resolveObject(relative);
+}
+
+Url.prototype.resolveObject = function(relative) {
+  if (isString(relative)) {
+    var rel = new Url();
+    rel.parse(relative, false, true);
+    relative = rel;
+  }
+
+  var result = new Url();
+  var tkeys = Object.keys(this);
+  for (var tk = 0; tk < tkeys.length; tk++) {
+    var tkey = tkeys[tk];
+    result[tkey] = this[tkey];
+  }
+
+  // hash is always overridden, no matter what.
+  // even href="" will remove it.
+  result.hash = relative.hash;
+
+  // if the relative url is empty, then there's nothing left to do here.
+  if (relative.href === '') {
+    result.href = result.format();
+    return result;
+  }
+
+  // hrefs like //foo/bar always cut to the protocol.
+  if (relative.slashes && !relative.protocol) {
+    // take everything except the protocol from relative
+    var rkeys = Object.keys(relative);
+    for (var rk = 0; rk < rkeys.length; rk++) {
+      var rkey = rkeys[rk];
+      if (rkey !== 'protocol')
+        result[rkey] = relative[rkey];
+    }
+
+    //urlParse appends trailing / to urls like http://www.example.com
+    if (slashedProtocol[result.protocol] &&
+      result.hostname && !result.pathname) {
+      result.path = result.pathname = '/';
+    }
+
+    result.href = result.format();
+    return result;
+  }
+  var relPath;
+  if (relative.protocol && relative.protocol !== result.protocol) {
+    // if it's a known url protocol, then changing
+    // the protocol does weird things
+    // first, if it's not file:, then we MUST have a host,
+    // and if there was a path
+    // to begin with, then we MUST have a path.
+    // if it is file:, then the host is dropped,
+    // because that's known to be hostless.
+    // anything else is assumed to be absolute.
+    if (!slashedProtocol[relative.protocol]) {
+      var keys = Object.keys(relative);
+      for (var v = 0; v < keys.length; v++) {
+        var k = keys[v];
+        result[k] = relative[k];
+      }
+      result.href = result.format();
+      return result;
+    }
+
+    result.protocol = relative.protocol;
+    if (!relative.host && !hostlessProtocol[relative.protocol]) {
+      relPath = (relative.pathname || '').split('/');
+      while (relPath.length && !(relative.host = relPath.shift()));
+      if (!relative.host) relative.host = '';
+      if (!relative.hostname) relative.hostname = '';
+      if (relPath[0] !== '') relPath.unshift('');
+      if (relPath.length < 2) relPath.unshift('');
+      result.pathname = relPath.join('/');
+    } else {
+      result.pathname = relative.pathname;
+    }
+    result.search = relative.search;
+    result.query = relative.query;
+    result.host = relative.host || '';
+    result.auth = relative.auth;
+    result.hostname = relative.hostname || relative.host;
+    result.port = relative.port;
+    // to support http.request
+    if (result.pathname || result.search) {
+      var p = result.pathname || '';
+      var s = result.search || '';
+      result.path = p + s;
+    }
+    result.slashes = result.slashes || relative.slashes;
+    result.href = result.format();
+    return result;
+  }
+
+  var isSourceAbs = (result.pathname && result.pathname.charAt(0) === '/'),
+    isRelAbs = (
+      relative.host ||
+      relative.pathname && relative.pathname.charAt(0) === '/'
+    ),
+    mustEndAbs = (isRelAbs || isSourceAbs ||
+      (result.host && relative.pathname)),
+    removeAllDots = mustEndAbs,
+    srcPath = result.pathname && result.pathname.split('/') || [],
+    psychotic = result.protocol && !slashedProtocol[result.protocol];
+  relPath = relative.pathname && relative.pathname.split('/') || [];
+  // if the url is a non-slashed url, then relative
+  // links like ../.. should be able
+  // to crawl up to the hostname, as well.  This is strange.
+  // result.protocol has already been set by now.
+  // Later on, put the first path part into the host field.
+  if (psychotic) {
+    result.hostname = '';
+    result.port = null;
+    if (result.host) {
+      if (srcPath[0] === '') srcPath[0] = result.host;
+      else srcPath.unshift(result.host);
+    }
+    result.host = '';
+    if (relative.protocol) {
+      relative.hostname = null;
+      relative.port = null;
+      if (relative.host) {
+        if (relPath[0] === '') relPath[0] = relative.host;
+        else relPath.unshift(relative.host);
+      }
+      relative.host = null;
+    }
+    mustEndAbs = mustEndAbs && (relPath[0] === '' || srcPath[0] === '');
+  }
+  var authInHost;
+  if (isRelAbs) {
+    // it's absolute.
+    result.host = (relative.host || relative.host === '') ?
+      relative.host : result.host;
+    result.hostname = (relative.hostname || relative.hostname === '') ?
+      relative.hostname : result.hostname;
+    result.search = relative.search;
+    result.query = relative.query;
+    srcPath = relPath;
+    // fall through to the dot-handling below.
+  } else if (relPath.length) {
+    // it's relative
+    // throw away the existing file, and take the new path instead.
+    if (!srcPath) srcPath = [];
+    srcPath.pop();
+    srcPath = srcPath.concat(relPath);
+    result.search = relative.search;
+    result.query = relative.query;
+  } else if (!isNullOrUndefined(relative.search)) {
+    // just pull out the search.
+    // like href='?foo'.
+    // Put this after the other two cases because it simplifies the booleans
+    if (psychotic) {
+      result.hostname = result.host = srcPath.shift();
+      //occationaly the auth can get stuck only in host
+      //this especially happens in cases like
+      //url.resolveObject('mailto:local1@domain1', 'local2@domain2')
+      authInHost = result.host && result.host.indexOf('@') > 0 ?
+        result.host.split('@') : false;
+      if (authInHost) {
+        result.auth = authInHost.shift();
+        result.host = result.hostname = authInHost.shift();
+      }
+    }
+    result.search = relative.search;
+    result.query = relative.query;
+    //to support http.request
+    if (!isNull(result.pathname) || !isNull(result.search)) {
+      result.path = (result.pathname ? result.pathname : '') +
+        (result.search ? result.search : '');
+    }
+    result.href = result.format();
+    return result;
+  }
+
+  if (!srcPath.length) {
+    // no path at all.  easy.
+    // we've already handled the other stuff above.
+    result.pathname = null;
+    //to support http.request
+    if (result.search) {
+      result.path = '/' + result.search;
+    } else {
+      result.path = null;
+    }
+    result.href = result.format();
+    return result;
+  }
+
+  // if a url ENDs in . or .., then it must get a trailing slash.
+  // however, if it ends in anything else non-slashy,
+  // then it must NOT get a trailing slash.
+  var last = srcPath.slice(-1)[0];
+  var hasTrailingSlash = (
+    (result.host || relative.host || srcPath.length > 1) &&
+    (last === '.' || last === '..') || last === '');
+
+  // strip single dots, resolve double dots to parent dir
+  // if the path tries to go above the root, `up` ends up > 0
+  var up = 0;
+  for (var i = srcPath.length; i >= 0; i--) {
+    last = srcPath[i];
+    if (last === '.') {
+      srcPath.splice(i, 1);
+    } else if (last === '..') {
+      srcPath.splice(i, 1);
+      up++;
+    } else if (up) {
+      srcPath.splice(i, 1);
+      up--;
+    }
+  }
+
+  // if the path is allowed to go above the root, restore leading ..s
+  if (!mustEndAbs && !removeAllDots) {
+    for (; up--; up) {
+      srcPath.unshift('..');
+    }
+  }
+
+  if (mustEndAbs && srcPath[0] !== '' &&
+    (!srcPath[0] || srcPath[0].charAt(0) !== '/')) {
+    srcPath.unshift('');
+  }
+
+  if (hasTrailingSlash && (srcPath.join('/').substr(-1) !== '/')) {
+    srcPath.push('');
+  }
+
+  var isAbsolute = srcPath[0] === '' ||
+    (srcPath[0] && srcPath[0].charAt(0) === '/');
+
+  // put the host back
+  if (psychotic) {
+    result.hostname = result.host = isAbsolute ? '' :
+      srcPath.length ? srcPath.shift() : '';
+    //occationaly the auth can get stuck only in host
+    //this especially happens in cases like
+    //url.resolveObject('mailto:local1@domain1', 'local2@domain2')
+    authInHost = result.host && result.host.indexOf('@') > 0 ?
+      result.host.split('@') : false;
+    if (authInHost) {
+      result.auth = authInHost.shift();
+      result.host = result.hostname = authInHost.shift();
+    }
+  }
+
+  mustEndAbs = mustEndAbs || (result.host && srcPath.length);
+
+  if (mustEndAbs && !isAbsolute) {
+    srcPath.unshift('');
+  }
+
+  if (!srcPath.length) {
+    result.pathname = null;
+    result.path = null;
+  } else {
+    result.pathname = srcPath.join('/');
+  }
+
+  //to support request.http
+  if (!isNull(result.pathname) || !isNull(result.search)) {
+    result.path = (result.pathname ? result.pathname : '') +
+      (result.search ? result.search : '');
+  }
+  result.auth = relative.auth || result.auth;
+  result.slashes = result.slashes || relative.slashes;
+  result.href = result.format();
+  return result;
+};
+
+Url.prototype.parseHost = function() {
+  return parseHost(this);
+};
+
+function parseHost(self) {
+  var host = self.host;
+  var port = portPattern.exec(host);
+  if (port) {
+    port = port[0];
+    if (port !== ':') {
+      self.port = port.substr(1);
+    }
+    host = host.substr(0, host.length - port.length);
+  }
+  if (host) self.hostname = host;
+}
+
+var unfetch="function"==typeof fetch?fetch.bind():function(e,t){return t=t||{}, new Promise(function(n,r){function s(){var e,t=[],n=[],r={};return o.getAllResponseHeaders().replace(/^(.*?):\s*([\s\S]*?)$/gm,function(s,o,u){t.push(o=o.toLowerCase()), n.push([o,u]), e=r[o], r[o]=e?e+","+u:u;}), {ok:1==(o.status/200|0),status:o.status,statusText:o.statusText,url:o.responseURL,clone:s,text:function(){return Promise.resolve(o.responseText)},json:function(){return Promise.resolve(o.responseText).then(JSON.parse)},blob:function(){return Promise.resolve(new Blob([o.response]))},headers:{keys:function(){return t},entries:function(){return n},get:function(e){return r[e.toLowerCase()]},has:function(e){return e.toLowerCase()in r}}}}var o=new XMLHttpRequest;o.open(t.method||"get",e);for(var u in t.headers)o.setRequestHeader(u,t.headers[u]);o.withCredentials="include"==t.credentials, o.onload=function(){n(s());}, o.onerror=r, o.send(t.body);})};
+
+// tslint:disable
+var portableFetch = unfetch;
+var BASE_PATH = "http://localhost:5171";
+/**
+ *
+ * @export
+ * @class BaseAPI
+ */
+var BaseAPI = /** @class */ (function () {
+    function BaseAPI(configuration, basePath, fetch) {
+        if (basePath === void 0) { basePath = BASE_PATH; }
+        if (fetch === void 0) { fetch = portableFetch; }
+        this.basePath = basePath;
+        this.fetch = fetch;
+        if (configuration) {
+            this.configuration = configuration;
+            this.basePath = configuration.basePath || this.basePath;
+        }
+    }
+    return BaseAPI;
+}());
+/**
+ *
+ * @export
+ * @class RequiredError
+ * @extends {Error}
+ */
+var RequiredError = /** @class */ (function (_super) {
+    __extends(RequiredError, _super);
+    function RequiredError(field, msg) {
+        var _this = _super.call(this, msg) || this;
+        _this.field = field;
+        return _this;
+    }
+    return RequiredError;
+}(Error));
+/**
+ * DefaultApi - fetch parameter creator
+ * @export
+ */
+var DefaultApiFetchParamCreator = function (configuration) {
+    return {
+        /**
+         * Adds a node to node manager.
+         * @summary Add node
+         * @param {string} node Name of the node in host:port format
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        addNode: function (node, options) {
+            if (options === void 0) { options = {}; }
+            // verify required parameter 'node' is not null or undefined
+            if (node === null || node === undefined) {
+                throw new RequiredError('node', 'Required parameter node was null or undefined when calling addNode.');
+            }
+            var localVarPath = "/add_node";
+            var localVarUrlObj = url.parse(localVarPath, true);
+            var localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            var localVarHeaderParameter = {};
+            var localVarQueryParameter = {};
+            // authentication basicAuth required
+            // http basic authentication required
+            if (configuration && (configuration.username || configuration.password)) {
+                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
+            }
+            if (node !== undefined) {
+                localVarQueryParameter['node'] = node;
+            }
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Adds an IP address to blacklist.
+         * @summary Add to blacklist
+         * @param {string} ip IP address
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        addToBlacklist: function (ip, options) {
+            if (options === void 0) { options = {}; }
+            // verify required parameter 'ip' is not null or undefined
+            if (ip === null || ip === undefined) {
+                throw new RequiredError('ip', 'Required parameter ip was null or undefined when calling addToBlacklist.');
+            }
+            var localVarPath = "/add_to_blacklist";
+            var localVarUrlObj = url.parse(localVarPath, true);
+            var localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            var localVarHeaderParameter = {};
+            var localVarQueryParameter = {};
+            // authentication basicAuth required
+            // http basic authentication required
+            if (configuration && (configuration.username || configuration.password)) {
+                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
+            }
+            if (ip !== undefined) {
+                localVarQueryParameter['ip'] = ip;
+            }
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Adds an IP address to whitelist.
+         * @summary Add to whitelist
+         * @param {string} ip IP address
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        addToWhitelist: function (ip, options) {
+            if (options === void 0) { options = {}; }
+            // verify required parameter 'ip' is not null or undefined
+            if (ip === null || ip === undefined) {
+                throw new RequiredError('ip', 'Required parameter ip was null or undefined when calling addToWhitelist.');
+            }
+            var localVarPath = "/add_to_whitelist";
+            var localVarUrlObj = url.parse(localVarPath, true);
+            var localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            var localVarHeaderParameter = {};
+            var localVarQueryParameter = {};
+            // authentication basicAuth required
+            // http basic authentication required
+            if (configuration && (configuration.username || configuration.password)) {
+                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
+            }
+            if (ip !== undefined) {
+                localVarQueryParameter['ip'] = ip;
+            }
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Creates a new account.
+         * @summary Create account
+         * @param {string} [name] Assigned alias to the created account.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createAccount: function (name, options) {
+            if (options === void 0) { options = {}; }
+            var localVarPath = "/create_account";
+            var localVarUrlObj = url.parse(localVarPath, true);
+            var localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            var localVarHeaderParameter = {};
+            var localVarQueryParameter = {};
+            // authentication basicAuth required
+            // http basic authentication required
+            if (configuration && (configuration.username || configuration.password)) {
+                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
+            }
+            if (name !== undefined) {
+                localVarQueryParameter['name'] = name;
+            }
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Returns an account.
+         * @summary Get account
+         * @param {string} address Address of account
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAccount: function (address, options) {
+            if (options === void 0) { options = {}; }
+            // verify required parameter 'address' is not null or undefined
+            if (address === null || address === undefined) {
+                throw new RequiredError('address', 'Required parameter address was null or undefined when calling getAccount.');
+            }
+            var localVarPath = "/get_account";
+            var localVarUrlObj = url.parse(localVarPath, true);
+            var localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            var localVarHeaderParameter = {};
+            var localVarQueryParameter = {};
+            // authentication basicAuth required
+            // http basic authentication required
+            if (configuration && (configuration.username || configuration.password)) {
+                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
+            }
+            if (address !== undefined) {
+                localVarQueryParameter['address'] = address;
+            }
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Returns transactions from/to an account.
+         * @summary Get account transactions
+         * @param {string} address Address of account
+         * @param {string} from Starting range of transactions
+         * @param {string} to Ending range of transactions
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAccountTransactions: function (address, from, to, options) {
+            if (options === void 0) { options = {}; }
+            // verify required parameter 'address' is not null or undefined
+            if (address === null || address === undefined) {
+                throw new RequiredError('address', 'Required parameter address was null or undefined when calling getAccountTransactions.');
+            }
+            // verify required parameter 'from' is not null or undefined
+            if (from === null || from === undefined) {
+                throw new RequiredError('from', 'Required parameter from was null or undefined when calling getAccountTransactions.');
+            }
+            // verify required parameter 'to' is not null or undefined
+            if (to === null || to === undefined) {
+                throw new RequiredError('to', 'Required parameter to was null or undefined when calling getAccountTransactions.');
+            }
+            var localVarPath = "/get_account_transactions";
+            var localVarUrlObj = url.parse(localVarPath, true);
+            var localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            var localVarHeaderParameter = {};
+            var localVarQueryParameter = {};
+            // authentication basicAuth required
+            // http basic authentication required
+            if (configuration && (configuration.username || configuration.password)) {
+                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
+            }
+            if (address !== undefined) {
+                localVarQueryParameter['address'] = address;
+            }
+            if (from !== undefined) {
+                localVarQueryParameter['from'] = from;
+            }
+            if (to !== undefined) {
+                localVarQueryParameter['to'] = to;
+            }
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Returns a block.
+         * @summary Get block
+         * @param {number} number Block number
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getBlock: function (number, options) {
+            if (options === void 0) { options = {}; }
+            // verify required parameter 'number' is not null or undefined
+            if (number === null || number === undefined) {
+                throw new RequiredError('number', 'Required parameter number was null or undefined when calling getBlock.');
+            }
+            var localVarPath = "/get_block";
+            var localVarUrlObj = url.parse(localVarPath, true);
+            var localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            var localVarHeaderParameter = {};
+            var localVarQueryParameter = {};
+            // authentication basicAuth required
+            // http basic authentication required
+            if (configuration && (configuration.username || configuration.password)) {
+                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
+            }
+            if (number !== undefined) {
+                localVarQueryParameter['number'] = number;
+            }
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Returns a delegate.
+         * @summary Get a delegate
+         * @param {string} address Delegate address
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getDelegate: function (address, options) {
+            if (options === void 0) { options = {}; }
+            // verify required parameter 'address' is not null or undefined
+            if (address === null || address === undefined) {
+                throw new RequiredError('address', 'Required parameter address was null or undefined when calling getDelegate.');
+            }
+            var localVarPath = "/get_delegate";
+            var localVarUrlObj = url.parse(localVarPath, true);
+            var localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            var localVarHeaderParameter = {};
+            var localVarQueryParameter = {};
+            // authentication basicAuth required
+            // http basic authentication required
+            if (configuration && (configuration.username || configuration.password)) {
+                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
+            }
+            if (address !== undefined) {
+                localVarQueryParameter['address'] = address;
+            }
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Returns a list of delegates.
+         * @summary Get all delegates
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getDelegates: function (options) {
+            if (options === void 0) { options = {}; }
+            var localVarPath = "/get_delegates";
+            var localVarUrlObj = url.parse(localVarPath, true);
+            var localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            var localVarHeaderParameter = {};
+            var localVarQueryParameter = {};
+            // authentication basicAuth required
+            // http basic authentication required
+            if (configuration && (configuration.username || configuration.password)) {
+                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
+            }
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Returns kernel info.
+         * @summary Get info
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getInfo: function (options) {
+            if (options === void 0) { options = {}; }
+            var localVarPath = "/get_info";
+            var localVarUrlObj = url.parse(localVarPath, true);
+            var localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            var localVarHeaderParameter = {};
+            var localVarQueryParameter = {};
+            // authentication basicAuth required
+            // http basic authentication required
+            if (configuration && (configuration.username || configuration.password)) {
+                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
+            }
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Returns the latest block.
+         * @summary Get latest block
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getLatestBlock: function (options) {
+            if (options === void 0) { options = {}; }
+            var localVarPath = "/get_latest_block";
+            var localVarUrlObj = url.parse(localVarPath, true);
+            var localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            var localVarHeaderParameter = {};
+            var localVarQueryParameter = {};
+            // authentication basicAuth required
+            // http basic authentication required
+            if (configuration && (configuration.username || configuration.password)) {
+                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
+            }
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Returns the number of the latest block.
+         * @summary Get latest block number
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getLatestBlockNumber: function (options) {
+            if (options === void 0) { options = {}; }
+            var localVarPath = "/get_latest_block_number";
+            var localVarUrlObj = url.parse(localVarPath, true);
+            var localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            var localVarHeaderParameter = {};
+            var localVarQueryParameter = {};
+            // authentication basicAuth required
+            // http basic authentication required
+            if (configuration && (configuration.username || configuration.password)) {
+                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
+            }
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Returns connected peers.
+         * @summary Get peers
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getPeers: function (options) {
+            if (options === void 0) { options = {}; }
+            var localVarPath = "/get_peers";
+            var localVarUrlObj = url.parse(localVarPath, true);
+            var localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            var localVarHeaderParameter = {};
+            var localVarQueryParameter = {};
+            // authentication basicAuth required
+            // http basic authentication required
+            if (configuration && (configuration.username || configuration.password)) {
+                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
+            }
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Returns all the pending transactions.
+         * @summary Get pending transactions
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getPendingTransactions: function (options) {
+            if (options === void 0) { options = {}; }
+            var localVarPath = "/get_pending_transactions";
+            var localVarUrlObj = url.parse(localVarPath, true);
+            var localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            var localVarHeaderParameter = {};
+            var localVarQueryParameter = {};
+            // authentication basicAuth required
+            // http basic authentication required
+            if (configuration && (configuration.username || configuration.password)) {
+                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
+            }
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Returns a transactions if exists.
+         * @summary Get transaction
+         * @param {string} hash Transaction hash
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getTransaction: function (hash, options) {
+            if (options === void 0) { options = {}; }
+            // verify required parameter 'hash' is not null or undefined
+            if (hash === null || hash === undefined) {
+                throw new RequiredError('hash', 'Required parameter hash was null or undefined when calling getTransaction.');
+            }
+            var localVarPath = "/get_transaction";
+            var localVarUrlObj = url.parse(localVarPath, true);
+            var localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            var localVarHeaderParameter = {};
+            var localVarQueryParameter = {};
+            // authentication basicAuth required
+            // http basic authentication required
+            if (configuration && (configuration.username || configuration.password)) {
+                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
+            }
+            if (hash !== undefined) {
+                localVarQueryParameter['hash'] = hash;
+            }
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Get minimum fee and maximum size.
+         * @summary Get transaction limits
+         * @param {string} type Type of transaction
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getTransactionLimits: function (type, options) {
+            if (options === void 0) { options = {}; }
+            // verify required parameter 'type' is not null or undefined
+            if (type === null || type === undefined) {
+                throw new RequiredError('type', 'Required parameter type was null or undefined when calling getTransactionLimits.');
+            }
+            var localVarPath = "/get_transaction_limits";
+            var localVarUrlObj = url.parse(localVarPath, true);
+            var localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            var localVarHeaderParameter = {};
+            var localVarQueryParameter = {};
+            // authentication basicAuth required
+            // http basic authentication required
+            if (configuration && (configuration.username || configuration.password)) {
+                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
+            }
+            if (type !== undefined) {
+                localVarQueryParameter['type'] = type;
+            }
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Returns a list of validators.
+         * @summary Get validators
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getValidators: function (options) {
+            if (options === void 0) { options = {}; }
+            var localVarPath = "/get_validators";
+            var localVarUrlObj = url.parse(localVarPath, true);
+            var localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            var localVarHeaderParameter = {};
+            var localVarQueryParameter = {};
+            // authentication basicAuth required
+            // http basic authentication required
+            if (configuration && (configuration.username || configuration.password)) {
+                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
+            }
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Returns the vote from a voter to a delegate.
+         * @summary Get vote
+         * @param {string} delegate Delegate address
+         * @param {string} voter Voter address
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getVote: function (delegate, voter, options) {
+            if (options === void 0) { options = {}; }
+            // verify required parameter 'delegate' is not null or undefined
+            if (delegate === null || delegate === undefined) {
+                throw new RequiredError('delegate', 'Required parameter delegate was null or undefined when calling getVote.');
+            }
+            // verify required parameter 'voter' is not null or undefined
+            if (voter === null || voter === undefined) {
+                throw new RequiredError('voter', 'Required parameter voter was null or undefined when calling getVote.');
+            }
+            var localVarPath = "/get_vote";
+            var localVarUrlObj = url.parse(localVarPath, true);
+            var localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            var localVarHeaderParameter = {};
+            var localVarQueryParameter = {};
+            // authentication basicAuth required
+            // http basic authentication required
+            if (configuration && (configuration.username || configuration.password)) {
+                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
+            }
+            if (delegate !== undefined) {
+                localVarQueryParameter['delegate'] = delegate;
+            }
+            if (voter !== undefined) {
+                localVarQueryParameter['voter'] = voter;
+            }
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Returns all the votes to a delegate
+         * @summary Get votes
+         * @param {string} delegate Delegate address
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getVotes: function (delegate, options) {
+            if (options === void 0) { options = {}; }
+            // verify required parameter 'delegate' is not null or undefined
+            if (delegate === null || delegate === undefined) {
+                throw new RequiredError('delegate', 'Required parameter delegate was null or undefined when calling getVotes.');
+            }
+            var localVarPath = "/get_votes";
+            var localVarUrlObj = url.parse(localVarPath, true);
+            var localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            var localVarHeaderParameter = {};
+            var localVarQueryParameter = {};
+            // authentication basicAuth required
+            // http basic authentication required
+            if (configuration && (configuration.username || configuration.password)) {
+                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
+            }
+            if (delegate !== undefined) {
+                localVarQueryParameter['delegate'] = delegate;
+            }
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Returns accounts in the wallet.
+         * @summary List accounts
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listAccounts: function (options) {
+            if (options === void 0) { options = {}; }
+            var localVarPath = "/list_accounts";
+            var localVarUrlObj = url.parse(localVarPath, true);
+            var localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            var localVarHeaderParameter = {};
+            var localVarQueryParameter = {};
+            // authentication basicAuth required
+            // http basic authentication required
+            if (configuration && (configuration.username || configuration.password)) {
+                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
+            }
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Registers as a delegate
+         * @summary Register delegate
+         * @param {string} from Registering address
+         * @param {string} fee Transaction fee
+         * @param {string} data Delegate name
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        registerDelegate: function (from, fee, data, options) {
+            if (options === void 0) { options = {}; }
+            // verify required parameter 'from' is not null or undefined
+            if (from === null || from === undefined) {
+                throw new RequiredError('from', 'Required parameter from was null or undefined when calling registerDelegate.');
+            }
+            // verify required parameter 'fee' is not null or undefined
+            if (fee === null || fee === undefined) {
+                throw new RequiredError('fee', 'Required parameter fee was null or undefined when calling registerDelegate.');
+            }
+            // verify required parameter 'data' is not null or undefined
+            if (data === null || data === undefined) {
+                throw new RequiredError('data', 'Required parameter data was null or undefined when calling registerDelegate.');
+            }
+            var localVarPath = "/delegate";
+            var localVarUrlObj = url.parse(localVarPath, true);
+            var localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            var localVarHeaderParameter = {};
+            var localVarQueryParameter = {};
+            // authentication basicAuth required
+            // http basic authentication required
+            if (configuration && (configuration.username || configuration.password)) {
+                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
+            }
+            if (from !== undefined) {
+                localVarQueryParameter['from'] = from;
+            }
+            if (fee !== undefined) {
+                localVarQueryParameter['fee'] = fee;
+            }
+            if (data !== undefined) {
+                localVarQueryParameter['data'] = data;
+            }
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Broadcasts a raw transaction to the network.
+         * @summary Send a raw transaction
+         * @param {string} raw Raw transaction
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        sendTransaction: function (raw, options) {
+            if (options === void 0) { options = {}; }
+            // verify required parameter 'raw' is not null or undefined
+            if (raw === null || raw === undefined) {
+                throw new RequiredError('raw', 'Required parameter raw was null or undefined when calling sendTransaction.');
+            }
+            var localVarPath = "/send_transaction";
+            var localVarUrlObj = url.parse(localVarPath, true);
+            var localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            var localVarHeaderParameter = {};
+            var localVarQueryParameter = {};
+            // authentication basicAuth required
+            // http basic authentication required
+            if (configuration && (configuration.username || configuration.password)) {
+                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
+            }
+            if (raw !== undefined) {
+                localVarQueryParameter['raw'] = raw;
+            }
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Sign a message.
+         * @summary Sign a message
+         * @param {string} address Signing address
+         * @param {string} message Message to sign
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        signMessage: function (address, message, options) {
+            if (options === void 0) { options = {}; }
+            // verify required parameter 'address' is not null or undefined
+            if (address === null || address === undefined) {
+                throw new RequiredError('address', 'Required parameter address was null or undefined when calling signMessage.');
+            }
+            // verify required parameter 'message' is not null or undefined
+            if (message === null || message === undefined) {
+                throw new RequiredError('message', 'Required parameter message was null or undefined when calling signMessage.');
+            }
+            var localVarPath = "/sign_message";
+            var localVarUrlObj = url.parse(localVarPath, true);
+            var localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            var localVarHeaderParameter = {};
+            var localVarQueryParameter = {};
+            // authentication basicAuth required
+            // http basic authentication required
+            if (configuration && (configuration.username || configuration.password)) {
+                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
+            }
+            if (address !== undefined) {
+                localVarQueryParameter['address'] = address;
+            }
+            if (message !== undefined) {
+                localVarQueryParameter['message'] = message;
+            }
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Transfers coins to another address.
+         * @summary Transfer coins
+         * @param {string} value Amount of SEM to transfer
+         * @param {string} from Sending address
+         * @param {string} to Receiving address
+         * @param {string} fee Transaction fee
+         * @param {string} data Transaction data
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        transfer: function (value, from, to, fee, data, options) {
+            if (options === void 0) { options = {}; }
+            // verify required parameter 'value' is not null or undefined
+            if (value === null || value === undefined) {
+                throw new RequiredError('value', 'Required parameter value was null or undefined when calling transfer.');
+            }
+            // verify required parameter 'from' is not null or undefined
+            if (from === null || from === undefined) {
+                throw new RequiredError('from', 'Required parameter from was null or undefined when calling transfer.');
+            }
+            // verify required parameter 'to' is not null or undefined
+            if (to === null || to === undefined) {
+                throw new RequiredError('to', 'Required parameter to was null or undefined when calling transfer.');
+            }
+            // verify required parameter 'fee' is not null or undefined
+            if (fee === null || fee === undefined) {
+                throw new RequiredError('fee', 'Required parameter fee was null or undefined when calling transfer.');
+            }
+            // verify required parameter 'data' is not null or undefined
+            if (data === null || data === undefined) {
+                throw new RequiredError('data', 'Required parameter data was null or undefined when calling transfer.');
+            }
+            var localVarPath = "/transfer";
+            var localVarUrlObj = url.parse(localVarPath, true);
+            var localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            var localVarHeaderParameter = {};
+            var localVarQueryParameter = {};
+            // authentication basicAuth required
+            // http basic authentication required
+            if (configuration && (configuration.username || configuration.password)) {
+                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
+            }
+            if (value !== undefined) {
+                localVarQueryParameter['value'] = value;
+            }
+            if (from !== undefined) {
+                localVarQueryParameter['from'] = from;
+            }
+            if (to !== undefined) {
+                localVarQueryParameter['to'] = to;
+            }
+            if (fee !== undefined) {
+                localVarQueryParameter['fee'] = fee;
+            }
+            if (data !== undefined) {
+                localVarQueryParameter['data'] = data;
+            }
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Unvotes for a delegate.
+         * @summary Unvote
+         * @param {string} from Voting address
+         * @param {string} to Delegate address
+         * @param {string} value Vote amount
+         * @param {string} fee Transaction fee
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        unvote: function (from, to, value, fee, options) {
+            if (options === void 0) { options = {}; }
+            // verify required parameter 'from' is not null or undefined
+            if (from === null || from === undefined) {
+                throw new RequiredError('from', 'Required parameter from was null or undefined when calling unvote.');
+            }
+            // verify required parameter 'to' is not null or undefined
+            if (to === null || to === undefined) {
+                throw new RequiredError('to', 'Required parameter to was null or undefined when calling unvote.');
+            }
+            // verify required parameter 'value' is not null or undefined
+            if (value === null || value === undefined) {
+                throw new RequiredError('value', 'Required parameter value was null or undefined when calling unvote.');
+            }
+            // verify required parameter 'fee' is not null or undefined
+            if (fee === null || fee === undefined) {
+                throw new RequiredError('fee', 'Required parameter fee was null or undefined when calling unvote.');
+            }
+            var localVarPath = "/unvote";
+            var localVarUrlObj = url.parse(localVarPath, true);
+            var localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            var localVarHeaderParameter = {};
+            var localVarQueryParameter = {};
+            // authentication basicAuth required
+            // http basic authentication required
+            if (configuration && (configuration.username || configuration.password)) {
+                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
+            }
+            if (from !== undefined) {
+                localVarQueryParameter['from'] = from;
+            }
+            if (to !== undefined) {
+                localVarQueryParameter['to'] = to;
+            }
+            if (value !== undefined) {
+                localVarQueryParameter['value'] = value;
+            }
+            if (fee !== undefined) {
+                localVarQueryParameter['fee'] = fee;
+            }
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Verify a signed message.
+         * @summary Verify a message
+         * @param {string} address Address
+         * @param {string} message Message
+         * @param {string} signature Signature to verify
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        verifyMessage: function (address, message, signature, options) {
+            if (options === void 0) { options = {}; }
+            // verify required parameter 'address' is not null or undefined
+            if (address === null || address === undefined) {
+                throw new RequiredError('address', 'Required parameter address was null or undefined when calling verifyMessage.');
+            }
+            // verify required parameter 'message' is not null or undefined
+            if (message === null || message === undefined) {
+                throw new RequiredError('message', 'Required parameter message was null or undefined when calling verifyMessage.');
+            }
+            // verify required parameter 'signature' is not null or undefined
+            if (signature === null || signature === undefined) {
+                throw new RequiredError('signature', 'Required parameter signature was null or undefined when calling verifyMessage.');
+            }
+            var localVarPath = "/verify_message";
+            var localVarUrlObj = url.parse(localVarPath, true);
+            var localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            var localVarHeaderParameter = {};
+            var localVarQueryParameter = {};
+            // authentication basicAuth required
+            // http basic authentication required
+            if (configuration && (configuration.username || configuration.password)) {
+                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
+            }
+            if (address !== undefined) {
+                localVarQueryParameter['address'] = address;
+            }
+            if (message !== undefined) {
+                localVarQueryParameter['message'] = message;
+            }
+            if (signature !== undefined) {
+                localVarQueryParameter['signature'] = signature;
+            }
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Votes for a delegate.
+         * @summary Vote
+         * @param {string} from Voting address
+         * @param {string} to Delegate address
+         * @param {string} value Vote amount
+         * @param {string} fee Transaction fee
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        vote: function (from, to, value, fee, options) {
+            if (options === void 0) { options = {}; }
+            // verify required parameter 'from' is not null or undefined
+            if (from === null || from === undefined) {
+                throw new RequiredError('from', 'Required parameter from was null or undefined when calling vote.');
+            }
+            // verify required parameter 'to' is not null or undefined
+            if (to === null || to === undefined) {
+                throw new RequiredError('to', 'Required parameter to was null or undefined when calling vote.');
+            }
+            // verify required parameter 'value' is not null or undefined
+            if (value === null || value === undefined) {
+                throw new RequiredError('value', 'Required parameter value was null or undefined when calling vote.');
+            }
+            // verify required parameter 'fee' is not null or undefined
+            if (fee === null || fee === undefined) {
+                throw new RequiredError('fee', 'Required parameter fee was null or undefined when calling vote.');
+            }
+            var localVarPath = "/vote";
+            var localVarUrlObj = url.parse(localVarPath, true);
+            var localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            var localVarHeaderParameter = {};
+            var localVarQueryParameter = {};
+            // authentication basicAuth required
+            // http basic authentication required
+            if (configuration && (configuration.username || configuration.password)) {
+                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
+            }
+            if (from !== undefined) {
+                localVarQueryParameter['from'] = from;
+            }
+            if (to !== undefined) {
+                localVarQueryParameter['to'] = to;
+            }
+            if (value !== undefined) {
+                localVarQueryParameter['value'] = value;
+            }
+            if (fee !== undefined) {
+                localVarQueryParameter['fee'] = fee;
+            }
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    };
+};
+/**
+ * DefaultApi - functional programming interface
+ * @export
+ */
+var DefaultApiFp = function (configuration) {
+    return {
+        /**
+         * Adds a node to node manager.
+         * @summary Add node
+         * @param {string} node Name of the node in host:port format
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        addNode: function (node, options) {
+            var localVarFetchArgs = DefaultApiFetchParamCreator(configuration).addNode(node, options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Adds an IP address to blacklist.
+         * @summary Add to blacklist
+         * @param {string} ip IP address
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        addToBlacklist: function (ip, options) {
+            var localVarFetchArgs = DefaultApiFetchParamCreator(configuration).addToBlacklist(ip, options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Adds an IP address to whitelist.
+         * @summary Add to whitelist
+         * @param {string} ip IP address
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        addToWhitelist: function (ip, options) {
+            var localVarFetchArgs = DefaultApiFetchParamCreator(configuration).addToWhitelist(ip, options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Creates a new account.
+         * @summary Create account
+         * @param {string} [name] Assigned alias to the created account.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createAccount: function (name, options) {
+            var localVarFetchArgs = DefaultApiFetchParamCreator(configuration).createAccount(name, options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Returns an account.
+         * @summary Get account
+         * @param {string} address Address of account
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAccount: function (address, options) {
+            var localVarFetchArgs = DefaultApiFetchParamCreator(configuration).getAccount(address, options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Returns transactions from/to an account.
+         * @summary Get account transactions
+         * @param {string} address Address of account
+         * @param {string} from Starting range of transactions
+         * @param {string} to Ending range of transactions
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAccountTransactions: function (address, from, to, options) {
+            var localVarFetchArgs = DefaultApiFetchParamCreator(configuration).getAccountTransactions(address, from, to, options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Returns a block.
+         * @summary Get block
+         * @param {number} number Block number
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getBlock: function (number, options) {
+            var localVarFetchArgs = DefaultApiFetchParamCreator(configuration).getBlock(number, options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Returns a delegate.
+         * @summary Get a delegate
+         * @param {string} address Delegate address
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getDelegate: function (address, options) {
+            var localVarFetchArgs = DefaultApiFetchParamCreator(configuration).getDelegate(address, options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Returns a list of delegates.
+         * @summary Get all delegates
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getDelegates: function (options) {
+            var localVarFetchArgs = DefaultApiFetchParamCreator(configuration).getDelegates(options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Returns kernel info.
+         * @summary Get info
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getInfo: function (options) {
+            var localVarFetchArgs = DefaultApiFetchParamCreator(configuration).getInfo(options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Returns the latest block.
+         * @summary Get latest block
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getLatestBlock: function (options) {
+            var localVarFetchArgs = DefaultApiFetchParamCreator(configuration).getLatestBlock(options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Returns the number of the latest block.
+         * @summary Get latest block number
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getLatestBlockNumber: function (options) {
+            var localVarFetchArgs = DefaultApiFetchParamCreator(configuration).getLatestBlockNumber(options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Returns connected peers.
+         * @summary Get peers
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getPeers: function (options) {
+            var localVarFetchArgs = DefaultApiFetchParamCreator(configuration).getPeers(options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Returns all the pending transactions.
+         * @summary Get pending transactions
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getPendingTransactions: function (options) {
+            var localVarFetchArgs = DefaultApiFetchParamCreator(configuration).getPendingTransactions(options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Returns a transactions if exists.
+         * @summary Get transaction
+         * @param {string} hash Transaction hash
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getTransaction: function (hash, options) {
+            var localVarFetchArgs = DefaultApiFetchParamCreator(configuration).getTransaction(hash, options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Get minimum fee and maximum size.
+         * @summary Get transaction limits
+         * @param {string} type Type of transaction
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getTransactionLimits: function (type, options) {
+            var localVarFetchArgs = DefaultApiFetchParamCreator(configuration).getTransactionLimits(type, options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Returns a list of validators.
+         * @summary Get validators
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getValidators: function (options) {
+            var localVarFetchArgs = DefaultApiFetchParamCreator(configuration).getValidators(options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Returns the vote from a voter to a delegate.
+         * @summary Get vote
+         * @param {string} delegate Delegate address
+         * @param {string} voter Voter address
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getVote: function (delegate, voter, options) {
+            var localVarFetchArgs = DefaultApiFetchParamCreator(configuration).getVote(delegate, voter, options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Returns all the votes to a delegate
+         * @summary Get votes
+         * @param {string} delegate Delegate address
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getVotes: function (delegate, options) {
+            var localVarFetchArgs = DefaultApiFetchParamCreator(configuration).getVotes(delegate, options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Returns accounts in the wallet.
+         * @summary List accounts
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listAccounts: function (options) {
+            var localVarFetchArgs = DefaultApiFetchParamCreator(configuration).listAccounts(options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Registers as a delegate
+         * @summary Register delegate
+         * @param {string} from Registering address
+         * @param {string} fee Transaction fee
+         * @param {string} data Delegate name
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        registerDelegate: function (from, fee, data, options) {
+            var localVarFetchArgs = DefaultApiFetchParamCreator(configuration).registerDelegate(from, fee, data, options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Broadcasts a raw transaction to the network.
+         * @summary Send a raw transaction
+         * @param {string} raw Raw transaction
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        sendTransaction: function (raw, options) {
+            var localVarFetchArgs = DefaultApiFetchParamCreator(configuration).sendTransaction(raw, options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Sign a message.
+         * @summary Sign a message
+         * @param {string} address Signing address
+         * @param {string} message Message to sign
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        signMessage: function (address, message, options) {
+            var localVarFetchArgs = DefaultApiFetchParamCreator(configuration).signMessage(address, message, options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Transfers coins to another address.
+         * @summary Transfer coins
+         * @param {string} value Amount of SEM to transfer
+         * @param {string} from Sending address
+         * @param {string} to Receiving address
+         * @param {string} fee Transaction fee
+         * @param {string} data Transaction data
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        transfer: function (value, from, to, fee, data, options) {
+            var localVarFetchArgs = DefaultApiFetchParamCreator(configuration).transfer(value, from, to, fee, data, options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Unvotes for a delegate.
+         * @summary Unvote
+         * @param {string} from Voting address
+         * @param {string} to Delegate address
+         * @param {string} value Vote amount
+         * @param {string} fee Transaction fee
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        unvote: function (from, to, value, fee, options) {
+            var localVarFetchArgs = DefaultApiFetchParamCreator(configuration).unvote(from, to, value, fee, options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Verify a signed message.
+         * @summary Verify a message
+         * @param {string} address Address
+         * @param {string} message Message
+         * @param {string} signature Signature to verify
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        verifyMessage: function (address, message, signature, options) {
+            var localVarFetchArgs = DefaultApiFetchParamCreator(configuration).verifyMessage(address, message, signature, options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Votes for a delegate.
+         * @summary Vote
+         * @param {string} from Voting address
+         * @param {string} to Delegate address
+         * @param {string} value Vote amount
+         * @param {string} fee Transaction fee
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        vote: function (from, to, value, fee, options) {
+            var localVarFetchArgs = DefaultApiFetchParamCreator(configuration).vote(from, to, value, fee, options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+    };
+};
+/**
+ * DefaultApi - object-oriented interface
+ * @export
+ * @class DefaultApi
+ * @extends {BaseAPI}
+ */
+var DefaultApi = /** @class */ (function (_super) {
+    __extends(DefaultApi, _super);
+    function DefaultApi() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    /**
+     * Adds a node to node manager.
+     * @summary Add node
+     * @param {} node Name of the node in host:port format
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    DefaultApi.prototype.addNode = function (node, options) {
+        return DefaultApiFp(this.configuration).addNode(node, options)(this.fetch, this.basePath);
+    };
+    /**
+     * Adds an IP address to blacklist.
+     * @summary Add to blacklist
+     * @param {} ip IP address
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    DefaultApi.prototype.addToBlacklist = function (ip, options) {
+        return DefaultApiFp(this.configuration).addToBlacklist(ip, options)(this.fetch, this.basePath);
+    };
+    /**
+     * Adds an IP address to whitelist.
+     * @summary Add to whitelist
+     * @param {} ip IP address
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    DefaultApi.prototype.addToWhitelist = function (ip, options) {
+        return DefaultApiFp(this.configuration).addToWhitelist(ip, options)(this.fetch, this.basePath);
+    };
+    /**
+     * Creates a new account.
+     * @summary Create account
+     * @param {} [name] Assigned alias to the created account.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    DefaultApi.prototype.createAccount = function (name, options) {
+        return DefaultApiFp(this.configuration).createAccount(name, options)(this.fetch, this.basePath);
+    };
+    /**
+     * Returns an account.
+     * @summary Get account
+     * @param {} address Address of account
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    DefaultApi.prototype.getAccount = function (address, options) {
+        return DefaultApiFp(this.configuration).getAccount(address, options)(this.fetch, this.basePath);
+    };
+    /**
+     * Returns transactions from/to an account.
+     * @summary Get account transactions
+     * @param {} address Address of account
+     * @param {} from Starting range of transactions
+     * @param {} to Ending range of transactions
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    DefaultApi.prototype.getAccountTransactions = function (address, from, to, options) {
+        return DefaultApiFp(this.configuration).getAccountTransactions(address, from, to, options)(this.fetch, this.basePath);
+    };
+    /**
+     * Returns a block.
+     * @summary Get block
+     * @param {} number Block number
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    DefaultApi.prototype.getBlock = function (number, options) {
+        return DefaultApiFp(this.configuration).getBlock(number, options)(this.fetch, this.basePath);
+    };
+    /**
+     * Returns a delegate.
+     * @summary Get a delegate
+     * @param {} address Delegate address
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    DefaultApi.prototype.getDelegate = function (address, options) {
+        return DefaultApiFp(this.configuration).getDelegate(address, options)(this.fetch, this.basePath);
+    };
+    /**
+     * Returns a list of delegates.
+     * @summary Get all delegates
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    DefaultApi.prototype.getDelegates = function (options) {
+        return DefaultApiFp(this.configuration).getDelegates(options)(this.fetch, this.basePath);
+    };
+    /**
+     * Returns kernel info.
+     * @summary Get info
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    DefaultApi.prototype.getInfo = function (options) {
+        return DefaultApiFp(this.configuration).getInfo(options)(this.fetch, this.basePath);
+    };
+    /**
+     * Returns the latest block.
+     * @summary Get latest block
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    DefaultApi.prototype.getLatestBlock = function (options) {
+        return DefaultApiFp(this.configuration).getLatestBlock(options)(this.fetch, this.basePath);
+    };
+    /**
+     * Returns the number of the latest block.
+     * @summary Get latest block number
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    DefaultApi.prototype.getLatestBlockNumber = function (options) {
+        return DefaultApiFp(this.configuration).getLatestBlockNumber(options)(this.fetch, this.basePath);
+    };
+    /**
+     * Returns connected peers.
+     * @summary Get peers
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    DefaultApi.prototype.getPeers = function (options) {
+        return DefaultApiFp(this.configuration).getPeers(options)(this.fetch, this.basePath);
+    };
+    /**
+     * Returns all the pending transactions.
+     * @summary Get pending transactions
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    DefaultApi.prototype.getPendingTransactions = function (options) {
+        return DefaultApiFp(this.configuration).getPendingTransactions(options)(this.fetch, this.basePath);
+    };
+    /**
+     * Returns a transactions if exists.
+     * @summary Get transaction
+     * @param {} hash Transaction hash
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    DefaultApi.prototype.getTransaction = function (hash, options) {
+        return DefaultApiFp(this.configuration).getTransaction(hash, options)(this.fetch, this.basePath);
+    };
+    /**
+     * Get minimum fee and maximum size.
+     * @summary Get transaction limits
+     * @param {} type Type of transaction
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    DefaultApi.prototype.getTransactionLimits = function (type, options) {
+        return DefaultApiFp(this.configuration).getTransactionLimits(type, options)(this.fetch, this.basePath);
+    };
+    /**
+     * Returns a list of validators.
+     * @summary Get validators
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    DefaultApi.prototype.getValidators = function (options) {
+        return DefaultApiFp(this.configuration).getValidators(options)(this.fetch, this.basePath);
+    };
+    /**
+     * Returns the vote from a voter to a delegate.
+     * @summary Get vote
+     * @param {} delegate Delegate address
+     * @param {} voter Voter address
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    DefaultApi.prototype.getVote = function (delegate, voter, options) {
+        return DefaultApiFp(this.configuration).getVote(delegate, voter, options)(this.fetch, this.basePath);
+    };
+    /**
+     * Returns all the votes to a delegate
+     * @summary Get votes
+     * @param {} delegate Delegate address
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    DefaultApi.prototype.getVotes = function (delegate, options) {
+        return DefaultApiFp(this.configuration).getVotes(delegate, options)(this.fetch, this.basePath);
+    };
+    /**
+     * Returns accounts in the wallet.
+     * @summary List accounts
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    DefaultApi.prototype.listAccounts = function (options) {
+        return DefaultApiFp(this.configuration).listAccounts(options)(this.fetch, this.basePath);
+    };
+    /**
+     * Registers as a delegate
+     * @summary Register delegate
+     * @param {} from Registering address
+     * @param {} fee Transaction fee
+     * @param {} data Delegate name
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    DefaultApi.prototype.registerDelegate = function (from, fee, data, options) {
+        return DefaultApiFp(this.configuration).registerDelegate(from, fee, data, options)(this.fetch, this.basePath);
+    };
+    /**
+     * Broadcasts a raw transaction to the network.
+     * @summary Send a raw transaction
+     * @param {} raw Raw transaction
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    DefaultApi.prototype.sendTransaction = function (raw, options) {
+        return DefaultApiFp(this.configuration).sendTransaction(raw, options)(this.fetch, this.basePath);
+    };
+    /**
+     * Sign a message.
+     * @summary Sign a message
+     * @param {} address Signing address
+     * @param {} message Message to sign
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    DefaultApi.prototype.signMessage = function (address, message, options) {
+        return DefaultApiFp(this.configuration).signMessage(address, message, options)(this.fetch, this.basePath);
+    };
+    /**
+     * Transfers coins to another address.
+     * @summary Transfer coins
+     * @param {} value Amount of SEM to transfer
+     * @param {} from Sending address
+     * @param {} to Receiving address
+     * @param {} fee Transaction fee
+     * @param {} data Transaction data
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    DefaultApi.prototype.transfer = function (value, from, to, fee, data, options) {
+        return DefaultApiFp(this.configuration).transfer(value, from, to, fee, data, options)(this.fetch, this.basePath);
+    };
+    /**
+     * Unvotes for a delegate.
+     * @summary Unvote
+     * @param {} from Voting address
+     * @param {} to Delegate address
+     * @param {} value Vote amount
+     * @param {} fee Transaction fee
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    DefaultApi.prototype.unvote = function (from, to, value, fee, options) {
+        return DefaultApiFp(this.configuration).unvote(from, to, value, fee, options)(this.fetch, this.basePath);
+    };
+    /**
+     * Verify a signed message.
+     * @summary Verify a message
+     * @param {} address Address
+     * @param {} message Message
+     * @param {} signature Signature to verify
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    DefaultApi.prototype.verifyMessage = function (address, message, signature, options) {
+        return DefaultApiFp(this.configuration).verifyMessage(address, message, signature, options)(this.fetch, this.basePath);
+    };
+    /**
+     * Votes for a delegate.
+     * @summary Vote
+     * @param {} from Voting address
+     * @param {} to Delegate address
+     * @param {} value Vote amount
+     * @param {} fee Transaction fee
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    DefaultApi.prototype.vote = function (from, to, value, fee, options) {
+        return DefaultApiFp(this.configuration).vote(from, to, value, fee, options)(this.fetch, this.basePath);
+    };
+    return DefaultApi;
+}(BaseAPI));
+
+// tslint:disable
+/**
+ * Semux
+ * Semux is an experimental high-performance blockchain platform that powers decentralized application.
+ *
+ * OpenAPI spec version: 1.0.1
+ *
+ *
+ * NOTE: This class is auto generated by the swagger code generator program.
+ * https://github.com/swagger-api/swagger-codegen.git
+ * Do not edit the class manually.
+ */
+var Configuration = /** @class */ (function () {
+    function Configuration(param) {
+        if (param === void 0) { param = {}; }
+        this.apiKey = param.apiKey;
+        this.username = param.username;
+        this.password = param.password;
+        this.accessToken = param.accessToken;
+        this.basePath = param.basePath;
+    }
+    return Configuration;
+}());
+
+// tslint:disable
+
+/**
+ * Utility class of byte operations on Uint8Array.
+ */
+var Bytes = /** @class */ (function () {
+    function Bytes() {
+    }
+    /**
+     * Merge 2 Uint8Array.
+     */
+    Bytes.merge = function (b1, b2) {
+        var res = new Uint8Array(b1.length + b2.length);
+        res.set(b1);
+        res.set(b2, b1.length);
+        return res;
+    };
+    /**
+     * Check whether 2 Uint8Array are equal.
+     */
+    Bytes.equal = function (b1, b2) {
+        if (b1.length !== b2.length) {
+            return false;
+        }
+        for (var i = 0; i < b1.length; i++) {
+            if (b1[i] !== b2[i]) {
+                return false;
+            }
+        }
+        return true;
+    };
+    return Bytes;
+}());
+
+var long_1 = Long;
+
+/**
+ * wasm optimizations, to do native i64 multiplication and divide
+ */
+var wasm = null;
+
+try {
+  wasm = new WebAssembly.Instance(new WebAssembly.Module(new Uint8Array([
+    0, 97, 115, 109, 1, 0, 0, 0, 1, 13, 2, 96, 0, 1, 127, 96, 4, 127, 127, 127, 127, 1, 127, 3, 7, 6, 0, 1, 1, 1, 1, 1, 6, 6, 1, 127, 1, 65, 0, 11, 7, 50, 6, 3, 109, 117, 108, 0, 1, 5, 100, 105, 118, 95, 115, 0, 2, 5, 100, 105, 118, 95, 117, 0, 3, 5, 114, 101, 109, 95, 115, 0, 4, 5, 114, 101, 109, 95, 117, 0, 5, 8, 103, 101, 116, 95, 104, 105, 103, 104, 0, 0, 10, 191, 1, 6, 4, 0, 35, 0, 11, 36, 1, 1, 126, 32, 0, 173, 32, 1, 173, 66, 32, 134, 132, 32, 2, 173, 32, 3, 173, 66, 32, 134, 132, 126, 34, 4, 66, 32, 135, 167, 36, 0, 32, 4, 167, 11, 36, 1, 1, 126, 32, 0, 173, 32, 1, 173, 66, 32, 134, 132, 32, 2, 173, 32, 3, 173, 66, 32, 134, 132, 127, 34, 4, 66, 32, 135, 167, 36, 0, 32, 4, 167, 11, 36, 1, 1, 126, 32, 0, 173, 32, 1, 173, 66, 32, 134, 132, 32, 2, 173, 32, 3, 173, 66, 32, 134, 132, 128, 34, 4, 66, 32, 135, 167, 36, 0, 32, 4, 167, 11, 36, 1, 1, 126, 32, 0, 173, 32, 1, 173, 66, 32, 134, 132, 32, 2, 173, 32, 3, 173, 66, 32, 134, 132, 129, 34, 4, 66, 32, 135, 167, 36, 0, 32, 4, 167, 11, 36, 1, 1, 126, 32, 0, 173, 32, 1, 173, 66, 32, 134, 132, 32, 2, 173, 32, 3, 173, 66, 32, 134, 132, 130, 34, 4, 66, 32, 135, 167, 36, 0, 32, 4, 167, 11
+  ])), {}).exports;
+} catch (e) {
+  // no wasm support :(
+}
+
+/**
+ * Constructs a 64 bit two's-complement integer, given its low and high 32 bit values as *signed* integers.
+ *  See the from* functions below for more convenient ways of constructing Longs.
+ * @exports Long
+ * @class A Long class for representing a 64 bit two's-complement integer value.
+ * @param {number} low The low (signed) 32 bits of the long
+ * @param {number} high The high (signed) 32 bits of the long
+ * @param {boolean=} unsigned Whether unsigned or not, defaults to signed
+ * @constructor
+ */
+function Long(low, high, unsigned) {
+
+    /**
+     * The low 32 bits as a signed value.
+     * @type {number}
+     */
+    this.low = low | 0;
+
+    /**
+     * The high 32 bits as a signed value.
+     * @type {number}
+     */
+    this.high = high | 0;
+
+    /**
+     * Whether unsigned or not.
+     * @type {boolean}
+     */
+    this.unsigned = !!unsigned;
+}
+
+Object.defineProperty(Long.prototype, "__isLong__", { value: true });
+
+/**
+ * @function
+ * @param {*} obj Object
+ * @returns {boolean}
+ * @inner
+ */
+function isLong(obj) {
+    return (obj && obj["__isLong__"]) === true;
+}
+
+/**
+ * Tests if the specified object is a Long.
+ * @function
+ * @param {*} obj Object
+ * @returns {boolean}
+ */
+Long.isLong = isLong;
+
+/**
+ * A cache of the Long representations of small integer values.
+ * @type {!Object}
+ * @inner
+ */
+var INT_CACHE = {};
+
+/**
+ * A cache of the Long representations of small unsigned integer values.
+ * @type {!Object}
+ * @inner
+ */
+var UINT_CACHE = {};
+
+/**
+ * @param {number} value
+ * @param {boolean=} unsigned
+ * @returns {!Long}
+ * @inner
+ */
+function fromInt(value, unsigned) {
+    var obj, cachedObj, cache;
+    if (unsigned) {
+        value >>>= 0;
+        if (cache = (0 <= value && value < 256)) {
+            cachedObj = UINT_CACHE[value];
+            if (cachedObj)
+                return cachedObj;
+        }
+        obj = fromBits(value, (value | 0) < 0 ? -1 : 0, true);
+        if (cache)
+            UINT_CACHE[value] = obj;
+        return obj;
+    } else {
+        value |= 0;
+        if (cache = (-128 <= value && value < 128)) {
+            cachedObj = INT_CACHE[value];
+            if (cachedObj)
+                return cachedObj;
+        }
+        obj = fromBits(value, value < 0 ? -1 : 0, false);
+        if (cache)
+            INT_CACHE[value] = obj;
+        return obj;
+    }
+}
+
+/**
+ * Returns a Long representing the given 32 bit integer value.
+ * @function
+ * @param {number} value The 32 bit integer in question
+ * @param {boolean=} unsigned Whether unsigned or not, defaults to signed
+ * @returns {!Long} The corresponding Long value
+ */
+Long.fromInt = fromInt;
+
+/**
+ * @param {number} value
+ * @param {boolean=} unsigned
+ * @returns {!Long}
+ * @inner
+ */
+function fromNumber(value, unsigned) {
+    if (isNaN(value))
+        return unsigned ? UZERO : ZERO$1;
+    if (unsigned) {
+        if (value < 0)
+            return UZERO;
+        if (value >= TWO_PWR_64_DBL)
+            return MAX_UNSIGNED_VALUE;
+    } else {
+        if (value <= -TWO_PWR_63_DBL)
+            return MIN_VALUE;
+        if (value + 1 >= TWO_PWR_63_DBL)
+            return MAX_VALUE;
+    }
+    if (value < 0)
+        return fromNumber(-value, unsigned).neg();
+    return fromBits((value % TWO_PWR_32_DBL) | 0, (value / TWO_PWR_32_DBL) | 0, unsigned);
+}
+
+/**
+ * Returns a Long representing the given value, provided that it is a finite number. Otherwise, zero is returned.
+ * @function
+ * @param {number} value The number in question
+ * @param {boolean=} unsigned Whether unsigned or not, defaults to signed
+ * @returns {!Long} The corresponding Long value
+ */
+Long.fromNumber = fromNumber;
+
+/**
+ * @param {number} lowBits
+ * @param {number} highBits
+ * @param {boolean=} unsigned
+ * @returns {!Long}
+ * @inner
+ */
+function fromBits(lowBits, highBits, unsigned) {
+    return new Long(lowBits, highBits, unsigned);
+}
+
+/**
+ * Returns a Long representing the 64 bit integer that comes by concatenating the given low and high bits. Each is
+ *  assumed to use 32 bits.
+ * @function
+ * @param {number} lowBits The low 32 bits
+ * @param {number} highBits The high 32 bits
+ * @param {boolean=} unsigned Whether unsigned or not, defaults to signed
+ * @returns {!Long} The corresponding Long value
+ */
+Long.fromBits = fromBits;
+
+/**
+ * @function
+ * @param {number} base
+ * @param {number} exponent
+ * @returns {number}
+ * @inner
+ */
+var pow_dbl = Math.pow; // Used 4 times (4*8 to 15+4)
+
+/**
+ * @param {string} str
+ * @param {(boolean|number)=} unsigned
+ * @param {number=} radix
+ * @returns {!Long}
+ * @inner
+ */
+function fromString$1(str, unsigned, radix) {
+    if (str.length === 0)
+        throw Error('empty string');
+    if (str === "NaN" || str === "Infinity" || str === "+Infinity" || str === "-Infinity")
+        return ZERO$1;
+    if (typeof unsigned === 'number') {
+        // For goog.math.long compatibility
+        radix = unsigned, unsigned = false;
+    } else {
+        unsigned = !! unsigned;
+    }
+    radix = radix || 10;
+    if (radix < 2 || 36 < radix)
+        throw RangeError('radix');
+
+    var p;
+    if ((p = str.indexOf('-')) > 0)
+        throw Error('interior hyphen');
+    else if (p === 0) {
+        return fromString$1(str.substring(1), unsigned, radix).neg();
+    }
+
+    // Do several (8) digits each time through the loop, so as to
+    // minimize the calls to the very expensive emulated div.
+    var radixToPower = fromNumber(pow_dbl(radix, 8));
+
+    var result = ZERO$1;
+    for (var i = 0; i < str.length; i += 8) {
+        var size = Math.min(8, str.length - i),
+            value = parseInt(str.substring(i, i + size), radix);
+        if (size < 8) {
+            var power = fromNumber(pow_dbl(radix, size));
+            result = result.mul(power).add(fromNumber(value));
+        } else {
+            result = result.mul(radixToPower);
+            result = result.add(fromNumber(value));
+        }
+    }
+    result.unsigned = unsigned;
+    return result;
+}
+
+/**
+ * Returns a Long representation of the given string, written using the specified radix.
+ * @function
+ * @param {string} str The textual representation of the Long
+ * @param {(boolean|number)=} unsigned Whether unsigned or not, defaults to signed
+ * @param {number=} radix The radix in which the text is written (2-36), defaults to 10
+ * @returns {!Long} The corresponding Long value
+ */
+Long.fromString = fromString$1;
+
+/**
+ * @function
+ * @param {!Long|number|string|!{low: number, high: number, unsigned: boolean}} val
+ * @param {boolean=} unsigned
+ * @returns {!Long}
+ * @inner
+ */
+function fromValue(val, unsigned) {
+    if (typeof val === 'number')
+        return fromNumber(val, unsigned);
+    if (typeof val === 'string')
+        return fromString$1(val, unsigned);
+    // Throws for non-objects, converts non-instanceof Long:
+    return fromBits(val.low, val.high, typeof unsigned === 'boolean' ? unsigned : val.unsigned);
+}
+
+/**
+ * Converts the specified value to a Long using the appropriate from* function for its type.
+ * @function
+ * @param {!Long|number|string|!{low: number, high: number, unsigned: boolean}} val Value
+ * @param {boolean=} unsigned Whether unsigned or not, defaults to signed
+ * @returns {!Long}
+ */
+Long.fromValue = fromValue;
+
+// NOTE: the compiler should inline these constant values below and then remove these variables, so there should be
+// no runtime penalty for these.
+
+/**
+ * @type {number}
+ * @const
+ * @inner
+ */
+var TWO_PWR_16_DBL = 1 << 16;
+
+/**
+ * @type {number}
+ * @const
+ * @inner
+ */
+var TWO_PWR_24_DBL = 1 << 24;
+
+/**
+ * @type {number}
+ * @const
+ * @inner
+ */
+var TWO_PWR_32_DBL = TWO_PWR_16_DBL * TWO_PWR_16_DBL;
+
+/**
+ * @type {number}
+ * @const
+ * @inner
+ */
+var TWO_PWR_64_DBL = TWO_PWR_32_DBL * TWO_PWR_32_DBL;
+
+/**
+ * @type {number}
+ * @const
+ * @inner
+ */
+var TWO_PWR_63_DBL = TWO_PWR_64_DBL / 2;
+
+/**
+ * @type {!Long}
+ * @const
+ * @inner
+ */
+var TWO_PWR_24 = fromInt(TWO_PWR_24_DBL);
+
+/**
+ * @type {!Long}
+ * @inner
+ */
+var ZERO$1 = fromInt(0);
+
+/**
+ * Signed zero.
+ * @type {!Long}
+ */
+Long.ZERO = ZERO$1;
+
+/**
+ * @type {!Long}
+ * @inner
+ */
+var UZERO = fromInt(0, true);
+
+/**
+ * Unsigned zero.
+ * @type {!Long}
+ */
+Long.UZERO = UZERO;
+
+/**
+ * @type {!Long}
+ * @inner
+ */
+var ONE = fromInt(1);
+
+/**
+ * Signed one.
+ * @type {!Long}
+ */
+Long.ONE = ONE;
+
+/**
+ * @type {!Long}
+ * @inner
+ */
+var UONE = fromInt(1, true);
+
+/**
+ * Unsigned one.
+ * @type {!Long}
+ */
+Long.UONE = UONE;
+
+/**
+ * @type {!Long}
+ * @inner
+ */
+var NEG_ONE = fromInt(-1);
+
+/**
+ * Signed negative one.
+ * @type {!Long}
+ */
+Long.NEG_ONE = NEG_ONE;
+
+/**
+ * @type {!Long}
+ * @inner
+ */
+var MAX_VALUE = fromBits(0xFFFFFFFF|0, 0x7FFFFFFF|0, false);
+
+/**
+ * Maximum signed value.
+ * @type {!Long}
+ */
+Long.MAX_VALUE = MAX_VALUE;
+
+/**
+ * @type {!Long}
+ * @inner
+ */
+var MAX_UNSIGNED_VALUE = fromBits(0xFFFFFFFF|0, 0xFFFFFFFF|0, true);
+
+/**
+ * Maximum unsigned value.
+ * @type {!Long}
+ */
+Long.MAX_UNSIGNED_VALUE = MAX_UNSIGNED_VALUE;
+
+/**
+ * @type {!Long}
+ * @inner
+ */
+var MIN_VALUE = fromBits(0, 0x80000000|0, false);
+
+/**
+ * Minimum signed value.
+ * @type {!Long}
+ */
+Long.MIN_VALUE = MIN_VALUE;
+
+/**
+ * @alias Long.prototype
+ * @inner
+ */
+var LongPrototype = Long.prototype;
+
+/**
+ * Converts the Long to a 32 bit integer, assuming it is a 32 bit integer.
+ * @returns {number}
+ */
+LongPrototype.toInt = function toInt() {
+    return this.unsigned ? this.low >>> 0 : this.low;
+};
+
+/**
+ * Converts the Long to a the nearest floating-point representation of this value (double, 53 bit mantissa).
+ * @returns {number}
+ */
+LongPrototype.toNumber = function toNumber() {
+    if (this.unsigned)
+        return ((this.high >>> 0) * TWO_PWR_32_DBL) + (this.low >>> 0);
+    return this.high * TWO_PWR_32_DBL + (this.low >>> 0);
+};
+
+/**
+ * Converts the Long to a string written in the specified radix.
+ * @param {number=} radix Radix (2-36), defaults to 10
+ * @returns {string}
+ * @override
+ * @throws {RangeError} If `radix` is out of range
+ */
+LongPrototype.toString = function toString(radix) {
+    radix = radix || 10;
+    if (radix < 2 || 36 < radix)
+        throw RangeError('radix');
+    if (this.isZero())
+        return '0';
+    if (this.isNegative()) { // Unsigned Longs are never negative
+        if (this.eq(MIN_VALUE)) {
+            // We need to change the Long value before it can be negated, so we remove
+            // the bottom-most digit in this base and then recurse to do the rest.
+            var radixLong = fromNumber(radix),
+                div = this.div(radixLong),
+                rem1 = div.mul(radixLong).sub(this);
+            return div.toString(radix) + rem1.toInt().toString(radix);
+        } else
+            return '-' + this.neg().toString(radix);
+    }
+
+    // Do several (6) digits each time through the loop, so as to
+    // minimize the calls to the very expensive emulated div.
+    var radixToPower = fromNumber(pow_dbl(radix, 6), this.unsigned),
+        rem = this;
+    var result = '';
+    while (true) {
+        var remDiv = rem.div(radixToPower),
+            intval = rem.sub(remDiv.mul(radixToPower)).toInt() >>> 0,
+            digits = intval.toString(radix);
+        rem = remDiv;
+        if (rem.isZero())
+            return digits + result;
+        else {
+            while (digits.length < 6)
+                digits = '0' + digits;
+            result = '' + digits + result;
+        }
+    }
+};
+
+/**
+ * Gets the high 32 bits as a signed integer.
+ * @returns {number} Signed high bits
+ */
+LongPrototype.getHighBits = function getHighBits() {
+    return this.high;
+};
+
+/**
+ * Gets the high 32 bits as an unsigned integer.
+ * @returns {number} Unsigned high bits
+ */
+LongPrototype.getHighBitsUnsigned = function getHighBitsUnsigned() {
+    return this.high >>> 0;
+};
+
+/**
+ * Gets the low 32 bits as a signed integer.
+ * @returns {number} Signed low bits
+ */
+LongPrototype.getLowBits = function getLowBits() {
+    return this.low;
+};
+
+/**
+ * Gets the low 32 bits as an unsigned integer.
+ * @returns {number} Unsigned low bits
+ */
+LongPrototype.getLowBitsUnsigned = function getLowBitsUnsigned() {
+    return this.low >>> 0;
+};
+
+/**
+ * Gets the number of bits needed to represent the absolute value of this Long.
+ * @returns {number}
+ */
+LongPrototype.getNumBitsAbs = function getNumBitsAbs() {
+    if (this.isNegative()) // Unsigned Longs are never negative
+        return this.eq(MIN_VALUE) ? 64 : this.neg().getNumBitsAbs();
+    var val = this.high != 0 ? this.high : this.low;
+    for (var bit = 31; bit > 0; bit--)
+        if ((val & (1 << bit)) != 0)
+            break;
+    return this.high != 0 ? bit + 33 : bit + 1;
+};
+
+/**
+ * Tests if this Long's value equals zero.
+ * @returns {boolean}
+ */
+LongPrototype.isZero = function isZero() {
+    return this.high === 0 && this.low === 0;
+};
+
+/**
+ * Tests if this Long's value equals zero. This is an alias of {@link Long#isZero}.
+ * @returns {boolean}
+ */
+LongPrototype.eqz = LongPrototype.isZero;
+
+/**
+ * Tests if this Long's value is negative.
+ * @returns {boolean}
+ */
+LongPrototype.isNegative = function isNegative() {
+    return !this.unsigned && this.high < 0;
+};
+
+/**
+ * Tests if this Long's value is positive.
+ * @returns {boolean}
+ */
+LongPrototype.isPositive = function isPositive() {
+    return this.unsigned || this.high >= 0;
+};
+
+/**
+ * Tests if this Long's value is odd.
+ * @returns {boolean}
+ */
+LongPrototype.isOdd = function isOdd() {
+    return (this.low & 1) === 1;
+};
+
+/**
+ * Tests if this Long's value is even.
+ * @returns {boolean}
+ */
+LongPrototype.isEven = function isEven() {
+    return (this.low & 1) === 0;
+};
+
+/**
+ * Tests if this Long's value equals the specified's.
+ * @param {!Long|number|string} other Other value
+ * @returns {boolean}
+ */
+LongPrototype.equals = function equals(other) {
+    if (!isLong(other))
+        other = fromValue(other);
+    if (this.unsigned !== other.unsigned && (this.high >>> 31) === 1 && (other.high >>> 31) === 1)
+        return false;
+    return this.high === other.high && this.low === other.low;
+};
+
+/**
+ * Tests if this Long's value equals the specified's. This is an alias of {@link Long#equals}.
+ * @function
+ * @param {!Long|number|string} other Other value
+ * @returns {boolean}
+ */
+LongPrototype.eq = LongPrototype.equals;
+
+/**
+ * Tests if this Long's value differs from the specified's.
+ * @param {!Long|number|string} other Other value
+ * @returns {boolean}
+ */
+LongPrototype.notEquals = function notEquals(other) {
+    return !this.eq(/* validates */ other);
+};
+
+/**
+ * Tests if this Long's value differs from the specified's. This is an alias of {@link Long#notEquals}.
+ * @function
+ * @param {!Long|number|string} other Other value
+ * @returns {boolean}
+ */
+LongPrototype.neq = LongPrototype.notEquals;
+
+/**
+ * Tests if this Long's value differs from the specified's. This is an alias of {@link Long#notEquals}.
+ * @function
+ * @param {!Long|number|string} other Other value
+ * @returns {boolean}
+ */
+LongPrototype.ne = LongPrototype.notEquals;
+
+/**
+ * Tests if this Long's value is less than the specified's.
+ * @param {!Long|number|string} other Other value
+ * @returns {boolean}
+ */
+LongPrototype.lessThan = function lessThan(other) {
+    return this.comp(/* validates */ other) < 0;
+};
+
+/**
+ * Tests if this Long's value is less than the specified's. This is an alias of {@link Long#lessThan}.
+ * @function
+ * @param {!Long|number|string} other Other value
+ * @returns {boolean}
+ */
+LongPrototype.lt = LongPrototype.lessThan;
+
+/**
+ * Tests if this Long's value is less than or equal the specified's.
+ * @param {!Long|number|string} other Other value
+ * @returns {boolean}
+ */
+LongPrototype.lessThanOrEqual = function lessThanOrEqual(other) {
+    return this.comp(/* validates */ other) <= 0;
+};
+
+/**
+ * Tests if this Long's value is less than or equal the specified's. This is an alias of {@link Long#lessThanOrEqual}.
+ * @function
+ * @param {!Long|number|string} other Other value
+ * @returns {boolean}
+ */
+LongPrototype.lte = LongPrototype.lessThanOrEqual;
+
+/**
+ * Tests if this Long's value is less than or equal the specified's. This is an alias of {@link Long#lessThanOrEqual}.
+ * @function
+ * @param {!Long|number|string} other Other value
+ * @returns {boolean}
+ */
+LongPrototype.le = LongPrototype.lessThanOrEqual;
+
+/**
+ * Tests if this Long's value is greater than the specified's.
+ * @param {!Long|number|string} other Other value
+ * @returns {boolean}
+ */
+LongPrototype.greaterThan = function greaterThan(other) {
+    return this.comp(/* validates */ other) > 0;
+};
+
+/**
+ * Tests if this Long's value is greater than the specified's. This is an alias of {@link Long#greaterThan}.
+ * @function
+ * @param {!Long|number|string} other Other value
+ * @returns {boolean}
+ */
+LongPrototype.gt = LongPrototype.greaterThan;
+
+/**
+ * Tests if this Long's value is greater than or equal the specified's.
+ * @param {!Long|number|string} other Other value
+ * @returns {boolean}
+ */
+LongPrototype.greaterThanOrEqual = function greaterThanOrEqual(other) {
+    return this.comp(/* validates */ other) >= 0;
+};
+
+/**
+ * Tests if this Long's value is greater than or equal the specified's. This is an alias of {@link Long#greaterThanOrEqual}.
+ * @function
+ * @param {!Long|number|string} other Other value
+ * @returns {boolean}
+ */
+LongPrototype.gte = LongPrototype.greaterThanOrEqual;
+
+/**
+ * Tests if this Long's value is greater than or equal the specified's. This is an alias of {@link Long#greaterThanOrEqual}.
+ * @function
+ * @param {!Long|number|string} other Other value
+ * @returns {boolean}
+ */
+LongPrototype.ge = LongPrototype.greaterThanOrEqual;
+
+/**
+ * Compares this Long's value with the specified's.
+ * @param {!Long|number|string} other Other value
+ * @returns {number} 0 if they are the same, 1 if the this is greater and -1
+ *  if the given one is greater
+ */
+LongPrototype.compare = function compare(other) {
+    if (!isLong(other))
+        other = fromValue(other);
+    if (this.eq(other))
+        return 0;
+    var thisNeg = this.isNegative(),
+        otherNeg = other.isNegative();
+    if (thisNeg && !otherNeg)
+        return -1;
+    if (!thisNeg && otherNeg)
+        return 1;
+    // At this point the sign bits are the same
+    if (!this.unsigned)
+        return this.sub(other).isNegative() ? -1 : 1;
+    // Both are positive if at least one is unsigned
+    return (other.high >>> 0) > (this.high >>> 0) || (other.high === this.high && (other.low >>> 0) > (this.low >>> 0)) ? -1 : 1;
+};
+
+/**
+ * Compares this Long's value with the specified's. This is an alias of {@link Long#compare}.
+ * @function
+ * @param {!Long|number|string} other Other value
+ * @returns {number} 0 if they are the same, 1 if the this is greater and -1
+ *  if the given one is greater
+ */
+LongPrototype.comp = LongPrototype.compare;
+
+/**
+ * Negates this Long's value.
+ * @returns {!Long} Negated Long
+ */
+LongPrototype.negate = function negate() {
+    if (!this.unsigned && this.eq(MIN_VALUE))
+        return MIN_VALUE;
+    return this.not().add(ONE);
+};
+
+/**
+ * Negates this Long's value. This is an alias of {@link Long#negate}.
+ * @function
+ * @returns {!Long} Negated Long
+ */
+LongPrototype.neg = LongPrototype.negate;
+
+/**
+ * Returns the sum of this and the specified Long.
+ * @param {!Long|number|string} addend Addend
+ * @returns {!Long} Sum
+ */
+LongPrototype.add = function add(addend) {
+    if (!isLong(addend))
+        addend = fromValue(addend);
+
+    // Divide each number into 4 chunks of 16 bits, and then sum the chunks.
+
+    var a48 = this.high >>> 16;
+    var a32 = this.high & 0xFFFF;
+    var a16 = this.low >>> 16;
+    var a00 = this.low & 0xFFFF;
+
+    var b48 = addend.high >>> 16;
+    var b32 = addend.high & 0xFFFF;
+    var b16 = addend.low >>> 16;
+    var b00 = addend.low & 0xFFFF;
+
+    var c48 = 0, c32 = 0, c16 = 0, c00 = 0;
+    c00 += a00 + b00;
+    c16 += c00 >>> 16;
+    c00 &= 0xFFFF;
+    c16 += a16 + b16;
+    c32 += c16 >>> 16;
+    c16 &= 0xFFFF;
+    c32 += a32 + b32;
+    c48 += c32 >>> 16;
+    c32 &= 0xFFFF;
+    c48 += a48 + b48;
+    c48 &= 0xFFFF;
+    return fromBits((c16 << 16) | c00, (c48 << 16) | c32, this.unsigned);
+};
+
+/**
+ * Returns the difference of this and the specified Long.
+ * @param {!Long|number|string} subtrahend Subtrahend
+ * @returns {!Long} Difference
+ */
+LongPrototype.subtract = function subtract(subtrahend) {
+    if (!isLong(subtrahend))
+        subtrahend = fromValue(subtrahend);
+    return this.add(subtrahend.neg());
+};
+
+/**
+ * Returns the difference of this and the specified Long. This is an alias of {@link Long#subtract}.
+ * @function
+ * @param {!Long|number|string} subtrahend Subtrahend
+ * @returns {!Long} Difference
+ */
+LongPrototype.sub = LongPrototype.subtract;
+
+/**
+ * Returns the product of this and the specified Long.
+ * @param {!Long|number|string} multiplier Multiplier
+ * @returns {!Long} Product
+ */
+LongPrototype.multiply = function multiply(multiplier) {
+    if (this.isZero())
+        return ZERO$1;
+    if (!isLong(multiplier))
+        multiplier = fromValue(multiplier);
+
+    // use wasm support if present
+    if (wasm) {
+        var low = wasm.mul(this.low,
+                           this.high,
+                           multiplier.low,
+                           multiplier.high);
+        return fromBits(low, wasm.get_high(), this.unsigned);
+    }
+
+    if (multiplier.isZero())
+        return ZERO$1;
+    if (this.eq(MIN_VALUE))
+        return multiplier.isOdd() ? MIN_VALUE : ZERO$1;
+    if (multiplier.eq(MIN_VALUE))
+        return this.isOdd() ? MIN_VALUE : ZERO$1;
+
+    if (this.isNegative()) {
+        if (multiplier.isNegative())
+            return this.neg().mul(multiplier.neg());
+        else
+            return this.neg().mul(multiplier).neg();
+    } else if (multiplier.isNegative())
+        return this.mul(multiplier.neg()).neg();
+
+    // If both longs are small, use float multiplication
+    if (this.lt(TWO_PWR_24) && multiplier.lt(TWO_PWR_24))
+        return fromNumber(this.toNumber() * multiplier.toNumber(), this.unsigned);
+
+    // Divide each long into 4 chunks of 16 bits, and then add up 4x4 products.
+    // We can skip products that would overflow.
+
+    var a48 = this.high >>> 16;
+    var a32 = this.high & 0xFFFF;
+    var a16 = this.low >>> 16;
+    var a00 = this.low & 0xFFFF;
+
+    var b48 = multiplier.high >>> 16;
+    var b32 = multiplier.high & 0xFFFF;
+    var b16 = multiplier.low >>> 16;
+    var b00 = multiplier.low & 0xFFFF;
+
+    var c48 = 0, c32 = 0, c16 = 0, c00 = 0;
+    c00 += a00 * b00;
+    c16 += c00 >>> 16;
+    c00 &= 0xFFFF;
+    c16 += a16 * b00;
+    c32 += c16 >>> 16;
+    c16 &= 0xFFFF;
+    c16 += a00 * b16;
+    c32 += c16 >>> 16;
+    c16 &= 0xFFFF;
+    c32 += a32 * b00;
+    c48 += c32 >>> 16;
+    c32 &= 0xFFFF;
+    c32 += a16 * b16;
+    c48 += c32 >>> 16;
+    c32 &= 0xFFFF;
+    c32 += a00 * b32;
+    c48 += c32 >>> 16;
+    c32 &= 0xFFFF;
+    c48 += a48 * b00 + a32 * b16 + a16 * b32 + a00 * b48;
+    c48 &= 0xFFFF;
+    return fromBits((c16 << 16) | c00, (c48 << 16) | c32, this.unsigned);
+};
+
+/**
+ * Returns the product of this and the specified Long. This is an alias of {@link Long#multiply}.
+ * @function
+ * @param {!Long|number|string} multiplier Multiplier
+ * @returns {!Long} Product
+ */
+LongPrototype.mul = LongPrototype.multiply;
+
+/**
+ * Returns this Long divided by the specified. The result is signed if this Long is signed or
+ *  unsigned if this Long is unsigned.
+ * @param {!Long|number|string} divisor Divisor
+ * @returns {!Long} Quotient
+ */
+LongPrototype.divide = function divide(divisor) {
+    if (!isLong(divisor))
+        divisor = fromValue(divisor);
+    if (divisor.isZero())
+        throw Error('division by zero');
+
+    // use wasm support if present
+    if (wasm) {
+        // guard against signed division overflow: the largest
+        // negative number / -1 would be 1 larger than the largest
+        // positive number, due to two's complement.
+        if (!this.unsigned &&
+            this.high === -0x80000000 &&
+            divisor.low === -1 && divisor.high === -1) {
+            // be consistent with non-wasm code path
+            return this;
+        }
+        var low = (this.unsigned ? wasm.div_u : wasm.div_s)(
+            this.low,
+            this.high,
+            divisor.low,
+            divisor.high
+        );
+        return fromBits(low, wasm.get_high(), this.unsigned);
+    }
+
+    if (this.isZero())
+        return this.unsigned ? UZERO : ZERO$1;
+    var approx, rem, res;
+    if (!this.unsigned) {
+        // This section is only relevant for signed longs and is derived from the
+        // closure library as a whole.
+        if (this.eq(MIN_VALUE)) {
+            if (divisor.eq(ONE) || divisor.eq(NEG_ONE))
+                return MIN_VALUE;  // recall that -MIN_VALUE == MIN_VALUE
+            else if (divisor.eq(MIN_VALUE))
+                return ONE;
+            else {
+                // At this point, we have |other| >= 2, so |this/other| < |MIN_VALUE|.
+                var halfThis = this.shr(1);
+                approx = halfThis.div(divisor).shl(1);
+                if (approx.eq(ZERO$1)) {
+                    return divisor.isNegative() ? ONE : NEG_ONE;
+                } else {
+                    rem = this.sub(divisor.mul(approx));
+                    res = approx.add(rem.div(divisor));
+                    return res;
+                }
+            }
+        } else if (divisor.eq(MIN_VALUE))
+            return this.unsigned ? UZERO : ZERO$1;
+        if (this.isNegative()) {
+            if (divisor.isNegative())
+                return this.neg().div(divisor.neg());
+            return this.neg().div(divisor).neg();
+        } else if (divisor.isNegative())
+            return this.div(divisor.neg()).neg();
+        res = ZERO$1;
+    } else {
+        // The algorithm below has not been made for unsigned longs. It's therefore
+        // required to take special care of the MSB prior to running it.
+        if (!divisor.unsigned)
+            divisor = divisor.toUnsigned();
+        if (divisor.gt(this))
+            return UZERO;
+        if (divisor.gt(this.shru(1))) // 15 >>> 1 = 7 ; with divisor = 8 ; true
+            return UONE;
+        res = UZERO;
+    }
+
+    // Repeat the following until the remainder is less than other:  find a
+    // floating-point that approximates remainder / other *from below*, add this
+    // into the result, and subtract it from the remainder.  It is critical that
+    // the approximate value is less than or equal to the real value so that the
+    // remainder never becomes negative.
+    rem = this;
+    while (rem.gte(divisor)) {
+        // Approximate the result of division. This may be a little greater or
+        // smaller than the actual value.
+        approx = Math.max(1, Math.floor(rem.toNumber() / divisor.toNumber()));
+
+        // We will tweak the approximate result by changing it in the 48-th digit or
+        // the smallest non-fractional digit, whichever is larger.
+        var log2 = Math.ceil(Math.log(approx) / Math.LN2),
+            delta = (log2 <= 48) ? 1 : pow_dbl(2, log2 - 48),
+
+        // Decrease the approximation until it is smaller than the remainder.  Note
+        // that if it is too large, the product overflows and is negative.
+            approxRes = fromNumber(approx),
+            approxRem = approxRes.mul(divisor);
+        while (approxRem.isNegative() || approxRem.gt(rem)) {
+            approx -= delta;
+            approxRes = fromNumber(approx, this.unsigned);
+            approxRem = approxRes.mul(divisor);
+        }
+
+        // We know the answer can't be zero... and actually, zero would cause
+        // infinite recursion since we would make no progress.
+        if (approxRes.isZero())
+            approxRes = ONE;
+
+        res = res.add(approxRes);
+        rem = rem.sub(approxRem);
+    }
+    return res;
+};
+
+/**
+ * Returns this Long divided by the specified. This is an alias of {@link Long#divide}.
+ * @function
+ * @param {!Long|number|string} divisor Divisor
+ * @returns {!Long} Quotient
+ */
+LongPrototype.div = LongPrototype.divide;
+
+/**
+ * Returns this Long modulo the specified.
+ * @param {!Long|number|string} divisor Divisor
+ * @returns {!Long} Remainder
+ */
+LongPrototype.modulo = function modulo(divisor) {
+    if (!isLong(divisor))
+        divisor = fromValue(divisor);
+
+    // use wasm support if present
+    if (wasm) {
+        var low = (this.unsigned ? wasm.rem_u : wasm.rem_s)(
+            this.low,
+            this.high,
+            divisor.low,
+            divisor.high
+        );
+        return fromBits(low, wasm.get_high(), this.unsigned);
+    }
+
+    return this.sub(this.div(divisor).mul(divisor));
+};
+
+/**
+ * Returns this Long modulo the specified. This is an alias of {@link Long#modulo}.
+ * @function
+ * @param {!Long|number|string} divisor Divisor
+ * @returns {!Long} Remainder
+ */
+LongPrototype.mod = LongPrototype.modulo;
+
+/**
+ * Returns this Long modulo the specified. This is an alias of {@link Long#modulo}.
+ * @function
+ * @param {!Long|number|string} divisor Divisor
+ * @returns {!Long} Remainder
+ */
+LongPrototype.rem = LongPrototype.modulo;
+
+/**
+ * Returns the bitwise NOT of this Long.
+ * @returns {!Long}
+ */
+LongPrototype.not = function not() {
+    return fromBits(~this.low, ~this.high, this.unsigned);
+};
+
+/**
+ * Returns the bitwise AND of this Long and the specified.
+ * @param {!Long|number|string} other Other Long
+ * @returns {!Long}
+ */
+LongPrototype.and = function and(other) {
+    if (!isLong(other))
+        other = fromValue(other);
+    return fromBits(this.low & other.low, this.high & other.high, this.unsigned);
+};
+
+/**
+ * Returns the bitwise OR of this Long and the specified.
+ * @param {!Long|number|string} other Other Long
+ * @returns {!Long}
+ */
+LongPrototype.or = function or(other) {
+    if (!isLong(other))
+        other = fromValue(other);
+    return fromBits(this.low | other.low, this.high | other.high, this.unsigned);
+};
+
+/**
+ * Returns the bitwise XOR of this Long and the given one.
+ * @param {!Long|number|string} other Other Long
+ * @returns {!Long}
+ */
+LongPrototype.xor = function xor(other) {
+    if (!isLong(other))
+        other = fromValue(other);
+    return fromBits(this.low ^ other.low, this.high ^ other.high, this.unsigned);
+};
+
+/**
+ * Returns this Long with bits shifted to the left by the given amount.
+ * @param {number|!Long} numBits Number of bits
+ * @returns {!Long} Shifted Long
+ */
+LongPrototype.shiftLeft = function shiftLeft(numBits) {
+    if (isLong(numBits))
+        numBits = numBits.toInt();
+    if ((numBits &= 63) === 0)
+        return this;
+    else if (numBits < 32)
+        return fromBits(this.low << numBits, (this.high << numBits) | (this.low >>> (32 - numBits)), this.unsigned);
+    else
+        return fromBits(0, this.low << (numBits - 32), this.unsigned);
+};
+
+/**
+ * Returns this Long with bits shifted to the left by the given amount. This is an alias of {@link Long#shiftLeft}.
+ * @function
+ * @param {number|!Long} numBits Number of bits
+ * @returns {!Long} Shifted Long
+ */
+LongPrototype.shl = LongPrototype.shiftLeft;
+
+/**
+ * Returns this Long with bits arithmetically shifted to the right by the given amount.
+ * @param {number|!Long} numBits Number of bits
+ * @returns {!Long} Shifted Long
+ */
+LongPrototype.shiftRight = function shiftRight(numBits) {
+    if (isLong(numBits))
+        numBits = numBits.toInt();
+    if ((numBits &= 63) === 0)
+        return this;
+    else if (numBits < 32)
+        return fromBits((this.low >>> numBits) | (this.high << (32 - numBits)), this.high >> numBits, this.unsigned);
+    else
+        return fromBits(this.high >> (numBits - 32), this.high >= 0 ? 0 : -1, this.unsigned);
+};
+
+/**
+ * Returns this Long with bits arithmetically shifted to the right by the given amount. This is an alias of {@link Long#shiftRight}.
+ * @function
+ * @param {number|!Long} numBits Number of bits
+ * @returns {!Long} Shifted Long
+ */
+LongPrototype.shr = LongPrototype.shiftRight;
+
+/**
+ * Returns this Long with bits logically shifted to the right by the given amount.
+ * @param {number|!Long} numBits Number of bits
+ * @returns {!Long} Shifted Long
+ */
+LongPrototype.shiftRightUnsigned = function shiftRightUnsigned(numBits) {
+    if (isLong(numBits))
+        numBits = numBits.toInt();
+    numBits &= 63;
+    if (numBits === 0)
+        return this;
+    else {
+        var high = this.high;
+        if (numBits < 32) {
+            var low = this.low;
+            return fromBits((low >>> numBits) | (high << (32 - numBits)), high >>> numBits, this.unsigned);
+        } else if (numBits === 32)
+            return fromBits(high, 0, this.unsigned);
+        else
+            return fromBits(high >>> (numBits - 32), 0, this.unsigned);
+    }
+};
+
+/**
+ * Returns this Long with bits logically shifted to the right by the given amount. This is an alias of {@link Long#shiftRightUnsigned}.
+ * @function
+ * @param {number|!Long} numBits Number of bits
+ * @returns {!Long} Shifted Long
+ */
+LongPrototype.shru = LongPrototype.shiftRightUnsigned;
+
+/**
+ * Returns this Long with bits logically shifted to the right by the given amount. This is an alias of {@link Long#shiftRightUnsigned}.
+ * @function
+ * @param {number|!Long} numBits Number of bits
+ * @returns {!Long} Shifted Long
+ */
+LongPrototype.shr_u = LongPrototype.shiftRightUnsigned;
+
+/**
+ * Converts this Long to signed.
+ * @returns {!Long} Signed long
+ */
+LongPrototype.toSigned = function toSigned() {
+    if (!this.unsigned)
+        return this;
+    return fromBits(this.low, this.high, false);
+};
+
+/**
+ * Converts this Long to unsigned.
+ * @returns {!Long} Unsigned long
+ */
+LongPrototype.toUnsigned = function toUnsigned() {
+    if (this.unsigned)
+        return this;
+    return fromBits(this.low, this.high, true);
+};
+
+/**
+ * Converts this Long to its byte representation.
+ * @param {boolean=} le Whether little or big endian, defaults to big endian
+ * @returns {!Array.<number>} Byte representation
+ */
+LongPrototype.toBytes = function toBytes(le) {
+    return le ? this.toBytesLE() : this.toBytesBE();
+};
+
+/**
+ * Converts this Long to its little endian byte representation.
+ * @returns {!Array.<number>} Little endian byte representation
+ */
+LongPrototype.toBytesLE = function toBytesLE() {
+    var hi = this.high,
+        lo = this.low;
+    return [
+        lo        & 0xff,
+        lo >>>  8 & 0xff,
+        lo >>> 16 & 0xff,
+        lo >>> 24       ,
+        hi        & 0xff,
+        hi >>>  8 & 0xff,
+        hi >>> 16 & 0xff,
+        hi >>> 24
+    ];
+};
+
+/**
+ * Converts this Long to its big endian byte representation.
+ * @returns {!Array.<number>} Big endian byte representation
+ */
+LongPrototype.toBytesBE = function toBytesBE() {
+    var hi = this.high,
+        lo = this.low;
+    return [
+        hi >>> 24       ,
+        hi >>> 16 & 0xff,
+        hi >>>  8 & 0xff,
+        hi        & 0xff,
+        lo >>> 24       ,
+        lo >>> 16 & 0xff,
+        lo >>>  8 & 0xff,
+        lo        & 0xff
+    ];
+};
+
+/**
+ * Creates a Long from its byte representation.
+ * @param {!Array.<number>} bytes Byte representation
+ * @param {boolean=} unsigned Whether unsigned or not, defaults to signed
+ * @param {boolean=} le Whether little or big endian, defaults to big endian
+ * @returns {Long} The corresponding Long value
+ */
+Long.fromBytes = function fromBytes(bytes, unsigned, le) {
+    return le ? Long.fromBytesLE(bytes, unsigned) : Long.fromBytesBE(bytes, unsigned);
+};
+
+/**
+ * Creates a Long from its little endian byte representation.
+ * @param {!Array.<number>} bytes Little endian byte representation
+ * @param {boolean=} unsigned Whether unsigned or not, defaults to signed
+ * @returns {Long} The corresponding Long value
+ */
+Long.fromBytesLE = function fromBytesLE(bytes, unsigned) {
+    return new Long(
+        bytes[0]       |
+        bytes[1] <<  8 |
+        bytes[2] << 16 |
+        bytes[3] << 24,
+        bytes[4]       |
+        bytes[5] <<  8 |
+        bytes[6] << 16 |
+        bytes[7] << 24,
+        unsigned
+    );
+};
+
+/**
+ * Creates a Long from its big endian byte representation.
+ * @param {!Array.<number>} bytes Big endian byte representation
+ * @param {boolean=} unsigned Whether unsigned or not, defaults to signed
+ * @returns {Long} The corresponding Long value
+ */
+Long.fromBytesBE = function fromBytesBE(bytes, unsigned) {
+    return new Long(
+        bytes[4] << 24 |
+        bytes[5] << 16 |
+        bytes[6] <<  8 |
+        bytes[7],
+        bytes[0] << 24 |
+        bytes[1] << 16 |
+        bytes[2] <<  8 |
+        bytes[3],
+        unsigned
+    );
+};
+
+/**
+ * Type casting utils.
+ */
+var Cast = /** @class */ (function () {
+    function Cast() {
+    }
+    Cast.byte = function (n) {
+        return new Int8Array([n])[0];
+    };
+    /**
+     * @param {number} n
+     * @returns {number}
+     */
+    Cast.int16 = function (n) {
+        return new Int16Array([n])[0];
+    };
+    /**
+     * @param {number} n
+     * @returns {number}
+     */
+    Cast.int32 = function (n) {
+        return new Int32Array([n])[0];
+    };
+    /**
+     * @param {number} n
+     * @returns {Long}
+     */
+    Cast.int64 = function (n) {
+        return long_1.fromInt(n);
+    };
+    return Cast;
+}());
+
+var ERROR_MSG_INPUT = 'Input must be an string, Buffer or Uint8Array';
+
+// For convenience, let people hash a string, not just a Uint8Array
+function normalizeInput (input) {
+  var ret;
+  if (input instanceof Uint8Array) {
+    ret = input;
+  } else if (input instanceof Buffer) {
+    ret = new Uint8Array(input);
+  } else if (typeof (input) === 'string') {
+    ret = new Uint8Array(Buffer.from(input, 'utf8'));
+  } else {
+    throw new Error(ERROR_MSG_INPUT)
+  }
+  return ret
+}
+
+// Converts a Uint8Array to a hexadecimal string
+// For example, toHex([255, 0, 255]) returns "ff00ff"
+function toHex$1 (bytes) {
+  return Array.prototype.map.call(bytes, function (n) {
+    return (n < 16 ? '0' : '') + n.toString(16)
+  }).join('')
+}
+
+// Converts any value in [0...2^32-1] to an 8-character hex string
+function uint32ToHex (val) {
+  return (0x100000000 + val).toString(16).substring(1)
+}
+
+// For debugging: prints out hash state in the same format as the RFC
+// sample computation exactly, so that you can diff
+function debugPrint (label, arr, size) {
+  var msg = '\n' + label + ' = ';
+  for (var i = 0; i < arr.length; i += 2) {
+    if (size === 32) {
+      msg += uint32ToHex(arr[i]).toUpperCase();
+      msg += ' ';
+      msg += uint32ToHex(arr[i + 1]).toUpperCase();
+    } else if (size === 64) {
+      msg += uint32ToHex(arr[i + 1]).toUpperCase();
+      msg += uint32ToHex(arr[i]).toUpperCase();
+    } else throw new Error('Invalid size ' + size)
+    if (i % 6 === 4) {
+      msg += '\n' + new Array(label.length + 4).join(' ');
+    } else if (i < arr.length - 2) {
+      msg += ' ';
+    }
+  }
+  console.log(msg);
+}
+
+// For performance testing: generates N bytes of input, hashes M times
+// Measures and prints MB/second hash performance each time
+function testSpeed (hashFn, N, M) {
+  var startMs = new Date().getTime();
+
+  var input = new Uint8Array(N);
+  for (var i = 0; i < N; i++) {
+    input[i] = i % 256;
+  }
+  var genMs = new Date().getTime();
+  console.log('Generated random input in ' + (genMs - startMs) + 'ms');
+  startMs = genMs;
+
+  for (i = 0; i < M; i++) {
+    var hashHex = hashFn(input);
+    var hashMs = new Date().getTime();
+    var ms = hashMs - startMs;
+    startMs = hashMs;
+    console.log('Hashed in ' + ms + 'ms: ' + hashHex.substring(0, 20) + '...');
+    console.log(Math.round(N / (1 << 20) / (ms / 1000) * 100) / 100 + ' MB PER SECOND');
+  }
+}
+
+var util$2 = {
+  normalizeInput: normalizeInput,
+  toHex: toHex$1,
+  debugPrint: debugPrint,
+  testSpeed: testSpeed
+};
+
+// Blake2B in pure Javascript
+// Adapted from the reference implementation in RFC7693
+// Ported to Javascript by DC - https://github.com/dcposch
+
+
+
+// 64-bit unsigned addition
+// Sets v[a,a+1] += v[b,b+1]
+// v should be a Uint32Array
+function ADD64AA (v, a, b) {
+  var o0 = v[a] + v[b];
+  var o1 = v[a + 1] + v[b + 1];
+  if (o0 >= 0x100000000) {
+    o1++;
+  }
+  v[a] = o0;
+  v[a + 1] = o1;
+}
+
+// 64-bit unsigned addition
+// Sets v[a,a+1] += b
+// b0 is the low 32 bits of b, b1 represents the high 32 bits
+function ADD64AC (v, a, b0, b1) {
+  var o0 = v[a] + b0;
+  if (b0 < 0) {
+    o0 += 0x100000000;
+  }
+  var o1 = v[a + 1] + b1;
+  if (o0 >= 0x100000000) {
+    o1++;
+  }
+  v[a] = o0;
+  v[a + 1] = o1;
+}
+
+// Little-endian byte access
+function B2B_GET32 (arr, i) {
+  return (arr[i] ^
+  (arr[i + 1] << 8) ^
+  (arr[i + 2] << 16) ^
+  (arr[i + 3] << 24))
+}
+
+// G Mixing function
+// The ROTRs are inlined for speed
+function B2B_G (a, b, c, d, ix, iy) {
+  var x0 = m[ix];
+  var x1 = m[ix + 1];
+  var y0 = m[iy];
+  var y1 = m[iy + 1];
+
+  ADD64AA(v, a, b); // v[a,a+1] += v[b,b+1] ... in JS we must store a uint64 as two uint32s
+  ADD64AC(v, a, x0, x1); // v[a, a+1] += x ... x0 is the low 32 bits of x, x1 is the high 32 bits
+
+  // v[d,d+1] = (v[d,d+1] xor v[a,a+1]) rotated to the right by 32 bits
+  var xor0 = v[d] ^ v[a];
+  var xor1 = v[d + 1] ^ v[a + 1];
+  v[d] = xor1;
+  v[d + 1] = xor0;
+
+  ADD64AA(v, c, d);
+
+  // v[b,b+1] = (v[b,b+1] xor v[c,c+1]) rotated right by 24 bits
+  xor0 = v[b] ^ v[c];
+  xor1 = v[b + 1] ^ v[c + 1];
+  v[b] = (xor0 >>> 24) ^ (xor1 << 8);
+  v[b + 1] = (xor1 >>> 24) ^ (xor0 << 8);
+
+  ADD64AA(v, a, b);
+  ADD64AC(v, a, y0, y1);
+
+  // v[d,d+1] = (v[d,d+1] xor v[a,a+1]) rotated right by 16 bits
+  xor0 = v[d] ^ v[a];
+  xor1 = v[d + 1] ^ v[a + 1];
+  v[d] = (xor0 >>> 16) ^ (xor1 << 16);
+  v[d + 1] = (xor1 >>> 16) ^ (xor0 << 16);
+
+  ADD64AA(v, c, d);
+
+  // v[b,b+1] = (v[b,b+1] xor v[c,c+1]) rotated right by 63 bits
+  xor0 = v[b] ^ v[c];
+  xor1 = v[b + 1] ^ v[c + 1];
+  v[b] = (xor1 >>> 31) ^ (xor0 << 1);
+  v[b + 1] = (xor0 >>> 31) ^ (xor1 << 1);
+}
+
+// Initialization Vector
+var BLAKE2B_IV32 = new Uint32Array([
+  0xF3BCC908, 0x6A09E667, 0x84CAA73B, 0xBB67AE85,
+  0xFE94F82B, 0x3C6EF372, 0x5F1D36F1, 0xA54FF53A,
+  0xADE682D1, 0x510E527F, 0x2B3E6C1F, 0x9B05688C,
+  0xFB41BD6B, 0x1F83D9AB, 0x137E2179, 0x5BE0CD19
+]);
+
+var SIGMA8 = [
+  0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
+  14, 10, 4, 8, 9, 15, 13, 6, 1, 12, 0, 2, 11, 7, 5, 3,
+  11, 8, 12, 0, 5, 2, 15, 13, 10, 14, 3, 6, 7, 1, 9, 4,
+  7, 9, 3, 1, 13, 12, 11, 14, 2, 6, 5, 10, 4, 0, 15, 8,
+  9, 0, 5, 7, 2, 4, 10, 15, 14, 1, 11, 12, 6, 8, 3, 13,
+  2, 12, 6, 10, 0, 11, 8, 3, 4, 13, 7, 5, 15, 14, 1, 9,
+  12, 5, 1, 15, 14, 13, 4, 10, 0, 7, 6, 3, 9, 2, 8, 11,
+  13, 11, 7, 14, 12, 1, 3, 9, 5, 0, 15, 4, 8, 6, 2, 10,
+  6, 15, 14, 9, 11, 3, 0, 8, 12, 2, 13, 7, 1, 4, 10, 5,
+  10, 2, 8, 4, 7, 6, 1, 5, 15, 11, 9, 14, 3, 12, 13, 0,
+  0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
+  14, 10, 4, 8, 9, 15, 13, 6, 1, 12, 0, 2, 11, 7, 5, 3
+];
+
+// These are offsets into a uint64 buffer.
+// Multiply them all by 2 to make them offsets into a uint32 buffer,
+// because this is Javascript and we don't have uint64s
+var SIGMA82 = new Uint8Array(SIGMA8.map(function (x) { return x * 2 }));
+
+// Compression function. 'last' flag indicates last block.
+// Note we're representing 16 uint64s as 32 uint32s
+var v = new Uint32Array(32);
+var m = new Uint32Array(32);
+function blake2bCompress (ctx, last) {
+  var i = 0;
+
+  // init work variables
+  for (i = 0; i < 16; i++) {
+    v[i] = ctx.h[i];
+    v[i + 16] = BLAKE2B_IV32[i];
+  }
+
+  // low 64 bits of offset
+  v[24] = v[24] ^ ctx.t;
+  v[25] = v[25] ^ (ctx.t / 0x100000000);
+  // high 64 bits not supported, offset may not be higher than 2**53-1
+
+  // last block flag set ?
+  if (last) {
+    v[28] = ~v[28];
+    v[29] = ~v[29];
+  }
+
+  // get little-endian words
+  for (i = 0; i < 32; i++) {
+    m[i] = B2B_GET32(ctx.b, 4 * i);
+  }
+
+  // twelve rounds of mixing
+  // uncomment the DebugPrint calls to log the computation
+  // and match the RFC sample documentation
+  // util.debugPrint('          m[16]', m, 64)
+  for (i = 0; i < 12; i++) {
+    // util.debugPrint('   (i=' + (i < 10 ? ' ' : '') + i + ') v[16]', v, 64)
+    B2B_G(0, 8, 16, 24, SIGMA82[i * 16 + 0], SIGMA82[i * 16 + 1]);
+    B2B_G(2, 10, 18, 26, SIGMA82[i * 16 + 2], SIGMA82[i * 16 + 3]);
+    B2B_G(4, 12, 20, 28, SIGMA82[i * 16 + 4], SIGMA82[i * 16 + 5]);
+    B2B_G(6, 14, 22, 30, SIGMA82[i * 16 + 6], SIGMA82[i * 16 + 7]);
+    B2B_G(0, 10, 20, 30, SIGMA82[i * 16 + 8], SIGMA82[i * 16 + 9]);
+    B2B_G(2, 12, 22, 24, SIGMA82[i * 16 + 10], SIGMA82[i * 16 + 11]);
+    B2B_G(4, 14, 16, 26, SIGMA82[i * 16 + 12], SIGMA82[i * 16 + 13]);
+    B2B_G(6, 8, 18, 28, SIGMA82[i * 16 + 14], SIGMA82[i * 16 + 15]);
+  }
+  // util.debugPrint('   (i=12) v[16]', v, 64)
+
+  for (i = 0; i < 16; i++) {
+    ctx.h[i] = ctx.h[i] ^ v[i] ^ v[i + 16];
+  }
+  // util.debugPrint('h[8]', ctx.h, 64)
+}
+
+// Creates a BLAKE2b hashing context
+// Requires an output length between 1 and 64 bytes
+// Takes an optional Uint8Array key
+function blake2bInit (outlen, key) {
+  if (outlen === 0 || outlen > 64) {
+    throw new Error('Illegal output length, expected 0 < length <= 64')
+  }
+  if (key && key.length > 64) {
+    throw new Error('Illegal key, expected Uint8Array with 0 < length <= 64')
+  }
+
+  // state, 'param block'
+  var ctx = {
+    b: new Uint8Array(128),
+    h: new Uint32Array(16),
+    t: 0, // input count
+    c: 0, // pointer within buffer
+    outlen: outlen // output length in bytes
+  };
+
+  // initialize hash state
+  for (var i = 0; i < 16; i++) {
+    ctx.h[i] = BLAKE2B_IV32[i];
+  }
+  var keylen = key ? key.length : 0;
+  ctx.h[0] ^= 0x01010000 ^ (keylen << 8) ^ outlen;
+
+  // key the hash, if applicable
+  if (key) {
+    blake2bUpdate(ctx, key);
+    // at the end
+    ctx.c = 128;
+  }
+
+  return ctx
+}
+
+// Updates a BLAKE2b streaming hash
+// Requires hash context and Uint8Array (byte array)
+function blake2bUpdate (ctx, input) {
+  for (var i = 0; i < input.length; i++) {
+    if (ctx.c === 128) { // buffer full ?
+      ctx.t += ctx.c; // add counters
+      blake2bCompress(ctx, false); // compress (not last)
+      ctx.c = 0; // counter to zero
+    }
+    ctx.b[ctx.c++] = input[i];
+  }
+}
+
+// Completes a BLAKE2b streaming hash
+// Returns a Uint8Array containing the message digest
+function blake2bFinal (ctx) {
+  ctx.t += ctx.c; // mark last block offset
+
+  while (ctx.c < 128) { // fill up with zeros
+    ctx.b[ctx.c++] = 0;
+  }
+  blake2bCompress(ctx, true); // final block flag = 1
+
+  // little endian convert and store
+  var out = new Uint8Array(ctx.outlen);
+  for (var i = 0; i < ctx.outlen; i++) {
+    out[i] = ctx.h[i >> 2] >> (8 * (i & 3));
+  }
+  return out
+}
+
+// Computes the BLAKE2B hash of a string or byte array, and returns a Uint8Array
+//
+// Returns a n-byte Uint8Array
+//
+// Parameters:
+// - input - the input bytes, as a string, Buffer or Uint8Array
+// - key - optional key Uint8Array, up to 64 bytes
+// - outlen - optional output length in bytes, default 64
+function blake2b (input, key, outlen) {
+  // preprocess inputs
+  outlen = outlen || 64;
+  input = util$2.normalizeInput(input);
+
+  // do the math
+  var ctx = blake2bInit(outlen, key);
+  blake2bUpdate(ctx, input);
+  return blake2bFinal(ctx)
+}
+
+// Computes the BLAKE2B hash of a string or byte array
+//
+// Returns an n-byte hash in hex, all lowercase
+//
+// Parameters:
+// - input - the input bytes, as a string, Buffer, or Uint8Array
+// - key - optional key Uint8Array, up to 64 bytes
+// - outlen - optional output length in bytes, default 64
+function blake2bHex (input, key, outlen) {
+  var output = blake2b(input, key, outlen);
+  return util$2.toHex(output)
+}
+
+var blake2b_1 = {
+  blake2b: blake2b,
+  blake2bHex: blake2bHex,
+  blake2bInit: blake2bInit,
+  blake2bUpdate: blake2bUpdate,
+  blake2bFinal: blake2bFinal
+};
+
+// BLAKE2s hash function in pure Javascript
+// Adapted from the reference implementation in RFC7693
+// Ported to Javascript by DC - https://github.com/dcposch
+
+
+
+// Little-endian byte access.
+// Expects a Uint8Array and an index
+// Returns the little-endian uint32 at v[i..i+3]
+function B2S_GET32 (v, i) {
+  return v[i] ^ (v[i + 1] << 8) ^ (v[i + 2] << 16) ^ (v[i + 3] << 24)
+}
+
+// Mixing function G.
+function B2S_G (a, b, c, d, x, y) {
+  v$1[a] = v$1[a] + v$1[b] + x;
+  v$1[d] = ROTR32(v$1[d] ^ v$1[a], 16);
+  v$1[c] = v$1[c] + v$1[d];
+  v$1[b] = ROTR32(v$1[b] ^ v$1[c], 12);
+  v$1[a] = v$1[a] + v$1[b] + y;
+  v$1[d] = ROTR32(v$1[d] ^ v$1[a], 8);
+  v$1[c] = v$1[c] + v$1[d];
+  v$1[b] = ROTR32(v$1[b] ^ v$1[c], 7);
+}
+
+// 32-bit right rotation
+// x should be a uint32
+// y must be between 1 and 31, inclusive
+function ROTR32 (x, y) {
+  return (x >>> y) ^ (x << (32 - y))
+}
+
+// Initialization Vector.
+var BLAKE2S_IV = new Uint32Array([
+  0x6A09E667, 0xBB67AE85, 0x3C6EF372, 0xA54FF53A,
+  0x510E527F, 0x9B05688C, 0x1F83D9AB, 0x5BE0CD19]);
+
+var SIGMA = new Uint8Array([
+  0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
+  14, 10, 4, 8, 9, 15, 13, 6, 1, 12, 0, 2, 11, 7, 5, 3,
+  11, 8, 12, 0, 5, 2, 15, 13, 10, 14, 3, 6, 7, 1, 9, 4,
+  7, 9, 3, 1, 13, 12, 11, 14, 2, 6, 5, 10, 4, 0, 15, 8,
+  9, 0, 5, 7, 2, 4, 10, 15, 14, 1, 11, 12, 6, 8, 3, 13,
+  2, 12, 6, 10, 0, 11, 8, 3, 4, 13, 7, 5, 15, 14, 1, 9,
+  12, 5, 1, 15, 14, 13, 4, 10, 0, 7, 6, 3, 9, 2, 8, 11,
+  13, 11, 7, 14, 12, 1, 3, 9, 5, 0, 15, 4, 8, 6, 2, 10,
+  6, 15, 14, 9, 11, 3, 0, 8, 12, 2, 13, 7, 1, 4, 10, 5,
+  10, 2, 8, 4, 7, 6, 1, 5, 15, 11, 9, 14, 3, 12, 13, 0]);
+
+// Compression function. "last" flag indicates last block
+var v$1 = new Uint32Array(16);
+var m$1 = new Uint32Array(16);
+function blake2sCompress (ctx, last) {
+  var i = 0;
+  for (i = 0; i < 8; i++) { // init work variables
+    v$1[i] = ctx.h[i];
+    v$1[i + 8] = BLAKE2S_IV[i];
+  }
+
+  v$1[12] ^= ctx.t; // low 32 bits of offset
+  v$1[13] ^= (ctx.t / 0x100000000); // high 32 bits
+  if (last) { // last block flag set ?
+    v$1[14] = ~v$1[14];
+  }
+
+  for (i = 0; i < 16; i++) { // get little-endian words
+    m$1[i] = B2S_GET32(ctx.b, 4 * i);
+  }
+
+  // ten rounds of mixing
+  // uncomment the DebugPrint calls to log the computation
+  // and match the RFC sample documentation
+  // util.debugPrint('          m[16]', m, 32)
+  for (i = 0; i < 10; i++) {
+    // util.debugPrint('   (i=' + i + ')  v[16]', v, 32)
+    B2S_G(0, 4, 8, 12, m$1[SIGMA[i * 16 + 0]], m$1[SIGMA[i * 16 + 1]]);
+    B2S_G(1, 5, 9, 13, m$1[SIGMA[i * 16 + 2]], m$1[SIGMA[i * 16 + 3]]);
+    B2S_G(2, 6, 10, 14, m$1[SIGMA[i * 16 + 4]], m$1[SIGMA[i * 16 + 5]]);
+    B2S_G(3, 7, 11, 15, m$1[SIGMA[i * 16 + 6]], m$1[SIGMA[i * 16 + 7]]);
+    B2S_G(0, 5, 10, 15, m$1[SIGMA[i * 16 + 8]], m$1[SIGMA[i * 16 + 9]]);
+    B2S_G(1, 6, 11, 12, m$1[SIGMA[i * 16 + 10]], m$1[SIGMA[i * 16 + 11]]);
+    B2S_G(2, 7, 8, 13, m$1[SIGMA[i * 16 + 12]], m$1[SIGMA[i * 16 + 13]]);
+    B2S_G(3, 4, 9, 14, m$1[SIGMA[i * 16 + 14]], m$1[SIGMA[i * 16 + 15]]);
+  }
+  // util.debugPrint('   (i=10) v[16]', v, 32)
+
+  for (i = 0; i < 8; i++) {
+    ctx.h[i] ^= v$1[i] ^ v$1[i + 8];
+  }
+  // util.debugPrint('h[8]', ctx.h, 32)
+}
+
+// Creates a BLAKE2s hashing context
+// Requires an output length between 1 and 32 bytes
+// Takes an optional Uint8Array key
+function blake2sInit (outlen, key) {
+  if (!(outlen > 0 && outlen <= 32)) {
+    throw new Error('Incorrect output length, should be in [1, 32]')
+  }
+  var keylen = key ? key.length : 0;
+  if (key && !(keylen > 0 && keylen <= 32)) {
+    throw new Error('Incorrect key length, should be in [1, 32]')
+  }
+
+  var ctx = {
+    h: new Uint32Array(BLAKE2S_IV), // hash state
+    b: new Uint32Array(64), // input block
+    c: 0, // pointer within block
+    t: 0, // input count
+    outlen: outlen // output length in bytes
+  };
+  ctx.h[0] ^= 0x01010000 ^ (keylen << 8) ^ outlen;
+
+  if (keylen > 0) {
+    blake2sUpdate(ctx, key);
+    ctx.c = 64; // at the end
+  }
+
+  return ctx
+}
+
+// Updates a BLAKE2s streaming hash
+// Requires hash context and Uint8Array (byte array)
+function blake2sUpdate (ctx, input) {
+  for (var i = 0; i < input.length; i++) {
+    if (ctx.c === 64) { // buffer full ?
+      ctx.t += ctx.c; // add counters
+      blake2sCompress(ctx, false); // compress (not last)
+      ctx.c = 0; // counter to zero
+    }
+    ctx.b[ctx.c++] = input[i];
+  }
+}
+
+// Completes a BLAKE2s streaming hash
+// Returns a Uint8Array containing the message digest
+function blake2sFinal (ctx) {
+  ctx.t += ctx.c; // mark last block offset
+  while (ctx.c < 64) { // fill up with zeros
+    ctx.b[ctx.c++] = 0;
+  }
+  blake2sCompress(ctx, true); // final block flag = 1
+
+  // little endian convert and store
+  var out = new Uint8Array(ctx.outlen);
+  for (var i = 0; i < ctx.outlen; i++) {
+    out[i] = (ctx.h[i >> 2] >> (8 * (i & 3))) & 0xFF;
+  }
+  return out
+}
+
+// Computes the BLAKE2S hash of a string or byte array, and returns a Uint8Array
+//
+// Returns a n-byte Uint8Array
+//
+// Parameters:
+// - input - the input bytes, as a string, Buffer, or Uint8Array
+// - key - optional key Uint8Array, up to 32 bytes
+// - outlen - optional output length in bytes, default 64
+function blake2s (input, key, outlen) {
+  // preprocess inputs
+  outlen = outlen || 32;
+  input = util$2.normalizeInput(input);
+
+  // do the math
+  var ctx = blake2sInit(outlen, key);
+  blake2sUpdate(ctx, input);
+  return blake2sFinal(ctx)
+}
+
+// Computes the BLAKE2S hash of a string or byte array
+//
+// Returns an n-byte hash in hex, all lowercase
+//
+// Parameters:
+// - input - the input bytes, as a string, Buffer, or Uint8Array
+// - key - optional key Uint8Array, up to 32 bytes
+// - outlen - optional output length in bytes, default 64
+function blake2sHex (input, key, outlen) {
+  var output = blake2s(input, key, outlen);
+  return util$2.toHex(output)
+}
+
+var blake2s_1 = {
+  blake2s: blake2s,
+  blake2sHex: blake2sHex,
+  blake2sInit: blake2sInit,
+  blake2sUpdate: blake2sUpdate,
+  blake2sFinal: blake2sFinal
+};
+
+var blakejs = {
+  blake2b: blake2b_1.blake2b,
+  blake2bHex: blake2b_1.blake2bHex,
+  blake2bInit: blake2b_1.blake2bInit,
+  blake2bUpdate: blake2b_1.blake2bUpdate,
+  blake2bFinal: blake2b_1.blake2bFinal,
+  blake2s: blake2s_1.blake2s,
+  blake2sHex: blake2s_1.blake2sHex,
+  blake2sInit: blake2s_1.blake2sInit,
+  blake2sUpdate: blake2s_1.blake2sUpdate,
+  blake2sFinal: blake2s_1.blake2sFinal
+};
+var blakejs_1 = blakejs.blake2b;
 
 var inherits_browser = createCommonjsModule(function (module) {
 if (typeof Object.create === 'function') {
@@ -10617,7 +13814,7 @@ if (typeof Object.create === 'function') {
 }
 });
 
-var require$$0 = ( util$2 && util$1 ) || util$2;
+var require$$0 = ( util$1 && util ) || util$1;
 
 var inherits$2 = createCommonjsModule(function (module) {
 try {
@@ -16601,7 +19798,14 @@ function hashTx(tx) {
     return Hash.h256(encodeTx(tx));
 }
 
+// shims
+if (!global['XMLHttpRequest']) {
+    global['XMLHttpRequest'] = require("xmlhttprequest").XMLHttpRequest;
+}
+// export Semux object
 var Semux = {
+    Api: DefaultApi,
+    ApiConfiguration: Configuration,
     Bytes: Bytes,
     Cast: Cast,
     Constants: Constants,
