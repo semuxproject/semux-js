@@ -4,6 +4,3534 @@
 	(global.Semux = factory());
 }(this, (function () { 'use strict';
 
+var $Object = Object;
+var $ = {
+  create:     $Object.create,
+  getProto:   $Object.getPrototypeOf,
+  isEnum:     {}.propertyIsEnumerable,
+  getDesc:    $Object.getOwnPropertyDescriptor,
+  setDesc:    $Object.defineProperty,
+  setDescs:   $Object.defineProperties,
+  getKeys:    $Object.keys,
+  getNames:   $Object.getOwnPropertyNames,
+  getSymbols: $Object.getOwnPropertySymbols,
+  each:       [].forEach
+};
+
+function commonjsRequire () {
+	throw new Error('Dynamic requires are not currently supported by rollup-plugin-commonjs');
+}
+
+function createCommonjsModule(fn, module) {
+	return module = { exports: {} }, fn(module, module.exports), module.exports;
+}
+
+var $_global = createCommonjsModule(function (module) {
+// https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
+var global = module.exports = typeof window != 'undefined' && window.Math == Math
+  ? window : typeof self != 'undefined' && self.Math == Math ? self : Function('return this')();
+if(typeof __g == 'number')__g = global; // eslint-disable-line no-undef
+});
+
+var $_core = createCommonjsModule(function (module) {
+var core = module.exports = {version: '1.2.6'};
+if(typeof __e == 'number')__e = core; // eslint-disable-line no-undef
+});
+var $_core_1 = $_core.version;
+
+var $_propertyDesc = function(bitmap, value){
+  return {
+    enumerable  : !(bitmap & 1),
+    configurable: !(bitmap & 2),
+    writable    : !(bitmap & 4),
+    value       : value
+  };
+};
+
+var $_fails = function(exec){
+  try {
+    return !!exec();
+  } catch(e){
+    return true;
+  }
+};
+
+// Thank's IE8 for his funny defineProperty
+var $_descriptors = !$_fails(function(){
+  return Object.defineProperty({}, 'a', {get: function(){ return 7; }}).a != 7;
+});
+
+var $_hide = $_descriptors ? function(object, key, value){
+  return $.setDesc(object, key, $_propertyDesc(1, value));
+} : function(object, key, value){
+  object[key] = value;
+  return object;
+};
+
+var id = 0
+  , px = Math.random();
+var $_uid = function(key){
+  return 'Symbol('.concat(key === undefined ? '' : key, ')_', (++id + px).toString(36));
+};
+
+var $_redefine = createCommonjsModule(function (module) {
+// add fake Function#toString
+// for correct work wrapped methods / constructors with methods like LoDash isNative
+var SRC       = $_uid('src')
+  , TO_STRING = 'toString'
+  , $toString = Function[TO_STRING]
+  , TPL       = ('' + $toString).split(TO_STRING);
+
+$_core.inspectSource = function(it){
+  return $toString.call(it);
+};
+
+(module.exports = function(O, key, val, safe){
+  if(typeof val == 'function'){
+    val.hasOwnProperty(SRC) || $_hide(val, SRC, O[key] ? '' + O[key] : TPL.join(String(key)));
+    val.hasOwnProperty('name') || $_hide(val, 'name', key);
+  }
+  if(O === $_global){
+    O[key] = val;
+  } else {
+    if(!safe)delete O[key];
+    $_hide(O, key, val);
+  }
+})(Function.prototype, TO_STRING, function toString(){
+  return typeof this == 'function' && this[SRC] || $toString.call(this);
+});
+});
+
+var $_aFunction = function(it){
+  if(typeof it != 'function')throw TypeError(it + ' is not a function!');
+  return it;
+};
+
+// optional / simple context binding
+
+var $_ctx = function(fn, that, length){
+  $_aFunction(fn);
+  if(that === undefined)return fn;
+  switch(length){
+    case 1: return function(a){
+      return fn.call(that, a);
+    };
+    case 2: return function(a, b){
+      return fn.call(that, a, b);
+    };
+    case 3: return function(a, b, c){
+      return fn.call(that, a, b, c);
+    };
+  }
+  return function(/* ...args */){
+    return fn.apply(that, arguments);
+  };
+};
+
+var PROTOTYPE = 'prototype';
+
+var $export = function(type, name, source){
+  var IS_FORCED = type & $export.F
+    , IS_GLOBAL = type & $export.G
+    , IS_STATIC = type & $export.S
+    , IS_PROTO  = type & $export.P
+    , IS_BIND   = type & $export.B
+    , target    = IS_GLOBAL ? $_global : IS_STATIC ? $_global[name] || ($_global[name] = {}) : ($_global[name] || {})[PROTOTYPE]
+    , exports   = IS_GLOBAL ? $_core : $_core[name] || ($_core[name] = {})
+    , expProto  = exports[PROTOTYPE] || (exports[PROTOTYPE] = {})
+    , key, own, out, exp;
+  if(IS_GLOBAL)source = name;
+  for(key in source){
+    // contains in native
+    own = !IS_FORCED && target && key in target;
+    // export native or passed
+    out = (own ? target : source)[key];
+    // bind timers to global for call from export context
+    exp = IS_BIND && own ? $_ctx(out, $_global) : IS_PROTO && typeof out == 'function' ? $_ctx(Function.call, out) : out;
+    // extend global
+    if(target && !own)$_redefine(target, key, out);
+    // export
+    if(exports[key] != out)$_hide(exports, key, exp);
+    if(IS_PROTO && expProto[key] != out)expProto[key] = out;
+  }
+};
+$_global.core = $_core;
+// type bitmap
+$export.F = 1;  // forced
+$export.G = 2;  // global
+$export.S = 4;  // static
+$export.P = 8;  // proto
+$export.B = 16; // bind
+$export.W = 32; // wrap
+var $_export = $export;
+
+var $_html = $_global.document && document.documentElement;
+
+var $_isObject = function(it){
+  return typeof it === 'object' ? it !== null : typeof it === 'function';
+};
+
+var document$1 = $_global.document
+  // in old IE typeof document.createElement is 'object'
+  , is = $_isObject(document$1) && $_isObject(document$1.createElement);
+var $_domCreate = function(it){
+  return is ? document$1.createElement(it) : {};
+};
+
+var hasOwnProperty = {}.hasOwnProperty;
+var $_has = function(it, key){
+  return hasOwnProperty.call(it, key);
+};
+
+var toString = {}.toString;
+
+var $_cof = function(it){
+  return toString.call(it).slice(8, -1);
+};
+
+// fast apply, http://jsperf.lnkit.com/fast-apply/5
+var $_invoke = function(fn, args, that){
+  var un = that === undefined;
+  switch(args.length){
+    case 0: return un ? fn()
+                      : fn.call(that);
+    case 1: return un ? fn(args[0])
+                      : fn.call(that, args[0]);
+    case 2: return un ? fn(args[0], args[1])
+                      : fn.call(that, args[0], args[1]);
+    case 3: return un ? fn(args[0], args[1], args[2])
+                      : fn.call(that, args[0], args[1], args[2]);
+    case 4: return un ? fn(args[0], args[1], args[2], args[3])
+                      : fn.call(that, args[0], args[1], args[2], args[3]);
+  } return              fn.apply(that, args);
+};
+
+var $_anObject = function(it){
+  if(!$_isObject(it))throw TypeError(it + ' is not an object!');
+  return it;
+};
+
+// 7.2.1 RequireObjectCoercible(argument)
+var $_defined = function(it){
+  if(it == undefined)throw TypeError("Can't call method on  " + it);
+  return it;
+};
+
+// 7.1.13 ToObject(argument)
+
+var $_toObject = function(it){
+  return Object($_defined(it));
+};
+
+// fallback for non-array-like ES3 and non-enumerable old V8 strings
+
+var $_iobject = Object('z').propertyIsEnumerable(0) ? Object : function(it){
+  return $_cof(it) == 'String' ? it.split('') : Object(it);
+};
+
+// to indexed object, toObject with fallback for non-array-like ES3 strings
+
+var $_toIobject = function(it){
+  return $_iobject($_defined(it));
+};
+
+// 7.1.4 ToInteger
+var ceil  = Math.ceil
+  , floor = Math.floor;
+var $_toInteger = function(it){
+  return isNaN(it = +it) ? 0 : (it > 0 ? floor : ceil)(it);
+};
+
+var max       = Math.max
+  , min       = Math.min;
+var $_toIndex = function(index, length){
+  index = $_toInteger(index);
+  return index < 0 ? max(index + length, 0) : min(index, length);
+};
+
+// 7.1.15 ToLength
+var min$1       = Math.min;
+var $_toLength = function(it){
+  return it > 0 ? min$1($_toInteger(it), 0x1fffffffffffff) : 0; // pow(2, 53) - 1 == 9007199254740991
+};
+
+// 7.2.2 IsArray(argument)
+
+var $_isArray = Array.isArray || function(arg){
+  return $_cof(arg) == 'Array';
+};
+
+var SHARED = '__core-js_shared__'
+  , store  = $_global[SHARED] || ($_global[SHARED] = {});
+var $_shared = function(key){
+  return store[key] || (store[key] = {});
+};
+
+var store$1  = $_shared('wks')
+  , Symbol$1 = $_global.Symbol;
+var $_wks = function(name){
+  return store$1[name] || (store$1[name] =
+    Symbol$1 && Symbol$1[name] || (Symbol$1 || $_uid)('Symbol.' + name));
+};
+
+// 9.4.2.3 ArraySpeciesCreate(originalArray, length)
+var SPECIES  = $_wks('species');
+var $_arraySpeciesCreate = function(original, length){
+  var C;
+  if($_isArray(original)){
+    C = original.constructor;
+    // cross-realm fallback
+    if(typeof C == 'function' && (C === Array || $_isArray(C.prototype)))C = undefined;
+    if($_isObject(C)){
+      C = C[SPECIES];
+      if(C === null)C = undefined;
+    }
+  } return new (C === undefined ? Array : C)(length);
+};
+
+// 0 -> Array#forEach
+// 1 -> Array#map
+// 2 -> Array#filter
+// 3 -> Array#some
+// 4 -> Array#every
+// 5 -> Array#find
+// 6 -> Array#findIndex
+
+var $_arrayMethods = function(TYPE){
+  var IS_MAP        = TYPE == 1
+    , IS_FILTER     = TYPE == 2
+    , IS_SOME       = TYPE == 3
+    , IS_EVERY      = TYPE == 4
+    , IS_FIND_INDEX = TYPE == 6
+    , NO_HOLES      = TYPE == 5 || IS_FIND_INDEX;
+  return function($this, callbackfn, that){
+    var O      = $_toObject($this)
+      , self   = $_iobject(O)
+      , f      = $_ctx(callbackfn, that, 3)
+      , length = $_toLength(self.length)
+      , index  = 0
+      , result = IS_MAP ? $_arraySpeciesCreate($this, length) : IS_FILTER ? $_arraySpeciesCreate($this, 0) : undefined
+      , val, res;
+    for(;length > index; index++)if(NO_HOLES || index in self){
+      val = self[index];
+      res = f(val, index, O);
+      if(TYPE){
+        if(IS_MAP)result[index] = res;            // map
+        else if(res)switch(TYPE){
+          case 3: return true;                    // some
+          case 5: return val;                     // find
+          case 6: return index;                   // findIndex
+          case 2: result.push(val);               // filter
+        } else if(IS_EVERY)return false;          // every
+      }
+    }
+    return IS_FIND_INDEX ? -1 : IS_SOME || IS_EVERY ? IS_EVERY : result;
+  };
+};
+
+// false -> Array#indexOf
+// true  -> Array#includes
+
+var $_arrayIncludes = function(IS_INCLUDES){
+  return function($this, el, fromIndex){
+    var O      = $_toIobject($this)
+      , length = $_toLength(O.length)
+      , index  = $_toIndex(fromIndex, length)
+      , value;
+    // Array#includes uses SameValueZero equality algorithm
+    if(IS_INCLUDES && el != el)while(length > index){
+      value = O[index++];
+      if(value != value)return true;
+    // Array#toIndex ignores holes, Array#includes - not
+    } else for(;length > index; index++)if(IS_INCLUDES || index in O){
+      if(O[index] === el)return IS_INCLUDES || index;
+    } return !IS_INCLUDES && -1;
+  };
+};
+
+var IE_PROTO          = $_uid('__proto__')
+  , arrayIndexOf      = $_arrayIncludes(false)
+  , ObjectProto       = Object.prototype
+  , ArrayProto        = Array.prototype
+  , arraySlice        = ArrayProto.slice
+  , arrayJoin         = ArrayProto.join
+  , defineProperty    = $.setDesc
+  , getOwnDescriptor  = $.getDesc
+  , defineProperties  = $.setDescs
+  , factories         = {}
+  , IE8_DOM_DEFINE;
+
+if(!$_descriptors){
+  IE8_DOM_DEFINE = !$_fails(function(){
+    return defineProperty($_domCreate('div'), 'a', {get: function(){ return 7; }}).a != 7;
+  });
+  $.setDesc = function(O, P, Attributes){
+    if(IE8_DOM_DEFINE)try {
+      return defineProperty(O, P, Attributes);
+    } catch(e){ /* empty */ }
+    if('get' in Attributes || 'set' in Attributes)throw TypeError('Accessors not supported!');
+    if('value' in Attributes)$_anObject(O)[P] = Attributes.value;
+    return O;
+  };
+  $.getDesc = function(O, P){
+    if(IE8_DOM_DEFINE)try {
+      return getOwnDescriptor(O, P);
+    } catch(e){ /* empty */ }
+    if($_has(O, P))return $_propertyDesc(!ObjectProto.propertyIsEnumerable.call(O, P), O[P]);
+  };
+  $.setDescs = defineProperties = function(O, Properties){
+    $_anObject(O);
+    var keys   = $.getKeys(Properties)
+      , length = keys.length
+      , i = 0
+      , P;
+    while(length > i)$.setDesc(O, P = keys[i++], Properties[P]);
+    return O;
+  };
+}
+$_export($_export.S + $_export.F * !$_descriptors, 'Object', {
+  // 19.1.2.6 / 15.2.3.3 Object.getOwnPropertyDescriptor(O, P)
+  getOwnPropertyDescriptor: $.getDesc,
+  // 19.1.2.4 / 15.2.3.6 Object.defineProperty(O, P, Attributes)
+  defineProperty: $.setDesc,
+  // 19.1.2.3 / 15.2.3.7 Object.defineProperties(O, Properties)
+  defineProperties: defineProperties
+});
+
+  // IE 8- don't enum bug keys
+var keys1 = ('constructor,hasOwnProperty,isPrototypeOf,propertyIsEnumerable,' +
+            'toLocaleString,toString,valueOf').split(',')
+  // Additional keys for getOwnPropertyNames
+  , keys2 = keys1.concat('length', 'prototype')
+  , keysLen1 = keys1.length;
+
+// Create object with `null` prototype: use iframe Object with cleared prototype
+var createDict = function(){
+  // Thrash, waste and sodomy: IE GC bug
+  var iframe = $_domCreate('iframe')
+    , i      = keysLen1
+    , gt     = '>'
+    , iframeDocument;
+  iframe.style.display = 'none';
+  $_html.appendChild(iframe);
+  iframe.src = 'javascript:'; // eslint-disable-line no-script-url
+  // createDict = iframe.contentWindow.Object;
+  // html.removeChild(iframe);
+  iframeDocument = iframe.contentWindow.document;
+  iframeDocument.open();
+  iframeDocument.write('<script>document.F=Object</script' + gt);
+  iframeDocument.close();
+  createDict = iframeDocument.F;
+  while(i--)delete createDict.prototype[keys1[i]];
+  return createDict();
+};
+var createGetKeys = function(names, length){
+  return function(object){
+    var O      = $_toIobject(object)
+      , i      = 0
+      , result = []
+      , key;
+    for(key in O)if(key != IE_PROTO)$_has(O, key) && result.push(key);
+    // Don't enum bug & hidden keys
+    while(length > i)if($_has(O, key = names[i++])){
+      ~arrayIndexOf(result, key) || result.push(key);
+    }
+    return result;
+  };
+};
+var Empty = function(){};
+$_export($_export.S, 'Object', {
+  // 19.1.2.9 / 15.2.3.2 Object.getPrototypeOf(O)
+  getPrototypeOf: $.getProto = $.getProto || function(O){
+    O = $_toObject(O);
+    if($_has(O, IE_PROTO))return O[IE_PROTO];
+    if(typeof O.constructor == 'function' && O instanceof O.constructor){
+      return O.constructor.prototype;
+    } return O instanceof Object ? ObjectProto : null;
+  },
+  // 19.1.2.7 / 15.2.3.4 Object.getOwnPropertyNames(O)
+  getOwnPropertyNames: $.getNames = $.getNames || createGetKeys(keys2, keys2.length, true),
+  // 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
+  create: $.create = $.create || function(O, /*?*/Properties){
+    var result;
+    if(O !== null){
+      Empty.prototype = $_anObject(O);
+      result = new Empty();
+      Empty.prototype = null;
+      // add "__proto__" for Object.getPrototypeOf shim
+      result[IE_PROTO] = O;
+    } else result = createDict();
+    return Properties === undefined ? result : defineProperties(result, Properties);
+  },
+  // 19.1.2.14 / 15.2.3.14 Object.keys(O)
+  keys: $.getKeys = $.getKeys || createGetKeys(keys1, keysLen1, false)
+});
+
+var construct = function(F, len, args){
+  if(!(len in factories)){
+    for(var n = [], i = 0; i < len; i++)n[i] = 'a[' + i + ']';
+    factories[len] = Function('F,a', 'return new F(' + n.join(',') + ')');
+  }
+  return factories[len](F, args);
+};
+
+// 19.2.3.2 / 15.3.4.5 Function.prototype.bind(thisArg, args...)
+$_export($_export.P, 'Function', {
+  bind: function bind(that /*, args... */){
+    var fn       = $_aFunction(this)
+      , partArgs = arraySlice.call(arguments, 1);
+    var bound = function(/* args... */){
+      var args = partArgs.concat(arraySlice.call(arguments));
+      return this instanceof bound ? construct(fn, args.length, args) : $_invoke(fn, args, that);
+    };
+    if($_isObject(fn.prototype))bound.prototype = fn.prototype;
+    return bound;
+  }
+});
+
+// fallback for not array-like ES3 strings and DOM objects
+$_export($_export.P + $_export.F * $_fails(function(){
+  if($_html)arraySlice.call($_html);
+}), 'Array', {
+  slice: function(begin, end){
+    var len   = $_toLength(this.length)
+      , klass = $_cof(this);
+    end = end === undefined ? len : end;
+    if(klass == 'Array')return arraySlice.call(this, begin, end);
+    var start  = $_toIndex(begin, len)
+      , upTo   = $_toIndex(end, len)
+      , size   = $_toLength(upTo - start)
+      , cloned = Array(size)
+      , i      = 0;
+    for(; i < size; i++)cloned[i] = klass == 'String'
+      ? this.charAt(start + i)
+      : this[start + i];
+    return cloned;
+  }
+});
+$_export($_export.P + $_export.F * ($_iobject != Object), 'Array', {
+  join: function join(separator){
+    return arrayJoin.call($_iobject(this), separator === undefined ? ',' : separator);
+  }
+});
+
+// 22.1.2.2 / 15.4.3.2 Array.isArray(arg)
+$_export($_export.S, 'Array', {isArray: $_isArray});
+
+var createArrayReduce = function(isRight){
+  return function(callbackfn, memo){
+    $_aFunction(callbackfn);
+    var O      = $_iobject(this)
+      , length = $_toLength(O.length)
+      , index  = isRight ? length - 1 : 0
+      , i      = isRight ? -1 : 1;
+    if(arguments.length < 2)for(;;){
+      if(index in O){
+        memo = O[index];
+        index += i;
+        break;
+      }
+      index += i;
+      if(isRight ? index < 0 : length <= index){
+        throw TypeError('Reduce of empty array with no initial value');
+      }
+    }
+    for(;isRight ? index >= 0 : length > index; index += i)if(index in O){
+      memo = callbackfn(memo, O[index], index, this);
+    }
+    return memo;
+  };
+};
+
+var methodize = function($fn){
+  return function(arg1/*, arg2 = undefined */){
+    return $fn(this, arg1, arguments[1]);
+  };
+};
+
+$_export($_export.P, 'Array', {
+  // 22.1.3.10 / 15.4.4.18 Array.prototype.forEach(callbackfn [, thisArg])
+  forEach: $.each = $.each || methodize($_arrayMethods(0)),
+  // 22.1.3.15 / 15.4.4.19 Array.prototype.map(callbackfn [, thisArg])
+  map: methodize($_arrayMethods(1)),
+  // 22.1.3.7 / 15.4.4.20 Array.prototype.filter(callbackfn [, thisArg])
+  filter: methodize($_arrayMethods(2)),
+  // 22.1.3.23 / 15.4.4.17 Array.prototype.some(callbackfn [, thisArg])
+  some: methodize($_arrayMethods(3)),
+  // 22.1.3.5 / 15.4.4.16 Array.prototype.every(callbackfn [, thisArg])
+  every: methodize($_arrayMethods(4)),
+  // 22.1.3.18 / 15.4.4.21 Array.prototype.reduce(callbackfn [, initialValue])
+  reduce: createArrayReduce(false),
+  // 22.1.3.19 / 15.4.4.22 Array.prototype.reduceRight(callbackfn [, initialValue])
+  reduceRight: createArrayReduce(true),
+  // 22.1.3.11 / 15.4.4.14 Array.prototype.indexOf(searchElement [, fromIndex])
+  indexOf: methodize(arrayIndexOf),
+  // 22.1.3.14 / 15.4.4.15 Array.prototype.lastIndexOf(searchElement [, fromIndex])
+  lastIndexOf: function(el, fromIndex /* = @[*-1] */){
+    var O      = $_toIobject(this)
+      , length = $_toLength(O.length)
+      , index  = length - 1;
+    if(arguments.length > 1)index = Math.min(index, $_toInteger(fromIndex));
+    if(index < 0)index = $_toLength(length + index);
+    for(;index >= 0; index--)if(index in O)if(O[index] === el)return index;
+    return -1;
+  }
+});
+
+// 20.3.3.1 / 15.9.4.4 Date.now()
+$_export($_export.S, 'Date', {now: function(){ return +new Date; }});
+
+var lz = function(num){
+  return num > 9 ? num : '0' + num;
+};
+
+// 20.3.4.36 / 15.9.5.43 Date.prototype.toISOString()
+// PhantomJS / old WebKit has a broken implementations
+$_export($_export.P + $_export.F * ($_fails(function(){
+  return new Date(-5e13 - 1).toISOString() != '0385-07-25T07:06:39.999Z';
+}) || !$_fails(function(){
+  new Date(NaN).toISOString();
+})), 'Date', {
+  toISOString: function toISOString(){
+    if(!isFinite(this))throw RangeError('Invalid time value');
+    var d = this
+      , y = d.getUTCFullYear()
+      , m = d.getUTCMilliseconds()
+      , s = y < 0 ? '-' : y > 9999 ? '+' : '';
+    return s + ('00000' + Math.abs(y)).slice(s ? -6 : -4) +
+      '-' + lz(d.getUTCMonth() + 1) + '-' + lz(d.getUTCDate()) +
+      'T' + lz(d.getUTCHours()) + ':' + lz(d.getUTCMinutes()) +
+      ':' + lz(d.getUTCSeconds()) + '.' + (m > 99 ? m : '0' + lz(m)) + 'Z';
+  }
+});
+
+var def = $.setDesc
+  , TAG = $_wks('toStringTag');
+
+var $_setToStringTag = function(it, tag, stat){
+  if(it && !$_has(it = stat ? it : it.prototype, TAG))def(it, TAG, {configurable: true, value: tag});
+};
+
+var $_keyof = function(object, el){
+  var O      = $_toIobject(object)
+    , keys   = $.getKeys(O)
+    , length = keys.length
+    , index  = 0
+    , key;
+  while(length > index)if(O[key = keys[index++]] === el)return key;
+};
+
+// fallback for IE11 buggy Object.getOwnPropertyNames with iframe and window
+var getNames  = $.getNames
+  , toString$1  = {}.toString;
+
+var windowNames = typeof window == 'object' && Object.getOwnPropertyNames
+  ? Object.getOwnPropertyNames(window) : [];
+
+var getWindowNames = function(it){
+  try {
+    return getNames(it);
+  } catch(e){
+    return windowNames.slice();
+  }
+};
+
+var get = function getOwnPropertyNames(it){
+  if(windowNames && toString$1.call(it) == '[object Window]')return getWindowNames(it);
+  return getNames($_toIobject(it));
+};
+
+var $_getNames = {
+	get: get
+};
+
+// all enumerable object keys, includes symbols
+
+var $_enumKeys = function(it){
+  var keys       = $.getKeys(it)
+    , getSymbols = $.getSymbols;
+  if(getSymbols){
+    var symbols = getSymbols(it)
+      , isEnum  = $.isEnum
+      , i       = 0
+      , key;
+    while(symbols.length > i)if(isEnum.call(it, key = symbols[i++]))keys.push(key);
+  }
+  return keys;
+};
+
+var $_library = false;
+
+// ECMAScript 6 symbols shim
+var getDesc        = $.getDesc
+  , setDesc        = $.setDesc
+  , _create        = $.create
+  , getNames$1       = $_getNames.get
+  , $Symbol        = $_global.Symbol
+  , $JSON          = $_global.JSON
+  , _stringify     = $JSON && $JSON.stringify
+  , setter         = false
+  , HIDDEN         = $_wks('_hidden')
+  , isEnum         = $.isEnum
+  , SymbolRegistry = $_shared('symbol-registry')
+  , AllSymbols     = $_shared('symbols')
+  , useNative      = typeof $Symbol == 'function'
+  , ObjectProto$1    = Object.prototype;
+
+// fallback for old Android, https://code.google.com/p/v8/issues/detail?id=687
+var setSymbolDesc = $_descriptors && $_fails(function(){
+  return _create(setDesc({}, 'a', {
+    get: function(){ return setDesc(this, 'a', {value: 7}).a; }
+  })).a != 7;
+}) ? function(it, key, D){
+  var protoDesc = getDesc(ObjectProto$1, key);
+  if(protoDesc)delete ObjectProto$1[key];
+  setDesc(it, key, D);
+  if(protoDesc && it !== ObjectProto$1)setDesc(ObjectProto$1, key, protoDesc);
+} : setDesc;
+
+var wrap = function(tag){
+  var sym = AllSymbols[tag] = _create($Symbol.prototype);
+  sym._k = tag;
+  $_descriptors && setter && setSymbolDesc(ObjectProto$1, tag, {
+    configurable: true,
+    set: function(value){
+      if($_has(this, HIDDEN) && $_has(this[HIDDEN], tag))this[HIDDEN][tag] = false;
+      setSymbolDesc(this, tag, $_propertyDesc(1, value));
+    }
+  });
+  return sym;
+};
+
+var isSymbol = function(it){
+  return typeof it == 'symbol';
+};
+
+var $defineProperty = function defineProperty(it, key, D){
+  if(D && $_has(AllSymbols, key)){
+    if(!D.enumerable){
+      if(!$_has(it, HIDDEN))setDesc(it, HIDDEN, $_propertyDesc(1, {}));
+      it[HIDDEN][key] = true;
+    } else {
+      if($_has(it, HIDDEN) && it[HIDDEN][key])it[HIDDEN][key] = false;
+      D = _create(D, {enumerable: $_propertyDesc(0, false)});
+    } return setSymbolDesc(it, key, D);
+  } return setDesc(it, key, D);
+};
+var $defineProperties = function defineProperties(it, P){
+  $_anObject(it);
+  var keys = $_enumKeys(P = $_toIobject(P))
+    , i    = 0
+    , l = keys.length
+    , key;
+  while(l > i)$defineProperty(it, key = keys[i++], P[key]);
+  return it;
+};
+var $create = function create(it, P){
+  return P === undefined ? _create(it) : $defineProperties(_create(it), P);
+};
+var $propertyIsEnumerable = function propertyIsEnumerable(key){
+  var E = isEnum.call(this, key);
+  return E || !$_has(this, key) || !$_has(AllSymbols, key) || $_has(this, HIDDEN) && this[HIDDEN][key]
+    ? E : true;
+};
+var $getOwnPropertyDescriptor = function getOwnPropertyDescriptor(it, key){
+  var D = getDesc(it = $_toIobject(it), key);
+  if(D && $_has(AllSymbols, key) && !($_has(it, HIDDEN) && it[HIDDEN][key]))D.enumerable = true;
+  return D;
+};
+var $getOwnPropertyNames = function getOwnPropertyNames(it){
+  var names  = getNames$1($_toIobject(it))
+    , result = []
+    , i      = 0
+    , key;
+  while(names.length > i)if(!$_has(AllSymbols, key = names[i++]) && key != HIDDEN)result.push(key);
+  return result;
+};
+var $getOwnPropertySymbols = function getOwnPropertySymbols(it){
+  var names  = getNames$1($_toIobject(it))
+    , result = []
+    , i      = 0
+    , key;
+  while(names.length > i)if($_has(AllSymbols, key = names[i++]))result.push(AllSymbols[key]);
+  return result;
+};
+var $stringify = function stringify(it){
+  if(it === undefined || isSymbol(it))return; // IE8 returns string on undefined
+  var args = [it]
+    , i    = 1
+    , $$   = arguments
+    , replacer, $replacer;
+  while($$.length > i)args.push($$[i++]);
+  replacer = args[1];
+  if(typeof replacer == 'function')$replacer = replacer;
+  if($replacer || !$_isArray(replacer))replacer = function(key, value){
+    if($replacer)value = $replacer.call(this, key, value);
+    if(!isSymbol(value))return value;
+  };
+  args[1] = replacer;
+  return _stringify.apply($JSON, args);
+};
+var buggyJSON = $_fails(function(){
+  var S = $Symbol();
+  // MS Edge converts symbol values to JSON as {}
+  // WebKit converts symbol values to JSON as null
+  // V8 throws on boxed symbols
+  return _stringify([S]) != '[null]' || _stringify({a: S}) != '{}' || _stringify(Object(S)) != '{}';
+});
+
+// 19.4.1.1 Symbol([description])
+if(!useNative){
+  $Symbol = function Symbol(){
+    if(isSymbol(this))throw TypeError('Symbol is not a constructor');
+    return wrap($_uid(arguments.length > 0 ? arguments[0] : undefined));
+  };
+  $_redefine($Symbol.prototype, 'toString', function toString(){
+    return this._k;
+  });
+
+  isSymbol = function(it){
+    return it instanceof $Symbol;
+  };
+
+  $.create     = $create;
+  $.isEnum     = $propertyIsEnumerable;
+  $.getDesc    = $getOwnPropertyDescriptor;
+  $.setDesc    = $defineProperty;
+  $.setDescs   = $defineProperties;
+  $.getNames   = $_getNames.get = $getOwnPropertyNames;
+  $.getSymbols = $getOwnPropertySymbols;
+
+  if($_descriptors && !$_library){
+    $_redefine(ObjectProto$1, 'propertyIsEnumerable', $propertyIsEnumerable, true);
+  }
+}
+
+var symbolStatics = {
+  // 19.4.2.1 Symbol.for(key)
+  'for': function(key){
+    return $_has(SymbolRegistry, key += '')
+      ? SymbolRegistry[key]
+      : SymbolRegistry[key] = $Symbol(key);
+  },
+  // 19.4.2.5 Symbol.keyFor(sym)
+  keyFor: function keyFor(key){
+    return $_keyof(SymbolRegistry, key);
+  },
+  useSetter: function(){ setter = true; },
+  useSimple: function(){ setter = false; }
+};
+// 19.4.2.2 Symbol.hasInstance
+// 19.4.2.3 Symbol.isConcatSpreadable
+// 19.4.2.4 Symbol.iterator
+// 19.4.2.6 Symbol.match
+// 19.4.2.8 Symbol.replace
+// 19.4.2.9 Symbol.search
+// 19.4.2.10 Symbol.species
+// 19.4.2.11 Symbol.split
+// 19.4.2.12 Symbol.toPrimitive
+// 19.4.2.13 Symbol.toStringTag
+// 19.4.2.14 Symbol.unscopables
+$.each.call((
+  'hasInstance,isConcatSpreadable,iterator,match,replace,search,' +
+  'species,split,toPrimitive,toStringTag,unscopables'
+).split(','), function(it){
+  var sym = $_wks(it);
+  symbolStatics[it] = useNative ? sym : wrap(sym);
+});
+
+setter = true;
+
+$_export($_export.G + $_export.W, {Symbol: $Symbol});
+
+$_export($_export.S, 'Symbol', symbolStatics);
+
+$_export($_export.S + $_export.F * !useNative, 'Object', {
+  // 19.1.2.2 Object.create(O [, Properties])
+  create: $create,
+  // 19.1.2.4 Object.defineProperty(O, P, Attributes)
+  defineProperty: $defineProperty,
+  // 19.1.2.3 Object.defineProperties(O, Properties)
+  defineProperties: $defineProperties,
+  // 19.1.2.6 Object.getOwnPropertyDescriptor(O, P)
+  getOwnPropertyDescriptor: $getOwnPropertyDescriptor,
+  // 19.1.2.7 Object.getOwnPropertyNames(O)
+  getOwnPropertyNames: $getOwnPropertyNames,
+  // 19.1.2.8 Object.getOwnPropertySymbols(O)
+  getOwnPropertySymbols: $getOwnPropertySymbols
+});
+
+// 24.3.2 JSON.stringify(value [, replacer [, space]])
+$JSON && $_export($_export.S + $_export.F * (!useNative || buggyJSON), 'JSON', {stringify: $stringify});
+
+// 19.4.3.5 Symbol.prototype[@@toStringTag]
+$_setToStringTag($Symbol, 'Symbol');
+// 20.2.1.9 Math[@@toStringTag]
+$_setToStringTag(Math, 'Math', true);
+// 24.3.3 JSON[@@toStringTag]
+$_setToStringTag($_global.JSON, 'JSON', true);
+
+// 19.1.2.1 Object.assign(target, source, ...)
+
+
+// should work with symbols and should have deterministic property order (V8 bug)
+var $_objectAssign = $_fails(function(){
+  var a = Object.assign
+    , A = {}
+    , B = {}
+    , S = Symbol()
+    , K = 'abcdefghijklmnopqrst';
+  A[S] = 7;
+  K.split('').forEach(function(k){ B[k] = k; });
+  return a({}, A)[S] != 7 || Object.keys(a({}, B)).join('') != K;
+}) ? function assign(target, source){ // eslint-disable-line no-unused-vars
+  var T     = $_toObject(target)
+    , $$    = arguments
+    , $$len = $$.length
+    , index = 1
+    , getKeys    = $.getKeys
+    , getSymbols = $.getSymbols
+    , isEnum     = $.isEnum;
+  while($$len > index){
+    var S      = $_iobject($$[index++])
+      , keys   = getSymbols ? getKeys(S).concat(getSymbols(S)) : getKeys(S)
+      , length = keys.length
+      , j      = 0
+      , key;
+    while(length > j)if(isEnum.call(S, key = keys[j++]))T[key] = S[key];
+  }
+  return T;
+} : Object.assign;
+
+// 19.1.3.1 Object.assign(target, source)
+
+
+$_export($_export.S + $_export.F, 'Object', {assign: $_objectAssign});
+
+// 7.2.9 SameValue(x, y)
+var $_sameValue = Object.is || function is(x, y){
+  return x === y ? x !== 0 || 1 / x === 1 / y : x != x && y != y;
+};
+
+// 19.1.3.10 Object.is(value1, value2)
+
+$_export($_export.S, 'Object', {is: $_sameValue});
+
+// Works with __proto__ only. Old v8 can't work with null proto objects.
+/* eslint-disable no-proto */
+var getDesc$1  = $.getDesc;
+var check = function(O, proto){
+  $_anObject(O);
+  if(!$_isObject(proto) && proto !== null)throw TypeError(proto + ": can't set as prototype!");
+};
+var $_setProto = {
+  set: Object.setPrototypeOf || ('__proto__' in {} ? // eslint-disable-line
+    function(test, buggy, set){
+      try {
+        set = $_ctx(Function.call, getDesc$1(Object.prototype, '__proto__').set, 2);
+        set(test, []);
+        buggy = !(test instanceof Array);
+      } catch(e){ buggy = true; }
+      return function setPrototypeOf(O, proto){
+        check(O, proto);
+        if(buggy)O.__proto__ = proto;
+        else set(O, proto);
+        return O;
+      };
+    }({}, false) : undefined),
+  check: check
+};
+
+// 19.1.3.19 Object.setPrototypeOf(O, proto)
+
+$_export($_export.S, 'Object', {setPrototypeOf: $_setProto.set});
+
+// getting tag from 19.1.3.6 Object.prototype.toString()
+var TAG$1 = $_wks('toStringTag')
+  // ES3 wrong here
+  , ARG = $_cof(function(){ return arguments; }()) == 'Arguments';
+
+var $_classof = function(it){
+  var O, T, B;
+  return it === undefined ? 'Undefined' : it === null ? 'Null'
+    // @@toStringTag case
+    : typeof (T = (O = Object(it))[TAG$1]) == 'string' ? T
+    // builtinTag case
+    : ARG ? $_cof(O)
+    // ES3 arguments fallback
+    : (B = $_cof(O)) == 'Object' && typeof O.callee == 'function' ? 'Arguments' : B;
+};
+
+// 19.1.3.6 Object.prototype.toString()
+var test    = {};
+test[$_wks('toStringTag')] = 'z';
+if(test + '' != '[object z]'){
+  $_redefine(Object.prototype, 'toString', function toString(){
+    return '[object ' + $_classof(this) + ']';
+  }, true);
+}
+
+// most Object methods by ES6 should accept primitives
+
+var $_objectSap = function(KEY, exec){
+  var fn  = ($_core.Object || {})[KEY] || Object[KEY]
+    , exp = {};
+  exp[KEY] = exec(fn);
+  $_export($_export.S + $_export.F * $_fails(function(){ fn(1); }), 'Object', exp);
+};
+
+// 19.1.2.5 Object.freeze(O)
+
+
+$_objectSap('freeze', function($freeze){
+  return function freeze(it){
+    return $freeze && $_isObject(it) ? $freeze(it) : it;
+  };
+});
+
+// 19.1.2.17 Object.seal(O)
+
+
+$_objectSap('seal', function($seal){
+  return function seal(it){
+    return $seal && $_isObject(it) ? $seal(it) : it;
+  };
+});
+
+// 19.1.2.15 Object.preventExtensions(O)
+
+
+$_objectSap('preventExtensions', function($preventExtensions){
+  return function preventExtensions(it){
+    return $preventExtensions && $_isObject(it) ? $preventExtensions(it) : it;
+  };
+});
+
+// 19.1.2.12 Object.isFrozen(O)
+
+
+$_objectSap('isFrozen', function($isFrozen){
+  return function isFrozen(it){
+    return $_isObject(it) ? $isFrozen ? $isFrozen(it) : false : true;
+  };
+});
+
+// 19.1.2.13 Object.isSealed(O)
+
+
+$_objectSap('isSealed', function($isSealed){
+  return function isSealed(it){
+    return $_isObject(it) ? $isSealed ? $isSealed(it) : false : true;
+  };
+});
+
+// 19.1.2.11 Object.isExtensible(O)
+
+
+$_objectSap('isExtensible', function($isExtensible){
+  return function isExtensible(it){
+    return $_isObject(it) ? $isExtensible ? $isExtensible(it) : true : false;
+  };
+});
+
+// 19.1.2.6 Object.getOwnPropertyDescriptor(O, P)
+
+
+$_objectSap('getOwnPropertyDescriptor', function($getOwnPropertyDescriptor){
+  return function getOwnPropertyDescriptor(it, key){
+    return $getOwnPropertyDescriptor($_toIobject(it), key);
+  };
+});
+
+// 19.1.2.9 Object.getPrototypeOf(O)
+
+
+$_objectSap('getPrototypeOf', function($getPrototypeOf){
+  return function getPrototypeOf(it){
+    return $getPrototypeOf($_toObject(it));
+  };
+});
+
+// 19.1.2.14 Object.keys(O)
+
+
+$_objectSap('keys', function($keys){
+  return function keys(it){
+    return $keys($_toObject(it));
+  };
+});
+
+// 19.1.2.7 Object.getOwnPropertyNames(O)
+$_objectSap('getOwnPropertyNames', function(){
+  return $_getNames.get;
+});
+
+var setDesc$1    = $.setDesc
+  , FProto     = Function.prototype
+  , nameRE     = /^\s*function ([^ (]*)/
+  , NAME       = 'name';
+// 19.2.4.2 name
+NAME in FProto || $_descriptors && setDesc$1(FProto, NAME, {
+  configurable: true,
+  get: function(){
+    var match = ('' + this).match(nameRE)
+      , name  = match ? match[1] : '';
+    $_has(this, NAME) || setDesc$1(this, NAME, $_propertyDesc(5, name));
+    return name;
+  }
+});
+
+var HAS_INSTANCE  = $_wks('hasInstance')
+  , FunctionProto = Function.prototype;
+// 19.2.3.6 Function.prototype[@@hasInstance](V)
+if(!(HAS_INSTANCE in FunctionProto))$.setDesc(FunctionProto, HAS_INSTANCE, {value: function(O){
+  if(typeof this != 'function' || !$_isObject(O))return false;
+  if(!$_isObject(this.prototype))return O instanceof this;
+  // for environment w/o native `@@hasInstance` logic enough `instanceof`, but add this:
+  while(O = $.getProto(O))if(this.prototype === O)return true;
+  return false;
+}});
+
+// 7.1.1 ToPrimitive(input [, PreferredType])
+
+// instead of the ES6 spec version, we didn't implement @@toPrimitive case
+// and the second argument - flag - preferred type is a string
+var $_toPrimitive = function(it, S){
+  if(!$_isObject(it))return it;
+  var fn, val;
+  if(S && typeof (fn = it.toString) == 'function' && !$_isObject(val = fn.call(it)))return val;
+  if(typeof (fn = it.valueOf) == 'function' && !$_isObject(val = fn.call(it)))return val;
+  if(!S && typeof (fn = it.toString) == 'function' && !$_isObject(val = fn.call(it)))return val;
+  throw TypeError("Can't convert object to primitive value");
+};
+
+var spaces  = '\x09\x0A\x0B\x0C\x0D\x20\xA0\u1680\u180E\u2000\u2001\u2002\u2003' +
+      '\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000\u2028\u2029\uFEFF'
+  , space   = '[' + spaces + ']'
+  , non     = '\u200b\u0085'
+  , ltrim   = RegExp('^' + space + space + '*')
+  , rtrim   = RegExp(space + space + '*$');
+
+var exporter = function(KEY, exec){
+  var exp  = {};
+  exp[KEY] = exec(trim);
+  $_export($_export.P + $_export.F * $_fails(function(){
+    return !!spaces[KEY]() || non[KEY]() != non;
+  }), 'String', exp);
+};
+
+// 1 -> String#trimLeft
+// 2 -> String#trimRight
+// 3 -> String#trim
+var trim = exporter.trim = function(string, TYPE){
+  string = String($_defined(string));
+  if(TYPE & 1)string = string.replace(ltrim, '');
+  if(TYPE & 2)string = string.replace(rtrim, '');
+  return string;
+};
+
+var $_stringTrim = exporter;
+
+var $trim       = $_stringTrim.trim
+  , NUMBER      = 'Number'
+  , $Number     = $_global[NUMBER]
+  , Base        = $Number
+  , proto       = $Number.prototype
+  // Opera ~12 has broken Object#toString
+  , BROKEN_COF  = $_cof($.create(proto)) == NUMBER
+  , TRIM        = 'trim' in String.prototype;
+
+// 7.1.3 ToNumber(argument)
+var toNumber = function(argument){
+  var it = $_toPrimitive(argument, false);
+  if(typeof it == 'string' && it.length > 2){
+    it = TRIM ? it.trim() : $trim(it, 3);
+    var first = it.charCodeAt(0)
+      , third, radix, maxCode;
+    if(first === 43 || first === 45){
+      third = it.charCodeAt(2);
+      if(third === 88 || third === 120)return NaN; // Number('+0x1') should be NaN, old V8 fix
+    } else if(first === 48){
+      switch(it.charCodeAt(1)){
+        case 66 : case 98  : radix = 2; maxCode = 49; break; // fast equal /^0b[01]+$/i
+        case 79 : case 111 : radix = 8; maxCode = 55; break; // fast equal /^0o[0-7]+$/i
+        default : return +it;
+      }
+      for(var digits = it.slice(2), i = 0, l = digits.length, code; i < l; i++){
+        code = digits.charCodeAt(i);
+        // parseInt parses a string to a first unavailable symbol
+        // but ToNumber should return NaN if a string contains unavailable symbols
+        if(code < 48 || code > maxCode)return NaN;
+      } return parseInt(digits, radix);
+    }
+  } return +it;
+};
+
+if(!$Number(' 0o1') || !$Number('0b1') || $Number('+0x1')){
+  $Number = function Number(value){
+    var it = arguments.length < 1 ? 0 : value
+      , that = this;
+    return that instanceof $Number
+      // check on 1..constructor(foo) case
+      && (BROKEN_COF ? $_fails(function(){ proto.valueOf.call(that); }) : $_cof(that) != NUMBER)
+        ? new Base(toNumber(it)) : toNumber(it);
+  };
+  $.each.call($_descriptors ? $.getNames(Base) : (
+    // ES3:
+    'MAX_VALUE,MIN_VALUE,NaN,NEGATIVE_INFINITY,POSITIVE_INFINITY,' +
+    // ES6 (in case, if modules with ES6 Number statics required before):
+    'EPSILON,isFinite,isInteger,isNaN,isSafeInteger,MAX_SAFE_INTEGER,' +
+    'MIN_SAFE_INTEGER,parseFloat,parseInt,isInteger'
+  ).split(','), function(key){
+    if($_has(Base, key) && !$_has($Number, key)){
+      $.setDesc($Number, key, $.getDesc(Base, key));
+    }
+  });
+  $Number.prototype = proto;
+  proto.constructor = $Number;
+  $_redefine($_global, NUMBER, $Number);
+}
+
+// 20.1.2.1 Number.EPSILON
+
+
+$_export($_export.S, 'Number', {EPSILON: Math.pow(2, -52)});
+
+// 20.1.2.2 Number.isFinite(number)
+var _isFinite = $_global.isFinite;
+
+$_export($_export.S, 'Number', {
+  isFinite: function isFinite(it){
+    return typeof it == 'number' && _isFinite(it);
+  }
+});
+
+// 20.1.2.3 Number.isInteger(number)
+var floor$1    = Math.floor;
+var $_isInteger = function isInteger(it){
+  return !$_isObject(it) && isFinite(it) && floor$1(it) === it;
+};
+
+// 20.1.2.3 Number.isInteger(number)
+
+
+$_export($_export.S, 'Number', {isInteger: $_isInteger});
+
+// 20.1.2.4 Number.isNaN(number)
+
+
+$_export($_export.S, 'Number', {
+  isNaN: function isNaN(number){
+    return number != number;
+  }
+});
+
+// 20.1.2.5 Number.isSafeInteger(number)
+var abs       = Math.abs;
+
+$_export($_export.S, 'Number', {
+  isSafeInteger: function isSafeInteger(number){
+    return $_isInteger(number) && abs(number) <= 0x1fffffffffffff;
+  }
+});
+
+// 20.1.2.6 Number.MAX_SAFE_INTEGER
+
+
+$_export($_export.S, 'Number', {MAX_SAFE_INTEGER: 0x1fffffffffffff});
+
+// 20.1.2.10 Number.MIN_SAFE_INTEGER
+
+
+$_export($_export.S, 'Number', {MIN_SAFE_INTEGER: -0x1fffffffffffff});
+
+// 20.1.2.12 Number.parseFloat(string)
+
+
+$_export($_export.S, 'Number', {parseFloat: parseFloat});
+
+// 20.1.2.13 Number.parseInt(string, radix)
+
+
+$_export($_export.S, 'Number', {parseInt: parseInt});
+
+// 20.2.2.20 Math.log1p(x)
+var $_mathLog1p = Math.log1p || function log1p(x){
+  return (x = +x) > -1e-8 && x < 1e-8 ? x - x * x / 2 : Math.log(1 + x);
+};
+
+// 20.2.2.3 Math.acosh(x)
+var sqrt    = Math.sqrt
+  , $acosh  = Math.acosh;
+
+// V8 bug https://code.google.com/p/v8/issues/detail?id=3509
+$_export($_export.S + $_export.F * !($acosh && Math.floor($acosh(Number.MAX_VALUE)) == 710), 'Math', {
+  acosh: function acosh(x){
+    return (x = +x) < 1 ? NaN : x > 94906265.62425156
+      ? Math.log(x) + Math.LN2
+      : $_mathLog1p(x - 1 + sqrt(x - 1) * sqrt(x + 1));
+  }
+});
+
+// 20.2.2.5 Math.asinh(x)
+
+
+function asinh(x){
+  return !isFinite(x = +x) || x == 0 ? x : x < 0 ? -asinh(-x) : Math.log(x + Math.sqrt(x * x + 1));
+}
+
+$_export($_export.S, 'Math', {asinh: asinh});
+
+// 20.2.2.7 Math.atanh(x)
+
+
+$_export($_export.S, 'Math', {
+  atanh: function atanh(x){
+    return (x = +x) == 0 ? x : Math.log((1 + x) / (1 - x)) / 2;
+  }
+});
+
+// 20.2.2.28 Math.sign(x)
+var $_mathSign = Math.sign || function sign(x){
+  return (x = +x) == 0 || x != x ? x : x < 0 ? -1 : 1;
+};
+
+// 20.2.2.9 Math.cbrt(x)
+
+
+$_export($_export.S, 'Math', {
+  cbrt: function cbrt(x){
+    return $_mathSign(x = +x) * Math.pow(Math.abs(x), 1 / 3);
+  }
+});
+
+// 20.2.2.11 Math.clz32(x)
+
+
+$_export($_export.S, 'Math', {
+  clz32: function clz32(x){
+    return (x >>>= 0) ? 31 - Math.floor(Math.log(x + 0.5) * Math.LOG2E) : 32;
+  }
+});
+
+// 20.2.2.12 Math.cosh(x)
+var exp     = Math.exp;
+
+$_export($_export.S, 'Math', {
+  cosh: function cosh(x){
+    return (exp(x = +x) + exp(-x)) / 2;
+  }
+});
+
+// 20.2.2.14 Math.expm1(x)
+var $_mathExpm1 = Math.expm1 || function expm1(x){
+  return (x = +x) == 0 ? x : x > -1e-6 && x < 1e-6 ? x + x * x / 2 : Math.exp(x) - 1;
+};
+
+// 20.2.2.14 Math.expm1(x)
+
+
+$_export($_export.S, 'Math', {expm1: $_mathExpm1});
+
+// 20.2.2.16 Math.fround(x)
+var pow       = Math.pow
+  , EPSILON   = pow(2, -52)
+  , EPSILON32 = pow(2, -23)
+  , MAX32     = pow(2, 127) * (2 - EPSILON32)
+  , MIN32     = pow(2, -126);
+
+var roundTiesToEven = function(n){
+  return n + 1 / EPSILON - 1 / EPSILON;
+};
+
+
+$_export($_export.S, 'Math', {
+  fround: function fround(x){
+    var $abs  = Math.abs(x)
+      , $sign = $_mathSign(x)
+      , a, result;
+    if($abs < MIN32)return $sign * roundTiesToEven($abs / MIN32 / EPSILON32) * MIN32 * EPSILON32;
+    a = (1 + EPSILON32 / EPSILON) * $abs;
+    result = a - (a - $abs);
+    if(result > MAX32 || result != result)return $sign * Infinity;
+    return $sign * result;
+  }
+});
+
+// 20.2.2.17 Math.hypot([value1[, value2[, … ]]])
+var abs$1     = Math.abs;
+
+$_export($_export.S, 'Math', {
+  hypot: function hypot(value1, value2){ // eslint-disable-line no-unused-vars
+    var sum   = 0
+      , i     = 0
+      , $$    = arguments
+      , $$len = $$.length
+      , larg  = 0
+      , arg, div;
+    while(i < $$len){
+      arg = abs$1($$[i++]);
+      if(larg < arg){
+        div  = larg / arg;
+        sum  = sum * div * div + 1;
+        larg = arg;
+      } else if(arg > 0){
+        div  = arg / larg;
+        sum += div * div;
+      } else sum += arg;
+    }
+    return larg === Infinity ? Infinity : larg * Math.sqrt(sum);
+  }
+});
+
+// 20.2.2.18 Math.imul(x, y)
+var $imul   = Math.imul;
+
+// some WebKit versions fails with big numbers, some has wrong arity
+$_export($_export.S + $_export.F * $_fails(function(){
+  return $imul(0xffffffff, 5) != -5 || $imul.length != 2;
+}), 'Math', {
+  imul: function imul(x, y){
+    var UINT16 = 0xffff
+      , xn = +x
+      , yn = +y
+      , xl = UINT16 & xn
+      , yl = UINT16 & yn;
+    return 0 | xl * yl + ((UINT16 & xn >>> 16) * yl + xl * (UINT16 & yn >>> 16) << 16 >>> 0);
+  }
+});
+
+// 20.2.2.21 Math.log10(x)
+
+
+$_export($_export.S, 'Math', {
+  log10: function log10(x){
+    return Math.log(x) / Math.LN10;
+  }
+});
+
+// 20.2.2.20 Math.log1p(x)
+
+
+$_export($_export.S, 'Math', {log1p: $_mathLog1p});
+
+// 20.2.2.22 Math.log2(x)
+
+
+$_export($_export.S, 'Math', {
+  log2: function log2(x){
+    return Math.log(x) / Math.LN2;
+  }
+});
+
+// 20.2.2.28 Math.sign(x)
+
+
+$_export($_export.S, 'Math', {sign: $_mathSign});
+
+// 20.2.2.30 Math.sinh(x)
+var exp$1     = Math.exp;
+
+// V8 near Chromium 38 has a problem with very small numbers
+$_export($_export.S + $_export.F * $_fails(function(){
+  return !Math.sinh(-2e-17) != -2e-17;
+}), 'Math', {
+  sinh: function sinh(x){
+    return Math.abs(x = +x) < 1
+      ? ($_mathExpm1(x) - $_mathExpm1(-x)) / 2
+      : (exp$1(x - 1) - exp$1(-x - 1)) * (Math.E / 2);
+  }
+});
+
+// 20.2.2.33 Math.tanh(x)
+var exp$2     = Math.exp;
+
+$_export($_export.S, 'Math', {
+  tanh: function tanh(x){
+    var a = $_mathExpm1(x = +x)
+      , b = $_mathExpm1(-x);
+    return a == Infinity ? 1 : b == Infinity ? -1 : (a - b) / (exp$2(x) + exp$2(-x));
+  }
+});
+
+// 20.2.2.34 Math.trunc(x)
+
+
+$_export($_export.S, 'Math', {
+  trunc: function trunc(it){
+    return (it > 0 ? Math.floor : Math.ceil)(it);
+  }
+});
+
+var fromCharCode   = String.fromCharCode
+  , $fromCodePoint = String.fromCodePoint;
+
+// length should be 1, old FF problem
+$_export($_export.S + $_export.F * (!!$fromCodePoint && $fromCodePoint.length != 1), 'String', {
+  // 21.1.2.2 String.fromCodePoint(...codePoints)
+  fromCodePoint: function fromCodePoint(x){ // eslint-disable-line no-unused-vars
+    var res   = []
+      , $$    = arguments
+      , $$len = $$.length
+      , i     = 0
+      , code;
+    while($$len > i){
+      code = +$$[i++];
+      if($_toIndex(code, 0x10ffff) !== code)throw RangeError(code + ' is not a valid code point');
+      res.push(code < 0x10000
+        ? fromCharCode(code)
+        : fromCharCode(((code -= 0x10000) >> 10) + 0xd800, code % 0x400 + 0xdc00)
+      );
+    } return res.join('');
+  }
+});
+
+$_export($_export.S, 'String', {
+  // 21.1.2.4 String.raw(callSite, ...substitutions)
+  raw: function raw(callSite){
+    var tpl   = $_toIobject(callSite.raw)
+      , len   = $_toLength(tpl.length)
+      , $$    = arguments
+      , $$len = $$.length
+      , res   = []
+      , i     = 0;
+    while(len > i){
+      res.push(String(tpl[i++]));
+      if(i < $$len)res.push(String($$[i]));
+    } return res.join('');
+  }
+});
+
+// 21.1.3.25 String.prototype.trim()
+$_stringTrim('trim', function($trim){
+  return function trim(){
+    return $trim(this, 3);
+  };
+});
+
+// true  -> String#at
+// false -> String#codePointAt
+var $_stringAt = function(TO_STRING){
+  return function(that, pos){
+    var s = String($_defined(that))
+      , i = $_toInteger(pos)
+      , l = s.length
+      , a, b;
+    if(i < 0 || i >= l)return TO_STRING ? '' : undefined;
+    a = s.charCodeAt(i);
+    return a < 0xd800 || a > 0xdbff || i + 1 === l || (b = s.charCodeAt(i + 1)) < 0xdc00 || b > 0xdfff
+      ? TO_STRING ? s.charAt(i) : a
+      : TO_STRING ? s.slice(i, i + 2) : (a - 0xd800 << 10) + (b - 0xdc00) + 0x10000;
+  };
+};
+
+var $_iterators = {};
+
+var IteratorPrototype = {};
+
+// 25.1.2.1.1 %IteratorPrototype%[@@iterator]()
+$_hide(IteratorPrototype, $_wks('iterator'), function(){ return this; });
+
+var $_iterCreate = function(Constructor, NAME, next){
+  Constructor.prototype = $.create(IteratorPrototype, {next: $_propertyDesc(1, next)});
+  $_setToStringTag(Constructor, NAME + ' Iterator');
+};
+
+var getProto       = $.getProto
+  , ITERATOR       = $_wks('iterator')
+  , BUGGY          = !([].keys && 'next' in [].keys()) // Safari has buggy iterators w/o `next`
+  , FF_ITERATOR    = '@@iterator'
+  , KEYS           = 'keys'
+  , VALUES         = 'values';
+
+var returnThis = function(){ return this; };
+
+var $_iterDefine = function(Base, NAME, Constructor, next, DEFAULT, IS_SET, FORCED){
+  $_iterCreate(Constructor, NAME, next);
+  var getMethod = function(kind){
+    if(!BUGGY && kind in proto)return proto[kind];
+    switch(kind){
+      case KEYS: return function keys(){ return new Constructor(this, kind); };
+      case VALUES: return function values(){ return new Constructor(this, kind); };
+    } return function entries(){ return new Constructor(this, kind); };
+  };
+  var TAG        = NAME + ' Iterator'
+    , DEF_VALUES = DEFAULT == VALUES
+    , VALUES_BUG = false
+    , proto      = Base.prototype
+    , $native    = proto[ITERATOR] || proto[FF_ITERATOR] || DEFAULT && proto[DEFAULT]
+    , $default   = $native || getMethod(DEFAULT)
+    , methods, key;
+  // Fix native
+  if($native){
+    var IteratorPrototype = getProto($default.call(new Base));
+    // Set @@toStringTag to native iterators
+    $_setToStringTag(IteratorPrototype, TAG, true);
+    // FF fix
+    if(!$_library && $_has(proto, FF_ITERATOR))$_hide(IteratorPrototype, ITERATOR, returnThis);
+    // fix Array#{values, @@iterator}.name in V8 / FF
+    if(DEF_VALUES && $native.name !== VALUES){
+      VALUES_BUG = true;
+      $default = function values(){ return $native.call(this); };
+    }
+  }
+  // Define iterator
+  if((!$_library || FORCED) && (BUGGY || VALUES_BUG || !proto[ITERATOR])){
+    $_hide(proto, ITERATOR, $default);
+  }
+  // Plug for library
+  $_iterators[NAME] = $default;
+  $_iterators[TAG]  = returnThis;
+  if(DEFAULT){
+    methods = {
+      values:  DEF_VALUES  ? $default : getMethod(VALUES),
+      keys:    IS_SET      ? $default : getMethod(KEYS),
+      entries: !DEF_VALUES ? $default : getMethod('entries')
+    };
+    if(FORCED)for(key in methods){
+      if(!(key in proto))$_redefine(proto, key, methods[key]);
+    } else $_export($_export.P + $_export.F * (BUGGY || VALUES_BUG), NAME, methods);
+  }
+  return methods;
+};
+
+var $at  = $_stringAt(true);
+
+// 21.1.3.27 String.prototype[@@iterator]()
+$_iterDefine(String, 'String', function(iterated){
+  this._t = String(iterated); // target
+  this._i = 0;                // next index
+// 21.1.5.2.1 %StringIteratorPrototype%.next()
+}, function(){
+  var O     = this._t
+    , index = this._i
+    , point;
+  if(index >= O.length)return {value: undefined, done: true};
+  point = $at(O, index);
+  this._i += point.length;
+  return {value: point, done: false};
+});
+
+var $at$1     = $_stringAt(false);
+$_export($_export.P, 'String', {
+  // 21.1.3.3 String.prototype.codePointAt(pos)
+  codePointAt: function codePointAt(pos){
+    return $at$1(this, pos);
+  }
+});
+
+// 7.2.8 IsRegExp(argument)
+var MATCH    = $_wks('match');
+var $_isRegexp = function(it){
+  var isRegExp;
+  return $_isObject(it) && ((isRegExp = it[MATCH]) !== undefined ? !!isRegExp : $_cof(it) == 'RegExp');
+};
+
+// helper for String#{startsWith, endsWith, includes}
+
+
+var $_stringContext = function(that, searchString, NAME){
+  if($_isRegexp(searchString))throw TypeError('String#' + NAME + " doesn't accept regex!");
+  return String($_defined(that));
+};
+
+var MATCH$1 = $_wks('match');
+var $_failsIsRegexp = function(KEY){
+  var re = /./;
+  try {
+    '/./'[KEY](re);
+  } catch(e){
+    try {
+      re[MATCH$1] = false;
+      return !'/./'[KEY](re);
+    } catch(f){ /* empty */ }
+  } return true;
+};
+
+var ENDS_WITH = 'endsWith'
+  , $endsWith = ''[ENDS_WITH];
+
+$_export($_export.P + $_export.F * $_failsIsRegexp(ENDS_WITH), 'String', {
+  endsWith: function endsWith(searchString /*, endPosition = @length */){
+    var that = $_stringContext(this, searchString, ENDS_WITH)
+      , $$   = arguments
+      , endPosition = $$.length > 1 ? $$[1] : undefined
+      , len    = $_toLength(that.length)
+      , end    = endPosition === undefined ? len : Math.min($_toLength(endPosition), len)
+      , search = String(searchString);
+    return $endsWith
+      ? $endsWith.call(that, search, end)
+      : that.slice(end - search.length, end) === search;
+  }
+});
+
+var INCLUDES = 'includes';
+
+$_export($_export.P + $_export.F * $_failsIsRegexp(INCLUDES), 'String', {
+  includes: function includes(searchString /*, position = 0 */){
+    return !!~$_stringContext(this, searchString, INCLUDES)
+      .indexOf(searchString, arguments.length > 1 ? arguments[1] : undefined);
+  }
+});
+
+var $_stringRepeat = function repeat(count){
+  var str = String($_defined(this))
+    , res = ''
+    , n   = $_toInteger(count);
+  if(n < 0 || n == Infinity)throw RangeError("Count can't be negative");
+  for(;n > 0; (n >>>= 1) && (str += str))if(n & 1)res += str;
+  return res;
+};
+
+$_export($_export.P, 'String', {
+  // 21.1.3.13 String.prototype.repeat(count)
+  repeat: $_stringRepeat
+});
+
+var STARTS_WITH = 'startsWith'
+  , $startsWith = ''[STARTS_WITH];
+
+$_export($_export.P + $_export.F * $_failsIsRegexp(STARTS_WITH), 'String', {
+  startsWith: function startsWith(searchString /*, position = 0 */){
+    var that   = $_stringContext(this, searchString, STARTS_WITH)
+      , $$     = arguments
+      , index  = $_toLength(Math.min($$.length > 1 ? $$[1] : undefined, that.length))
+      , search = String(searchString);
+    return $startsWith
+      ? $startsWith.call(that, search, index)
+      : that.slice(index, index + search.length) === search;
+  }
+});
+
+// call something on iterator step with safe closing on error
+
+var $_iterCall = function(iterator, fn, value, entries){
+  try {
+    return entries ? fn($_anObject(value)[0], value[1]) : fn(value);
+  // 7.4.6 IteratorClose(iterator, completion)
+  } catch(e){
+    var ret = iterator['return'];
+    if(ret !== undefined)$_anObject(ret.call(iterator));
+    throw e;
+  }
+};
+
+// check on default Array iterator
+var ITERATOR$1   = $_wks('iterator')
+  , ArrayProto$1 = Array.prototype;
+
+var $_isArrayIter = function(it){
+  return it !== undefined && ($_iterators.Array === it || ArrayProto$1[ITERATOR$1] === it);
+};
+
+var ITERATOR$2  = $_wks('iterator');
+var core_getIteratorMethod = $_core.getIteratorMethod = function(it){
+  if(it != undefined)return it[ITERATOR$2]
+    || it['@@iterator']
+    || $_iterators[$_classof(it)];
+};
+
+var ITERATOR$3     = $_wks('iterator')
+  , SAFE_CLOSING = false;
+
+try {
+  var riter = [7][ITERATOR$3]();
+  riter['return'] = function(){ SAFE_CLOSING = true; };
+} catch(e){ /* empty */ }
+
+var $_iterDetect = function(exec, skipClosing){
+  if(!skipClosing && !SAFE_CLOSING)return false;
+  var safe = false;
+  try {
+    var arr  = [7]
+      , iter = arr[ITERATOR$3]();
+    iter.next = function(){ return {done: safe = true}; };
+    arr[ITERATOR$3] = function(){ return iter; };
+    exec(arr);
+  } catch(e){ /* empty */ }
+  return safe;
+};
+
+$_export($_export.S + $_export.F * !$_iterDetect(function(iter){ }), 'Array', {
+  // 22.1.2.1 Array.from(arrayLike, mapfn = undefined, thisArg = undefined)
+  from: function from(arrayLike/*, mapfn = undefined, thisArg = undefined*/){
+    var O       = $_toObject(arrayLike)
+      , C       = typeof this == 'function' ? this : Array
+      , $$      = arguments
+      , $$len   = $$.length
+      , mapfn   = $$len > 1 ? $$[1] : undefined
+      , mapping = mapfn !== undefined
+      , index   = 0
+      , iterFn  = core_getIteratorMethod(O)
+      , length, result, step, iterator;
+    if(mapping)mapfn = $_ctx(mapfn, $$len > 2 ? $$[2] : undefined, 2);
+    // if object isn't iterable or it's array with default iterator - use simple case
+    if(iterFn != undefined && !(C == Array && $_isArrayIter(iterFn))){
+      for(iterator = iterFn.call(O), result = new C; !(step = iterator.next()).done; index++){
+        result[index] = mapping ? $_iterCall(iterator, mapfn, [step.value, index], true) : step.value;
+      }
+    } else {
+      length = $_toLength(O.length);
+      for(result = new C(length); length > index; index++){
+        result[index] = mapping ? mapfn(O[index], index) : O[index];
+      }
+    }
+    result.length = index;
+    return result;
+  }
+});
+
+// WebKit Array.of isn't generic
+$_export($_export.S + $_export.F * $_fails(function(){
+  function F(){}
+  return !(Array.of.call(F) instanceof F);
+}), 'Array', {
+  // 22.1.2.3 Array.of( ...items)
+  of: function of(/* ...args */){
+    var index  = 0
+      , $$     = arguments
+      , $$len  = $$.length
+      , result = new (typeof this == 'function' ? this : Array)($$len);
+    while($$len > index)result[index] = $$[index++];
+    result.length = $$len;
+    return result;
+  }
+});
+
+// 22.1.3.31 Array.prototype[@@unscopables]
+var UNSCOPABLES = $_wks('unscopables')
+  , ArrayProto$2  = Array.prototype;
+if(ArrayProto$2[UNSCOPABLES] == undefined)$_hide(ArrayProto$2, UNSCOPABLES, {});
+var $_addToUnscopables = function(key){
+  ArrayProto$2[UNSCOPABLES][key] = true;
+};
+
+var $_iterStep = function(done, value){
+  return {value: value, done: !!done};
+};
+
+// 22.1.3.4 Array.prototype.entries()
+// 22.1.3.13 Array.prototype.keys()
+// 22.1.3.29 Array.prototype.values()
+// 22.1.3.30 Array.prototype[@@iterator]()
+var es6_array_iterator = $_iterDefine(Array, 'Array', function(iterated, kind){
+  this._t = $_toIobject(iterated); // target
+  this._i = 0;                   // next index
+  this._k = kind;                // kind
+// 22.1.5.2.1 %ArrayIteratorPrototype%.next()
+}, function(){
+  var O     = this._t
+    , kind  = this._k
+    , index = this._i++;
+  if(!O || index >= O.length){
+    this._t = undefined;
+    return $_iterStep(1);
+  }
+  if(kind == 'keys'  )return $_iterStep(0, index);
+  if(kind == 'values')return $_iterStep(0, O[index]);
+  return $_iterStep(0, [index, O[index]]);
+}, 'values');
+
+// argumentsList[@@iterator] is %ArrayProto_values% (9.4.4.6, 9.4.4.7)
+$_iterators.Arguments = $_iterators.Array;
+
+$_addToUnscopables('keys');
+$_addToUnscopables('values');
+$_addToUnscopables('entries');
+
+var SPECIES$1     = $_wks('species');
+
+var $_setSpecies = function(KEY){
+  var C = $_global[KEY];
+  if($_descriptors && C && !C[SPECIES$1])$.setDesc(C, SPECIES$1, {
+    configurable: true,
+    get: function(){ return this; }
+  });
+};
+
+$_setSpecies('Array');
+
+var $_arrayCopyWithin = [].copyWithin || function copyWithin(target/*= 0*/, start/*= 0, end = @length*/){
+  var O     = $_toObject(this)
+    , len   = $_toLength(O.length)
+    , to    = $_toIndex(target, len)
+    , from  = $_toIndex(start, len)
+    , $$    = arguments
+    , end   = $$.length > 2 ? $$[2] : undefined
+    , count = Math.min((end === undefined ? len : $_toIndex(end, len)) - from, len - to)
+    , inc   = 1;
+  if(from < to && to < from + count){
+    inc  = -1;
+    from += count - 1;
+    to   += count - 1;
+  }
+  while(count-- > 0){
+    if(from in O)O[to] = O[from];
+    else delete O[to];
+    to   += inc;
+    from += inc;
+  } return O;
+};
+
+// 22.1.3.3 Array.prototype.copyWithin(target, start, end = this.length)
+
+
+$_export($_export.P, 'Array', {copyWithin: $_arrayCopyWithin});
+
+$_addToUnscopables('copyWithin');
+
+var $_arrayFill = [].fill || function fill(value /*, start = 0, end = @length */){
+  var O      = $_toObject(this)
+    , length = $_toLength(O.length)
+    , $$     = arguments
+    , $$len  = $$.length
+    , index  = $_toIndex($$len > 1 ? $$[1] : undefined, length)
+    , end    = $$len > 2 ? $$[2] : undefined
+    , endPos = end === undefined ? length : $_toIndex(end, length);
+  while(endPos > index)O[index++] = value;
+  return O;
+};
+
+// 22.1.3.6 Array.prototype.fill(value, start = 0, end = this.length)
+
+
+$_export($_export.P, 'Array', {fill: $_arrayFill});
+
+$_addToUnscopables('fill');
+
+// 22.1.3.8 Array.prototype.find(predicate, thisArg = undefined)
+var $find   = $_arrayMethods(5)
+  , KEY     = 'find'
+  , forced  = true;
+// Shouldn't skip holes
+if(KEY in [])Array(1)[KEY](function(){ forced = false; });
+$_export($_export.P + $_export.F * forced, 'Array', {
+  find: function find(callbackfn/*, that = undefined */){
+    return $find(this, callbackfn, arguments.length > 1 ? arguments[1] : undefined);
+  }
+});
+$_addToUnscopables(KEY);
+
+// 22.1.3.9 Array.prototype.findIndex(predicate, thisArg = undefined)
+var $find$1   = $_arrayMethods(6)
+  , KEY$1     = 'findIndex'
+  , forced$1  = true;
+// Shouldn't skip holes
+if(KEY$1 in [])Array(1)[KEY$1](function(){ forced$1 = false; });
+$_export($_export.P + $_export.F * forced$1, 'Array', {
+  findIndex: function findIndex(callbackfn/*, that = undefined */){
+    return $find$1(this, callbackfn, arguments.length > 1 ? arguments[1] : undefined);
+  }
+});
+$_addToUnscopables(KEY$1);
+
+// 21.2.5.3 get RegExp.prototype.flags
+
+var $_flags = function(){
+  var that   = $_anObject(this)
+    , result = '';
+  if(that.global)     result += 'g';
+  if(that.ignoreCase) result += 'i';
+  if(that.multiline)  result += 'm';
+  if(that.unicode)    result += 'u';
+  if(that.sticky)     result += 'y';
+  return result;
+};
+
+var $RegExp  = $_global.RegExp
+  , Base$1     = $RegExp
+  , proto$1    = $RegExp.prototype
+  , re1      = /a/g
+  , re2      = /a/g
+  // "new" creates a new object, old webkit buggy here
+  , CORRECT_NEW = new $RegExp(re1) !== re1;
+
+if($_descriptors && (!CORRECT_NEW || $_fails(function(){
+  re2[$_wks('match')] = false;
+  // RegExp constructor can alter flags and IsRegExp works correct with @@match
+  return $RegExp(re1) != re1 || $RegExp(re2) == re2 || $RegExp(re1, 'i') != '/a/i';
+}))){
+  $RegExp = function RegExp(p, f){
+    var piRE = $_isRegexp(p)
+      , fiU  = f === undefined;
+    return !(this instanceof $RegExp) && piRE && p.constructor === $RegExp && fiU ? p
+      : CORRECT_NEW
+        ? new Base$1(piRE && !fiU ? p.source : p, f)
+        : Base$1((piRE = p instanceof $RegExp) ? p.source : p, piRE && fiU ? $_flags.call(p) : f);
+  };
+  $.each.call($.getNames(Base$1), function(key){
+    key in $RegExp || $.setDesc($RegExp, key, {
+      configurable: true,
+      get: function(){ return Base$1[key]; },
+      set: function(it){ Base$1[key] = it; }
+    });
+  });
+  proto$1.constructor = $RegExp;
+  $RegExp.prototype = proto$1;
+  $_redefine($_global, 'RegExp', $RegExp);
+}
+
+$_setSpecies('RegExp');
+
+// 21.2.5.3 get RegExp.prototype.flags()
+
+if($_descriptors && /./g.flags != 'g')$.setDesc(RegExp.prototype, 'flags', {
+  configurable: true,
+  get: $_flags
+});
+
+var $_fixReWks = function(KEY, length, exec){
+  var SYMBOL   = $_wks(KEY)
+    , original = ''[KEY];
+  if($_fails(function(){
+    var O = {};
+    O[SYMBOL] = function(){ return 7; };
+    return ''[KEY](O) != 7;
+  })){
+    $_redefine(String.prototype, KEY, exec($_defined, SYMBOL, original));
+    $_hide(RegExp.prototype, SYMBOL, length == 2
+      // 21.2.5.8 RegExp.prototype[@@replace](string, replaceValue)
+      // 21.2.5.11 RegExp.prototype[@@split](string, limit)
+      ? function(string, arg){ return original.call(string, this, arg); }
+      // 21.2.5.6 RegExp.prototype[@@match](string)
+      // 21.2.5.9 RegExp.prototype[@@search](string)
+      : function(string){ return original.call(string, this); }
+    );
+  }
+};
+
+// @@match logic
+$_fixReWks('match', 1, function(defined, MATCH){
+  // 21.1.3.11 String.prototype.match(regexp)
+  return function match(regexp){
+    var O  = defined(this)
+      , fn = regexp == undefined ? undefined : regexp[MATCH];
+    return fn !== undefined ? fn.call(regexp, O) : new RegExp(regexp)[MATCH](String(O));
+  };
+});
+
+// @@replace logic
+$_fixReWks('replace', 2, function(defined, REPLACE, $replace){
+  // 21.1.3.14 String.prototype.replace(searchValue, replaceValue)
+  return function replace(searchValue, replaceValue){
+    var O  = defined(this)
+      , fn = searchValue == undefined ? undefined : searchValue[REPLACE];
+    return fn !== undefined
+      ? fn.call(searchValue, O, replaceValue)
+      : $replace.call(String(O), searchValue, replaceValue);
+  };
+});
+
+// @@search logic
+$_fixReWks('search', 1, function(defined, SEARCH){
+  // 21.1.3.15 String.prototype.search(regexp)
+  return function search(regexp){
+    var O  = defined(this)
+      , fn = regexp == undefined ? undefined : regexp[SEARCH];
+    return fn !== undefined ? fn.call(regexp, O) : new RegExp(regexp)[SEARCH](String(O));
+  };
+});
+
+// @@split logic
+$_fixReWks('split', 2, function(defined, SPLIT, $split){
+  // 21.1.3.17 String.prototype.split(separator, limit)
+  return function split(separator, limit){
+    var O  = defined(this)
+      , fn = separator == undefined ? undefined : separator[SPLIT];
+    return fn !== undefined
+      ? fn.call(separator, O, limit)
+      : $split.call(String(O), separator, limit);
+  };
+});
+
+var $_strictNew = function(it, Constructor, name){
+  if(!(it instanceof Constructor))throw TypeError(name + ": use the 'new' operator!");
+  return it;
+};
+
+var $_forOf = function(iterable, entries, fn, that){
+  var iterFn = core_getIteratorMethod(iterable)
+    , f      = $_ctx(fn, that, entries ? 2 : 1)
+    , index  = 0
+    , length, step, iterator;
+  if(typeof iterFn != 'function')throw TypeError(iterable + ' is not iterable!');
+  // fast case for arrays with default iterator
+  if($_isArrayIter(iterFn))for(length = $_toLength(iterable.length); length > index; index++){
+    entries ? f($_anObject(step = iterable[index])[0], step[1]) : f(iterable[index]);
+  } else for(iterator = iterFn.call(iterable); !(step = iterator.next()).done; ){
+    $_iterCall(iterator, f, step.value, entries);
+  }
+};
+
+// 7.3.20 SpeciesConstructor(O, defaultConstructor)
+var SPECIES$2   = $_wks('species');
+var $_speciesConstructor = function(O, D){
+  var C = $_anObject(O).constructor, S;
+  return C === undefined || (S = $_anObject(C)[SPECIES$2]) == undefined ? D : $_aFunction(S);
+};
+
+var process            = $_global.process
+  , setTask            = $_global.setImmediate
+  , clearTask          = $_global.clearImmediate
+  , MessageChannel     = $_global.MessageChannel
+  , counter            = 0
+  , queue              = {}
+  , ONREADYSTATECHANGE = 'onreadystatechange'
+  , defer, channel, port;
+var run = function(){
+  var id = +this;
+  if(queue.hasOwnProperty(id)){
+    var fn = queue[id];
+    delete queue[id];
+    fn();
+  }
+};
+var listner = function(event){
+  run.call(event.data);
+};
+// Node.js 0.9+ & IE10+ has setImmediate, otherwise:
+if(!setTask || !clearTask){
+  setTask = function setImmediate(fn){
+    var args = [], i = 1;
+    while(arguments.length > i)args.push(arguments[i++]);
+    queue[++counter] = function(){
+      $_invoke(typeof fn == 'function' ? fn : Function(fn), args);
+    };
+    defer(counter);
+    return counter;
+  };
+  clearTask = function clearImmediate(id){
+    delete queue[id];
+  };
+  // Node.js 0.8-
+  if($_cof(process) == 'process'){
+    defer = function(id){
+      process.nextTick($_ctx(run, id, 1));
+    };
+  // Browsers with MessageChannel, includes WebWorkers
+  } else if(MessageChannel){
+    channel = new MessageChannel;
+    port    = channel.port2;
+    channel.port1.onmessage = listner;
+    defer = $_ctx(port.postMessage, port, 1);
+  // Browsers with postMessage, skip WebWorkers
+  // IE8 has postMessage, but it's sync & typeof its postMessage is 'object'
+  } else if($_global.addEventListener && typeof postMessage == 'function' && !$_global.importScripts){
+    defer = function(id){
+      $_global.postMessage(id + '', '*');
+    };
+    $_global.addEventListener('message', listner, false);
+  // IE8-
+  } else if(ONREADYSTATECHANGE in $_domCreate('script')){
+    defer = function(id){
+      $_html.appendChild($_domCreate('script'))[ONREADYSTATECHANGE] = function(){
+        $_html.removeChild(this);
+        run.call(id);
+      };
+    };
+  // Rest old browsers
+  } else {
+    defer = function(id){
+      setTimeout($_ctx(run, id, 1), 0);
+    };
+  }
+}
+var $_task = {
+  set:   setTask,
+  clear: clearTask
+};
+
+var macrotask = $_task.set
+  , Observer  = $_global.MutationObserver || $_global.WebKitMutationObserver
+  , process$1   = $_global.process
+  , Promise   = $_global.Promise
+  , isNode    = $_cof(process$1) == 'process'
+  , head, last, notify;
+
+var flush = function(){
+  var parent, domain, fn;
+  if(isNode && (parent = process$1.domain)){
+    process$1.domain = null;
+    parent.exit();
+  }
+  while(head){
+    domain = head.domain;
+    fn     = head.fn;
+    if(domain)domain.enter();
+    fn(); // <- currently we use it only for Promise - try / catch not required
+    if(domain)domain.exit();
+    head = head.next;
+  } last = undefined;
+  if(parent)parent.enter();
+};
+
+// Node.js
+if(isNode){
+  notify = function(){
+    process$1.nextTick(flush);
+  };
+// browsers with MutationObserver
+} else if(Observer){
+  var toggle = 1
+    , node   = document.createTextNode('');
+  new Observer(flush).observe(node, {characterData: true}); // eslint-disable-line no-new
+  notify = function(){
+    node.data = toggle = -toggle;
+  };
+// environments with maybe non-completely correct, but existent Promise
+} else if(Promise && Promise.resolve){
+  notify = function(){
+    Promise.resolve().then(flush);
+  };
+// for other environments - macrotask based on:
+// - setImmediate
+// - MessageChannel
+// - window.postMessag
+// - onreadystatechange
+// - setTimeout
+} else {
+  notify = function(){
+    // strange IE + webpack dev server bug - use .call(global)
+    macrotask.call($_global, flush);
+  };
+}
+
+var $_microtask = function asap(fn){
+  var task = {fn: fn, next: undefined, domain: isNode && process$1.domain};
+  if(last)last.next = task;
+  if(!head){
+    head = task;
+    notify();
+  } last = task;
+};
+
+var $_redefineAll = function(target, src){
+  for(var key in src)$_redefine(target, key, src[key]);
+  return target;
+};
+
+var setProto   = $_setProto.set
+  , SPECIES$3    = $_wks('species')
+  , PROMISE    = 'Promise'
+  , process$2    = $_global.process
+  , isNode$1     = $_classof(process$2) == 'process'
+  , P          = $_global[PROMISE]
+  , empty      = function(){ /* empty */ }
+  , Wrapper;
+
+var testResolve = function(sub){
+  var test = new P(empty), promise;
+  if(sub)test.constructor = function(exec){
+    exec(empty, empty);
+  };
+  (promise = P.resolve(test))['catch'](empty);
+  return promise === test;
+};
+
+var USE_NATIVE = function(){
+  var works = false;
+  function P2(x){
+    var self = new P(x);
+    setProto(self, P2.prototype);
+    return self;
+  }
+  try {
+    works = P && P.resolve && testResolve();
+    setProto(P2, P);
+    P2.prototype = $.create(P.prototype, {constructor: {value: P2}});
+    // actual Firefox has broken subclass support, test that
+    if(!(P2.resolve(5).then(function(){}) instanceof P2)){
+      works = false;
+    }
+    // actual V8 bug, https://code.google.com/p/v8/issues/detail?id=4162
+    if(works && $_descriptors){
+      var thenableThenGotten = false;
+      P.resolve($.setDesc({}, 'then', {
+        get: function(){ thenableThenGotten = true; }
+      }));
+      works = thenableThenGotten;
+    }
+  } catch(e){ works = false; }
+  return works;
+}();
+
+// helpers
+var sameConstructor = function(a, b){
+  // library wrapper special case
+  if($_library && a === P && b === Wrapper)return true;
+  return $_sameValue(a, b);
+};
+var getConstructor = function(C){
+  var S = $_anObject(C)[SPECIES$3];
+  return S != undefined ? S : C;
+};
+var isThenable = function(it){
+  var then;
+  return $_isObject(it) && typeof (then = it.then) == 'function' ? then : false;
+};
+var PromiseCapability = function(C){
+  var resolve, reject;
+  this.promise = new C(function($$resolve, $$reject){
+    if(resolve !== undefined || reject !== undefined)throw TypeError('Bad Promise constructor');
+    resolve = $$resolve;
+    reject  = $$reject;
+  });
+  this.resolve = $_aFunction(resolve), this.reject  = $_aFunction(reject);
+};
+var perform = function(exec){
+  try {
+    exec();
+  } catch(e){
+    return {error: e};
+  }
+};
+var notify$1 = function(record, isReject){
+  if(record.n)return;
+  record.n = true;
+  var chain = record.c;
+  $_microtask(function(){
+    var value = record.v
+      , ok    = record.s == 1
+      , i     = 0;
+    var run = function(reaction){
+      var handler = ok ? reaction.ok : reaction.fail
+        , resolve = reaction.resolve
+        , reject  = reaction.reject
+        , result, then;
+      try {
+        if(handler){
+          if(!ok)record.h = true;
+          result = handler === true ? value : handler(value);
+          if(result === reaction.promise){
+            reject(TypeError('Promise-chain cycle'));
+          } else if(then = isThenable(result)){
+            then.call(result, resolve, reject);
+          } else resolve(result);
+        } else reject(value);
+      } catch(e){
+        reject(e);
+      }
+    };
+    while(chain.length > i)run(chain[i++]); // variable length - can't use forEach
+    chain.length = 0;
+    record.n = false;
+    if(isReject)setTimeout(function(){
+      var promise = record.p
+        , handler, console;
+      if(isUnhandled(promise)){
+        if(isNode$1){
+          process$2.emit('unhandledRejection', value, promise);
+        } else if(handler = $_global.onunhandledrejection){
+          handler({promise: promise, reason: value});
+        } else if((console = $_global.console) && console.error){
+          console.error('Unhandled promise rejection', value);
+        }
+      } record.a = undefined;
+    }, 1);
+  });
+};
+var isUnhandled = function(promise){
+  var record = promise._d
+    , chain  = record.a || record.c
+    , i      = 0
+    , reaction;
+  if(record.h)return false;
+  while(chain.length > i){
+    reaction = chain[i++];
+    if(reaction.fail || !isUnhandled(reaction.promise))return false;
+  } return true;
+};
+var $reject = function(value){
+  var record = this;
+  if(record.d)return;
+  record.d = true;
+  record = record.r || record; // unwrap
+  record.v = value;
+  record.s = 2;
+  record.a = record.c.slice();
+  notify$1(record, true);
+};
+var $resolve = function(value){
+  var record = this
+    , then;
+  if(record.d)return;
+  record.d = true;
+  record = record.r || record; // unwrap
+  try {
+    if(record.p === value)throw TypeError("Promise can't be resolved itself");
+    if(then = isThenable(value)){
+      $_microtask(function(){
+        var wrapper = {r: record, d: false}; // wrap
+        try {
+          then.call(value, $_ctx($resolve, wrapper, 1), $_ctx($reject, wrapper, 1));
+        } catch(e){
+          $reject.call(wrapper, e);
+        }
+      });
+    } else {
+      record.v = value;
+      record.s = 1;
+      notify$1(record, false);
+    }
+  } catch(e){
+    $reject.call({r: record, d: false}, e); // wrap
+  }
+};
+
+// constructor polyfill
+if(!USE_NATIVE){
+  // 25.4.3.1 Promise(executor)
+  P = function Promise(executor){
+    $_aFunction(executor);
+    var record = this._d = {
+      p: $_strictNew(this, P, PROMISE),         // <- promise
+      c: [],                                  // <- awaiting reactions
+      a: undefined,                           // <- checked in isUnhandled reactions
+      s: 0,                                   // <- state
+      d: false,                               // <- done
+      v: undefined,                           // <- value
+      h: false,                               // <- handled rejection
+      n: false                                // <- notify
+    };
+    try {
+      executor($_ctx($resolve, record, 1), $_ctx($reject, record, 1));
+    } catch(err){
+      $reject.call(record, err);
+    }
+  };
+  $_redefineAll(P.prototype, {
+    // 25.4.5.3 Promise.prototype.then(onFulfilled, onRejected)
+    then: function then(onFulfilled, onRejected){
+      var reaction = new PromiseCapability($_speciesConstructor(this, P))
+        , promise  = reaction.promise
+        , record   = this._d;
+      reaction.ok   = typeof onFulfilled == 'function' ? onFulfilled : true;
+      reaction.fail = typeof onRejected == 'function' && onRejected;
+      record.c.push(reaction);
+      if(record.a)record.a.push(reaction);
+      if(record.s)notify$1(record, false);
+      return promise;
+    },
+    // 25.4.5.1 Promise.prototype.catch(onRejected)
+    'catch': function(onRejected){
+      return this.then(undefined, onRejected);
+    }
+  });
+}
+
+$_export($_export.G + $_export.W + $_export.F * !USE_NATIVE, {Promise: P});
+$_setToStringTag(P, PROMISE);
+$_setSpecies(PROMISE);
+Wrapper = $_core[PROMISE];
+
+// statics
+$_export($_export.S + $_export.F * !USE_NATIVE, PROMISE, {
+  // 25.4.4.5 Promise.reject(r)
+  reject: function reject(r){
+    var capability = new PromiseCapability(this)
+      , $$reject   = capability.reject;
+    $$reject(r);
+    return capability.promise;
+  }
+});
+$_export($_export.S + $_export.F * (!USE_NATIVE || testResolve(true)), PROMISE, {
+  // 25.4.4.6 Promise.resolve(x)
+  resolve: function resolve(x){
+    // instanceof instead of internal slot check because we should fix it without replacement native Promise core
+    if(x instanceof P && sameConstructor(x.constructor, this))return x;
+    var capability = new PromiseCapability(this)
+      , $$resolve  = capability.resolve;
+    $$resolve(x);
+    return capability.promise;
+  }
+});
+$_export($_export.S + $_export.F * !(USE_NATIVE && $_iterDetect(function(iter){
+  P.all(iter)['catch'](function(){});
+})), PROMISE, {
+  // 25.4.4.1 Promise.all(iterable)
+  all: function all(iterable){
+    var C          = getConstructor(this)
+      , capability = new PromiseCapability(C)
+      , resolve    = capability.resolve
+      , reject     = capability.reject
+      , values     = [];
+    var abrupt = perform(function(){
+      $_forOf(iterable, false, values.push, values);
+      var remaining = values.length
+        , results   = Array(remaining);
+      if(remaining)$.each.call(values, function(promise, index){
+        var alreadyCalled = false;
+        C.resolve(promise).then(function(value){
+          if(alreadyCalled)return;
+          alreadyCalled = true;
+          results[index] = value;
+          --remaining || resolve(results);
+        }, reject);
+      });
+      else resolve(results);
+    });
+    if(abrupt)reject(abrupt.error);
+    return capability.promise;
+  },
+  // 25.4.4.4 Promise.race(iterable)
+  race: function race(iterable){
+    var C          = getConstructor(this)
+      , capability = new PromiseCapability(C)
+      , reject     = capability.reject;
+    var abrupt = perform(function(){
+      $_forOf(iterable, false, function(promise){
+        C.resolve(promise).then(capability.resolve, reject);
+      });
+    });
+    if(abrupt)reject(abrupt.error);
+    return capability.promise;
+  }
+});
+
+var ID           = $_uid('id')
+  , isExtensible = Object.isExtensible || $_isObject
+  , SIZE         = $_descriptors ? '_s' : 'size'
+  , id$1           = 0;
+
+var fastKey = function(it, create){
+  // return primitive with prefix
+  if(!$_isObject(it))return typeof it == 'symbol' ? it : (typeof it == 'string' ? 'S' : 'P') + it;
+  if(!$_has(it, ID)){
+    // can't set id to frozen object
+    if(!isExtensible(it))return 'F';
+    // not necessary to add id
+    if(!create)return 'E';
+    // add missing object id
+    $_hide(it, ID, ++id$1);
+  // return object id with prefix
+  } return 'O' + it[ID];
+};
+
+var getEntry = function(that, key){
+  // fast case
+  var index = fastKey(key), entry;
+  if(index !== 'F')return that._i[index];
+  // frozen object case
+  for(entry = that._f; entry; entry = entry.n){
+    if(entry.k == key)return entry;
+  }
+};
+
+var $_collectionStrong = {
+  getConstructor: function(wrapper, NAME, IS_MAP, ADDER){
+    var C = wrapper(function(that, iterable){
+      $_strictNew(that, C, NAME);
+      that._i = $.create(null); // index
+      that._f = undefined;      // first entry
+      that._l = undefined;      // last entry
+      that[SIZE] = 0;           // size
+      if(iterable != undefined)$_forOf(iterable, IS_MAP, that[ADDER], that);
+    });
+    $_redefineAll(C.prototype, {
+      // 23.1.3.1 Map.prototype.clear()
+      // 23.2.3.2 Set.prototype.clear()
+      clear: function clear(){
+        for(var that = this, data = that._i, entry = that._f; entry; entry = entry.n){
+          entry.r = true;
+          if(entry.p)entry.p = entry.p.n = undefined;
+          delete data[entry.i];
+        }
+        that._f = that._l = undefined;
+        that[SIZE] = 0;
+      },
+      // 23.1.3.3 Map.prototype.delete(key)
+      // 23.2.3.4 Set.prototype.delete(value)
+      'delete': function(key){
+        var that  = this
+          , entry = getEntry(that, key);
+        if(entry){
+          var next = entry.n
+            , prev = entry.p;
+          delete that._i[entry.i];
+          entry.r = true;
+          if(prev)prev.n = next;
+          if(next)next.p = prev;
+          if(that._f == entry)that._f = next;
+          if(that._l == entry)that._l = prev;
+          that[SIZE]--;
+        } return !!entry;
+      },
+      // 23.2.3.6 Set.prototype.forEach(callbackfn, thisArg = undefined)
+      // 23.1.3.5 Map.prototype.forEach(callbackfn, thisArg = undefined)
+      forEach: function forEach(callbackfn /*, that = undefined */){
+        var f = $_ctx(callbackfn, arguments.length > 1 ? arguments[1] : undefined, 3)
+          , entry;
+        while(entry = entry ? entry.n : this._f){
+          f(entry.v, entry.k, this);
+          // revert to the last existing entry
+          while(entry && entry.r)entry = entry.p;
+        }
+      },
+      // 23.1.3.7 Map.prototype.has(key)
+      // 23.2.3.7 Set.prototype.has(value)
+      has: function has(key){
+        return !!getEntry(this, key);
+      }
+    });
+    if($_descriptors)$.setDesc(C.prototype, 'size', {
+      get: function(){
+        return $_defined(this[SIZE]);
+      }
+    });
+    return C;
+  },
+  def: function(that, key, value){
+    var entry = getEntry(that, key)
+      , prev, index;
+    // change existing entry
+    if(entry){
+      entry.v = value;
+    // create new entry
+    } else {
+      that._l = entry = {
+        i: index = fastKey(key, true), // <- index
+        k: key,                        // <- key
+        v: value,                      // <- value
+        p: prev = that._l,             // <- previous entry
+        n: undefined,                  // <- next entry
+        r: false                       // <- removed
+      };
+      if(!that._f)that._f = entry;
+      if(prev)prev.n = entry;
+      that[SIZE]++;
+      // add to index
+      if(index !== 'F')that._i[index] = entry;
+    } return that;
+  },
+  getEntry: getEntry,
+  setStrong: function(C, NAME, IS_MAP){
+    // add .keys, .values, .entries, [@@iterator]
+    // 23.1.3.4, 23.1.3.8, 23.1.3.11, 23.1.3.12, 23.2.3.5, 23.2.3.8, 23.2.3.10, 23.2.3.11
+    $_iterDefine(C, NAME, function(iterated, kind){
+      this._t = iterated;  // target
+      this._k = kind;      // kind
+      this._l = undefined; // previous
+    }, function(){
+      var that  = this
+        , kind  = that._k
+        , entry = that._l;
+      // revert to the last existing entry
+      while(entry && entry.r)entry = entry.p;
+      // get next entry
+      if(!that._t || !(that._l = entry = entry ? entry.n : that._t._f)){
+        // or finish the iteration
+        that._t = undefined;
+        return $_iterStep(1);
+      }
+      // return step by kind
+      if(kind == 'keys'  )return $_iterStep(0, entry.k);
+      if(kind == 'values')return $_iterStep(0, entry.v);
+      return $_iterStep(0, [entry.k, entry.v]);
+    }, IS_MAP ? 'entries' : 'values' , !IS_MAP, true);
+
+    // add [@@species], 23.1.2.2, 23.2.2.2
+    $_setSpecies(NAME);
+  }
+};
+
+var $_collection = function(NAME, wrapper, methods, common, IS_MAP, IS_WEAK){
+  var Base  = $_global[NAME]
+    , C     = Base
+    , ADDER = IS_MAP ? 'set' : 'add'
+    , proto = C && C.prototype
+    , O     = {};
+  var fixMethod = function(KEY){
+    var fn = proto[KEY];
+    $_redefine(proto, KEY,
+      KEY == 'delete' ? function(a){
+        return IS_WEAK && !$_isObject(a) ? false : fn.call(this, a === 0 ? 0 : a);
+      } : KEY == 'has' ? function has(a){
+        return IS_WEAK && !$_isObject(a) ? false : fn.call(this, a === 0 ? 0 : a);
+      } : KEY == 'get' ? function get(a){
+        return IS_WEAK && !$_isObject(a) ? undefined : fn.call(this, a === 0 ? 0 : a);
+      } : KEY == 'add' ? function add(a){ fn.call(this, a === 0 ? 0 : a); return this; }
+        : function set(a, b){ fn.call(this, a === 0 ? 0 : a, b); return this; }
+    );
+  };
+  if(typeof C != 'function' || !(IS_WEAK || proto.forEach && !$_fails(function(){
+    new C().entries().next();
+  }))){
+    // create collection constructor
+    C = common.getConstructor(wrapper, NAME, IS_MAP, ADDER);
+    $_redefineAll(C.prototype, methods);
+  } else {
+    var instance             = new C
+      // early implementations not supports chaining
+      , HASNT_CHAINING       = instance[ADDER](IS_WEAK ? {} : -0, 1) != instance
+      // V8 ~  Chromium 40- weak-collections throws on primitives, but should return false
+      , THROWS_ON_PRIMITIVES = $_fails(function(){ instance.has(1); })
+      // most early implementations doesn't supports iterables, most modern - not close it correctly
+      , ACCEPT_ITERABLES     = $_iterDetect(function(iter){ new C(iter); }) // eslint-disable-line no-new
+      // for early implementations -0 and +0 not the same
+      , BUGGY_ZERO;
+    if(!ACCEPT_ITERABLES){ 
+      C = wrapper(function(target, iterable){
+        $_strictNew(target, C, NAME);
+        var that = new Base;
+        if(iterable != undefined)$_forOf(iterable, IS_MAP, that[ADDER], that);
+        return that;
+      });
+      C.prototype = proto;
+      proto.constructor = C;
+    }
+    IS_WEAK || instance.forEach(function(val, key){
+      BUGGY_ZERO = 1 / key === -Infinity;
+    });
+    if(THROWS_ON_PRIMITIVES || BUGGY_ZERO){
+      fixMethod('delete');
+      fixMethod('has');
+      IS_MAP && fixMethod('get');
+    }
+    if(BUGGY_ZERO || HASNT_CHAINING)fixMethod(ADDER);
+    // weak collections should not contains .clear method
+    if(IS_WEAK && proto.clear)delete proto.clear;
+  }
+
+  $_setToStringTag(C, NAME);
+
+  O[NAME] = C;
+  $_export($_export.G + $_export.W + $_export.F * (C != Base), O);
+
+  if(!IS_WEAK)common.setStrong(C, NAME, IS_MAP);
+
+  return C;
+};
+
+// 23.1 Map Objects
+$_collection('Map', function(get){
+  return function Map(){ return get(this, arguments.length > 0 ? arguments[0] : undefined); };
+}, {
+  // 23.1.3.6 Map.prototype.get(key)
+  get: function get(key){
+    var entry = $_collectionStrong.getEntry(this, key);
+    return entry && entry.v;
+  },
+  // 23.1.3.9 Map.prototype.set(key, value)
+  set: function set(key, value){
+    return $_collectionStrong.def(this, key === 0 ? 0 : key, value);
+  }
+}, $_collectionStrong, true);
+
+// 23.2 Set Objects
+$_collection('Set', function(get){
+  return function Set(){ return get(this, arguments.length > 0 ? arguments[0] : undefined); };
+}, {
+  // 23.2.3.1 Set.prototype.add(value)
+  add: function add(value){
+    return $_collectionStrong.def(this, value = value === 0 ? 0 : value, value);
+  }
+}, $_collectionStrong);
+
+var WEAK              = $_uid('weak')
+  , isExtensible$1      = Object.isExtensible || $_isObject
+  , arrayFind         = $_arrayMethods(5)
+  , arrayFindIndex    = $_arrayMethods(6)
+  , id$2                = 0;
+
+// fallback for frozen keys
+var frozenStore = function(that){
+  return that._l || (that._l = new FrozenStore);
+};
+var FrozenStore = function(){
+  this.a = [];
+};
+var findFrozen = function(store, key){
+  return arrayFind(store.a, function(it){
+    return it[0] === key;
+  });
+};
+FrozenStore.prototype = {
+  get: function(key){
+    var entry = findFrozen(this, key);
+    if(entry)return entry[1];
+  },
+  has: function(key){
+    return !!findFrozen(this, key);
+  },
+  set: function(key, value){
+    var entry = findFrozen(this, key);
+    if(entry)entry[1] = value;
+    else this.a.push([key, value]);
+  },
+  'delete': function(key){
+    var index = arrayFindIndex(this.a, function(it){
+      return it[0] === key;
+    });
+    if(~index)this.a.splice(index, 1);
+    return !!~index;
+  }
+};
+
+var $_collectionWeak = {
+  getConstructor: function(wrapper, NAME, IS_MAP, ADDER){
+    var C = wrapper(function(that, iterable){
+      $_strictNew(that, C, NAME);
+      that._i = id$2++;      // collection id
+      that._l = undefined; // leak store for frozen objects
+      if(iterable != undefined)$_forOf(iterable, IS_MAP, that[ADDER], that);
+    });
+    $_redefineAll(C.prototype, {
+      // 23.3.3.2 WeakMap.prototype.delete(key)
+      // 23.4.3.3 WeakSet.prototype.delete(value)
+      'delete': function(key){
+        if(!$_isObject(key))return false;
+        if(!isExtensible$1(key))return frozenStore(this)['delete'](key);
+        return $_has(key, WEAK) && $_has(key[WEAK], this._i) && delete key[WEAK][this._i];
+      },
+      // 23.3.3.4 WeakMap.prototype.has(key)
+      // 23.4.3.4 WeakSet.prototype.has(value)
+      has: function has(key){
+        if(!$_isObject(key))return false;
+        if(!isExtensible$1(key))return frozenStore(this).has(key);
+        return $_has(key, WEAK) && $_has(key[WEAK], this._i);
+      }
+    });
+    return C;
+  },
+  def: function(that, key, value){
+    if(!isExtensible$1($_anObject(key))){
+      frozenStore(that).set(key, value);
+    } else {
+      $_has(key, WEAK) || $_hide(key, WEAK, {});
+      key[WEAK][that._i] = value;
+    } return that;
+  },
+  frozenStore: frozenStore,
+  WEAK: WEAK
+};
+
+var frozenStore$1  = $_collectionWeak.frozenStore
+  , WEAK$1         = $_collectionWeak.WEAK
+  , isExtensible$2 = Object.isExtensible || $_isObject
+  , tmp          = {};
+
+// 23.3 WeakMap Objects
+var $WeakMap = $_collection('WeakMap', function(get){
+  return function WeakMap(){ return get(this, arguments.length > 0 ? arguments[0] : undefined); };
+}, {
+  // 23.3.3.3 WeakMap.prototype.get(key)
+  get: function get(key){
+    if($_isObject(key)){
+      if(!isExtensible$2(key))return frozenStore$1(this).get(key);
+      if($_has(key, WEAK$1))return key[WEAK$1][this._i];
+    }
+  },
+  // 23.3.3.5 WeakMap.prototype.set(key, value)
+  set: function set(key, value){
+    return $_collectionWeak.def(this, key, value);
+  }
+}, $_collectionWeak, true, true);
+
+// IE11 WeakMap frozen keys fix
+if(new $WeakMap().set((Object.freeze || Object)(tmp), 7).get(tmp) != 7){
+  $.each.call(['delete', 'has', 'get', 'set'], function(key){
+    var proto  = $WeakMap.prototype
+      , method = proto[key];
+    $_redefine(proto, key, function(a, b){
+      // store frozen objects on leaky map
+      if($_isObject(a) && !isExtensible$2(a)){
+        var result = frozenStore$1(this)[key](a, b);
+        return key == 'set' ? this : result;
+      // store all the rest on native weakmap
+      } return method.call(this, a, b);
+    });
+  });
+}
+
+// 23.4 WeakSet Objects
+$_collection('WeakSet', function(get){
+  return function WeakSet(){ return get(this, arguments.length > 0 ? arguments[0] : undefined); };
+}, {
+  // 23.4.3.1 WeakSet.prototype.add(value)
+  add: function add(value){
+    return $_collectionWeak.def(this, value, true);
+  }
+}, $_collectionWeak, false, true);
+
+// 26.1.1 Reflect.apply(target, thisArgument, argumentsList)
+var _apply   = Function.apply;
+
+$_export($_export.S, 'Reflect', {
+  apply: function apply(target, thisArgument, argumentsList){
+    return _apply.call(target, thisArgument, $_anObject(argumentsList));
+  }
+});
+
+// 26.1.2 Reflect.construct(target, argumentsList [, newTarget])
+var bind      = Function.bind || $_core.Function.prototype.bind;
+
+// MS Edge supports only 2 arguments
+// FF Nightly sets third argument as `new.target`, but does not create `this` from it
+$_export($_export.S + $_export.F * $_fails(function(){
+  function F(){}
+  return !(Reflect.construct(function(){}, [], F) instanceof F);
+}), 'Reflect', {
+  construct: function construct(Target, args /*, newTarget*/){
+    $_aFunction(Target);
+    $_anObject(args);
+    var newTarget = arguments.length < 3 ? Target : $_aFunction(arguments[2]);
+    if(Target == newTarget){
+      // w/o altered newTarget, optimization for 0-4 arguments
+      switch(args.length){
+        case 0: return new Target;
+        case 1: return new Target(args[0]);
+        case 2: return new Target(args[0], args[1]);
+        case 3: return new Target(args[0], args[1], args[2]);
+        case 4: return new Target(args[0], args[1], args[2], args[3]);
+      }
+      // w/o altered newTarget, lot of arguments case
+      var $args = [null];
+      $args.push.apply($args, args);
+      return new (bind.apply(Target, $args));
+    }
+    // with altered newTarget, not support built-in constructors
+    var proto    = newTarget.prototype
+      , instance = $.create($_isObject(proto) ? proto : Object.prototype)
+      , result   = Function.apply.call(Target, instance, args);
+    return $_isObject(result) ? result : instance;
+  }
+});
+
+// 26.1.3 Reflect.defineProperty(target, propertyKey, attributes)
+
+
+// MS Edge has broken Reflect.defineProperty - throwing instead of returning false
+$_export($_export.S + $_export.F * $_fails(function(){
+  Reflect.defineProperty($.setDesc({}, 1, {value: 1}), 1, {value: 2});
+}), 'Reflect', {
+  defineProperty: function defineProperty(target, propertyKey, attributes){
+    $_anObject(target);
+    try {
+      $.setDesc(target, propertyKey, attributes);
+      return true;
+    } catch(e){
+      return false;
+    }
+  }
+});
+
+// 26.1.4 Reflect.deleteProperty(target, propertyKey)
+var getDesc$2  = $.getDesc;
+
+$_export($_export.S, 'Reflect', {
+  deleteProperty: function deleteProperty(target, propertyKey){
+    var desc = getDesc$2($_anObject(target), propertyKey);
+    return desc && !desc.configurable ? false : delete target[propertyKey];
+  }
+});
+
+// 26.1.5 Reflect.enumerate(target)
+
+var Enumerate = function(iterated){
+  this._t = $_anObject(iterated); // target
+  this._i = 0;                  // next index
+  var keys = this._k = []       // keys
+    , key;
+  for(key in iterated)keys.push(key);
+};
+$_iterCreate(Enumerate, 'Object', function(){
+  var that = this
+    , keys = that._k
+    , key;
+  do {
+    if(that._i >= keys.length)return {value: undefined, done: true};
+  } while(!((key = keys[that._i++]) in that._t));
+  return {value: key, done: false};
+});
+
+$_export($_export.S, 'Reflect', {
+  enumerate: function enumerate(target){
+    return new Enumerate(target);
+  }
+});
+
+// 26.1.6 Reflect.get(target, propertyKey [, receiver])
+
+
+function get$1(target, propertyKey/*, receiver*/){
+  var receiver = arguments.length < 3 ? target : arguments[2]
+    , desc, proto;
+  if($_anObject(target) === receiver)return target[propertyKey];
+  if(desc = $.getDesc(target, propertyKey))return $_has(desc, 'value')
+    ? desc.value
+    : desc.get !== undefined
+      ? desc.get.call(receiver)
+      : undefined;
+  if($_isObject(proto = $.getProto(target)))return get$1(proto, propertyKey, receiver);
+}
+
+$_export($_export.S, 'Reflect', {get: get$1});
+
+// 26.1.7 Reflect.getOwnPropertyDescriptor(target, propertyKey)
+
+
+$_export($_export.S, 'Reflect', {
+  getOwnPropertyDescriptor: function getOwnPropertyDescriptor(target, propertyKey){
+    return $.getDesc($_anObject(target), propertyKey);
+  }
+});
+
+// 26.1.8 Reflect.getPrototypeOf(target)
+var getProto$1 = $.getProto;
+
+$_export($_export.S, 'Reflect', {
+  getPrototypeOf: function getPrototypeOf(target){
+    return getProto$1($_anObject(target));
+  }
+});
+
+// 26.1.9 Reflect.has(target, propertyKey)
+
+
+$_export($_export.S, 'Reflect', {
+  has: function has(target, propertyKey){
+    return propertyKey in target;
+  }
+});
+
+// 26.1.10 Reflect.isExtensible(target)
+var $isExtensible = Object.isExtensible;
+
+$_export($_export.S, 'Reflect', {
+  isExtensible: function isExtensible(target){
+    $_anObject(target);
+    return $isExtensible ? $isExtensible(target) : true;
+  }
+});
+
+// all object keys, includes non-enumerable and symbols
+var Reflect$1  = $_global.Reflect;
+var $_ownKeys = Reflect$1 && Reflect$1.ownKeys || function ownKeys(it){
+  var keys       = $.getNames($_anObject(it))
+    , getSymbols = $.getSymbols;
+  return getSymbols ? keys.concat(getSymbols(it)) : keys;
+};
+
+// 26.1.11 Reflect.ownKeys(target)
+
+
+$_export($_export.S, 'Reflect', {ownKeys: $_ownKeys});
+
+// 26.1.12 Reflect.preventExtensions(target)
+var $preventExtensions = Object.preventExtensions;
+
+$_export($_export.S, 'Reflect', {
+  preventExtensions: function preventExtensions(target){
+    $_anObject(target);
+    try {
+      if($preventExtensions)$preventExtensions(target);
+      return true;
+    } catch(e){
+      return false;
+    }
+  }
+});
+
+// 26.1.13 Reflect.set(target, propertyKey, V [, receiver])
+
+
+function set(target, propertyKey, V/*, receiver*/){
+  var receiver = arguments.length < 4 ? target : arguments[3]
+    , ownDesc  = $.getDesc($_anObject(target), propertyKey)
+    , existingDescriptor, proto;
+  if(!ownDesc){
+    if($_isObject(proto = $.getProto(target))){
+      return set(proto, propertyKey, V, receiver);
+    }
+    ownDesc = $_propertyDesc(0);
+  }
+  if($_has(ownDesc, 'value')){
+    if(ownDesc.writable === false || !$_isObject(receiver))return false;
+    existingDescriptor = $.getDesc(receiver, propertyKey) || $_propertyDesc(0);
+    existingDescriptor.value = V;
+    $.setDesc(receiver, propertyKey, existingDescriptor);
+    return true;
+  }
+  return ownDesc.set === undefined ? false : (ownDesc.set.call(receiver, V), true);
+}
+
+$_export($_export.S, 'Reflect', {set: set});
+
+// 26.1.14 Reflect.setPrototypeOf(target, proto)
+
+
+if($_setProto)$_export($_export.S, 'Reflect', {
+  setPrototypeOf: function setPrototypeOf(target, proto){
+    $_setProto.check(target, proto);
+    try {
+      $_setProto.set(target, proto);
+      return true;
+    } catch(e){
+      return false;
+    }
+  }
+});
+
+var $includes = $_arrayIncludes(true);
+
+$_export($_export.P, 'Array', {
+  // https://github.com/domenic/Array.prototype.includes
+  includes: function includes(el /*, fromIndex = 0 */){
+    return $includes(this, el, arguments.length > 1 ? arguments[1] : undefined);
+  }
+});
+
+$_addToUnscopables('includes');
+
+// https://github.com/mathiasbynens/String.prototype.at
+var $at$2     = $_stringAt(true);
+
+$_export($_export.P, 'String', {
+  at: function at(pos){
+    return $at$2(this, pos);
+  }
+});
+
+// https://github.com/ljharb/proposal-string-pad-left-right
+
+
+var $_stringPad = function(that, maxLength, fillString, left){
+  var S            = String($_defined(that))
+    , stringLength = S.length
+    , fillStr      = fillString === undefined ? ' ' : String(fillString)
+    , intMaxLength = $_toLength(maxLength);
+  if(intMaxLength <= stringLength)return S;
+  if(fillStr == '')fillStr = ' ';
+  var fillLen = intMaxLength - stringLength
+    , stringFiller = $_stringRepeat.call(fillStr, Math.ceil(fillLen / fillStr.length));
+  if(stringFiller.length > fillLen)stringFiller = stringFiller.slice(0, fillLen);
+  return left ? stringFiller + S : S + stringFiller;
+};
+
+$_export($_export.P, 'String', {
+  padLeft: function padLeft(maxLength /*, fillString = ' ' */){
+    return $_stringPad(this, maxLength, arguments.length > 1 ? arguments[1] : undefined, true);
+  }
+});
+
+$_export($_export.P, 'String', {
+  padRight: function padRight(maxLength /*, fillString = ' ' */){
+    return $_stringPad(this, maxLength, arguments.length > 1 ? arguments[1] : undefined, false);
+  }
+});
+
+// https://github.com/sebmarkbage/ecmascript-string-left-right-trim
+$_stringTrim('trimLeft', function($trim){
+  return function trimLeft(){
+    return $trim(this, 1);
+  };
+});
+
+// https://github.com/sebmarkbage/ecmascript-string-left-right-trim
+$_stringTrim('trimRight', function($trim){
+  return function trimRight(){
+    return $trim(this, 2);
+  };
+});
+
+var $_replacer = function(regExp, replace){
+  var replacer = replace === Object(replace) ? function(part){
+    return replace[part];
+  } : replace;
+  return function(it){
+    return String(it).replace(regExp, replacer);
+  };
+};
+
+// https://github.com/benjamingr/RexExp.escape
+var $re     = $_replacer(/[\\^$*+?.()|[\]{}]/g, '\\$&');
+
+$_export($_export.S, 'RegExp', {escape: function escape(it){ return $re(it); }});
+
+// https://gist.github.com/WebReflection/9353781
+
+
+$_export($_export.S, 'Object', {
+  getOwnPropertyDescriptors: function getOwnPropertyDescriptors(object){
+    var O       = $_toIobject(object)
+      , setDesc = $.setDesc
+      , getDesc = $.getDesc
+      , keys    = $_ownKeys(O)
+      , result  = {}
+      , i       = 0
+      , key, D;
+    while(keys.length > i){
+      D = getDesc(O, key = keys[i++]);
+      if(key in result)setDesc(result, key, $_propertyDesc(0, D));
+      else result[key] = D;
+    } return result;
+  }
+});
+
+var isEnum$1    = $.isEnum;
+var $_objectToArray = function(isEntries){
+  return function(it){
+    var O      = $_toIobject(it)
+      , keys   = $.getKeys(O)
+      , length = keys.length
+      , i      = 0
+      , result = []
+      , key;
+    while(length > i)if(isEnum$1.call(O, key = keys[i++])){
+      result.push(isEntries ? [key, O[key]] : O[key]);
+    } return result;
+  };
+};
+
+// http://goo.gl/XkBrjD
+var $values = $_objectToArray(false);
+
+$_export($_export.S, 'Object', {
+  values: function values(it){
+    return $values(it);
+  }
+});
+
+// http://goo.gl/XkBrjD
+var $entries = $_objectToArray(true);
+
+$_export($_export.S, 'Object', {
+  entries: function entries(it){
+    return $entries(it);
+  }
+});
+
+// https://github.com/DavidBruant/Map-Set.prototype.toJSON
+
+var $_collectionToJson = function(NAME){
+  return function toJSON(){
+    if($_classof(this) != NAME)throw TypeError(NAME + "#toJSON isn't generic");
+    var arr = [];
+    $_forOf(this, false, arr.push, arr);
+    return arr;
+  };
+};
+
+// https://github.com/DavidBruant/Map-Set.prototype.toJSON
+
+
+$_export($_export.P, 'Map', {toJSON: $_collectionToJson('Map')});
+
+// https://github.com/DavidBruant/Map-Set.prototype.toJSON
+
+
+$_export($_export.P, 'Set', {toJSON: $_collectionToJson('Set')});
+
+// JavaScript 1.6 / Strawman array statics shim
+var $Array  = $_core.Array || Array
+  , statics = {};
+var setStatics = function(keys, length){
+  $.each.call(keys.split(','), function(key){
+    if(length == undefined && key in $Array)statics[key] = $Array[key];
+    else if(key in [])statics[key] = $_ctx(Function.call, [][key], length);
+  });
+};
+setStatics('pop,reverse,shift,keys,values,entries', 1);
+setStatics('indexOf,every,some,forEach,map,filter,find,findIndex,includes', 3);
+setStatics('join,slice,concat,push,splice,unshift,sort,lastIndexOf,' +
+           'reduce,reduceRight,copyWithin,fill');
+$_export($_export.S, 'Array', statics);
+
+var $_path = $_global;
+
+var $_partial = function(/* ...pargs */){
+  var fn     = $_aFunction(this)
+    , length = arguments.length
+    , pargs  = Array(length)
+    , i      = 0
+    , _      = $_path._
+    , holder = false;
+  while(length > i)if((pargs[i] = arguments[i++]) === _)holder = true;
+  return function(/* ...args */){
+    var that  = this
+      , $$    = arguments
+      , $$len = $$.length
+      , j = 0, k = 0, args;
+    if(!holder && !$$len)return $_invoke(fn, pargs, that);
+    args = pargs.slice();
+    if(holder)for(;length > j; j++)if(args[j] === _)args[j] = $$[k++];
+    while($$len > k)args.push($$[k++]);
+    return $_invoke(fn, args, that);
+  };
+};
+
+// ie9- setTimeout & setInterval additional parameters fix
+var navigator  = $_global.navigator
+  , MSIE       = !!navigator && /MSIE .\./.test(navigator.userAgent); // <- dirty ie9- check
+var wrap$1 = function(set){
+  return MSIE ? function(fn, time /*, ...args */){
+    return set($_invoke(
+      $_partial,
+      [].slice.call(arguments, 2),
+      typeof fn == 'function' ? fn : Function(fn)
+    ), time);
+  } : set;
+};
+$_export($_export.G + $_export.B + $_export.F * MSIE, {
+  setTimeout:  wrap$1($_global.setTimeout),
+  setInterval: wrap$1($_global.setInterval)
+});
+
+$_export($_export.G + $_export.B, {
+  setImmediate:   $_task.set,
+  clearImmediate: $_task.clear
+});
+
+var ITERATOR$4    = $_wks('iterator')
+  , NL          = $_global.NodeList
+  , HTC         = $_global.HTMLCollection
+  , NLProto     = NL && NL.prototype
+  , HTCProto    = HTC && HTC.prototype
+  , ArrayValues = $_iterators.NodeList = $_iterators.HTMLCollection = $_iterators.Array;
+if(NLProto && !NLProto[ITERATOR$4])$_hide(NLProto, ITERATOR$4, ArrayValues);
+if(HTCProto && !HTCProto[ITERATOR$4])$_hide(HTCProto, ITERATOR$4, ArrayValues);
+
+var ITERATOR$5  = $_wks('iterator');
+var core_isIterable = $_core.isIterable = function(it){
+  var O = Object(it);
+  return O[ITERATOR$5] !== undefined
+    || '@@iterator' in O
+    || $_iterators.hasOwnProperty($_classof(O));
+};
+
+var getKeys     = $.getKeys;
+
+// 0 -> Dict.forEach
+// 1 -> Dict.map
+// 2 -> Dict.filter
+// 3 -> Dict.some
+// 4 -> Dict.every
+// 5 -> Dict.find
+// 6 -> Dict.findKey
+// 7 -> Dict.mapPairs
+var createDictMethod = function(TYPE){
+  var IS_MAP   = TYPE == 1
+    , IS_EVERY = TYPE == 4;
+  return function(object, callbackfn, that /* = undefined */){
+    var f      = $_ctx(callbackfn, that, 3)
+      , O      = $_toIobject(object)
+      , result = IS_MAP || TYPE == 7 || TYPE == 2
+          ? new (typeof this == 'function' ? this : Dict) : undefined
+      , key, val, res;
+    for(key in O)if($_has(O, key)){
+      val = O[key];
+      res = f(val, key, object);
+      if(TYPE){
+        if(IS_MAP)result[key] = res;            // map
+        else if(res)switch(TYPE){
+          case 2: result[key] = val; break;     // filter
+          case 3: return true;                  // some
+          case 5: return val;                   // find
+          case 6: return key;                   // findKey
+          case 7: result[res[0]] = res[1];      // mapPairs
+        } else if(IS_EVERY)return false;        // every
+      }
+    }
+    return TYPE == 3 || IS_EVERY ? IS_EVERY : result;
+  };
+};
+var findKey = createDictMethod(6);
+
+var createDictIter = function(kind){
+  return function(it){
+    return new DictIterator(it, kind);
+  };
+};
+var DictIterator = function(iterated, kind){
+  this._t = $_toIobject(iterated); // target
+  this._a = getKeys(iterated);   // keys
+  this._i = 0;                   // next index
+  this._k = kind;                // kind
+};
+$_iterCreate(DictIterator, 'Dict', function(){
+  var that = this
+    , O    = that._t
+    , keys = that._a
+    , kind = that._k
+    , key;
+  do {
+    if(that._i >= keys.length){
+      that._t = undefined;
+      return $_iterStep(1);
+    }
+  } while(!$_has(O, key = keys[that._i++]));
+  if(kind == 'keys'  )return $_iterStep(0, key);
+  if(kind == 'values')return $_iterStep(0, O[key]);
+  return $_iterStep(0, [key, O[key]]);
+});
+
+function Dict(iterable){
+  var dict = $.create(null);
+  if(iterable != undefined){
+    if(core_isIterable(iterable)){
+      $_forOf(iterable, true, function(key, value){
+        dict[key] = value;
+      });
+    } else $_objectAssign(dict, iterable);
+  }
+  return dict;
+}
+Dict.prototype = null;
+
+function reduce(object, mapfn, init){
+  $_aFunction(mapfn);
+  var O      = $_toIobject(object)
+    , keys   = getKeys(O)
+    , length = keys.length
+    , i      = 0
+    , memo, key;
+  if(arguments.length < 3){
+    if(!length)throw TypeError('Reduce of empty object with no initial value');
+    memo = O[keys[i++]];
+  } else memo = Object(init);
+  while(length > i)if($_has(O, key = keys[i++])){
+    memo = mapfn(memo, O[key], key, object);
+  }
+  return memo;
+}
+
+function includes(object, el){
+  return (el == el ? $_keyof(object, el) : findKey(object, function(it){
+    return it != it;
+  })) !== undefined;
+}
+
+function get$2(object, key){
+  if($_has(object, key))return object[key];
+}
+function set$1(object, key, value){
+  if($_descriptors && key in Object)$.setDesc(object, key, $_propertyDesc(0, value));
+  else object[key] = value;
+  return object;
+}
+
+function isDict(it){
+  return $_isObject(it) && $.getProto(it) === Dict.prototype;
+}
+
+$_export($_export.G + $_export.F, {Dict: Dict});
+
+$_export($_export.S, 'Dict', {
+  keys:     createDictIter('keys'),
+  values:   createDictIter('values'),
+  entries:  createDictIter('entries'),
+  forEach:  createDictMethod(0),
+  map:      createDictMethod(1),
+  filter:   createDictMethod(2),
+  some:     createDictMethod(3),
+  every:    createDictMethod(4),
+  find:     createDictMethod(5),
+  findKey:  findKey,
+  mapPairs: createDictMethod(7),
+  reduce:   reduce,
+  keyOf:    $_keyof,
+  includes: includes,
+  has:      $_has,
+  get:      get$2,
+  set:      set$1,
+  isDict:   isDict
+});
+
+var core_getIterator = $_core.getIterator = function(it){
+  var iterFn = core_getIteratorMethod(it);
+  if(typeof iterFn != 'function')throw TypeError(it + ' is not iterable!');
+  return $_anObject(iterFn.call(it));
+};
+
+// https://esdiscuss.org/topic/promise-returning-delay-function
+$_export($_export.G + $_export.F, {
+  delay: function delay(time){
+    return new ($_core.Promise || $_global.Promise)(function(resolve){
+      setTimeout($_partial.call(resolve, true), time);
+    });
+  }
+});
+
+// Placeholder
+$_core._ = $_path._ = $_path._ || {};
+
+$_export($_export.P + $_export.F, 'Function', {part: $_partial});
+
+$_export($_export.S + $_export.F, 'Object', {isObject: $_isObject});
+
+$_export($_export.S + $_export.F, 'Object', {classof: $_classof});
+
+var $_objectDefine = function define(target, mixin){
+  var keys   = $_ownKeys($_toIobject(mixin))
+    , length = keys.length
+    , i = 0, key;
+  while(length > i)$.setDesc(target, key = keys[i++], $.getDesc(mixin, key));
+  return target;
+};
+
+$_export($_export.S + $_export.F, 'Object', {define: $_objectDefine});
+
+var create  = $.create;
+
+$_export($_export.S + $_export.F, 'Object', {
+  make: function(proto, mixin){
+    return $_objectDefine(create(proto), mixin);
+  }
+});
+
+$_iterDefine(Number, 'Number', function(iterated){
+  this._l = +iterated;
+  this._i = 0;
+}, function(){
+  var i    = this._i++
+    , done = !(i < this._l);
+  return {done: done, value: done ? undefined : i};
+});
+
+var $re$1 = $_replacer(/[&<>"']/g, {
+  '&': '&amp;',
+  '<': '&lt;',
+  '>': '&gt;',
+  '"': '&quot;',
+  "'": '&apos;'
+});
+
+$_export($_export.P + $_export.F, 'String', {escapeHTML: function escapeHTML(){ return $re$1(this); }});
+
+var $re$2 = $_replacer(/&(?:amp|lt|gt|quot|apos);/g, {
+  '&amp;':  '&',
+  '&lt;':   '<',
+  '&gt;':   '>',
+  '&quot;': '"',
+  '&apos;': "'"
+});
+
+$_export($_export.P + $_export.F, 'String', {unescapeHTML:  function unescapeHTML(){ return $re$2(this); }});
+
+var log     = {}
+  , enabled = true;
+// Methods from https://github.com/DeveloperToolsWG/console-object/blob/master/api.md
+$.each.call((
+  'assert,clear,count,debug,dir,dirxml,error,exception,group,groupCollapsed,groupEnd,' +
+  'info,isIndependentlyComposed,log,markTimeline,profile,profileEnd,table,' +
+  'time,timeEnd,timeline,timelineEnd,timeStamp,trace,warn'
+).split(','), function(key){
+  log[key] = function(){
+    var $console = $_global.console;
+    if(enabled && $console && $console[key]){
+      return Function.apply.call($console[key], $console, arguments);
+    }
+  };
+});
+$_export($_export.G + $_export.F, {log: $_objectAssign(log.log, log, {
+  enable: function(){
+    enabled = true;
+  },
+  disable: function(){
+    enabled = false;
+  }
+})});
+
 /**
  * Utility class of byte operations on Uint8Array.
  */
@@ -1566,10 +5094,10 @@ function write (buffer, value, offset, isLE, mLen, nBytes) {
   buffer[offset + i - d] |= s * 128;
 }
 
-var toString = {}.toString;
+var toString$2 = {}.toString;
 
 var isArray = Array.isArray || function (arr) {
-  return toString.call(arr) == '[object Array]';
+  return toString$2.call(arr) == '[object Array]';
 };
 
 var INSPECT_MAX_BYTES = 50;
@@ -2223,7 +5751,7 @@ function bidirectionalIndexOf (buffer, val, byteOffset, encoding, dir) {
     if (val.length === 0) {
       return -1
     }
-    return arrayIndexOf(buffer, val, byteOffset, encoding, dir)
+    return arrayIndexOf$1(buffer, val, byteOffset, encoding, dir)
   } else if (typeof val === 'number') {
     val = val & 0xFF; // Search for a byte value [0-255]
     if (Buffer.TYPED_ARRAY_SUPPORT &&
@@ -2234,13 +5762,13 @@ function bidirectionalIndexOf (buffer, val, byteOffset, encoding, dir) {
         return Uint8Array.prototype.lastIndexOf.call(buffer, val, byteOffset)
       }
     }
-    return arrayIndexOf(buffer, [ val ], byteOffset, encoding, dir)
+    return arrayIndexOf$1(buffer, [ val ], byteOffset, encoding, dir)
   }
 
   throw new TypeError('val must be string, number or Buffer')
 }
 
-function arrayIndexOf (arr, val, byteOffset, encoding, dir) {
+function arrayIndexOf$1 (arr, val, byteOffset, encoding, dir) {
   var indexSize = 1;
   var arrLength = arr.length;
   var valLength = val.length;
@@ -3893,14 +7421,6 @@ var blakejs = {
 };
 var blakejs_1 = blakejs.blake2b;
 
-function commonjsRequire () {
-	throw new Error('Dynamic requires are not currently supported by rollup-plugin-commonjs');
-}
-
-function createCommonjsModule(fn, module) {
-	return module = { exports: {} }, fn(module, module.exports), module.exports;
-}
-
 // shim for using process in browser
 // based off https://github.com/defunctzombie/node-process/blob/master/browser.js
 
@@ -3971,7 +7491,7 @@ function runClearTimeout(marker) {
 
 
 }
-var queue = [];
+var queue$1 = [];
 var draining = false;
 var currentQueue;
 var queueIndex = -1;
@@ -3982,11 +7502,11 @@ function cleanUpNextTick() {
     }
     draining = false;
     if (currentQueue.length) {
-        queue = currentQueue.concat(queue);
+        queue$1 = currentQueue.concat(queue$1);
     } else {
         queueIndex = -1;
     }
-    if (queue.length) {
+    if (queue$1.length) {
         drainQueue();
     }
 }
@@ -3998,17 +7518,17 @@ function drainQueue() {
     var timeout = runTimeout(cleanUpNextTick);
     draining = true;
 
-    var len = queue.length;
+    var len = queue$1.length;
     while(len) {
-        currentQueue = queue;
-        queue = [];
+        currentQueue = queue$1;
+        queue$1 = [];
         while (++queueIndex < len) {
             if (currentQueue) {
                 currentQueue[queueIndex].run();
             }
         }
         queueIndex = -1;
-        len = queue.length;
+        len = queue$1.length;
     }
     currentQueue = null;
     draining = false;
@@ -4021,8 +7541,8 @@ function nextTick(fun) {
             args[i - 1] = arguments[i];
         }
     }
-    queue.push(new Item(fun, args));
-    if (queue.length === 1 && !draining) {
+    queue$1.push(new Item(fun, args));
+    if (queue$1.length === 1 && !draining) {
         runTimeout(drainQueue);
     }
 }
@@ -4097,7 +7617,7 @@ function uptime() {
   return dif / 1000;
 }
 
-var process = {
+var process$3 = {
   nextTick: nextTick,
   title: title,
   browser: browser,
@@ -4198,16 +7718,16 @@ function deprecate(fn, msg) {
     };
   }
 
-  if (process.noDeprecation === true) {
+  if (process$3.noDeprecation === true) {
     return fn;
   }
 
   var warned = false;
   function deprecated() {
     if (!warned) {
-      if (process.throwDeprecation) {
+      if (process$3.throwDeprecation) {
         throw new Error(msg);
-      } else if (process.traceDeprecation) {
+      } else if (process$3.traceDeprecation) {
         console.trace(msg);
       } else {
         console.error(msg);
@@ -4224,7 +7744,7 @@ var debugs = {};
 var debugEnviron;
 function debuglog(set) {
   if (isUndefined(debugEnviron))
-    debugEnviron = process.env.NODE_DEBUG || '';
+    debugEnviron = process$3.env.NODE_DEBUG || '';
   set = set.toUpperCase();
   if (!debugs[set]) {
     if (new RegExp('\\b' + set + '\\b', 'i').test(debugEnviron)) {
@@ -4472,7 +7992,7 @@ function formatError(value) {
 function formatArray(ctx, value, recurseTimes, visibleKeys, keys) {
   var output = [];
   for (var i = 0, l = value.length; i < l; ++i) {
-    if (hasOwnProperty(value, String(i))) {
+    if (hasOwnProperty$1(value, String(i))) {
       output.push(formatProperty(ctx, value, recurseTimes, visibleKeys,
           String(i), true));
     } else {
@@ -4503,7 +8023,7 @@ function formatProperty(ctx, value, recurseTimes, visibleKeys, key, array) {
       str = ctx.stylize('[Setter]', 'special');
     }
   }
-  if (!hasOwnProperty(visibleKeys, key)) {
+  if (!hasOwnProperty$1(visibleKeys, key)) {
     name = '[' + key + ']';
   }
   if (!str) {
@@ -4595,7 +8115,7 @@ function isString(arg) {
   return typeof arg === 'string';
 }
 
-function isSymbol(arg) {
+function isSymbol$1(arg) {
   return typeof arg === 'symbol';
 }
 
@@ -4661,7 +8181,7 @@ function timestamp() {
 
 
 // log is just a thin wrapper to console.log that prepends a timestamp
-function log() {
+function log$1() {
   console.log('%s - %s', timestamp(), format.apply(null, arguments));
 }
 
@@ -4676,14 +8196,14 @@ function _extend(origin, add) {
   }
   return origin;
 }
-function hasOwnProperty(obj, prop) {
+function hasOwnProperty$1(obj, prop) {
   return Object.prototype.hasOwnProperty.call(obj, prop);
 }
 
 var util$1 = {
   inherits: inherits$1,
   _extend: _extend,
-  log: log,
+  log: log$1,
   isBuffer: isBuffer$1,
   isPrimitive: isPrimitive,
   isFunction: isFunction,
@@ -4692,7 +8212,7 @@ var util$1 = {
   isObject: isObject,
   isRegExp: isRegExp,
   isUndefined: isUndefined,
-  isSymbol: isSymbol,
+  isSymbol: isSymbol$1,
   isString: isString,
   isNumber: isNumber,
   isNullOrUndefined: isNullOrUndefined,
@@ -4717,7 +8237,7 @@ var util$2 = Object.freeze({
 	isNullOrUndefined: isNullOrUndefined,
 	isNumber: isNumber,
 	isString: isString,
-	isSymbol: isSymbol,
+	isSymbol: isSymbol$1,
 	isUndefined: isUndefined,
 	isRegExp: isRegExp,
 	isObject: isObject,
@@ -4726,7 +8246,7 @@ var util$2 = Object.freeze({
 	isFunction: isFunction,
 	isPrimitive: isPrimitive,
 	isBuffer: isBuffer$1,
-	log: log,
+	log: log$1,
 	inherits: inherits$1,
 	_extend: _extend,
 	default: util$1
@@ -7717,14 +11237,14 @@ var KeyCodec = /** @class */ (function () {
     return KeyCodec;
 }());
 
-var empty = {};
+var empty$1 = {};
 
 
-var empty$1 = Object.freeze({
-	default: empty
+var empty$2 = Object.freeze({
+	default: empty$1
 });
 
-var require$$0$2 = ( empty$1 && empty ) || empty$1;
+var require$$0$2 = ( empty$2 && empty$1 ) || empty$2;
 
 var naclFast = createCommonjsModule(function (module) {
 (function(nacl) {
