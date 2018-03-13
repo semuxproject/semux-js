@@ -7,25 +7,24 @@ node_js:
 
 matrix:
   include:
-    # Code linting
-    - script:
+    # Code Linting
+    - env: NAME=Code Linting
+      script:
         - npm run format:check
 
     # Test Build
-    - script:
+    - env: NAME=Test Build
+      script:
         - npm run build
 
     # Node.js Tests
-    - script:
+    - env: NAME=Node.js Tests
+      script:
         - npm test
 
-    # Coverage Report
-    - script:
-        - npm run build:test
-        - $(npm bin)/nyc report --reporter=text-lcov | $(npm bin)/coveralls
-
-    # Browser tests
-    - addons:
+    # Browser Tests
+    - env: NAME=Browser Tests
+      addons:
         chrome: stable
         firefox: latest
       before_script:
@@ -33,6 +32,13 @@ matrix:
         - sh -e /etc/init.d/xvfb start
       script:
         - npm run test:browser
+
+    # Coverage Report
+    - env: NAME=Coverage Report
+      script:
+        - npm run build:test
+        - $(npm bin)/nyc --reporter=text-lcov $(npm bin)/mocha --opts mocha.opts test/index.js
+        - $(npm bin)/nyc report --reporter=text-lcov | $(npm bin)/coveralls
 
 cache:
   directories:
