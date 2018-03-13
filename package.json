@@ -5,20 +5,22 @@
   "main": "dist/semux.umd.js",
   "module": "dist/semux.es6.js",
   "typings": "dist/types/index.d.ts",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "engines": {
     "node": ">=9"
   },
   "scripts": {
-    "prebuild": "npm run format:check && $(npm bin)/rimraf dist coverage .nyc_output",
-    "build": "$(npm bin)/rollup -c rollup.config.js",
-    "build:docs": "$(npm bin)/rimraf docs && $(npm bin)/typedoc --name semux.js --out docs --target es5 --theme default --mode file --excludeNotExported --exclude node_modules --ignoreCompilerErrors lib",
-    "build:test": "npm run prebuild && $(npm bin)/rollup -c rollup.test.config.js",
-    "test": "npm run build:test && $(npm bin)/mocha --opts mocha.opts test/index.js",
-    "test:browser": "$(npm bin)/karma start --single-run",
-    "test:coverage": "npm run build:test && $(npm bin)/nyc $(npm bin)/mocha --opts mocha.opts test/index.js",
-    "format": "$(npm bin)/tslint --project . --fix",
-    "format:check": "$(npm bin)/tslint --project ."
+    "prebuild": "cross-env-shell \"npm run format:check && rimraf dist coverage .nyc_output\"",
+    "build": "cross-env-shell \"rollup -c rollup.config.js\"",
+    "build:docs": "cross-env-shell \"rimraf docs && typedoc --name semux.js --out docs --target es5 --theme default --mode file --excludeNotExported --exclude node_modules --ignoreCompilerErrors lib\"",
+    "build:test": "cross-env-shell \"rollup -c rollup.test.config.js\"",
+    "test": "cross-env-shell \"npm run build:test && mocha --opts mocha.opts test/index.js\"",
+    "test:browser": "cross-env-shell \"karma start --single-run\"",
+    "test:coverage": "cross-env-shell \"npm run build:test && nyc mocha --opts mocha.opts test/index.js\"",
+    "format": "cross-env-shell \"tslint --project . --fix\"",
+    "format:check": "cross-env-shell \"tslint --project .\""
   },
   "repository": {
     "type": "git",
@@ -36,6 +38,7 @@
   "dependencies": {
     "blakejs": "^1.1.0",
     "buffer": "^5.1.0",
+    "core-js": "^2.5.3",
     "detect-node": "^2.0.3",
     "lodash": "^4.17.5",
     "long": "^4.0.0",
@@ -44,6 +47,7 @@
   },
   "devDependencies": {
     "@types/chai": "^4.1.2",
+    "@types/core-js": "^0.9.46",
     "@types/karma": "^1.7.3",
     "@types/lodash": "^4.14.104",
     "@types/long": "^3.0.32",
@@ -51,6 +55,8 @@
     "@types/node": "^9.4.7",
     "chai": "^4.1.2",
     "coveralls": "^3.0.0",
+    "cross-env": "^5.1.4",
+    "electron": "^1.8.3",
     "eslint": "^4.18.2",
     "eslint-config-standard": "^11.0.0",
     "eslint-plugin-import": "^2.9.0",
@@ -63,12 +69,14 @@
     "karma-chrome-launcher": "^2.2.0",
     "karma-cli": "^1.0.1",
     "karma-coverage": "^1.1.1",
+    "karma-edge-launcher": "^0.4.2",
+    "karma-electron-launcher": "^0.2.0",
     "karma-firefox-launcher": "^1.1.0",
-    "karma-jasmine": "^1.1.1",
-    "karma-jsdom-launcher": "^6.1.3",
+    "karma-ie-launcher": "^1.0.0",
     "karma-mocha": "^1.3.0",
     "karma-mocha-reporter": "^2.2.5",
     "karma-rollup-preprocessor": "^5.1.1",
+    "karma-safari-launcher": "^1.0.0",
     "karma-sourcemap-loader": "^0.3.7",
     "karma-transform-path-preprocessor": "0.0.3",
     "karma-typescript": "^3.0.12",

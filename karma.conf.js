@@ -5,6 +5,10 @@ module.exports = function(config) {
     plugins: [
       'karma-chrome-launcher',
       'karma-firefox-launcher',
+      'karma-electron-launcher',
+      'karma-safari-launcher',
+      'karma-ie-launcher',
+      'karma-edge-launcher',
       "karma-rollup-preprocessor",
       "karma-transform-path-preprocessor",
       'karma-mocha',
@@ -12,7 +16,19 @@ module.exports = function(config) {
       "karma-sourcemap-loader"
     ],
 
-    browsers: ['Chrome', "Firefox"],
+    customLaunchers: {
+      IE11: {
+        base: 'IE',
+        'x-ua-compatible': 'IE=edge'
+      }
+    },
+
+    browsers: ["Chrome", "Firefox", "Electron"],
+
+    client: {
+      useIframe: false,
+      captureConsole: true
+    },
 
     frameworks: ['mocha'],
 
@@ -41,6 +57,8 @@ module.exports = function(config) {
 
     singleRun: true,
 
-    concurrency: 8
+    concurrency: 8,
+
+    browserNoActivityTimeout: 100000
   })
 }
