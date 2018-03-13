@@ -34,11 +34,11 @@ matrix:
       script:
         - npm run test:browser -- --browsers Chrome,Firefox,Electron
 
-    # Safari Tests
-    - env: NAME="Safari Tests"
-      os: osx
-      script:
-        - npm run test:browser -- --browsers Safari
+    # FIXME: Safari Tests
+    # - env: NAME="Safari Tests"
+    #  os: osx
+    #  script:
+    #    - npm run test:browser -- --browsers Safari
 
     # Coverage Report
     - env: NAME="Coverage Report"
