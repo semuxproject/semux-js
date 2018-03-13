@@ -1,7 +1,17 @@
 language: node_js
+sudo: true
+dist: trusty
 
 node_js:
   - "node"
+
+addons:
+  chrome: stable
+  firefox: latest
+
+before_script:
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
 
 script:
   - npm run format:check --verbose # style check
