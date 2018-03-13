@@ -5,6 +5,7 @@ module.exports = function(config) {
     plugins: [
       'karma-chrome-launcher',
       'karma-firefox-launcher',
+      'karma-electron-launcher',
       "karma-rollup-preprocessor",
       "karma-transform-path-preprocessor",
       'karma-mocha',
@@ -12,7 +13,12 @@ module.exports = function(config) {
       "karma-sourcemap-loader"
     ],
 
-    browsers: ['Chrome', "Firefox"],
+    browsers: ['Chrome', "Firefox", "Electron"],
+
+    client: {
+      useIframe: false,
+      captureConsole: true
+    },
 
     frameworks: ['mocha'],
 
@@ -41,6 +47,6 @@ module.exports = function(config) {
 
     singleRun: true,
 
-    concurrency: 8
-  })
+    concurrency: 8,
+})
 }

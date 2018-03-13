@@ -5,7 +5,9 @@
   "main": "dist/semux.umd.js",
   "module": "dist/semux.es6.js",
   "typings": "dist/types/index.d.ts",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "engines": {
     "node": ">=9"
   },
@@ -51,6 +53,7 @@
     "@types/node": "^9.4.7",
     "chai": "^4.1.2",
     "coveralls": "^3.0.0",
+    "electron": "^1.8.3",
     "eslint": "^4.18.2",
     "eslint-config-standard": "^11.0.0",
     "eslint-plugin-import": "^2.9.0",
@@ -63,6 +66,7 @@
     "karma-chrome-launcher": "^2.2.0",
     "karma-cli": "^1.0.1",
     "karma-coverage": "^1.1.1",
+    "karma-electron-launcher": "^0.2.0",
     "karma-firefox-launcher": "^1.1.0",
     "karma-jasmine": "^1.1.1",
     "karma-jsdom-launcher": "^6.1.3",
