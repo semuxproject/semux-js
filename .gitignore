@@ -60,6 +60,5 @@ yarn-error.log
 .env
 
 .idea
-dist
 .rpt2_cache
 test/index.js*
