@@ -7,9 +7,8 @@ module.exports = {
     sourcemap: true,
   },
   plugins: [
-    // require('rollup-plugin-istanbul')({
-    //   exclude: ['**/*.spec.ts']
-    // }),
     require('rollup-plugin-glob-import')(),
-  ].concat(require('./rollup.config').plugins),
+  ].concat(require('./rollup.config').plugins).concat([require('rollup-plugin-istanbul')({
+    exclude: ['**/*.spec.ts', 'node_modules']
+  })]),
 };

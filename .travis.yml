@@ -5,21 +5,34 @@ dist: trusty
 node_js:
   - "node"
 
-addons:
-  chrome: stable
-  firefox: latest
+matrix:
+  include:
+    # Code linting
+    - script:
+        - npm run format:check
 
-before_script:
-  - export DISPLAY=:99.0
-  - sh -e /etc/init.d/xvfb start
+    # Test Build
+    - script:
+        - npm run build
 
-script:
-  - npm run format:check --verbose # style check
-  - npm run build # build
-  - npm run test # node test
-  - npm run test:browser # browser test
-#  - npm run test:coverage # generate coverage report
-#  - $(npm bin)/nyc report --reporter=text-lcov | $(npm bin)/coveralls # report coverage to coveralls
+    # Node.js Tests
+    - script:
+        - npm test
+
+    # Coverage Report
+    - script:
+        - npm run build:test
+        - $(npm bin)/nyc report --reporter=text-lcov | $(npm bin)/coveralls
+
+    # Browser tests
+    - addons:
+        chrome: stable
+        firefox: latest
+      before_script:
+        - export DISPLAY=:99.0
+        - sh -e /etc/init.d/xvfb start
+      script:
+        - npm run test:browser
 
 cache:
   directories:
