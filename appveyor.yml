@@ -3,19 +3,9 @@ image: Visual Studio 2017
 # Test against the latest version of this Node.js version
 environment:
   nodejs_version: "9"
-  matrix:
-    - BROWSER: IE11
-    - BROWSER: Edge
-    - BROWSER: Chrome
-    - BROWSER: Firefox
-    - BROWSER: Electron
 
 init:
-  - ps: Switch ($env:BROWSER) {
-        'Chrome' {choco install googlechrome}
-        'Firefox' {choco install firefox}
-        Default {}
-        }
+  - choco install googlechrome firefox
 
 # Install scripts. (runs after repo cloning)
 install:
@@ -30,7 +20,7 @@ test_script:
   - node --version
   - npm --version
   # run tests
-  - npm run test:browser -- --browsers %BROWSER%
+  - npm run test:browser -- --browsers IE11,Chrome,Firefox,Electron
 
 # Don't actually build.
 build: off
