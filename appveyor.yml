@@ -1,0 +1,34 @@
+# Test against the latest version of this Node.js version
+environment:
+  nodejs_version: "9"
+  matrix:
+    - BROWSER: IE
+    - BROWSER: Chrome
+    - BROWSER: Firefox
+    - BROWSER: Electron
+
+# Install scripts. (runs after repo cloning)
+install:
+  # install browsers
+  - choco install firefox
+  - choco install googlechrome
+  # Get the latest stable version of Node.js or io.js
+  - ps: Install-Product node $env:nodejs_version
+  # install modules
+  - npm install
+
+# Post-install test scripts.
+test_script:
+  # Output useful info for debugging.
+  - node --version
+  - npm --version
+  # run tests
+  - npm run test:browser -- --browsers %BROWSER%
+
+# Don't actually build.
+build: off
+
+# Package cache
+cache:
+  - node_modules                        # local npm modules
+  - '%APPDATA%\npm-cache'               # npm cache

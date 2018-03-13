@@ -7,6 +7,7 @@ module.exports = function(config) {
       'karma-firefox-launcher',
       'karma-electron-launcher',
       'karma-safari-launcher',
+      'karma-ie-launcher',
       "karma-rollup-preprocessor",
       "karma-transform-path-preprocessor",
       'karma-mocha',

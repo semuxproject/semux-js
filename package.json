@@ -12,15 +12,15 @@
     "node": ">=9"
   },
   "scripts": {
-    "prebuild": "npm run format:check && $(npm bin)/rimraf dist coverage .nyc_output",
-    "build": "$(npm bin)/rollup -c rollup.config.js",
-    "build:docs": "$(npm bin)/rimraf docs && $(npm bin)/typedoc --name semux.js --out docs --target es5 --theme default --mode file --excludeNotExported --exclude node_modules --ignoreCompilerErrors lib",
-    "build:test": "npm run prebuild && $(npm bin)/rollup -c rollup.test.config.js",
-    "test": "npm run build:test && $(npm bin)/mocha --opts mocha.opts test/index.js",
-    "test:browser": "$(npm bin)/karma start --single-run",
-    "test:coverage": "npm run build:test && $(npm bin)/nyc $(npm bin)/mocha --opts mocha.opts test/index.js",
-    "format": "$(npm bin)/tslint --project . --fix",
-    "format:check": "$(npm bin)/tslint --project ."
+    "prebuild": "cross-env-shell \"npm run format:check && rimraf dist coverage .nyc_output\"",
+    "build": "cross-env-shell \"rollup -c rollup.config.js\"",
+    "build:docs": "cross-env-shell \"rimraf docs && typedoc --name semux.js --out docs --target es5 --theme default --mode file --excludeNotExported --exclude node_modules --ignoreCompilerErrors lib\"",
+    "build:test": "cross-env-shell \"npm run prebuild && rollup -c rollup.test.config.js\"",
+    "test": "cross-env-shell \"npm run build:test && mocha --opts mocha.opts test/index.js\"",
+    "test:browser": "cross-env-shell \"karma start --single-run\"",
+    "test:coverage": "cross-env-shell \"npm run build:test && nyc mocha --opts mocha.opts test/index.js\"",
+    "format": "cross-env-shell \"tslint --project . --fix\"",
+    "format:check": "cross-env-shell \"tslint --project .\""
   },
   "repository": {
     "type": "git",
@@ -53,6 +53,7 @@
     "@types/node": "^9.4.7",
     "chai": "^4.1.2",
     "coveralls": "^3.0.0",
+    "cross-env": "^5.1.4",
     "electron": "^1.8.3",
     "eslint": "^4.18.2",
     "eslint-config-standard": "^11.0.0",
@@ -68,6 +69,7 @@
     "karma-coverage": "^1.1.1",
     "karma-electron-launcher": "^0.2.0",
     "karma-firefox-launcher": "^1.1.0",
+    "karma-ie-launcher": "^1.0.0",
     "karma-mocha": "^1.3.0",
     "karma-mocha-reporter": "^2.2.5",
     "karma-rollup-preprocessor": "^5.1.1",
