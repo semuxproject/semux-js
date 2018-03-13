@@ -8,6 +8,7 @@ module.exports = function(config) {
       'karma-electron-launcher',
       'karma-safari-launcher',
       'karma-ie-launcher',
+      'karma-edge-launcher',
       "karma-rollup-preprocessor",
       "karma-transform-path-preprocessor",
       'karma-mocha',
@@ -15,7 +16,7 @@ module.exports = function(config) {
       "karma-sourcemap-loader"
     ],
 
-    browsers: ["Chrome"],
+    browsers: ["Chrome", "Firefox", "Electron"],
 
     client: {
       useIframe: false,

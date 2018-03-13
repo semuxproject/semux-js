@@ -1,17 +1,21 @@
+image: Visual Studio 2017
+
 # Test against the latest version of this Node.js version
 environment:
   nodejs_version: "9"
   matrix:
     - BROWSER: IE
+    - BROWSER: Edge
     - BROWSER: Chrome
+      init:
+        - choco install googlechrome
     - BROWSER: Firefox
+      init:
+        - choco install firefox
     - BROWSER: Electron
 
 # Install scripts. (runs after repo cloning)
 install:
-  # install browsers
-  - choco install firefox
-  - choco install googlechrome
   # Get the latest stable version of Node.js or io.js
   - ps: Install-Product node $env:nodejs_version
   # install modules
