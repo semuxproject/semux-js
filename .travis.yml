@@ -1,4 +1,5 @@
 language: node_js
+os: linux
 sudo: true
 dist: trusty
 
@@ -22,8 +23,8 @@ matrix:
       script:
         - npm test
 
-    # Browser Tests
-    - env: NAME=Browser Tests
+    # Firefox/Chrome/Electron Tests
+    - env: NAME=Firefox/Chrome/Electron Tests
       addons:
         chrome: stable
         firefox: latest
@@ -32,6 +33,12 @@ matrix:
         - sh -e /etc/init.d/xvfb start
       script:
         - npm run test:browser
+
+    # Safari Tests
+    - env: NAME=Safari Tests
+      os: osx
+      script:
+        - npm run test:browser --browser=Safari
 
     # Coverage Report
     - env: NAME=Coverage Report
