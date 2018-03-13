@@ -1,8 +1,8 @@
 import { Buffer } from "buffer";
 import chai from "chai";
-import nacl from "tweetnacl";
 import Hash from "./Hash";
 import Key from "./Key";
+import nacl from "./nacl";
 import Signature from "./Signature";
 
 describe("Key", () => {

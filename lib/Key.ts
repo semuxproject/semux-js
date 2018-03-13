@@ -1,7 +1,7 @@
 import { Buffer } from "buffer";
-import nacl from "tweetnacl";
 import Hash from "./Hash";
 import KeyCodec from "./KeyCodec";
+import nacl from "./nacl";
 import Signature from "./Signature";
 
 /**
