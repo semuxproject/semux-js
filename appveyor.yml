@@ -4,14 +4,18 @@ image: Visual Studio 2017
 environment:
   nodejs_version: "9"
   matrix:
-    - BROWSER: IE
+    - BROWSER: IE11
     - BROWSER: Edge
     - BROWSER: Chrome
     - BROWSER: Firefox
     - BROWSER: Electron
 
 init:
-  - choco install googlechrome firefox
+  - ps: Switch ($env:BROWSER) {
+        'Chrome' {choco install googlechrome}
+        'Firefox' {choco install firefox}
+        Default {}
+        }
 
 # Install scripts. (runs after repo cloning)
 install:

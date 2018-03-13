@@ -16,6 +16,13 @@ module.exports = function(config) {
       "karma-sourcemap-loader"
     ],
 
+    customLaunchers: {
+      IE11: {
+        base: 'IE',
+        'x-ua-compatible': 'IE=edge'
+      }
+    },
+
     browsers: ["Chrome", "Firefox", "Electron"],
 
     client: {
