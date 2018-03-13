@@ -7,12 +7,11 @@ environment:
     - BROWSER: IE
     - BROWSER: Edge
     - BROWSER: Chrome
-      init:
-        - choco install googlechrome
     - BROWSER: Firefox
-      init:
-        - choco install firefox
     - BROWSER: Electron
+
+init:
+  - choco install googlechrome firefox
 
 # Install scripts. (runs after repo cloning)
 install:
@@ -36,3 +35,6 @@ build: off
 cache:
   - node_modules                        # local npm modules
   - '%APPDATA%\npm-cache'               # npm cache
+
+matrix:
+  fast_finish: true
