@@ -1,15 +1,16 @@
-import Assert from "assert";
-import SimpleEncoder from "./SimpleEncoder";
+import { Buffer } from "buffer";
+import chai from "chai";
 import Long from "long";
+import SimpleEncoder from "./SimpleEncoder";
 
 describe("SimpleEncoder", () => {
 
   it("encodes a boolean", () => {
     const encoder = new SimpleEncoder();
     encoder.writeBoolean(true);
-    Assert.deepEqual(encoder.toBytes(), Uint8Array.of(1));
+    chai.assert.deepEqual(encoder.toBytes(), Uint8Array.of(1));
     encoder.writeBoolean(false);
-    Assert.deepEqual(encoder.toBytes(), Uint8Array.of(1, 0));
+    chai.assert.deepEqual(encoder.toBytes(), Uint8Array.of(1, 0));
   });
 
   it("encodes a byte", () => {
@@ -17,7 +18,7 @@ describe("SimpleEncoder", () => {
     for (let i = -128; i <= 127; i++) {
       encoder.writeByte(i);
     }
-    Assert.deepEqual(encoder.toBytes(), Buffer.from("808182838485868788898a8b8c8d8e8f909192939495969798999a9b9c9d9e9fa0a1a2a3a4a5a6a7a8a9aaabacadaeafb0b1b2b3b4b5b6b7b8b9babbbcbdbebfc0c1c2c3c4c5c6c7c8c9cacbcccdcecfd0d1d2d3d4d5d6d7d8d9dadbdcdddedfe0e1e2e3e4e5e6e7e8e9eaebecedeeeff0f1f2f3f4f5f6f7f8f9fafbfcfdfeff000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f404142434445464748494a4b4c4d4e4f505152535455565758595a5b5c5d5e5f606162636465666768696a6b6c6d6e6f707172737475767778797a7b7c7d7e7f", "hex"));
+    chai.assert.deepEqual(encoder.toBytes(), Buffer.from("808182838485868788898a8b8c8d8e8f909192939495969798999a9b9c9d9e9fa0a1a2a3a4a5a6a7a8a9aaabacadaeafb0b1b2b3b4b5b6b7b8b9babbbcbdbebfc0c1c2c3c4c5c6c7c8c9cacbcccdcecfd0d1d2d3d4d5d6d7d8d9dadbdcdddedfe0e1e2e3e4e5e6e7e8e9eaebecedeeeff0f1f2f3f4f5f6f7f8f9fafbfcfdfeff000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f404142434445464748494a4b4c4d4e4f505152535455565758595a5b5c5d5e5f606162636465666768696a6b6c6d6e6f707172737475767778797a7b7c7d7e7f", "hex"));
   });
 
   it("encodes a 16-bit integer", () => {
@@ -32,8 +33,8 @@ describe("SimpleEncoder", () => {
     for (const bytes in tests) {
       const encoder = new SimpleEncoder();
       encoder.writeShort(tests[bytes]);
-      Assert.deepEqual(encoder.toBytes(), Buffer.from(bytes, "hex"));
-      Assert.equal(encoder.toBytes().length, 2);
+      chai.assert.deepEqual(encoder.toBytes(), Buffer.from(bytes, "hex"));
+      chai.assert.strictEqual(encoder.toBytes().length, 2);
     }
   });
 
@@ -49,8 +50,8 @@ describe("SimpleEncoder", () => {
     for (const bytes in tests) {
       const encoder = new SimpleEncoder();
       encoder.writeInt(tests[bytes]);
-      Assert.deepEqual(encoder.toBytes(), Buffer.from(bytes, "hex"));
-      Assert.equal(encoder.toBytes().length, 4);
+      chai.assert.deepEqual(encoder.toBytes(), Buffer.from(bytes, "hex"));
+      chai.assert.strictEqual(encoder.toBytes().length, 4);
     }
   });
 
@@ -66,8 +67,8 @@ describe("SimpleEncoder", () => {
     for (const hex in tests) {
       const encoder = new SimpleEncoder();
       encoder.writeLong(tests[hex]);
-      Assert.deepEqual(encoder.toBytes(), Buffer.from(hex, "hex"));
-      Assert.equal(encoder.toBytes().length, 8);
+      chai.assert.deepEqual(encoder.toBytes(), Buffer.from(hex, "hex"));
+      chai.assert.strictEqual(encoder.toBytes().length, 8);
     }
   });
 
@@ -80,7 +81,7 @@ describe("SimpleEncoder", () => {
     for (const hex in tests) {
       const encoder = new SimpleEncoder();
       encoder.writeBytes(new Uint8Array(tests[hex]));
-      Assert.deepEqual(encoder.toBytes(), Buffer.from(hex, "hex"));
+      chai.assert.deepEqual(encoder.toBytes(), Buffer.from(hex, "hex"));
     }
   });
 
@@ -90,7 +91,7 @@ describe("SimpleEncoder", () => {
 
     const encoder = new SimpleEncoder();
     encoder.writeString(TEST_STRING);
-    Assert.deepEqual(encoder.toBytes(), Buffer.from(TEST_STRING_HEX, "hex"));
+    chai.assert.deepEqual(encoder.toBytes(), Buffer.from(TEST_STRING_HEX, "hex"));
   });
 
   it("encoded a multi-typed data structure", () => {
@@ -112,7 +113,7 @@ describe("SimpleEncoder", () => {
     e.writeBytes(new Uint8Array(0));
     e.writeString("");
 
-    Assert.deepEqual(e.toBytes(), BYTES_TX);
+    chai.assert.deepEqual(e.toBytes(), BYTES_TX);
   });
 
   it("encodes sizes of byte arrays", () => {
@@ -124,7 +125,7 @@ describe("SimpleEncoder", () => {
       encoder.writeSize(SIZES[i]);
     }
 
-    Assert.deepEqual(encoder.toBytes(), SIZES_ENCODED);
+    chai.assert.deepEqual(encoder.toBytes(), SIZES_ENCODED);
   });
 
 });

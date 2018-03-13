@@ -167,5 +167,3 @@ export default class KeyCodec {
     return rv;
   }
 }
-
-module.exports = KeyCodec;

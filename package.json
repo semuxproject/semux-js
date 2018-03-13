@@ -2,17 +2,24 @@
   "name": "semux",
   "version": "1.0.1",
   "description": "Semux Javascript Library",
-  "main": "dist/index.js",
+  "main": "dist/semux.umd.js",
+  "module": "dist/semux.es6.js",
+  "typings": "dist/types/index.d.ts",
   "engines": {
     "node": ">=9"
   },
   "scripts": {
-    "build": "$(npm bin)/tsr ./index.ts -c tsconfig.json",
-    "test": "$(npm bin)/mocha --opts mocha.opts",
-    "coverage": "$(npm bin)/nyc $(npm bin)/mocha --opts mocha.opts",
+    "prebuild": "npm run format:check && $(npm bin)/rimraf dist",
+    "build": "$(npm bin)/rollup -c rollup.config.js",
+    "build:docs": "$(npm bin)/typedoc --name semux.js --out docs --target es5 --theme default --mode file --excludeNotExported --exclude node_modules --ignoreCompilerErrors lib",
+    "build:tsc": "$(npm bin)/tsc -p .",
+    "build:tsr": "$(npm bin)/tsr ./index.ts -c tsconfig.json --force",
+    "build:test": "$(npm bin)/rollup -c rollup.test.config.js",
+    "test": "npm run build:test && $(npm bin)/mocha --opts mocha.opts test/index.js",
+    "test:browser": "$(npm bin)/karma start --single-run",
+    "test:coverage": "npm run build:test && $(npm bin)/nyc $(npm bin)/mocha --opts mocha.opts test/index.js",
     "format": "$(npm bin)/tslint --project . --fix",
-    "format:check": "$(npm bin)/tslint --project .",
-    "doc": ""
+    "format:check": "$(npm bin)/tslint --project ."
   },
   "repository": {
     "type": "git",
@@ -30,18 +37,22 @@
   "dependencies": {
     "blakejs": "^1.1.0",
     "buffer": "^5.1.0",
+    "crypto-browserify": "^3.12.0",
     "lodash": "^4.17.5",
     "long": "^4.0.0",
+    "random-bytes": "^1.0.0",
+    "randombytes": "^2.0.6",
     "ripemd160": "^2.0.1",
-    "scl": "^1.0.2",
     "tweetnacl": "^1.0.0"
   },
   "devDependencies": {
+    "@types/chai": "^4.1.2",
+    "@types/karma": "^1.7.3",
     "@types/lodash": "^4.14.104",
     "@types/long": "^3.0.32",
     "@types/mocha": "^2.2.48",
     "@types/node": "^9.4.7",
-    "assert": "^1.4.1",
+    "chai": "^4.1.2",
     "coveralls": "^3.0.0",
     "eslint": "^4.18.2",
     "eslint-config-standard": "^11.0.0",
@@ -51,11 +62,37 @@
     "eslint-plugin-react": "^7.7.0",
     "eslint-plugin-standard": "^3.0.1",
     "eslint-plugin-typescript": "^0.9.0",
+    "karma": "^2.0.0",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-cli": "^1.0.1",
+    "karma-coverage": "^1.1.1",
+    "karma-firefox-launcher": "^1.1.0",
+    "karma-jasmine": "^1.1.1",
+    "karma-jsdom-launcher": "^6.1.3",
+    "karma-mocha": "^1.3.0",
+    "karma-mocha-reporter": "^2.2.5",
+    "karma-rollup-preprocessor": "^5.1.1",
+    "karma-sourcemap-loader": "^0.3.7",
+    "karma-transform-path-preprocessor": "0.0.3",
+    "karma-typescript": "^3.0.12",
     "mocha": "^5.0.1",
     "mocha-lcov-reporter": "^1.3.0",
     "mocha-typescript": "^1.1.12",
     "nyc": "^11.5.0",
+    "rimraf": "^2.6.2",
+    "rollup": "^0.56.5",
+    "rollup-plugin-browserify-transform": "^1.0.1",
+    "rollup-plugin-commonjs": "^9.1.0",
+    "rollup-plugin-glob-import": "^0.1.4",
+    "rollup-plugin-istanbul": "^2.0.1",
+    "rollup-plugin-json": "^2.3.0",
+    "rollup-plugin-node-builtins": "^2.1.2",
+    "rollup-plugin-node-globals": "^1.1.0",
+    "rollup-plugin-node-resolve": "^3.2.0",
+    "rollup-plugin-sourcemaps": "^0.4.2",
+    "rollup-plugin-typescript2": "^0.12.0",
     "source-map-support": "^0.5.3",
+    "static-module": "^2.2.2",
     "ts-node": "^5.0.1",
     "ts-runtime": "^0.1.35",
     "tsconfig-paths": "^3.1.1",
@@ -70,15 +107,16 @@
     "extension": [
       ".ts"
     ],
-    "exclude": [
-      "**/*.d.ts",
-      "dist",
-      "node_modules"
-    ],
     "reporter": [
       "lcov",
       "html",
       "text"
+    ],
+    "include": [
+      "lib/**/*.ts"
+    ],
+    "exclude": [
+      "lib/**/*.spec.ts"
     ],
     "all": true
   }

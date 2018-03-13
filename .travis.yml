@@ -5,8 +5,11 @@ node_js:
 
 script:
   - npm run format:check --verbose # style check
-  - npm run coverage # run test cases and and generate coverage report
-  - $(npm bin)/nyc report --reporter=text-lcov | $(npm bin)/coveralls # report coverage to coveralls
+  - npm run build # build
+  - npm run test # node test
+  - npm run test:browser # browser test
+#  - npm run test:coverage # generate coverage report
+#  - $(npm bin)/nyc report --reporter=text-lcov | $(npm bin)/coveralls # report coverage to coveralls
 
 cache:
   directories:

@@ -61,3 +61,5 @@ yarn-error.log
 
 .idea
 dist
+.rpt2_cache
+test/index.js*

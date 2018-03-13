@@ -1,5 +1,5 @@
-import Assert from "assert";
 import { Buffer } from "buffer";
+import chai from "chai";
 import nacl from "tweetnacl";
 import Hash from "./Hash";
 import Key from "./Key";
@@ -13,28 +13,28 @@ describe("Key", () => {
 
   it("generates as key-pair", () => {
     const key = Key.generateKeyPair();
-    Assert.equal(key.getPublicKey().length, Key.PUBLIC_KEY_LEN);
-    Assert.equal(key.getEncodedPublicKey().length, Key.ENCODED_PUBLIC_KEY_LEN);
-    Assert.equal(key.getPrivateKey().length, Key.PRIVATE_KEY_LEN);
-    Assert.equal(key.getEncodedPrivateKey().length, Key.ENCODED_PRIVATE_KEY_LEN);
-    Assert.equal(key.toAddressBytes().length, Key.ADDRESS_LEN);
+    chai.assert.strictEqual(key.getPublicKey().length, Key.PUBLIC_KEY_LEN);
+    chai.assert.strictEqual(key.getEncodedPublicKey().length, Key.ENCODED_PUBLIC_KEY_LEN);
+    chai.assert.strictEqual(key.getPrivateKey().length, Key.PRIVATE_KEY_LEN);
+    chai.assert.strictEqual(key.getEncodedPrivateKey().length, Key.ENCODED_PRIVATE_KEY_LEN);
+    chai.assert.strictEqual(key.toAddressBytes().length, Key.ADDRESS_LEN);
   });
 
   it("decodes & encodes a key-pair in PKCS8/X.509", () => {
     const key = Key.importEncodedPrivateKey(Buffer.from(TEST_ENCODED_PRIVATEKEY, "hex"));
     const privKey = key.getEncodedPrivateKey();
     const pubKey = key.getEncodedPublicKey();
-    Assert.equal(Buffer.from(privKey.buffer, 0, privKey.length).toString("hex"), TEST_ENCODED_PRIVATEKEY);
-    Assert.equal(Buffer.from(pubKey.buffer, 0, pubKey.length).toString("hex"), TEST_ENCODED_PUBLICKEY);
-    Assert.equal(key.toAddressHexString(), TEST_ADDRESS);
+    chai.assert.strictEqual(Buffer.from(privKey.buffer, 0, privKey.length).toString("hex"), TEST_ENCODED_PRIVATEKEY);
+    chai.assert.strictEqual(Buffer.from(pubKey.buffer, 0, pubKey.length).toString("hex"), TEST_ENCODED_PUBLICKEY);
+    chai.assert.strictEqual(key.toAddressHexString(), TEST_ADDRESS);
 
     const key2 = Key.importEncodedPrivateKey(key.getEncodedPrivateKey());
-    Assert.deepEqual(key2.getEncodedPrivateKey(), key.getEncodedPrivateKey());
-    Assert.deepEqual(key2.getSeed(), key.getSeed());
-    Assert.deepEqual(key2.getPrivateKey(), key.getPrivateKey());
-    Assert.deepEqual(key2.getPublicKey(), key.getPublicKey());
-    Assert.deepEqual(key2.toAddressBytes(), key.toAddressBytes());
-    Assert.equal(key2.toAddressHexString(), key.toAddressHexString());
+    chai.assert.deepEqual(key2.getEncodedPrivateKey(), key.getEncodedPrivateKey());
+    chai.assert.deepEqual(key2.getSeed(), key.getSeed());
+    chai.assert.deepEqual(key2.getPrivateKey(), key.getPrivateKey());
+    chai.assert.deepEqual(key2.getPublicKey(), key.getPublicKey());
+    chai.assert.deepEqual(key2.toAddressBytes(), key.toAddressBytes());
+    chai.assert.strictEqual(key2.toAddressHexString(), key.toAddressHexString());
   });
 
   it("signs & verifies a message", () => {
@@ -42,10 +42,10 @@ describe("Key", () => {
     const message = Hash.h256(Buffer.from("test"));
     const sig = key.sign(message);
 
-    Assert.equal(sig.toBytes().length, Signature.LENGTH);
-    Assert.ok(Key.verify(message, sig));
-    Assert.deepEqual(sig.getPublicKey(), key.getPublicKey());
-    Assert.deepEqual(sig.getAddress(), key.toAddressBytes());
+    chai.assert.strictEqual(sig.toBytes().length, Signature.LENGTH);
+    chai.assert.isOk(Key.verify(message, sig));
+    chai.assert.deepEqual(sig.getPublicKey(), key.getPublicKey());
+    chai.assert.deepEqual(sig.getAddress(), key.toAddressBytes());
   });
 
   it("signs & verifies large data", () => {
@@ -53,24 +53,24 @@ describe("Key", () => {
     const key = Key.generateKeyPair();
     const sig = key.sign(data);
 
-    Assert.ok(Key.verify(data, sig));
-    Assert.deepEqual(sig.getPublicKey(), key.getPublicKey());
+    chai.assert.isOk(Key.verify(data, sig));
+    chai.assert.deepEqual(sig.getPublicKey(), key.getPublicKey());
   });
 
   it("does not verify invalid signatures", () => {
     const data = Buffer.from("test");
     const hash = Hash.h256(data);
 
-    Assert.ok(!Key.verify(hash, Signature.fromBytes(nacl.randomBytes(Signature.LENGTH))));
+    chai.assert.isOk(!Key.verify(hash, Signature.fromBytes(nacl.randomBytes(Signature.LENGTH))));
   });
 
   it("verifies encoded signatures", () => {
     const key = Key.importEncodedPrivateKey(Buffer.from(TEST_ENCODED_PRIVATEKEY, "hex"));
     const sig = Signature.fromBytes(Buffer.from(TEST_SIG, "hex"));
 
-    Assert.deepEqual(sig.getPublicKey(), key.getPublicKey());
-    Assert.deepEqual(sig.getSignedMsg(), key.sign(Buffer.from("test")).getSignedMsg());
-    Assert.deepEqual(sig.getAddress(), key.toAddressBytes());
-    Assert.deepEqual(sig.toBytes(), Buffer.from(TEST_SIG, "hex"));
+    chai.assert.deepEqual(sig.getPublicKey(), key.getPublicKey());
+    chai.assert.deepEqual(sig.getSignedMsg(), key.sign(Buffer.from("test")).getSignedMsg());
+    chai.assert.deepEqual(sig.getAddress(), key.toAddressBytes());
+    chai.assert.deepEqual(sig.toBytes(), Buffer.from(TEST_SIG, "hex"));
   });
 });

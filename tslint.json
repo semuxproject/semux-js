@@ -6,12 +6,11 @@
   "lintOptions": {
     "typeCheck": true
   },
-  "linterOptions": {
-    "exclude": [
-      "**/*.spec.ts"
-    ]
-  },
   "rules": {
-    "no-bitwise": false
+    "no-bitwise": false,
+    "no-var-requires": false,
+    "prefer-for-of": false,
+    "forin": false,
+    "object-literal-sort-keys": false
   }
 }

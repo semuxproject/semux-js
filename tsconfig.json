@@ -1,37 +1,29 @@
 {
   "files": [
-    "index.ts"
+    "index.ts",
+    "test/index.ts"
   ],
   "include": [
     "lib/**/*"
   ],
   "exclude": [
     "dist",
-    "node_modules",
-    "lib/**/*.spec.ts"
+    "node_modules"
   ],
   "compilerOptions": {
     "target": "es5",
-    "module": "commonjs",
+    "module": "es2015",
     "moduleResolution": "node",
-    "sourceMap": true,
     "declaration": true,
+    "declarationDir": "./dist/types",
     "outDir": "./dist",
-    "strict": true,
-    "alwaysStrict": true,
-    "strictNullChecks": true,
-    "strictFunctionTypes": true,
-    "strictPropertyInitialization": true,
-    "noImplicitAny": true,
-    "noImplicitThis": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": false,
     "esModuleInterop": true,
-    "typeRoots": ["node_modules/@types", "types"],
-    "lib": ["es5", "es6"],
+    "strict": false,
+    "allowSyntheticDefaultImports": true,
+    "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true
+    "sourceMap": true,
+    "typeRoots": ["node_modules/@types", "types"],
+    "lib": ["es2015", "es2016", "dom"]
   }
 }

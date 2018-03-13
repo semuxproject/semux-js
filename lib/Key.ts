@@ -1,3 +1,4 @@
+import { Buffer } from "buffer";
 import nacl from "tweetnacl";
 import Hash from "./Hash";
 import KeyCodec from "./KeyCodec";

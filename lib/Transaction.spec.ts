@@ -1,10 +1,10 @@
-import Assert from "assert";
 import { Buffer } from "buffer";
-import Key from "./Key";
+import chai from "chai";
 import Long from "long";
+import Key from "./Key";
 import Network from "./Network";
-import TransactionType from "./TransactionType";
 import Transaction from "./Transaction";
+import TransactionType from "./TransactionType";
 
 describe("Transaction", () => {
   function TEST_TX() {
@@ -35,37 +35,37 @@ describe("Transaction", () => {
   TEST_V.signature = Buffer.from("3a2948cbf99a5d833176139c9a66279389e8e8c71eec242826922e07e3c92882929afb82ce3048ec21310d5fe295e674587cd0197da6250542fc839a546d1b0db72dc8ebc9f53d21837dc96483da08765ea11f25c1bd4c3cb49318c944d67b9b", "hex");
 
   function assertTestTx(tx : Transaction) {
-    Assert.strictEqual(tx.getNetworkId(), TEST_V.network.getId());
-    Assert.strictEqual(tx.getType().getCode(), TEST_V.type.getCode());
-    Assert.deepEqual(tx.getTo(), TEST_V.to);
-    Assert.ok(tx.getValue().eq(TEST_V.value));
-    Assert.ok(tx.getFee().eq(TEST_V.fee));
-    Assert.ok(tx.getNonce().eq(TEST_V.nonce));
-    Assert.ok(tx.getTimestamp().eq(TEST_V.timestamp));
-    Assert.deepEqual(tx.getData(), TEST_V.data);
-    Assert.deepEqual(tx.getHash(), TEST_V.hash);
+    chai.assert.strictEqual(tx.getNetworkId(), TEST_V.network.getId());
+    chai.assert.strictEqual(tx.getType().getCode(), TEST_V.type.getCode());
+    chai.assert.deepEqual(tx.getTo(), TEST_V.to);
+    chai.assert.isOk(tx.getValue().eq(TEST_V.value));
+    chai.assert.isOk(tx.getFee().eq(TEST_V.fee));
+    chai.assert.isOk(tx.getNonce().eq(TEST_V.nonce));
+    chai.assert.isOk(tx.getTimestamp().eq(TEST_V.timestamp));
+    chai.assert.deepEqual(tx.getData(), TEST_V.data);
+    chai.assert.deepEqual(tx.getHash(), TEST_V.hash);
   }
 
   it("constructs a semux transaction and its hash", () => {
     const tx = TEST_TX();
     assertTestTx(tx);
-    Assert.strictEqual(tx.getSignature(), undefined);
+    chai.assert.strictEqual(tx.getSignature(), undefined);
   });
 
   it("validates data and signature", () => {
     const tx = TEST_TX().sign(TEST_V.key);
-    Assert.strictEqual(tx.validate(TEST_V.network), null);
+    chai.assert.strictEqual(tx.validate(TEST_V.network), null);
   });
 
   it("serializes in bytes", () => {
     const tx = TEST_TX().sign(TEST_V.key);
-    Assert.deepEqual(tx.toBytes(), TEST_V.serialized);
+    chai.assert.deepEqual(tx.toBytes(), TEST_V.serialized);
   });
 
   it("de-serializes a serialized transaction", () => {
     const tx = Transaction.fromBytes(TEST_V.serialized);
     assertTestTx(tx);
-    Assert.deepEqual(tx.getSignature().getPublicKey(), TEST_V.key.getPublicKey());
-    Assert.deepEqual(tx.getSignature().toBytes(), TEST_V.signature);
+    chai.assert.deepEqual(tx.getSignature().getPublicKey(), TEST_V.key.getPublicKey());
+    chai.assert.deepEqual(tx.getSignature().toBytes(), TEST_V.signature);
   });
 });
