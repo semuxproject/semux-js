@@ -1,4 +1,3 @@
-import "core-js";
 import "core-js/shim";
 import Bytes from "./lib/Bytes";
 import Cast from "./lib/Cast";
