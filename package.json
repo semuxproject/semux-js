@@ -5,6 +5,7 @@
   "main": "dist/semux.umd.js",
   "module": "dist/semux.es6.js",
   "typings": "dist/types/index.d.ts",
+  "files": ["dist"],
   "engines": {
     "node": ">=9"
   },
