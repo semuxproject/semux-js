@@ -15,10 +15,10 @@ npm install --save https://github.com/semuxproject/semux.js.git
 
 # Usage
 
-- [Hash](lib/Hash.spec.js)
-- [Key & Signature](lib/Key.spec.js)
-- [Transaction Signing, Encoding or Decoding](lib/Transaction.spec.js)
-- [Byte Encoder](lib/SimpleEncoder.spec.js) / [Byte Decoder](lib/SimpleDecoder.spec.js)
+- [Hash](src/lib/Hash.spec.ts)
+- [Key & Signature](src/lib/Key.spec.ts)
+- [Transaction Signing, Encoding or Decoding](src/lib/Transaction.spec.ts)
+- [Byte Encoder](src/lib/SimpleEncoder.spec.ts) / [Byte Decoder](src/lib/SimpleDecoder.spec.ts)
 
 # Development
 

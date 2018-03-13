@@ -1,0 +1,29 @@
+{
+  "files": [
+    "index.ts",
+    "test/index.ts"
+  ],
+  "include": [
+    "lib/**/*"
+  ],
+  "exclude": [
+    "dist",
+    "node_modules"
+  ],
+  "compilerOptions": {
+    "target": "es5",
+    "module": "es2015",
+    "moduleResolution": "node",
+    "declaration": true,
+    "declarationDir": "./dist/types",
+    "outDir": "./dist",
+    "esModuleInterop": true,
+    "strict": false,
+    "allowSyntheticDefaultImports": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "sourceMap": true,
+    "typeRoots": ["node_modules/@types", "types"],
+    "lib": ["es2015", "es2016", "dom"]
+  }
+}

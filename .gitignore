@@ -19,6 +19,7 @@ coverage
 
 # nyc test coverage
 .nyc_output
+coverage
 
 # Grunt intermediate storage (http://gruntjs.com/creating-plugins#storing-task-files)
 .grunt
@@ -53,8 +54,12 @@ typings/
 
 # Yarn Integrity file
 .yarn-integrity
+yarn-error.log
 
 # dotenv environment variables file
 .env
 
 .idea
+dist
+.rpt2_cache
+test/index.js*

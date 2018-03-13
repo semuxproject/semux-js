@@ -1,12 +1,44 @@
 language: node_js
+sudo: true
+dist: trusty
 
 node_js:
   - "node"
 
-script:
-  - npm run format:check --verbose # style check
-  - npm run coverage # run test cases and and generate coverage report
-  - $(npm bin)/nyc report --reporter=text-lcov | $(npm bin)/coveralls # report coverage to coveralls
+matrix:
+  include:
+    # Code Linting
+    - env: NAME=Code Linting
+      script:
+        - npm run format:check
+
+    # Test Build
+    - env: NAME=Test Build
+      script:
+        - npm run build
+
+    # Node.js Tests
+    - env: NAME=Node.js Tests
+      script:
+        - npm test
+
+    # Browser Tests
+    - env: NAME=Browser Tests
+      addons:
+        chrome: stable
+        firefox: latest
+      before_script:
+        - export DISPLAY=:99.0
+        - sh -e /etc/init.d/xvfb start
+      script:
+        - npm run test:browser
+
+    # Coverage Report
+    - env: NAME=Coverage Report
+      script:
+        - npm run build:test
+        - $(npm bin)/nyc --reporter=text-lcov $(npm bin)/mocha --opts mocha.opts test/index.js
+        - $(npm bin)/nyc report --reporter=text-lcov | $(npm bin)/coveralls
 
 cache:
   directories:
