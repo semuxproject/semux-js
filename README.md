@@ -58,5 +58,5 @@ npm run format:check
 
 # Special Thanks
 
-This project is supported by BrowserStack
+This project is supported by [BrowserStack](https://www.browserstack.com/) to test cross-browser compatibility:
 [![BrowserStack Logo](https://ipfs.io/ipfs/QmXLQMnAreyJ3WkXzAuK33ibbKejFxy4YASgq6diaYHsX5)](https://www.browserstack.com/)
