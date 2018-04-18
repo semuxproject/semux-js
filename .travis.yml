@@ -53,9 +53,6 @@ jobs:
   - env: NAME="Firefox 59"
     script:
     - npm run test:browserstack -- --browsers firefox_59
-  - env: NAME="IOS 5.1"
-    script:
-    - npm run test:browserstack -- --browsers ios_5.1
   - env: NAME="IOS 6.0"
     script:
     - npm run test:browserstack -- --browsers ios_6.0
