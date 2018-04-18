@@ -25,6 +25,15 @@ jobs:
   - env: NAME="Unit Tests"
     script:
     - npm test
+  - env: NAME="Linux Browser Tests (Chrome, Firefox, Electron)"
+    addons:
+      chrome: stable
+      firefox: latest
+    before_script:
+      - export DISPLAY=:99.0
+      - sh -e /etc/init.d/xvfb start
+    script:
+      - npm run test:browser
   - env: NAME="Coverage Report"
     script:
       - npm run build:test
@@ -53,9 +62,6 @@ jobs:
   - env: NAME="Firefox 59"
     script:
     - npm run test:browserstack -- --browsers firefox_59
-  - env: NAME="IOS 5.1"
-    script:
-    - npm run test:browserstack -- --browsers ios_5.1
   - env: NAME="IOS 6.0"
     script:
     - npm run test:browserstack -- --browsers ios_6.0

@@ -22,6 +22,14 @@ npm install --save https://github.com/semuxproject/semux.js.git
 - [Transaction Signing, Encoding or Decoding](lib/Transaction.spec.ts)
 - [Byte Encoder](src/lib/SimpleEncoder.spec.ts) / [Byte Decoder](lib/SimpleDecoder.spec.ts)
 
+# Browser Compatibility
+
+- Chrome >= 65
+- Firefox >= 59
+- IE >= 11
+- Edge >= 16
+- Safari >= 6
+
 # Development
 
 ## Install Modules

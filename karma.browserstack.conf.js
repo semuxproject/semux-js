@@ -1,6 +1,8 @@
+const merge = require('lodash').merge;
+const commons = require('./karma.common.conf');
+
 module.exports = function(config) {
-  config.set({
-    basePath: '.',
+  config.set(merge(commons, {
 
     plugins: [
       'karma-browserstack-launcher',
@@ -71,15 +73,6 @@ module.exports = function(config) {
         'browser' : 'Firefox',
         'browser_version' : '59.0'
       },
-      'ios_5.1': {
-        'base': 'BrowserStack',
-        real_mobile: false,
-        device: 'iPhone 4S',
-        os: 'ios',
-        'os_version': '5.1',
-        'browser_version': null,
-        browser: 'Mobile Safari'
-      },
       'ios_6.0': {
         'base': 'BrowserStack',
         real_mobile: false,
@@ -142,37 +135,5 @@ module.exports = function(config) {
       }
     },
 
-    frameworks: ['mocha'],
-
-    reporters: ['mocha'],
-
-    port: 9876,
-
-    files: [
-      { pattern: "test/index.ts", watched: false }
-    ],
-
-    preprocessors: {
-      "test/index.ts": ['rollup', 'transformPath']
-    },
-
-    rollupPreprocessor: {
-      output: {
-        format: 'iife',   // Helps prevent naming collisions.
-        name: 'SemuxTest',    // Required for 'iife' format.
-        sourcemap: "inline"
-      },
-      plugins: [require('rollup-plugin-glob-import')()].concat(require('./rollup.config').plugins),
-    },
-
-    transformPathPreprocessor: {
-      transformer: path => path.replace(/\.ts$/i, ".js")
-    },
-
-    singleRun: true,
-
-    concurrency: 1,
-
-    browserNoActivityTimeout: 100000
-  })
+  }));
 }
