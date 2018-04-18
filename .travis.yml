@@ -26,8 +26,14 @@ jobs:
     script:
     - npm test
   - env: NAME="Linux Browser Tests (Chrome, Firefox, Electron)"
+    addons:
+      chrome: stable
+      firefox: latest
+    before_script:
+      - export DISPLAY=:99.0
+      - sh -e /etc/init.d/xvfb start
     script:
-    - npm test:browser
+      - npm run test:browser
   - env: NAME="Coverage Report"
     script:
       - npm run build:test

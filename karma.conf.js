@@ -32,5 +32,7 @@ module.exports = function(config) {
       captureConsole: true
     },
 
+    concurrency: 8,
+
   }));
 }
