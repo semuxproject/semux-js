@@ -30,11 +30,19 @@ npm install --save https://github.com/semuxproject/semux.js.git
 npm install
 ```
 
-## Execute Test Cases
+## Run Unit Tests
 
 ```
 npm test
 ``` 
+
+## Run Browser Tests
+
+Browser testing requires Chrome and Firefox installed.
+
+```
+npm run-script test:browser
+```
 
 ## Format Source Code
 
@@ -47,3 +55,8 @@ npm run format
 ```
 npm run format:check
 ```
+
+# Special Thanks
+
+This project is supported by BrowserStack
+[![BrowserStack Logo](https://ipfs.io/ipfs/QmXLQMnAreyJ3WkXzAuK33ibbKejFxy4YASgq6diaYHsX5)](https://www.browserstack.com/)
