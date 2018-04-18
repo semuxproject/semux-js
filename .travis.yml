@@ -25,6 +25,9 @@ jobs:
   - env: NAME="Unit Tests"
     script:
     - npm test
+  - env: NAME="Linux Browser Tests (Chrome, Firefox, Electron)"
+    script:
+    - npm test:browser
   - env: NAME="Coverage Report"
     script:
       - npm run build:test
