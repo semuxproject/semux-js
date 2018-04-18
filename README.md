@@ -27,6 +27,7 @@ npm install --save https://github.com/semuxproject/semux.js.git
 - Chrome >= 65
 - Firefox >= 59
 - IE >= 11
+- Edge >= 16
 - Safari >= 6
 
 # Development
