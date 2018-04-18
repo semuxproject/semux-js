@@ -18,23 +18,7 @@ module.exports = function(config) {
     },
 
     browsers: [
-      /**
-      "safari_11",
-      "safari_10",
-      "safari_9.1",
-      "ie_11",
-      "edge_16",
-      "chrome_65",
-      "firefox_59",
-      "iphone_7",
-      "iphone_8",
-      "android_4.4",
-      "android_5",
-      "android_6",
-      "android_7.0",
-      "android_7.1",
-      "android_8.0",
-       **/
+      // in command line
     ],
 
     customLaunchers: {
@@ -87,61 +71,74 @@ module.exports = function(config) {
         'browser' : 'Firefox',
         'browser_version' : '59.0'
       },
-      'iphone_7': {
+      'ios_5.1': {
         'base': 'BrowserStack',
-        'os': 'ios',
-        'os_version' : '10.3',
-        'device' : 'iPhone 7',
-        'real_mobile' : 'true',
+        real_mobile: false,
+        device: 'iPhone 4S',
+        os: 'ios',
+        'os_version': '5.1',
+        'browser_version': null,
+        browser: 'Mobile Safari'
       },
-      'iphone_8': {
+      'ios_6.0': {
         'base': 'BrowserStack',
-        'os': 'ios',
-        'os_version' : '11.0',
-        'device' : 'iPhone 8',
-        'real_mobile' : 'true',
+        real_mobile: false,
+        device: 'iPhone 4S (6.0)',
+        os: 'ios',
+        'os_version': '6.0',
+        'browser_version': null,
+        browser: 'Mobile Safari'
+      },
+      'ios_7.0': {
+        'base': 'BrowserStack',
+        real_mobile: false,
+        device: 'iPhone 5S',
+        os: 'ios',
+        'os_version': '7.0',
+        'browser_version': null,
+        browser: 'Mobile Safari'
       },
       "android_4.4": {
         'base': 'BrowserStack',
         'os': 'android',
         'os_version' : '4.4',
         'device' : 'Google Nexus 5',
-        'real_mobile' : 'true',
+        'real_mobile' : true,
       },
-      "android_5": {
+      "android_5.0": {
         'base': 'BrowserStack',
         'os': 'android',
         'os_version' : '5.0',
         'device' : 'Samsung Galaxy S6',
-        'real_mobile' : 'true',
+        'real_mobile' : true,
       },
-      "android_6": {
+      "android_6.0": {
         'base': 'BrowserStack',
         'os': 'android',
         'os_version' : '6.0',
         'device' : 'Google Nexus 6',
-        'real_mobile' : 'true',
+        'real_mobile' : true,
       },
       "android_7.0": {
         'base': 'BrowserStack',
         'os': 'android',
         'os_version' : '7.0',
         'device' : 'Samsung Galaxy S8',
-        'real_mobile' : 'true',
+        'real_mobile' : true,
       },
       "android_7.1": {
         'base': 'BrowserStack',
         'os': 'android',
         'os_version' : '7.1',
         'device' : 'Samsung Galaxy Note 8',
-        'real_mobile' : 'true',
+        'real_mobile' : true,
       },
       "android_8.0": {
         'base': 'BrowserStack',
         'os': 'android',
         'os_version' : '8.0',
         'device' : 'Google Pixel',
-        'real_mobile' : 'true',
+        'real_mobile' : true,
       }
     },
 
