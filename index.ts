@@ -1,11 +1,6 @@
-// shims
-import "core-js/shim";
-if (!global['XMLHttpRequest']) {
-  global['XMLHttpRequest'] = require("xmlhttprequest").XMLHttpRequest;
-}
+require("./shim");
 
-// import lib
-import {Configuration, DefaultApi} from "./lib/api";
+import {Configuration, SemuxApi} from "./lib/api";
 import Bytes from "./lib/Bytes";
 import Cast from "./lib/Cast";
 import Constants from "./lib/Constants";
@@ -21,7 +16,7 @@ import TransactionType from "./lib/TransactionType";
 
 // export Semux object
 const Semux = {
-  Api: DefaultApi,
+  Api: SemuxApi,
   ApiConfiguration: Configuration,
   Bytes,
   Cast,
