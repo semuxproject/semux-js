@@ -61,4 +61,5 @@ yarn-error.log
 
 .idea
 .rpt2_cache
-test/index.js*
+test/**/*.js
+test/**/*.js.map
