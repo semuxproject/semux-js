@@ -1,6 +1,6 @@
 language: node_js
 os: linux
-sudo: true
+sudo: required
 dist: trusty
 node_js:
 - node
@@ -8,6 +8,8 @@ env:
   global:
   - secure: CMXH4Lfu6vLsTIEMi1PDZTp1042vZRoR59YJ3NCxP/tezSE2psjslwtuW5xuB6lRU/BoOZdR0btHPD8FTuiN5qI9I7jiWLL/s+V8LanLHZHCoKbB10m3wJIw+yWPzpZXGUjvANiDFGyUqbowhXhUIp6IA5s+UJtiaHwXD0L6lkpBCWq7T8TfuiG9IbHIb/LiXwTghjZDeOict68H8Insl3wobS5DGTdSoR8DKgyeczg9vF8iy81J9W9zkb2X1bPSncbYa0i1cBMs69oCKpkSDB83Zbm6k+d9+Lix1e4o+D41Bpv8B2ricCZtc92RpOOJ10ZaWrgUB3e6R6AqHPjkk4n89IZuw/KqZB/F756QiLv4goapv3rI3ChnfaLt42WqgzzYJCfxSsUSFg5f8GVjnvriFLqsXFGVZ4aruqfzZKIZGLf3K7Iov74dsXROr/u1W+apmnkfun20G6yMfCqbuKbSlakrL/hrzgjW2iqX1FjpGAHIi1RPx5BpBSPPj6ecxxaREZdB17YWzDB1u1J6mnDlrpoNzl3A3QrsZT2jhJy8C4rFGC8F+bZli1P+9TLsNYJZn7onIesHZ8xta7X2UQXR6jTeOSF0EocyKKnrjlp4CZUX7FU+skZwYYtMPHxawCN1lsG5RoF/Xi+MOt5dkI8Q82XAFgNlbYtC8JwHmhU=
   - secure: vhBO4K5XLASQU76jmOT9lJ5yid9Texi2Qh8NV/YaAgA1yPLaQa/Wz4+64bVwi8w9oq4ZxhPOzTZ8/ePkpWpEBWdDgrPGwtKfEdHE+XpU9XLfFWfN+wP7/2tU70EX8hG3aTknVPoHKO76ewzG7DrCLjeFXWwJeqYV9fxywdLXYifSQCBhjG86yHBNUMlgZfXWM1T0XFxT9m6FdF7bD7tJnr4U7MSN18+uEBjTVDrn8vrokmGQQsYwiWYhUGjM+qY2CwsOFd49jQSiFXD+FBLN+I9yM8gHTqt0SlMIY/fIUYkg/rafjoGij08ltfllrqxjp1mjZAyBZKBVZ1ggY7KrbyvTMfZb9ptMIIv832g68UUkbifr3PIwD9G8Acyc62ZSAD9eLl9FL4yS6U4qKoeRIW8ocn/5zBakJzYQD3s88WWZuKmoBMho4LFcVGqxzAqjheUAOzIr9dL3JLBCHbQgmUD4fvaa5l67iJ8m+FhO5GJSLZw7FlUKYsnqY8RPDCILTFBni3ldOYohRwIlj5Y+R9TbOnDDmE/xwCTeRcXh6OJGJH3qlVWp3pCT89MLjAR4ny5SuYPAhd5hMqoqIKwwJqpQEv8QStVg32QrLDob2HvNKtJHEM+Cz3Ys8N3j+86JbKVa1LcLphl0QXkXSPL+jkaM3KbwTx1Cz2mOfkolktY=
+before_install:
+  - .travis/install-docker.sh
 stages:
   - Node.js Tests
   - name: Browser Tests
@@ -25,6 +27,12 @@ jobs:
   - env: NAME="Unit Tests"
     script:
     - npm test
+  - env: NAME="API Tests"
+    script:
+    - docker build test/api/
+    - docker-compose -f test/api/docker-compose.yml up -d
+    - $(npm bin)/wait-on http-get://user:pass@localhost:5171/v2.0.0/
+    - npm run test:api
   - env: NAME="Linux Browser Tests (Chrome, Firefox, Electron)"
     addons:
       chrome: stable
