@@ -1,2 +1,3 @@
-import "../index";
+import "../shim";
+
 import "../lib/*.spec.ts";

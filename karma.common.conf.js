@@ -30,7 +30,5 @@ module.exports = {
 
   singleRun: true,
 
-  concurrency: 1,
-
   browserNoActivityTimeout: 100000
 };

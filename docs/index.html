@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>semux.js</title>
+	<title>semux-js-sdk</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="assets/css/main.css">
@@ -22,7 +22,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="index.html" class="title">semux.js</a>
+					<a href="index.html" class="title">semux-js-sdk</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -54,7 +54,7 @@
 					<a href="globals.html">Globals</a>
 				</li>
 			</ul>
-			<h1> semux.js</h1>
+			<h1> semux-js-sdk</h1>
 		</div>
 	</div>
 </header>
@@ -62,30 +62,45 @@
 	<div class="row">
 		<div class="col-8 col-content">
 			<div class="tsd-panel tsd-typography">
-				<h1 id="semux-js-under-development-">semux.js (Under Development)</h1>
-				<p><a href="https://travis-ci.org/semuxproject/semux.js"><img src="https://travis-ci.org/semuxproject/semux.js.svg?branch=master" alt="Build Status"></a>
-				<a href="https://coveralls.io/github/semuxproject/semux.js?branch=master"><img src="https://coveralls.io/repos/github/semuxproject/semux.js/badge.svg?branch=master" alt="Coverage Status"></a></p>
+				<h1 id="semux-javascript-sdk">Semux Javascript SDK</h1>
+				<p><a href="https://www.browserstack.com/automate/public-build/eEVtNGR5NjNKcGdaMVp6N1RldVJsTmRpTTNQeGtQbVlvNER1R2dLWjlyST0tLTlQeG9WSlpJam8xOUIvYUc5NlBNN2c9PQ==--05e005a64351ce1375536b9931466c99c023ac13"><img src="https://www.browserstack.com/automate/badge.svg?badge_key=eEVtNGR5NjNKcGdaMVp6N1RldVJsTmRpTTNQeGtQbVlvNER1R2dLWjlyST0tLTlQeG9WSlpJam8xOUIvYUc5NlBNN2c9PQ==--05e005a64351ce1375536b9931466c99c023ac13" alt="BrowserStack Status"></a>
+					<a href="https://travis-ci.org/semuxproject/semux-js-sdk"><img src="https://travis-ci.org/semuxproject/semux-js-sdk.svg?branch=master" alt="Travis Build Status"></a>
+					<a href="https://ci.appveyor.com/project/cryptokat/semux-js/branch/master"><img src="https://ci.appveyor.com/api/projects/status/7ooa3ykhcl8nuvg7/branch/master?svg=true" alt="AppVeyor Build Status"></a>
+				<a href="https://coveralls.io/github/semuxproject/semux-js-sdk?branch=master"><img src="https://coveralls.io/repos/github/semuxproject/semux-js-sdk/badge.svg?branch=master" alt="Coverage Status"></a></p>
 				<p>This library aims to providing javascript utilities for Semux client-side applications, such as web wallet.</p>
-				<p>Visit <a href="https://github.com/semuxproject/semux.js/issues">issues</a> page to see planned features or propose a feature request.</p>
+				<p>Visit <a href="https://github.com/semuxproject/semux-js-sdk/issues">issues</a> page to see planned features or propose a feature request.</p>
 				<h1 id="install">Install</h1>
-				<pre><code>npm install --save https:<span class="hljs-regexp">//gi</span>thub.com<span class="hljs-regexp">/semuxproject/</span>semux.js.git
+				<pre><code>npm install --save https:<span class="hljs-regexp">//gi</span>thub.com<span class="hljs-regexp">/semuxproject/</span>semux-js-sdk.git<span class="hljs-comment">#master</span>
 </code></pre><h1 id="usage">Usage</h1>
 				<ul>
-					<li><a href="src/lib/Hash.spec.ts">Hash</a></li>
-					<li><a href="src/lib/Key.spec.ts">Key &amp; Signature</a></li>
-					<li><a href="src/lib/Transaction.spec.ts">Transaction Signing, Encoding or Decoding</a></li>
-					<li><a href="src/lib/SimpleEncoder.spec.ts">Byte Encoder</a> / <a href="src/lib/SimpleDecoder.spec.ts">Byte Decoder</a></li>
+					<li><a href="./lib/Hash.spec.ts">Hash</a></li>
+					<li><a href="./lib/Key.spec.ts">Key &amp; Signature</a></li>
+					<li><a href="./lib/Transaction.spec.ts">Transaction Signing, Encoding or Decoding</a></li>
+					<li><a href="./lib/SimpleEncoder.spec.ts">Byte Encoder</a> / <a href="./lib/SimpleDecoder.spec.ts">Byte Decoder</a></li>
+				</ul>
+				<h1 id="browser-compatibility">Browser Compatibility</h1>
+				<ul>
+					<li>Chrome &gt;= 65</li>
+					<li>Firefox &gt;= 59</li>
+					<li>IE &gt;= 11</li>
+					<li>Edge &gt;= 16</li>
+					<li>Safari &gt;= 6</li>
 				</ul>
 				<h1 id="development">Development</h1>
 				<h2 id="install-modules">Install Modules</h2>
 				<pre><code>npm <span class="hljs-keyword">install</span>
-</code></pre><h2 id="execute-test-cases">Execute Test Cases</h2>
+</code></pre><h2 id="run-unit-tests">Run Unit Tests</h2>
 				<pre><code>npm <span class="hljs-built_in">test</span>
+</code></pre><h2 id="run-browser-tests">Run Browser Tests</h2>
+				<p>Browser testing requires Chrome and Firefox installed.</p>
+				<pre><code>npm <span class="hljs-keyword">run</span><span class="bash">-script <span class="hljs-built_in">test</span>:browser</span>
 </code></pre><h2 id="format-source-code">Format Source Code</h2>
 				<pre><code>npm <span class="hljs-keyword">run</span><span class="bash"> format</span>
 </code></pre><h2 id="check-source-code-formatting">Check Source Code Formatting</h2>
 				<pre><code>npm <span class="hljs-keyword">run</span><span class="bash"> format:check</span>
-</code></pre>
+</code></pre><h1 id="special-thanks">Special Thanks</h1>
+				<p>This project is supported by <a href="https://www.browserstack.com/">BrowserStack</a> to test cross-browser compatibility:
+				<a href="https://www.browserstack.com/"><img src="https://ipfs.io/ipfs/QmXLQMnAreyJ3WkXzAuK33ibbKejFxy4YASgq6diaYHsX5" alt="BrowserStack Logo"></a></p>
 			</div>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
@@ -98,41 +113,170 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-					<li class=" tsd-kind-class">
+					<li class=" tsd-kind-class tsd-is-external">
+						<a href="classes/baseapi.html" class="tsd-kind-icon">BaseAPI</a>
+					</li>
+					<li class=" tsd-kind-class tsd-is-external">
 						<a href="classes/bytes.html" class="tsd-kind-icon">Bytes</a>
 					</li>
-					<li class=" tsd-kind-class">
+					<li class=" tsd-kind-class tsd-is-external">
 						<a href="classes/cast.html" class="tsd-kind-icon">Cast</a>
 					</li>
-					<li class=" tsd-kind-class">
+					<li class=" tsd-kind-class tsd-is-external">
+						<a href="classes/configuration.html" class="tsd-kind-icon">Configuration</a>
+					</li>
+					<li class=" tsd-kind-class tsd-is-external">
 						<a href="classes/constants.html" class="tsd-kind-icon">Constants</a>
 					</li>
-					<li class=" tsd-kind-class">
+					<li class=" tsd-kind-class tsd-is-external">
 						<a href="classes/hash.html" class="tsd-kind-icon">Hash</a>
 					</li>
-					<li class=" tsd-kind-class">
+					<li class=" tsd-kind-class tsd-is-external">
 						<a href="classes/key.html" class="tsd-kind-icon">Key</a>
 					</li>
-					<li class=" tsd-kind-class">
+					<li class=" tsd-kind-class tsd-is-external">
 						<a href="classes/keycodec.html" class="tsd-kind-icon">Key<wbr>Codec</a>
 					</li>
-					<li class=" tsd-kind-class">
+					<li class=" tsd-kind-class tsd-is-external">
 						<a href="classes/network.html" class="tsd-kind-icon">Network</a>
 					</li>
-					<li class=" tsd-kind-class">
+					<li class=" tsd-kind-class tsd-is-external">
+						<a href="classes/requirederror.html" class="tsd-kind-icon">Required<wbr>Error</a>
+					</li>
+					<li class=" tsd-kind-class tsd-is-external">
+						<a href="classes/semuxapi.html" class="tsd-kind-icon">Semux<wbr>Api</a>
+					</li>
+					<li class=" tsd-kind-class tsd-is-external">
 						<a href="classes/signature.html" class="tsd-kind-icon">Signature</a>
 					</li>
-					<li class=" tsd-kind-class">
+					<li class=" tsd-kind-class tsd-is-external">
 						<a href="classes/simpledecoder.html" class="tsd-kind-icon">Simple<wbr>Decoder</a>
 					</li>
-					<li class=" tsd-kind-class">
+					<li class=" tsd-kind-class tsd-is-external">
 						<a href="classes/simpleencoder.html" class="tsd-kind-icon">Simple<wbr>Encoder</a>
 					</li>
-					<li class=" tsd-kind-class">
+					<li class=" tsd-kind-class tsd-is-external">
 						<a href="classes/transaction.html" class="tsd-kind-icon">Transaction</a>
 					</li>
-					<li class=" tsd-kind-class">
+					<li class=" tsd-kind-class tsd-is-external">
 						<a href="classes/transactiontype.html" class="tsd-kind-icon">Transaction<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/accounttype.html" class="tsd-kind-icon">Account<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/addnoderesponse.html" class="tsd-kind-icon">Add<wbr>Node<wbr>Response</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/apihandlerresponse.html" class="tsd-kind-icon">Api<wbr>Handler<wbr>Response</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/blocktype.html" class="tsd-kind-icon">Block<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/composerawtransactionresponse.html" class="tsd-kind-icon">Compose<wbr>Raw<wbr>Transaction<wbr>Response</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/configurationparameters.html" class="tsd-kind-icon">Configuration<wbr>Parameters</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/createaccountresponse.html" class="tsd-kind-icon">Create<wbr>Account<wbr>Response</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/delegatetype.html" class="tsd-kind-icon">Delegate<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/dotransactionresponse.html" class="tsd-kind-icon">Do<wbr>Transaction<wbr>Response</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/fetchapi.html" class="tsd-kind-icon">FetchAPI</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/fetchargs.html" class="tsd-kind-icon">Fetch<wbr>Args</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/getaccountresponse.html" class="tsd-kind-icon">Get<wbr>Account<wbr>Response</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/getaccounttransactionsresponse.html" class="tsd-kind-icon">Get<wbr>Account<wbr>Transactions<wbr>Response</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/getblockresponse.html" class="tsd-kind-icon">Get<wbr>Block<wbr>Response</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/getdelegateresponse.html" class="tsd-kind-icon">Get<wbr>Delegate<wbr>Response</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/getdelegatesresponse.html" class="tsd-kind-icon">Get<wbr>Delegates<wbr>Response</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/getinforesponse.html" class="tsd-kind-icon">Get<wbr>Info<wbr>Response</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/getlatestblocknumberresponse.html" class="tsd-kind-icon">Get<wbr>Latest<wbr>Block<wbr>Number<wbr>Response</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/getlatestblockresponse.html" class="tsd-kind-icon">Get<wbr>Latest<wbr>Block<wbr>Response</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/getpeersresponse.html" class="tsd-kind-icon">Get<wbr>Peers<wbr>Response</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/getpendingtransactionsresponse.html" class="tsd-kind-icon">Get<wbr>Pending<wbr>Transactions<wbr>Response</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/getrootresponse.html" class="tsd-kind-icon">Get<wbr>Root<wbr>Response</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/gettransactionlimitsresponse.html" class="tsd-kind-icon">Get<wbr>Transaction<wbr>Limits<wbr>Response</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/gettransactionresponse.html" class="tsd-kind-icon">Get<wbr>Transaction<wbr>Response</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/getvalidatorsresponse.html" class="tsd-kind-icon">Get<wbr>Validators<wbr>Response</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/getvoteresponse.html" class="tsd-kind-icon">Get<wbr>Vote<wbr>Response</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/getvotesresponse.html" class="tsd-kind-icon">Get<wbr>Votes<wbr>Response</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/infotype.html" class="tsd-kind-icon">Info<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/listaccountsresponse.html" class="tsd-kind-icon">List<wbr>Accounts<wbr>Response</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/peertype.html" class="tsd-kind-icon">Peer<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/sendtransactionresponse.html" class="tsd-kind-icon">Send<wbr>Transaction<wbr>Response</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/signmessageresponse.html" class="tsd-kind-icon">Sign<wbr>Message<wbr>Response</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/signrawtransactionresponse.html" class="tsd-kind-icon">Sign<wbr>Raw<wbr>Transaction<wbr>Response</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/transactionlimitstype.html" class="tsd-kind-icon">Transaction<wbr>Limits<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/verifymessageresponse.html" class="tsd-kind-icon">Verify<wbr>Message<wbr>Response</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-external">
+						<a href="globals.html#semuxapifactory" class="tsd-kind-icon">Semux<wbr>Api<wbr>Factory</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-external">
+						<a href="globals.html#semuxapifetchparamcreator" class="tsd-kind-icon">Semux<wbr>Api<wbr>Fetch<wbr>Param<wbr>Creator</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-external">
+						<a href="globals.html#semuxapifp" class="tsd-kind-icon">Semux<wbr>Api<wbr>Fp</a>
+					</li>
+					<li class=" tsd-kind-object-literal tsd-is-external">
+						<a href="globals.html#collection_formats" class="tsd-kind-icon">COLLECTION_<wbr>FORMATS</a>
 					</li>
 				</ul>
 			</nav>

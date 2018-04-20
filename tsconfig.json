@@ -1,7 +1,9 @@
 {
   "files": [
     "index.ts",
-    "test/index.ts"
+    "shim.ts",
+    "test/index.ts",
+    "test/api/index.ts"
   ],
   "include": [
     "lib/**/*"
@@ -12,7 +14,7 @@
   ],
   "compilerOptions": {
     "target": "es5",
-    "module": "es2015",
+    "module": "ESNext",
     "moduleResolution": "node",
     "declaration": true,
     "declarationDir": "./dist/types",
@@ -24,6 +26,6 @@
     "experimentalDecorators": true,
     "sourceMap": true,
     "typeRoots": ["node_modules/@types", "types"],
-    "lib": ["es2015", "es2016", "dom"]
+    "lib": ["es2015", "es2016", "dom", "scripthost"]
   }
 }

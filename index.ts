@@ -1,4 +1,6 @@
-import "core-js/shim";
+require("./shim");
+
+import {Configuration, SemuxApi} from "./lib/api";
 import Bytes from "./lib/Bytes";
 import Cast from "./lib/Cast";
 import Constants from "./lib/Constants";
@@ -12,7 +14,10 @@ import SimpleEncoder from "./lib/SimpleEncoder";
 import Transaction from "./lib/Transaction";
 import TransactionType from "./lib/TransactionType";
 
+// export Semux object
 const Semux = {
+  Api: SemuxApi,
+  ApiConfiguration: Configuration,
   Bytes,
   Cast,
   Constants,

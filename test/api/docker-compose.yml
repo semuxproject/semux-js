@@ -1,0 +1,10 @@
+version: '3'
+services:
+  semux:
+    build: .
+    command: --network devnet --password=""
+    ports:
+      - "5171:5171"
+    volumes:
+      - ./semux.properties:/semux/config/semux.properties
+      - ./wallet.data:/semux/wallet.data:rw

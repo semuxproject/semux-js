@@ -4,6 +4,8 @@ const commons = require('./karma.common.conf');
 module.exports = function(config) {
   config.set(merge(commons, {
 
+    concurrency: 1,
+
     plugins: [
       'karma-browserstack-launcher',
       "karma-rollup-preprocessor",
