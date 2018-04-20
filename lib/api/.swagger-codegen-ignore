@@ -7,3 +7,4 @@
 git_push.sh
 .gitignore
 custom.d.ts
+*.spec.ts
