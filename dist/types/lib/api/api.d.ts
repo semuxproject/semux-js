@@ -62,47 +62,28 @@ export interface AccountType {
     address?: string;
     /**
      *
-     * @type {number}
+     * @type {string}
      * @memberof AccountType
      */
-    available?: number;
+    available?: string;
     /**
      *
-     * @type {number}
+     * @type {string}
      * @memberof AccountType
      */
-    locked?: number;
+    locked?: string;
     /**
      *
-     * @type {number}
+     * @type {string}
      * @memberof AccountType
      */
-    nonce?: number;
+    nonce?: string;
     /**
      *
      * @type {number}
      * @memberof AccountType
      */
     transactionCount?: number;
-}
-/**
- *
- * @export
- * @interface AddNodeResponse
- */
-export interface AddNodeResponse {
-    /**
-     *
-     * @type {boolean}
-     * @memberof AddNodeResponse
-     */
-    success: boolean;
-    /**
-     *
-     * @type {string}
-     * @memberof AddNodeResponse
-     */
-    message?: string;
 }
 /**
  *
@@ -137,10 +118,10 @@ export interface BlockType {
     hash?: string;
     /**
      *
-     * @type {number}
+     * @type {string}
      * @memberof BlockType
      */
-    number?: number;
+    number?: string;
     /**
      *
      * @type {number}
@@ -161,10 +142,10 @@ export interface BlockType {
     parentHash?: string;
     /**
      *
-     * @type {number}
+     * @type {string}
      * @memberof BlockType
      */
-    timestamp?: number;
+    timestamp?: string;
     /**
      *
      * @type {string}
@@ -205,31 +186,6 @@ export interface BlockType {
 /**
  *
  * @export
- * @interface CreateAccountResponse
- */
-export interface CreateAccountResponse {
-    /**
-     *
-     * @type {boolean}
-     * @memberof CreateAccountResponse
-     */
-    success: boolean;
-    /**
-     *
-     * @type {string}
-     * @memberof CreateAccountResponse
-     */
-    result?: string;
-    /**
-     *
-     * @type {string}
-     * @memberof CreateAccountResponse
-     */
-    message?: string;
-}
-/**
- *
- * @export
  * @interface DelegateType
  */
 export interface DelegateType {
@@ -247,436 +203,34 @@ export interface DelegateType {
     name?: string;
     /**
      *
-     * @type {number}
+     * @type {string}
      * @memberof DelegateType
      */
-    registeredAt?: number;
+    registeredAt?: string;
     /**
      *
-     * @type {number}
+     * @type {string}
      * @memberof DelegateType
      */
-    votes?: number;
+    votes?: string;
     /**
      *
-     * @type {number}
+     * @type {string}
      * @memberof DelegateType
      */
-    blocksForged?: number;
+    blocksForged?: string;
     /**
      *
-     * @type {number}
+     * @type {string}
      * @memberof DelegateType
      */
-    turnsHit?: number;
+    turnsHit?: string;
     /**
      *
-     * @type {number}
+     * @type {string}
      * @memberof DelegateType
      */
-    turnsMissed?: number;
-}
-/**
- *
- * @export
- * @interface DoTransactionResponse
- */
-export interface DoTransactionResponse {
-    /**
-     *
-     * @type {boolean}
-     * @memberof DoTransactionResponse
-     */
-    success: boolean;
-    /**
-     *
-     * @type {string}
-     * @memberof DoTransactionResponse
-     */
-    message?: string;
-    /**
-     *
-     * @type {string}
-     * @memberof DoTransactionResponse
-     */
-    result?: string;
-}
-/**
- *
- * @export
- * @interface GetAccountResponse
- */
-export interface GetAccountResponse {
-    /**
-     *
-     * @type {boolean}
-     * @memberof GetAccountResponse
-     */
-    success: boolean;
-    /**
-     *
-     * @type {AccountType}
-     * @memberof GetAccountResponse
-     */
-    result?: AccountType;
-    /**
-     *
-     * @type {string}
-     * @memberof GetAccountResponse
-     */
-    message?: string;
-}
-/**
- *
- * @export
- * @interface GetAccountTransactionsResponse
- */
-export interface GetAccountTransactionsResponse {
-    /**
-     *
-     * @type {boolean}
-     * @memberof GetAccountTransactionsResponse
-     */
-    success: boolean;
-    /**
-     *
-     * @type {Array&lt;TransactionType&gt;}
-     * @memberof GetAccountTransactionsResponse
-     */
-    result?: Array<TransactionType>;
-    /**
-     *
-     * @type {string}
-     * @memberof GetAccountTransactionsResponse
-     */
-    message?: string;
-}
-/**
- *
- * @export
- * @interface GetBlockResponse
- */
-export interface GetBlockResponse {
-    /**
-     *
-     * @type {boolean}
-     * @memberof GetBlockResponse
-     */
-    success: boolean;
-    /**
-     *
-     * @type {BlockType}
-     * @memberof GetBlockResponse
-     */
-    result?: BlockType;
-    /**
-     *
-     * @type {string}
-     * @memberof GetBlockResponse
-     */
-    message?: string;
-}
-/**
- *
- * @export
- * @interface GetDelegateResponse
- */
-export interface GetDelegateResponse {
-    /**
-     *
-     * @type {boolean}
-     * @memberof GetDelegateResponse
-     */
-    success: boolean;
-    /**
-     *
-     * @type {DelegateType}
-     * @memberof GetDelegateResponse
-     */
-    result?: DelegateType;
-    /**
-     *
-     * @type {string}
-     * @memberof GetDelegateResponse
-     */
-    message?: string;
-}
-/**
- *
- * @export
- * @interface GetDelegatesResponse
- */
-export interface GetDelegatesResponse {
-    /**
-     *
-     * @type {boolean}
-     * @memberof GetDelegatesResponse
-     */
-    success: boolean;
-    /**
-     *
-     * @type {Array&lt;DelegateType&gt;}
-     * @memberof GetDelegatesResponse
-     */
-    result?: Array<DelegateType>;
-    /**
-     *
-     * @type {string}
-     * @memberof GetDelegatesResponse
-     */
-    message?: string;
-}
-/**
- *
- * @export
- * @interface GetInfoResponse
- */
-export interface GetInfoResponse {
-    /**
-     *
-     * @type {boolean}
-     * @memberof GetInfoResponse
-     */
-    success: boolean;
-    /**
-     *
-     * @type {InfoType}
-     * @memberof GetInfoResponse
-     */
-    result?: InfoType;
-    /**
-     *
-     * @type {string}
-     * @memberof GetInfoResponse
-     */
-    message?: string;
-}
-/**
- *
- * @export
- * @interface GetLatestBlockNumberResponse
- */
-export interface GetLatestBlockNumberResponse {
-    /**
-     *
-     * @type {boolean}
-     * @memberof GetLatestBlockNumberResponse
-     */
-    success: boolean;
-    /**
-     *
-     * @type {number}
-     * @memberof GetLatestBlockNumberResponse
-     */
-    result?: number;
-    /**
-     *
-     * @type {string}
-     * @memberof GetLatestBlockNumberResponse
-     */
-    message?: string;
-}
-/**
- *
- * @export
- * @interface GetLatestBlockResponse
- */
-export interface GetLatestBlockResponse {
-    /**
-     *
-     * @type {boolean}
-     * @memberof GetLatestBlockResponse
-     */
-    success: boolean;
-    /**
-     *
-     * @type {BlockType}
-     * @memberof GetLatestBlockResponse
-     */
-    result?: BlockType;
-    /**
-     *
-     * @type {string}
-     * @memberof GetLatestBlockResponse
-     */
-    message?: string;
-}
-/**
- *
- * @export
- * @interface GetPeersResponse
- */
-export interface GetPeersResponse {
-    /**
-     *
-     * @type {boolean}
-     * @memberof GetPeersResponse
-     */
-    success: boolean;
-    /**
-     *
-     * @type {Array&lt;PeerType&gt;}
-     * @memberof GetPeersResponse
-     */
-    result?: Array<PeerType>;
-    /**
-     *
-     * @type {string}
-     * @memberof GetPeersResponse
-     */
-    message?: string;
-}
-/**
- *
- * @export
- * @interface GetPendingTransactionsResponse
- */
-export interface GetPendingTransactionsResponse {
-    /**
-     *
-     * @type {boolean}
-     * @memberof GetPendingTransactionsResponse
-     */
-    success: boolean;
-    /**
-     *
-     * @type {Array&lt;TransactionType&gt;}
-     * @memberof GetPendingTransactionsResponse
-     */
-    result?: Array<TransactionType>;
-    /**
-     *
-     * @type {string}
-     * @memberof GetPendingTransactionsResponse
-     */
-    message?: string;
-}
-/**
- *
- * @export
- * @interface GetTransactionLimitsResponse
- */
-export interface GetTransactionLimitsResponse {
-    /**
-     *
-     * @type {boolean}
-     * @memberof GetTransactionLimitsResponse
-     */
-    success: boolean;
-    /**
-     *
-     * @type {TransactionLimitsType}
-     * @memberof GetTransactionLimitsResponse
-     */
-    result?: TransactionLimitsType;
-    /**
-     *
-     * @type {string}
-     * @memberof GetTransactionLimitsResponse
-     */
-    message?: string;
-}
-/**
- *
- * @export
- * @interface GetTransactionResponse
- */
-export interface GetTransactionResponse {
-    /**
-     *
-     * @type {boolean}
-     * @memberof GetTransactionResponse
-     */
-    success: boolean;
-    /**
-     *
-     * @type {TransactionType}
-     * @memberof GetTransactionResponse
-     */
-    result?: TransactionType;
-    /**
-     *
-     * @type {string}
-     * @memberof GetTransactionResponse
-     */
-    message?: string;
-}
-/**
- *
- * @export
- * @interface GetValidatorsResponse
- */
-export interface GetValidatorsResponse {
-    /**
-     *
-     * @type {boolean}
-     * @memberof GetValidatorsResponse
-     */
-    success: boolean;
-    /**
-     *
-     * @type {Array&lt;string&gt;}
-     * @memberof GetValidatorsResponse
-     */
-    result?: Array<string>;
-    /**
-     *
-     * @type {string}
-     * @memberof GetValidatorsResponse
-     */
-    message?: string;
-}
-/**
- *
- * @export
- * @interface GetVoteResponse
- */
-export interface GetVoteResponse {
-    /**
-     *
-     * @type {boolean}
-     * @memberof GetVoteResponse
-     */
-    success: boolean;
-    /**
-     *
-     * @type {number}
-     * @memberof GetVoteResponse
-     */
-    result?: number;
-    /**
-     *
-     * @type {string}
-     * @memberof GetVoteResponse
-     */
-    message?: string;
-}
-/**
- *
- * @export
- * @interface GetVotesResponse
- */
-export interface GetVotesResponse {
-    /**
-     *
-     * @type {boolean}
-     * @memberof GetVotesResponse
-     */
-    success: boolean;
-    /**
-     *
-     * @type {{ [key: string]: number; }}
-     * @memberof GetVotesResponse
-     */
-    result?: {
-        [key: string]: number;
-    };
-    /**
-     *
-     * @type {string}
-     * @memberof GetVotesResponse
-     */
-    message?: string;
+    turnsMissed?: string;
 }
 /**
  *
@@ -698,10 +252,10 @@ export interface InfoType {
     coinbase?: string;
     /**
      *
-     * @type {number}
+     * @type {string}
      * @memberof InfoType
      */
-    latestBlockNumber?: number;
+    latestBlockNumber?: string;
     /**
      *
      * @type {string}
@@ -720,31 +274,6 @@ export interface InfoType {
      * @memberof InfoType
      */
     pendingTransactions?: number;
-}
-/**
- *
- * @export
- * @interface ListAccountsResponse
- */
-export interface ListAccountsResponse {
-    /**
-     *
-     * @type {boolean}
-     * @memberof ListAccountsResponse
-     */
-    success: boolean;
-    /**
-     *
-     * @type {Array&lt;string&gt;}
-     * @memberof ListAccountsResponse
-     */
-    result?: Array<string>;
-    /**
-     *
-     * @type {string}
-     * @memberof ListAccountsResponse
-     */
-    message?: string;
 }
 /**
  *
@@ -784,66 +313,22 @@ export interface PeerType {
     peerId?: string;
     /**
      *
-     * @type {number}
+     * @type {string}
      * @memberof PeerType
      */
-    latestBlockNumber?: number;
+    latestBlockNumber?: string;
     /**
      *
-     * @type {number}
+     * @type {string}
      * @memberof PeerType
      */
-    latency?: number;
+    latency?: string;
     /**
      *
      * @type {Array&lt;string&gt;}
      * @memberof PeerType
      */
     capabilities?: Array<string>;
-}
-/**
- *
- * @export
- * @interface SendTransactionResponse
- */
-export interface SendTransactionResponse {
-    /**
-     *
-     * @type {boolean}
-     * @memberof SendTransactionResponse
-     */
-    success: boolean;
-    /**
-     *
-     * @type {string}
-     * @memberof SendTransactionResponse
-     */
-    message?: string;
-}
-/**
- *
- * @export
- * @interface SignMessageResponse
- */
-export interface SignMessageResponse {
-    /**
-     *
-     * @type {boolean}
-     * @memberof SignMessageResponse
-     */
-    success: boolean;
-    /**
-     *
-     * @type {string}
-     * @memberof SignMessageResponse
-     */
-    result?: string;
-    /**
-     *
-     * @type {string}
-     * @memberof SignMessageResponse
-     */
-    message?: string;
 }
 /**
  *
@@ -859,16 +344,16 @@ export interface TransactionLimitsType {
     maxTransactionDataSize?: number;
     /**
      *
-     * @type {number}
+     * @type {string}
      * @memberof TransactionLimitsType
      */
-    minTransactionFee?: number;
+    minTransactionFee?: string;
     /**
      *
-     * @type {number}
+     * @type {string}
      * @memberof TransactionLimitsType
      */
-    minDelegateBurnAmount?: number;
+    minDelegateBurnAmount?: string;
 }
 /**
  *
@@ -878,10 +363,10 @@ export interface TransactionLimitsType {
 export interface TransactionType {
     /**
      *
-     * @type {number}
+     * @type {string}
      * @memberof TransactionType
      */
-    blockNumber?: number;
+    blockNumber?: string;
     /**
      *
      * @type {string}
@@ -908,28 +393,28 @@ export interface TransactionType {
     to?: string;
     /**
      *
-     * @type {number}
+     * @type {string}
      * @memberof TransactionType
      */
-    value?: number;
+    value?: string;
     /**
      *
-     * @type {number}
+     * @type {string}
      * @memberof TransactionType
      */
-    fee?: number;
+    fee?: string;
     /**
      *
-     * @type {number}
+     * @type {string}
      * @memberof TransactionType
      */
-    nonce?: number;
+    nonce?: string;
     /**
      *
-     * @type {number}
+     * @type {string}
      * @memberof TransactionType
      */
-    timestamp?: number;
+    timestamp?: string;
     /**
      *
      * @type {string}
@@ -940,40 +425,327 @@ export interface TransactionType {
 /**
  *
  * @export
- * @interface VerifyMessageResponse
+ * @interface AddNodeResponse
  */
-export interface VerifyMessageResponse {
-    /**
-     *
-     * @type {boolean}
-     * @memberof VerifyMessageResponse
-     */
-    success: boolean;
-    /**
-     *
-     * @type {boolean}
-     * @memberof VerifyMessageResponse
-     */
-    result?: boolean;
+export interface AddNodeResponse extends ApiHandlerResponse {
+}
+/**
+ *
+ * @export
+ * @interface ComposeRawTransactionResponse
+ */
+export interface ComposeRawTransactionResponse extends ApiHandlerResponse {
     /**
      *
      * @type {string}
-     * @memberof VerifyMessageResponse
+     * @memberof ComposeRawTransactionResponse
      */
-    message?: string;
+    result?: string;
 }
 /**
- * DefaultApi - fetch parameter creator
+ *
+ * @export
+ * @interface CreateAccountResponse
+ */
+export interface CreateAccountResponse extends ApiHandlerResponse {
+    /**
+     *
+     * @type {string}
+     * @memberof CreateAccountResponse
+     */
+    result?: string;
+}
+/**
+ *
+ * @export
+ * @interface DoTransactionResponse
+ */
+export interface DoTransactionResponse extends ApiHandlerResponse {
+    /**
+     *
+     * @type {string}
+     * @memberof DoTransactionResponse
+     */
+    result?: string;
+}
+/**
+ *
+ * @export
+ * @interface GetAccountResponse
+ */
+export interface GetAccountResponse extends ApiHandlerResponse {
+    /**
+     *
+     * @type {AccountType}
+     * @memberof GetAccountResponse
+     */
+    result?: AccountType;
+}
+/**
+ *
+ * @export
+ * @interface GetAccountTransactionsResponse
+ */
+export interface GetAccountTransactionsResponse extends ApiHandlerResponse {
+    /**
+     *
+     * @type {Array&lt;TransactionType&gt;}
+     * @memberof GetAccountTransactionsResponse
+     */
+    result?: Array<TransactionType>;
+}
+/**
+ *
+ * @export
+ * @interface GetBlockResponse
+ */
+export interface GetBlockResponse extends ApiHandlerResponse {
+    /**
+     *
+     * @type {BlockType}
+     * @memberof GetBlockResponse
+     */
+    result?: BlockType;
+}
+/**
+ *
+ * @export
+ * @interface GetDelegateResponse
+ */
+export interface GetDelegateResponse extends ApiHandlerResponse {
+    /**
+     *
+     * @type {DelegateType}
+     * @memberof GetDelegateResponse
+     */
+    result?: DelegateType;
+}
+/**
+ *
+ * @export
+ * @interface GetDelegatesResponse
+ */
+export interface GetDelegatesResponse extends ApiHandlerResponse {
+    /**
+     *
+     * @type {Array&lt;DelegateType&gt;}
+     * @memberof GetDelegatesResponse
+     */
+    result?: Array<DelegateType>;
+}
+/**
+ *
+ * @export
+ * @interface GetInfoResponse
+ */
+export interface GetInfoResponse extends ApiHandlerResponse {
+    /**
+     *
+     * @type {InfoType}
+     * @memberof GetInfoResponse
+     */
+    result?: InfoType;
+}
+/**
+ *
+ * @export
+ * @interface GetLatestBlockNumberResponse
+ */
+export interface GetLatestBlockNumberResponse extends ApiHandlerResponse {
+    /**
+     *
+     * @type {string}
+     * @memberof GetLatestBlockNumberResponse
+     */
+    result?: string;
+}
+/**
+ *
+ * @export
+ * @interface GetLatestBlockResponse
+ */
+export interface GetLatestBlockResponse extends ApiHandlerResponse {
+    /**
+     *
+     * @type {BlockType}
+     * @memberof GetLatestBlockResponse
+     */
+    result?: BlockType;
+}
+/**
+ *
+ * @export
+ * @interface GetPeersResponse
+ */
+export interface GetPeersResponse extends ApiHandlerResponse {
+    /**
+     *
+     * @type {Array&lt;PeerType&gt;}
+     * @memberof GetPeersResponse
+     */
+    result?: Array<PeerType>;
+}
+/**
+ *
+ * @export
+ * @interface GetPendingTransactionsResponse
+ */
+export interface GetPendingTransactionsResponse extends ApiHandlerResponse {
+    /**
+     *
+     * @type {Array&lt;TransactionType&gt;}
+     * @memberof GetPendingTransactionsResponse
+     */
+    result?: Array<TransactionType>;
+}
+/**
+ *
+ * @export
+ * @interface GetRootResponse
+ */
+export interface GetRootResponse extends ApiHandlerResponse {
+}
+/**
+ *
+ * @export
+ * @interface GetTransactionLimitsResponse
+ */
+export interface GetTransactionLimitsResponse extends ApiHandlerResponse {
+    /**
+     *
+     * @type {TransactionLimitsType}
+     * @memberof GetTransactionLimitsResponse
+     */
+    result?: TransactionLimitsType;
+}
+/**
+ *
+ * @export
+ * @interface GetTransactionResponse
+ */
+export interface GetTransactionResponse extends ApiHandlerResponse {
+    /**
+     *
+     * @type {TransactionType}
+     * @memberof GetTransactionResponse
+     */
+    result?: TransactionType;
+}
+/**
+ *
+ * @export
+ * @interface GetValidatorsResponse
+ */
+export interface GetValidatorsResponse extends ApiHandlerResponse {
+    /**
+     *
+     * @type {Array&lt;string&gt;}
+     * @memberof GetValidatorsResponse
+     */
+    result?: Array<string>;
+}
+/**
+ *
+ * @export
+ * @interface GetVoteResponse
+ */
+export interface GetVoteResponse extends ApiHandlerResponse {
+    /**
+     *
+     * @type {string}
+     * @memberof GetVoteResponse
+     */
+    result?: string;
+}
+/**
+ *
+ * @export
+ * @interface GetVotesResponse
+ */
+export interface GetVotesResponse extends ApiHandlerResponse {
+    /**
+     *
+     * @type {{ [key: string]: string; }}
+     * @memberof GetVotesResponse
+     */
+    result?: {
+        [key: string]: string;
+    };
+}
+/**
+ *
+ * @export
+ * @interface ListAccountsResponse
+ */
+export interface ListAccountsResponse extends ApiHandlerResponse {
+    /**
+     *
+     * @type {Array&lt;string&gt;}
+     * @memberof ListAccountsResponse
+     */
+    result?: Array<string>;
+}
+/**
+ *
+ * @export
+ * @interface SendTransactionResponse
+ */
+export interface SendTransactionResponse extends ApiHandlerResponse {
+}
+/**
+ *
+ * @export
+ * @interface SignMessageResponse
+ */
+export interface SignMessageResponse extends ApiHandlerResponse {
+    /**
+     *
+     * @type {string}
+     * @memberof SignMessageResponse
+     */
+    result?: string;
+}
+/**
+ *
+ * @export
+ * @interface SignRawTransactionResponse
+ */
+export interface SignRawTransactionResponse extends ApiHandlerResponse {
+    /**
+     *
+     * @type {string}
+     * @memberof SignRawTransactionResponse
+     */
+    result?: string;
+}
+/**
+ *
+ * @export
+ * @interface VerifyMessageResponse
+ */
+export interface VerifyMessageResponse extends ApiHandlerResponse {
+    /**
+     *
+     * @type {boolean}
+     * @memberof VerifyMessageResponse
+     */
+    validSignature?: boolean;
+}
+/**
+ * SemuxApi - fetch parameter creator
  * @export
  */
-export declare const DefaultApiFetchParamCreator: (configuration?: Configuration) => {
+export declare const SemuxApiFetchParamCreator: (configuration?: Configuration) => {
     addNode(node: string, options?: any): FetchArgs;
     addToBlacklist(ip: string, options?: any): FetchArgs;
     addToWhitelist(ip: string, options?: any): FetchArgs;
+    broadcastRawTransaction(raw: string, options?: any): FetchArgs;
+    composeRawTransaction(network: string, type: string, fee: string, nonce: string, to?: string, value?: string, timestamp?: string, data?: string, options?: any): FetchArgs;
     createAccount(name?: string, options?: any): FetchArgs;
     getAccount(address: string, options?: any): FetchArgs;
     getAccountTransactions(address: string, from: string, to: string, options?: any): FetchArgs;
-    getBlock(number: number, options?: any): FetchArgs;
+    getBlockByHash(hash: string, options?: any): FetchArgs;
+    getBlockByNumber(number: string, options?: any): FetchArgs;
     getDelegate(address: string, options?: any): FetchArgs;
     getDelegates(options?: any): FetchArgs;
     getInfo(options?: any): FetchArgs;
@@ -981,6 +753,7 @@ export declare const DefaultApiFetchParamCreator: (configuration?: Configuration
     getLatestBlockNumber(options?: any): FetchArgs;
     getPeers(options?: any): FetchArgs;
     getPendingTransactions(options?: any): FetchArgs;
+    getRoot(options?: any): FetchArgs;
     getTransaction(hash: string, options?: any): FetchArgs;
     getTransactionLimits(type: string, options?: any): FetchArgs;
     getValidators(options?: any): FetchArgs;
@@ -988,25 +761,28 @@ export declare const DefaultApiFetchParamCreator: (configuration?: Configuration
     getVotes(delegate: string, options?: any): FetchArgs;
     listAccounts(options?: any): FetchArgs;
     registerDelegate(from: string, fee: string, data: string, options?: any): FetchArgs;
-    sendTransaction(raw: string, options?: any): FetchArgs;
     signMessage(address: string, message: string, options?: any): FetchArgs;
-    transfer(value: string, from: string, to: string, fee: string, data: string, options?: any): FetchArgs;
+    signRawTransaction(raw: string, address: string, options?: any): FetchArgs;
+    transfer(from: string, to: string, value: string, fee: string, data: string, options?: any): FetchArgs;
     unvote(from: string, to: string, value: string, fee: string, options?: any): FetchArgs;
     verifyMessage(address: string, message: string, signature: string, options?: any): FetchArgs;
     vote(from: string, to: string, value: string, fee: string, options?: any): FetchArgs;
 };
 /**
- * DefaultApi - functional programming interface
+ * SemuxApi - functional programming interface
  * @export
  */
-export declare const DefaultApiFp: (configuration?: Configuration) => {
+export declare const SemuxApiFp: (configuration?: Configuration) => {
     addNode(node: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<AddNodeResponse>;
     addToBlacklist(ip: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<ApiHandlerResponse>;
     addToWhitelist(ip: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<ApiHandlerResponse>;
+    broadcastRawTransaction(raw: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<SendTransactionResponse>;
+    composeRawTransaction(network: string, type: string, fee: string, nonce: string, to?: string, value?: string, timestamp?: string, data?: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<ComposeRawTransactionResponse>;
     createAccount(name?: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<CreateAccountResponse>;
     getAccount(address: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<GetAccountResponse>;
     getAccountTransactions(address: string, from: string, to: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<GetAccountTransactionsResponse>;
-    getBlock(number: number, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<GetBlockResponse>;
+    getBlockByHash(hash: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<GetBlockResponse>;
+    getBlockByNumber(number: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<GetBlockResponse>;
     getDelegate(address: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<GetDelegateResponse>;
     getDelegates(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<GetDelegatesResponse>;
     getInfo(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<GetInfoResponse>;
@@ -1014,6 +790,7 @@ export declare const DefaultApiFp: (configuration?: Configuration) => {
     getLatestBlockNumber(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<GetLatestBlockNumberResponse>;
     getPeers(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<GetPeersResponse>;
     getPendingTransactions(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<GetPendingTransactionsResponse>;
+    getRoot(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<GetRootResponse>;
     getTransaction(hash: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<GetTransactionResponse>;
     getTransactionLimits(type: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<GetTransactionLimitsResponse>;
     getValidators(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<GetValidatorsResponse>;
@@ -1021,25 +798,28 @@ export declare const DefaultApiFp: (configuration?: Configuration) => {
     getVotes(delegate: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<GetVotesResponse>;
     listAccounts(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<ListAccountsResponse>;
     registerDelegate(from: string, fee: string, data: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<DoTransactionResponse>;
-    sendTransaction(raw: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<SendTransactionResponse>;
     signMessage(address: string, message: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<SignMessageResponse>;
-    transfer(value: string, from: string, to: string, fee: string, data: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<DoTransactionResponse>;
+    signRawTransaction(raw: string, address: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<SignRawTransactionResponse>;
+    transfer(from: string, to: string, value: string, fee: string, data: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<DoTransactionResponse>;
     unvote(from: string, to: string, value: string, fee: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<DoTransactionResponse>;
     verifyMessage(address: string, message: string, signature: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<VerifyMessageResponse>;
     vote(from: string, to: string, value: string, fee: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<DoTransactionResponse>;
 };
 /**
- * DefaultApi - factory interface
+ * SemuxApi - factory interface
  * @export
  */
-export declare const DefaultApiFactory: (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) => {
+export declare const SemuxApiFactory: (configuration?: Configuration, fetch?: FetchAPI, basePath?: string) => {
     addNode(node: string, options?: any): Promise<AddNodeResponse>;
     addToBlacklist(ip: string, options?: any): Promise<ApiHandlerResponse>;
     addToWhitelist(ip: string, options?: any): Promise<ApiHandlerResponse>;
+    broadcastRawTransaction(raw: string, options?: any): Promise<SendTransactionResponse>;
+    composeRawTransaction(network: string, type: string, fee: string, nonce: string, to?: string, value?: string, timestamp?: string, data?: string, options?: any): Promise<ComposeRawTransactionResponse>;
     createAccount(name?: string, options?: any): Promise<CreateAccountResponse>;
     getAccount(address: string, options?: any): Promise<GetAccountResponse>;
     getAccountTransactions(address: string, from: string, to: string, options?: any): Promise<GetAccountTransactionsResponse>;
-    getBlock(number: number, options?: any): Promise<GetBlockResponse>;
+    getBlockByHash(hash: string, options?: any): Promise<GetBlockResponse>;
+    getBlockByNumber(number: string, options?: any): Promise<GetBlockResponse>;
     getDelegate(address: string, options?: any): Promise<GetDelegateResponse>;
     getDelegates(options?: any): Promise<GetDelegatesResponse>;
     getInfo(options?: any): Promise<GetInfoResponse>;
@@ -1047,6 +827,7 @@ export declare const DefaultApiFactory: (configuration?: Configuration, fetch?: 
     getLatestBlockNumber(options?: any): Promise<GetLatestBlockNumberResponse>;
     getPeers(options?: any): Promise<GetPeersResponse>;
     getPendingTransactions(options?: any): Promise<GetPendingTransactionsResponse>;
+    getRoot(options?: any): Promise<GetRootResponse>;
     getTransaction(hash: string, options?: any): Promise<GetTransactionResponse>;
     getTransactionLimits(type: string, options?: any): Promise<GetTransactionLimitsResponse>;
     getValidators(options?: any): Promise<GetValidatorsResponse>;
@@ -1054,27 +835,27 @@ export declare const DefaultApiFactory: (configuration?: Configuration, fetch?: 
     getVotes(delegate: string, options?: any): Promise<GetVotesResponse>;
     listAccounts(options?: any): Promise<ListAccountsResponse>;
     registerDelegate(from: string, fee: string, data: string, options?: any): Promise<DoTransactionResponse>;
-    sendTransaction(raw: string, options?: any): Promise<SendTransactionResponse>;
     signMessage(address: string, message: string, options?: any): Promise<SignMessageResponse>;
-    transfer(value: string, from: string, to: string, fee: string, data: string, options?: any): Promise<DoTransactionResponse>;
+    signRawTransaction(raw: string, address: string, options?: any): Promise<SignRawTransactionResponse>;
+    transfer(from: string, to: string, value: string, fee: string, data: string, options?: any): Promise<DoTransactionResponse>;
     unvote(from: string, to: string, value: string, fee: string, options?: any): Promise<DoTransactionResponse>;
     verifyMessage(address: string, message: string, signature: string, options?: any): Promise<VerifyMessageResponse>;
     vote(from: string, to: string, value: string, fee: string, options?: any): Promise<DoTransactionResponse>;
 };
 /**
- * DefaultApi - object-oriented interface
+ * SemuxApi - object-oriented interface
  * @export
- * @class DefaultApi
+ * @class SemuxApi
  * @extends {BaseAPI}
  */
-export declare class DefaultApi extends BaseAPI {
+export declare class SemuxApi extends BaseAPI {
     /**
      * Adds a node to node manager.
      * @summary Add node
      * @param {} node Name of the node in host:port format
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof DefaultApi
+     * @memberof SemuxApi
      */
     addNode(node: string, options?: any): Promise<AddNodeResponse>;
     /**
@@ -1083,7 +864,7 @@ export declare class DefaultApi extends BaseAPI {
      * @param {} ip IP address
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof DefaultApi
+     * @memberof SemuxApi
      */
     addToBlacklist(ip: string, options?: any): Promise<ApiHandlerResponse>;
     /**
@@ -1092,16 +873,41 @@ export declare class DefaultApi extends BaseAPI {
      * @param {} ip IP address
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof DefaultApi
+     * @memberof SemuxApi
      */
     addToWhitelist(ip: string, options?: any): Promise<ApiHandlerResponse>;
+    /**
+     * Broadcasts a raw transaction to the network.
+     * @summary Broadcast a raw transaction
+     * @param {} raw Raw transaction
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SemuxApi
+     */
+    broadcastRawTransaction(raw: string, options?: any): Promise<SendTransactionResponse>;
+    /**
+     * Compose an unsigned raw transaction then return its hexadecimal encoded string. An unsigned raw transaction can be signed using /sign-raw-transaction API.
+     * @summary Compose an unsigned raw transaction
+     * @param {} network Network name
+     * @param {} type Transaction type
+     * @param {} fee Transaction fee in nano
+     * @param {} nonce Transaction nonce
+     * @param {} [to] Recipient&#39;s address
+     * @param {} [value] Transaction value in nano
+     * @param {} [timestamp] Transaction timestamp in milliseconds. Default to current time.
+     * @param {} [data] Hexadecimal encoded transaction data.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SemuxApi
+     */
+    composeRawTransaction(network: string, type: string, fee: string, nonce: string, to?: string, value?: string, timestamp?: string, data?: string, options?: any): Promise<ComposeRawTransactionResponse>;
     /**
      * Creates a new account.
      * @summary Create account
      * @param {} [name] Assigned alias to the created account.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof DefaultApi
+     * @memberof SemuxApi
      */
     createAccount(name?: string, options?: any): Promise<CreateAccountResponse>;
     /**
@@ -1110,7 +916,7 @@ export declare class DefaultApi extends BaseAPI {
      * @param {} address Address of account
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof DefaultApi
+     * @memberof SemuxApi
      */
     getAccount(address: string, options?: any): Promise<GetAccountResponse>;
     /**
@@ -1121,25 +927,34 @@ export declare class DefaultApi extends BaseAPI {
      * @param {} to Ending range of transactions
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof DefaultApi
+     * @memberof SemuxApi
      */
     getAccountTransactions(address: string, from: string, to: string, options?: any): Promise<GetAccountTransactionsResponse>;
     /**
-     * Returns a block.
-     * @summary Get block
-     * @param {} number Block number
+     * Returns a block by block hash.
+     * @summary Get block by hash
+     * @param {} hash Hash of block
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof DefaultApi
+     * @memberof SemuxApi
      */
-    getBlock(number: number, options?: any): Promise<GetBlockResponse>;
+    getBlockByHash(hash: string, options?: any): Promise<GetBlockResponse>;
+    /**
+     * Returns a block by block number.
+     * @summary Get block by number
+     * @param {} number Number of block
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SemuxApi
+     */
+    getBlockByNumber(number: string, options?: any): Promise<GetBlockResponse>;
     /**
      * Returns a delegate.
      * @summary Get a delegate
      * @param {} address Delegate address
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof DefaultApi
+     * @memberof SemuxApi
      */
     getDelegate(address: string, options?: any): Promise<GetDelegateResponse>;
     /**
@@ -1147,7 +962,7 @@ export declare class DefaultApi extends BaseAPI {
      * @summary Get all delegates
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof DefaultApi
+     * @memberof SemuxApi
      */
     getDelegates(options?: any): Promise<GetDelegatesResponse>;
     /**
@@ -1155,7 +970,7 @@ export declare class DefaultApi extends BaseAPI {
      * @summary Get info
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof DefaultApi
+     * @memberof SemuxApi
      */
     getInfo(options?: any): Promise<GetInfoResponse>;
     /**
@@ -1163,7 +978,7 @@ export declare class DefaultApi extends BaseAPI {
      * @summary Get latest block
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof DefaultApi
+     * @memberof SemuxApi
      */
     getLatestBlock(options?: any): Promise<GetLatestBlockResponse>;
     /**
@@ -1171,7 +986,7 @@ export declare class DefaultApi extends BaseAPI {
      * @summary Get latest block number
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof DefaultApi
+     * @memberof SemuxApi
      */
     getLatestBlockNumber(options?: any): Promise<GetLatestBlockNumberResponse>;
     /**
@@ -1179,7 +994,7 @@ export declare class DefaultApi extends BaseAPI {
      * @summary Get peers
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof DefaultApi
+     * @memberof SemuxApi
      */
     getPeers(options?: any): Promise<GetPeersResponse>;
     /**
@@ -1187,16 +1002,24 @@ export declare class DefaultApi extends BaseAPI {
      * @summary Get pending transactions
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof DefaultApi
+     * @memberof SemuxApi
      */
     getPendingTransactions(options?: any): Promise<GetPendingTransactionsResponse>;
+    /**
+     *
+     * @summary Get root
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SemuxApi
+     */
+    getRoot(options?: any): Promise<GetRootResponse>;
     /**
      * Returns a transactions if exists.
      * @summary Get transaction
      * @param {} hash Transaction hash
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof DefaultApi
+     * @memberof SemuxApi
      */
     getTransaction(hash: string, options?: any): Promise<GetTransactionResponse>;
     /**
@@ -1205,7 +1028,7 @@ export declare class DefaultApi extends BaseAPI {
      * @param {} type Type of transaction
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof DefaultApi
+     * @memberof SemuxApi
      */
     getTransactionLimits(type: string, options?: any): Promise<GetTransactionLimitsResponse>;
     /**
@@ -1213,7 +1036,7 @@ export declare class DefaultApi extends BaseAPI {
      * @summary Get validators
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof DefaultApi
+     * @memberof SemuxApi
      */
     getValidators(options?: any): Promise<GetValidatorsResponse>;
     /**
@@ -1223,7 +1046,7 @@ export declare class DefaultApi extends BaseAPI {
      * @param {} voter Voter address
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof DefaultApi
+     * @memberof SemuxApi
      */
     getVote(delegate: string, voter: string, options?: any): Promise<GetVoteResponse>;
     /**
@@ -1232,7 +1055,7 @@ export declare class DefaultApi extends BaseAPI {
      * @param {} delegate Delegate address
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof DefaultApi
+     * @memberof SemuxApi
      */
     getVotes(delegate: string, options?: any): Promise<GetVotesResponse>;
     /**
@@ -1240,7 +1063,7 @@ export declare class DefaultApi extends BaseAPI {
      * @summary List accounts
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof DefaultApi
+     * @memberof SemuxApi
      */
     listAccounts(options?: any): Promise<ListAccountsResponse>;
     /**
@@ -1251,18 +1074,9 @@ export declare class DefaultApi extends BaseAPI {
      * @param {} data Delegate name
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof DefaultApi
+     * @memberof SemuxApi
      */
     registerDelegate(from: string, fee: string, data: string, options?: any): Promise<DoTransactionResponse>;
-    /**
-     * Broadcasts a raw transaction to the network.
-     * @summary Send a raw transaction
-     * @param {} raw Raw transaction
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof DefaultApi
-     */
-    sendTransaction(raw: string, options?: any): Promise<SendTransactionResponse>;
     /**
      * Sign a message.
      * @summary Sign a message
@@ -1270,22 +1084,32 @@ export declare class DefaultApi extends BaseAPI {
      * @param {} message Message to sign
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof DefaultApi
+     * @memberof SemuxApi
      */
     signMessage(address: string, message: string, options?: any): Promise<SignMessageResponse>;
     /**
+     * Sign an unsigned raw transaction then return its hexadecimal encoded string. An unsigned raw transaction can be created using /compose-raw-transaction API.
+     * @summary Sign an unsigned raw transaction
+     * @param {} raw Unsigned raw transaction encoded in hexadecimal string.
+     * @param {} address Signer&#39;s address. This address must exist in the wallet.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SemuxApi
+     */
+    signRawTransaction(raw: string, address: string, options?: any): Promise<SignRawTransactionResponse>;
+    /**
      * Transfers coins to another address.
      * @summary Transfer coins
-     * @param {} value Amount of SEM to transfer
      * @param {} from Sending address
      * @param {} to Receiving address
+     * @param {} value Amount of SEM to transfer
      * @param {} fee Transaction fee
      * @param {} data Transaction data
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof DefaultApi
+     * @memberof SemuxApi
      */
-    transfer(value: string, from: string, to: string, fee: string, data: string, options?: any): Promise<DoTransactionResponse>;
+    transfer(from: string, to: string, value: string, fee: string, data: string, options?: any): Promise<DoTransactionResponse>;
     /**
      * Unvotes for a delegate.
      * @summary Unvote
@@ -1295,7 +1119,7 @@ export declare class DefaultApi extends BaseAPI {
      * @param {} fee Transaction fee
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof DefaultApi
+     * @memberof SemuxApi
      */
     unvote(from: string, to: string, value: string, fee: string, options?: any): Promise<DoTransactionResponse>;
     /**
@@ -1306,7 +1130,7 @@ export declare class DefaultApi extends BaseAPI {
      * @param {} signature Signature to verify
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof DefaultApi
+     * @memberof SemuxApi
      */
     verifyMessage(address: string, message: string, signature: string, options?: any): Promise<VerifyMessageResponse>;
     /**
@@ -1318,7 +1142,7 @@ export declare class DefaultApi extends BaseAPI {
      * @param {} fee Transaction fee
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof DefaultApi
+     * @memberof SemuxApi
      */
     vote(from: string, to: string, value: string, fee: string, options?: any): Promise<DoTransactionResponse>;
 }
