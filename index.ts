@@ -1,4 +1,4 @@
-require("./shim");
+import "./shim";
 
 import {Configuration, SemuxApi} from "./lib/api";
 import Bytes from "./lib/Bytes";
