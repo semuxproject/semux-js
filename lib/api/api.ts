@@ -1704,19 +1704,15 @@ export const SemuxApiFetchParamCreator = function (configuration?: Configuration
          * Registers as a delegate
          * @summary Register delegate
          * @param {string} from Registering address
-         * @param {string} fee Transaction fee
          * @param {string} data Delegate name
+         * @param {string} [fee] Transaction fee
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        registerDelegate(from: string, fee: string, data: string, options: any = {}): FetchArgs {
+        registerDelegate(from: string, data: string, fee?: string, options: any = {}): FetchArgs {
             // verify required parameter 'from' is not null or undefined
             if (from === null || from === undefined) {
                 throw new RequiredError('from','Required parameter from was null or undefined when calling registerDelegate.');
-            }
-            // verify required parameter 'fee' is not null or undefined
-            if (fee === null || fee === undefined) {
-                throw new RequiredError('fee','Required parameter fee was null or undefined when calling registerDelegate.');
             }
             // verify required parameter 'data' is not null or undefined
             if (data === null || data === undefined) {
@@ -1856,12 +1852,12 @@ export const SemuxApiFetchParamCreator = function (configuration?: Configuration
          * @param {string} from Sending address
          * @param {string} to Receiving address
          * @param {string} value Amount of SEM to transfer
-         * @param {string} fee Transaction fee
-         * @param {string} data Transaction data
+         * @param {string} [fee] Transaction fee
+         * @param {string} [data] Transaction data
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        transfer(from: string, to: string, value: string, fee: string, data: string, options: any = {}): FetchArgs {
+        transfer(from: string, to: string, value: string, fee?: string, data?: string, options: any = {}): FetchArgs {
             // verify required parameter 'from' is not null or undefined
             if (from === null || from === undefined) {
                 throw new RequiredError('from','Required parameter from was null or undefined when calling transfer.');
@@ -1873,14 +1869,6 @@ export const SemuxApiFetchParamCreator = function (configuration?: Configuration
             // verify required parameter 'value' is not null or undefined
             if (value === null || value === undefined) {
                 throw new RequiredError('value','Required parameter value was null or undefined when calling transfer.');
-            }
-            // verify required parameter 'fee' is not null or undefined
-            if (fee === null || fee === undefined) {
-                throw new RequiredError('fee','Required parameter fee was null or undefined when calling transfer.');
-            }
-            // verify required parameter 'data' is not null or undefined
-            if (data === null || data === undefined) {
-                throw new RequiredError('data','Required parameter data was null or undefined when calling transfer.');
             }
             const localVarPath = `/transaction/transfer`;
             const localVarUrlObj = url.parse(localVarPath, true);
@@ -1930,11 +1918,11 @@ export const SemuxApiFetchParamCreator = function (configuration?: Configuration
          * @param {string} from Voting address
          * @param {string} to Delegate address
          * @param {string} value Vote amount
-         * @param {string} fee Transaction fee
+         * @param {string} [fee] Transaction fee
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        unvote(from: string, to: string, value: string, fee: string, options: any = {}): FetchArgs {
+        unvote(from: string, to: string, value: string, fee?: string, options: any = {}): FetchArgs {
             // verify required parameter 'from' is not null or undefined
             if (from === null || from === undefined) {
                 throw new RequiredError('from','Required parameter from was null or undefined when calling unvote.');
@@ -1946,10 +1934,6 @@ export const SemuxApiFetchParamCreator = function (configuration?: Configuration
             // verify required parameter 'value' is not null or undefined
             if (value === null || value === undefined) {
                 throw new RequiredError('value','Required parameter value was null or undefined when calling unvote.');
-            }
-            // verify required parameter 'fee' is not null or undefined
-            if (fee === null || fee === undefined) {
-                throw new RequiredError('fee','Required parameter fee was null or undefined when calling unvote.');
             }
             const localVarPath = `/transaction/unvote`;
             const localVarUrlObj = url.parse(localVarPath, true);
@@ -2051,11 +2035,11 @@ export const SemuxApiFetchParamCreator = function (configuration?: Configuration
          * @param {string} from Voting address
          * @param {string} to Delegate address
          * @param {string} value Vote amount
-         * @param {string} fee Transaction fee
+         * @param {string} [fee] Transaction fee
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        vote(from: string, to: string, value: string, fee: string, options: any = {}): FetchArgs {
+        vote(from: string, to: string, value: string, fee?: string, options: any = {}): FetchArgs {
             // verify required parameter 'from' is not null or undefined
             if (from === null || from === undefined) {
                 throw new RequiredError('from','Required parameter from was null or undefined when calling vote.');
@@ -2067,10 +2051,6 @@ export const SemuxApiFetchParamCreator = function (configuration?: Configuration
             // verify required parameter 'value' is not null or undefined
             if (value === null || value === undefined) {
                 throw new RequiredError('value','Required parameter value was null or undefined when calling vote.');
-            }
-            // verify required parameter 'fee' is not null or undefined
-            if (fee === null || fee === undefined) {
-                throw new RequiredError('fee','Required parameter fee was null or undefined when calling vote.');
             }
             const localVarPath = `/transaction/vote`;
             const localVarUrlObj = url.parse(localVarPath, true);
@@ -2580,13 +2560,13 @@ export const SemuxApiFp = function(configuration?: Configuration) {
          * Registers as a delegate
          * @summary Register delegate
          * @param {string} from Registering address
-         * @param {string} fee Transaction fee
          * @param {string} data Delegate name
+         * @param {string} [fee] Transaction fee
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        registerDelegate(from: string, fee: string, data: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<DoTransactionResponse> {
-            const localVarFetchArgs = SemuxApiFetchParamCreator(configuration).registerDelegate(from, fee, data, options);
+        registerDelegate(from: string, data: string, fee?: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<DoTransactionResponse> {
+            const localVarFetchArgs = SemuxApiFetchParamCreator(configuration).registerDelegate(from, data, fee, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -2643,12 +2623,12 @@ export const SemuxApiFp = function(configuration?: Configuration) {
          * @param {string} from Sending address
          * @param {string} to Receiving address
          * @param {string} value Amount of SEM to transfer
-         * @param {string} fee Transaction fee
-         * @param {string} data Transaction data
+         * @param {string} [fee] Transaction fee
+         * @param {string} [data] Transaction data
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        transfer(from: string, to: string, value: string, fee: string, data: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<DoTransactionResponse> {
+        transfer(from: string, to: string, value: string, fee?: string, data?: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<DoTransactionResponse> {
             const localVarFetchArgs = SemuxApiFetchParamCreator(configuration).transfer(from, to, value, fee, data, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
@@ -2666,11 +2646,11 @@ export const SemuxApiFp = function(configuration?: Configuration) {
          * @param {string} from Voting address
          * @param {string} to Delegate address
          * @param {string} value Vote amount
-         * @param {string} fee Transaction fee
+         * @param {string} [fee] Transaction fee
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        unvote(from: string, to: string, value: string, fee: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<DoTransactionResponse> {
+        unvote(from: string, to: string, value: string, fee?: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<DoTransactionResponse> {
             const localVarFetchArgs = SemuxApiFetchParamCreator(configuration).unvote(from, to, value, fee, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
@@ -2709,11 +2689,11 @@ export const SemuxApiFp = function(configuration?: Configuration) {
          * @param {string} from Voting address
          * @param {string} to Delegate address
          * @param {string} value Vote amount
-         * @param {string} fee Transaction fee
+         * @param {string} [fee] Transaction fee
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        vote(from: string, to: string, value: string, fee: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<DoTransactionResponse> {
+        vote(from: string, to: string, value: string, fee?: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<DoTransactionResponse> {
             const localVarFetchArgs = SemuxApiFetchParamCreator(configuration).vote(from, to, value, fee, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
@@ -2979,13 +2959,13 @@ export const SemuxApiFactory = function (configuration?: Configuration, fetch?: 
          * Registers as a delegate
          * @summary Register delegate
          * @param {string} from Registering address
-         * @param {string} fee Transaction fee
          * @param {string} data Delegate name
+         * @param {string} [fee] Transaction fee
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        registerDelegate(from: string, fee: string, data: string, options?: any) {
-            return SemuxApiFp(configuration).registerDelegate(from, fee, data, options)(fetch, basePath);
+        registerDelegate(from: string, data: string, fee?: string, options?: any) {
+            return SemuxApiFp(configuration).registerDelegate(from, data, fee, options)(fetch, basePath);
         },
         /**
          * Sign a message.
@@ -3015,12 +2995,12 @@ export const SemuxApiFactory = function (configuration?: Configuration, fetch?: 
          * @param {string} from Sending address
          * @param {string} to Receiving address
          * @param {string} value Amount of SEM to transfer
-         * @param {string} fee Transaction fee
-         * @param {string} data Transaction data
+         * @param {string} [fee] Transaction fee
+         * @param {string} [data] Transaction data
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        transfer(from: string, to: string, value: string, fee: string, data: string, options?: any) {
+        transfer(from: string, to: string, value: string, fee?: string, data?: string, options?: any) {
             return SemuxApiFp(configuration).transfer(from, to, value, fee, data, options)(fetch, basePath);
         },
         /**
@@ -3029,11 +3009,11 @@ export const SemuxApiFactory = function (configuration?: Configuration, fetch?: 
          * @param {string} from Voting address
          * @param {string} to Delegate address
          * @param {string} value Vote amount
-         * @param {string} fee Transaction fee
+         * @param {string} [fee] Transaction fee
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        unvote(from: string, to: string, value: string, fee: string, options?: any) {
+        unvote(from: string, to: string, value: string, fee?: string, options?: any) {
             return SemuxApiFp(configuration).unvote(from, to, value, fee, options)(fetch, basePath);
         },
         /**
@@ -3054,11 +3034,11 @@ export const SemuxApiFactory = function (configuration?: Configuration, fetch?: 
          * @param {string} from Voting address
          * @param {string} to Delegate address
          * @param {string} value Vote amount
-         * @param {string} fee Transaction fee
+         * @param {string} [fee] Transaction fee
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        vote(from: string, to: string, value: string, fee: string, options?: any) {
+        vote(from: string, to: string, value: string, fee?: string, options?: any) {
             return SemuxApiFp(configuration).vote(from, to, value, fee, options)(fetch, basePath);
         },
     };
@@ -3364,14 +3344,14 @@ export class SemuxApi extends BaseAPI {
      * Registers as a delegate
      * @summary Register delegate
      * @param {} from Registering address
-     * @param {} fee Transaction fee
      * @param {} data Delegate name
+     * @param {} [fee] Transaction fee
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SemuxApi
      */
-    public registerDelegate(from: string, fee: string, data: string, options?: any) {
-        return SemuxApiFp(this.configuration).registerDelegate(from, fee, data, options)(this.fetch, this.basePath);
+    public registerDelegate(from: string, data: string, fee?: string, options?: any) {
+        return SemuxApiFp(this.configuration).registerDelegate(from, data, fee, options)(this.fetch, this.basePath);
     }
 
     /**
@@ -3406,13 +3386,13 @@ export class SemuxApi extends BaseAPI {
      * @param {} from Sending address
      * @param {} to Receiving address
      * @param {} value Amount of SEM to transfer
-     * @param {} fee Transaction fee
-     * @param {} data Transaction data
+     * @param {} [fee] Transaction fee
+     * @param {} [data] Transaction data
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SemuxApi
      */
-    public transfer(from: string, to: string, value: string, fee: string, data: string, options?: any) {
+    public transfer(from: string, to: string, value: string, fee?: string, data?: string, options?: any) {
         return SemuxApiFp(this.configuration).transfer(from, to, value, fee, data, options)(this.fetch, this.basePath);
     }
 
@@ -3422,12 +3402,12 @@ export class SemuxApi extends BaseAPI {
      * @param {} from Voting address
      * @param {} to Delegate address
      * @param {} value Vote amount
-     * @param {} fee Transaction fee
+     * @param {} [fee] Transaction fee
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SemuxApi
      */
-    public unvote(from: string, to: string, value: string, fee: string, options?: any) {
+    public unvote(from: string, to: string, value: string, fee?: string, options?: any) {
         return SemuxApiFp(this.configuration).unvote(from, to, value, fee, options)(this.fetch, this.basePath);
     }
 
@@ -3451,12 +3431,12 @@ export class SemuxApi extends BaseAPI {
      * @param {} from Voting address
      * @param {} to Delegate address
      * @param {} value Vote amount
-     * @param {} fee Transaction fee
+     * @param {} [fee] Transaction fee
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SemuxApi
      */
-    public vote(from: string, to: string, value: string, fee: string, options?: any) {
+    public vote(from: string, to: string, value: string, fee?: string, options?: any) {
         return SemuxApiFp(this.configuration).vote(from, to, value, fee, options)(this.fetch, this.basePath);
     }
 

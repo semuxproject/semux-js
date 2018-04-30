@@ -760,13 +760,13 @@ export declare const SemuxApiFetchParamCreator: (configuration?: Configuration) 
     getVote(delegate: string, voter: string, options?: any): FetchArgs;
     getVotes(delegate: string, options?: any): FetchArgs;
     listAccounts(options?: any): FetchArgs;
-    registerDelegate(from: string, fee: string, data: string, options?: any): FetchArgs;
+    registerDelegate(from: string, data: string, fee?: string, options?: any): FetchArgs;
     signMessage(address: string, message: string, options?: any): FetchArgs;
     signRawTransaction(raw: string, address: string, options?: any): FetchArgs;
-    transfer(from: string, to: string, value: string, fee: string, data: string, options?: any): FetchArgs;
-    unvote(from: string, to: string, value: string, fee: string, options?: any): FetchArgs;
+    transfer(from: string, to: string, value: string, fee?: string, data?: string, options?: any): FetchArgs;
+    unvote(from: string, to: string, value: string, fee?: string, options?: any): FetchArgs;
     verifyMessage(address: string, message: string, signature: string, options?: any): FetchArgs;
-    vote(from: string, to: string, value: string, fee: string, options?: any): FetchArgs;
+    vote(from: string, to: string, value: string, fee?: string, options?: any): FetchArgs;
 };
 /**
  * SemuxApi - functional programming interface
@@ -797,13 +797,13 @@ export declare const SemuxApiFp: (configuration?: Configuration) => {
     getVote(delegate: string, voter: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<GetVoteResponse>;
     getVotes(delegate: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<GetVotesResponse>;
     listAccounts(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<ListAccountsResponse>;
-    registerDelegate(from: string, fee: string, data: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<DoTransactionResponse>;
+    registerDelegate(from: string, data: string, fee?: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<DoTransactionResponse>;
     signMessage(address: string, message: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<SignMessageResponse>;
     signRawTransaction(raw: string, address: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<SignRawTransactionResponse>;
-    transfer(from: string, to: string, value: string, fee: string, data: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<DoTransactionResponse>;
-    unvote(from: string, to: string, value: string, fee: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<DoTransactionResponse>;
+    transfer(from: string, to: string, value: string, fee?: string, data?: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<DoTransactionResponse>;
+    unvote(from: string, to: string, value: string, fee?: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<DoTransactionResponse>;
     verifyMessage(address: string, message: string, signature: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<VerifyMessageResponse>;
-    vote(from: string, to: string, value: string, fee: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<DoTransactionResponse>;
+    vote(from: string, to: string, value: string, fee?: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<DoTransactionResponse>;
 };
 /**
  * SemuxApi - factory interface
@@ -834,13 +834,13 @@ export declare const SemuxApiFactory: (configuration?: Configuration, fetch?: Fe
     getVote(delegate: string, voter: string, options?: any): Promise<GetVoteResponse>;
     getVotes(delegate: string, options?: any): Promise<GetVotesResponse>;
     listAccounts(options?: any): Promise<ListAccountsResponse>;
-    registerDelegate(from: string, fee: string, data: string, options?: any): Promise<DoTransactionResponse>;
+    registerDelegate(from: string, data: string, fee?: string, options?: any): Promise<DoTransactionResponse>;
     signMessage(address: string, message: string, options?: any): Promise<SignMessageResponse>;
     signRawTransaction(raw: string, address: string, options?: any): Promise<SignRawTransactionResponse>;
-    transfer(from: string, to: string, value: string, fee: string, data: string, options?: any): Promise<DoTransactionResponse>;
-    unvote(from: string, to: string, value: string, fee: string, options?: any): Promise<DoTransactionResponse>;
+    transfer(from: string, to: string, value: string, fee?: string, data?: string, options?: any): Promise<DoTransactionResponse>;
+    unvote(from: string, to: string, value: string, fee?: string, options?: any): Promise<DoTransactionResponse>;
     verifyMessage(address: string, message: string, signature: string, options?: any): Promise<VerifyMessageResponse>;
-    vote(from: string, to: string, value: string, fee: string, options?: any): Promise<DoTransactionResponse>;
+    vote(from: string, to: string, value: string, fee?: string, options?: any): Promise<DoTransactionResponse>;
 };
 /**
  * SemuxApi - object-oriented interface
@@ -1070,13 +1070,13 @@ export declare class SemuxApi extends BaseAPI {
      * Registers as a delegate
      * @summary Register delegate
      * @param {} from Registering address
-     * @param {} fee Transaction fee
      * @param {} data Delegate name
+     * @param {} [fee] Transaction fee
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SemuxApi
      */
-    registerDelegate(from: string, fee: string, data: string, options?: any): Promise<DoTransactionResponse>;
+    registerDelegate(from: string, data: string, fee?: string, options?: any): Promise<DoTransactionResponse>;
     /**
      * Sign a message.
      * @summary Sign a message
@@ -1103,25 +1103,25 @@ export declare class SemuxApi extends BaseAPI {
      * @param {} from Sending address
      * @param {} to Receiving address
      * @param {} value Amount of SEM to transfer
-     * @param {} fee Transaction fee
-     * @param {} data Transaction data
+     * @param {} [fee] Transaction fee
+     * @param {} [data] Transaction data
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SemuxApi
      */
-    transfer(from: string, to: string, value: string, fee: string, data: string, options?: any): Promise<DoTransactionResponse>;
+    transfer(from: string, to: string, value: string, fee?: string, data?: string, options?: any): Promise<DoTransactionResponse>;
     /**
      * Unvotes for a delegate.
      * @summary Unvote
      * @param {} from Voting address
      * @param {} to Delegate address
      * @param {} value Vote amount
-     * @param {} fee Transaction fee
+     * @param {} [fee] Transaction fee
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SemuxApi
      */
-    unvote(from: string, to: string, value: string, fee: string, options?: any): Promise<DoTransactionResponse>;
+    unvote(from: string, to: string, value: string, fee?: string, options?: any): Promise<DoTransactionResponse>;
     /**
      * Verify a signed message.
      * @summary Verify a message
@@ -1139,10 +1139,10 @@ export declare class SemuxApi extends BaseAPI {
      * @param {} from Voting address
      * @param {} to Delegate address
      * @param {} value Vote amount
-     * @param {} fee Transaction fee
+     * @param {} [fee] Transaction fee
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SemuxApi
      */
-    vote(from: string, to: string, value: string, fee: string, options?: any): Promise<DoTransactionResponse>;
+    vote(from: string, to: string, value: string, fee?: string, options?: any): Promise<DoTransactionResponse>;
 }

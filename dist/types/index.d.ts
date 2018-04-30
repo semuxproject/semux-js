@@ -1,3 +1,4 @@
+import "./shim";
 import { Configuration, SemuxApi } from "./lib/api";
 import Bytes from "./lib/Bytes";
 import Cast from "./lib/Cast";

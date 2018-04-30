@@ -1,0 +1,7 @@
+*
+!.gitignore
+!dist
+!docs
+!package.json
+!package-lock.json
+!README.md
