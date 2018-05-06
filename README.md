@@ -23,6 +23,10 @@ npm install --save semux
 - [Byte Encoder](https://github.com/semuxproject/semux-js-sdk/blob/master/lib/SimpleDecoder.spec.ts) / [Byte Decoder](https://github.com/semuxproject/semux-js-sdk/blob/master/lib/SimpleDecoder.spec.ts)
 - [API Client](https://github.com/semuxproject/semux-js-sdk/blob/master/lib/api/api.spec.ts)
 
+# Example Applications
+
+- https://github.com/witoldsz/semux-light
+
 # Browser Compatibility
 
 - Chrome >= 65
@@ -69,4 +73,4 @@ npm run format:check
 
 This project is supported by [BrowserStack](https://www.browserstack.com/) to test cross-browser compatibility:
 
-[![BrowserStack Logo](https://ipfs.io/ipfs/QmSjhNTsswVWtxfkWup2XdTcFhhQrbw2Bdxajr1w7XM4Hh)](https://www.browserstack.com/)
+[![BrowserStack Logo](https://i.imgur.com/tssTLRk.png)](https://www.browserstack.com/)
