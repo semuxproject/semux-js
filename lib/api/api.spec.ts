@@ -1,5 +1,6 @@
 import { Buffer } from "buffer";
 import chai from 'chai';
+import sleep from "es7-sleep";
 import Long from "long";
 import Key from "../Key";
 import Network from "../Network";
@@ -7,7 +8,6 @@ import Transaction from "../Transaction";
 import TransactionType from "../TransactionType";
 import * as API from "./api";
 import {Configuration} from "./configuration";
-import sleep from "es7-sleep";
 
 const DEV_KEY = Key.importEncodedPrivateKey(Buffer.from(
   "302e020100300506032b657004220420acbd5f2cb2b6053f704376d12df99f2aa163d267a755c7f1d9fe55d2a2dc5405",
@@ -68,10 +68,9 @@ describe("Semux API Test", () => {
     await sleep(500);
 
     const responsePendingTxs = await api.getPendingTransactions();
-    const pendingTxs : API.TransactionType[] = [{
-      "blockNumber": "null",
+    const pendingTxs : API.PendingTransactionType[] = [{
       "hash": `0x${Buffer.from(tx.getHash().buffer).toString("hex")}`,
-      "type": "TRANSFER",
+      "type": API.PendingTransactionType.TypeEnum.TRANSFER,
       "from": `0x${DEV_ADDRESS}`,
       "to": `0x${DEV_ADDRESS}`,
       "value": "1234567890",

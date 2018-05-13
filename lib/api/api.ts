@@ -114,6 +114,32 @@ export interface AccountType {
      * @memberof AccountType
      */
     transactionCount?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof AccountType
+     */
+    pendingTransactionCount?: number;
+}
+
+/**
+ * 
+ * @export
+ * @interface AccountVoteType
+ */
+export interface AccountVoteType {
+    /**
+     * 
+     * @type {DelegateType}
+     * @memberof AccountVoteType
+     */
+    delegate?: DelegateType;
+    /**
+     * Votes from the account
+     * @type {string}
+     * @memberof AccountVoteType
+     */
+    votes?: string;
 }
 
 /**
@@ -173,7 +199,7 @@ export interface BlockType {
      */
     parentHash?: string;
     /**
-     * 
+     * Block timestamp in milliseconds specified by the block forger. There can be a time drift up to 30 seconds.
      * @type {string}
      * @memberof BlockType
      */
@@ -223,47 +249,53 @@ export interface BlockType {
  */
 export interface DelegateType {
     /**
-     * 
+     * Delegate SEM address
      * @type {string}
      * @memberof DelegateType
      */
     address?: string;
     /**
-     * 
+     * Delegate name
      * @type {string}
      * @memberof DelegateType
      */
     name?: string;
     /**
-     * 
+     * Delegate registration block number
      * @type {string}
      * @memberof DelegateType
      */
     registeredAt?: string;
     /**
-     * 
+     * Total votes of the delegate
      * @type {string}
      * @memberof DelegateType
      */
     votes?: string;
     /**
-     * 
+     * Total forged blocks including primary rounds & backup rounds
      * @type {string}
      * @memberof DelegateType
      */
     blocksForged?: string;
     /**
-     * 
+     * Forged blocks when the delegate is a primary validator
      * @type {string}
      * @memberof DelegateType
      */
     turnsHit?: string;
     /**
-     * 
+     * Missed blocks when the delegate is a primary validator
      * @type {string}
      * @memberof DelegateType
      */
     turnsMissed?: string;
+    /**
+     * Whether the delegate is currently a validator
+     * @type {boolean}
+     * @memberof DelegateType
+     */
+    validator?: boolean;
 }
 
 /**
@@ -272,6 +304,18 @@ export interface DelegateType {
  * @interface InfoType
  */
 export interface InfoType {
+    /**
+     * 
+     * @type {string}
+     * @memberof InfoType
+     */
+    network?: InfoType.NetworkEnum;
+    /**
+     * 
+     * @type {Array&lt;string&gt;}
+     * @memberof InfoType
+     */
+    capabilities?: Array<string>;
     /**
      * 
      * @type {string}
@@ -308,6 +352,22 @@ export interface InfoType {
      * @memberof InfoType
      */
     pendingTransactions?: number;
+}
+
+/**
+ * @export
+ * @namespace InfoType
+ */
+export namespace InfoType {
+    /**
+     * @export
+     * @enum {string}
+     */
+    export enum NetworkEnum {
+        MAINNET = <any> 'MAINNET',
+        TESTNET = <any> 'TESTNET',
+        DEVNET = <any> 'DEVNET'
+    }
 }
 
 /**
@@ -369,23 +429,105 @@ export interface PeerType {
 /**
  * 
  * @export
+ * @interface PendingTransactionType
+ */
+export interface PendingTransactionType {
+    /**
+     * 
+     * @type {string}
+     * @memberof PendingTransactionType
+     */
+    hash?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PendingTransactionType
+     */
+    type?: PendingTransactionType.TypeEnum;
+    /**
+     * Sender's address
+     * @type {string}
+     * @memberof PendingTransactionType
+     */
+    from?: string;
+    /**
+     * Recipient's address
+     * @type {string}
+     * @memberof PendingTransactionType
+     */
+    to?: string;
+    /**
+     * Transaction value in nano SEM
+     * @type {string}
+     * @memberof PendingTransactionType
+     */
+    value?: string;
+    /**
+     * Transaction fee in nano SEM
+     * @type {string}
+     * @memberof PendingTransactionType
+     */
+    fee?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PendingTransactionType
+     */
+    nonce?: string;
+    /**
+     * Transaction timestamp in milliseconds specified by the transaction creator. There can be a time drift up to 2 hours.
+     * @type {string}
+     * @memberof PendingTransactionType
+     */
+    timestamp?: string;
+    /**
+     * Transaction data encoded in hexadecimal string
+     * @type {string}
+     * @memberof PendingTransactionType
+     */
+    data?: string;
+}
+
+/**
+ * @export
+ * @namespace PendingTransactionType
+ */
+export namespace PendingTransactionType {
+    /**
+     * @export
+     * @enum {string}
+     */
+    export enum TypeEnum {
+        COINBASE = <any> 'COINBASE',
+        TRANSFER = <any> 'TRANSFER',
+        DELEGATE = <any> 'DELEGATE',
+        VOTE = <any> 'VOTE',
+        UNVOTE = <any> 'UNVOTE',
+        CREATE = <any> 'CREATE',
+        CALL = <any> 'CALL'
+    }
+}
+
+/**
+ * 
+ * @export
  * @interface TransactionLimitsType
  */
 export interface TransactionLimitsType {
     /**
-     * 
+     * The maximum transaction size in bytes
      * @type {number}
      * @memberof TransactionLimitsType
      */
     maxTransactionDataSize?: number;
     /**
-     * 
+     * The minimum transaction fee in nano SEM
      * @type {string}
      * @memberof TransactionLimitsType
      */
     minTransactionFee?: string;
     /**
-     * 
+     * The amount of nano SEM required to burn for delegate registration
      * @type {string}
      * @memberof TransactionLimitsType
      */
@@ -415,27 +557,27 @@ export interface TransactionType {
      * @type {string}
      * @memberof TransactionType
      */
-    type?: string;
+    type?: TransactionType.TypeEnum;
     /**
-     * 
+     * Sender's address
      * @type {string}
      * @memberof TransactionType
      */
     from?: string;
     /**
-     * 
+     * Recipient's address
      * @type {string}
      * @memberof TransactionType
      */
     to?: string;
     /**
-     * 
+     * Transaction value in nano SEM
      * @type {string}
      * @memberof TransactionType
      */
     value?: string;
     /**
-     * 
+     * Transaction fee in nano SEM
      * @type {string}
      * @memberof TransactionType
      */
@@ -447,17 +589,37 @@ export interface TransactionType {
      */
     nonce?: string;
     /**
-     * 
+     * Transaction timestamp in milliseconds specified by the transaction creator. There can be a time drift up to 2 hours.
      * @type {string}
      * @memberof TransactionType
      */
     timestamp?: string;
     /**
-     * 
+     * Transaction data encoded in hexadecimal string
      * @type {string}
      * @memberof TransactionType
      */
     data?: string;
+}
+
+/**
+ * @export
+ * @namespace TransactionType
+ */
+export namespace TransactionType {
+    /**
+     * @export
+     * @enum {string}
+     */
+    export enum TypeEnum {
+        COINBASE = <any> 'COINBASE',
+        TRANSFER = <any> 'TRANSFER',
+        DELEGATE = <any> 'DELEGATE',
+        VOTE = <any> 'VOTE',
+        UNVOTE = <any> 'UNVOTE',
+        CREATE = <any> 'CREATE',
+        CALL = <any> 'CALL'
+    }
 }
 
 /**
@@ -475,7 +637,7 @@ export interface AddNodeResponse extends ApiHandlerResponse {
  */
 export interface ComposeRawTransactionResponse extends ApiHandlerResponse {
     /**
-     * 
+     * The composed raw transaction encoded in hexadecimal string
      * @type {string}
      * @memberof ComposeRawTransactionResponse
      */
@@ -513,6 +675,20 @@ export interface DoTransactionResponse extends ApiHandlerResponse {
 /**
  * 
  * @export
+ * @interface GetAccountPendingTransactionsResponse
+ */
+export interface GetAccountPendingTransactionsResponse extends ApiHandlerResponse {
+    /**
+     * 
+     * @type {Array&lt;PendingTransactionType&gt;}
+     * @memberof GetAccountPendingTransactionsResponse
+     */
+    result?: Array<PendingTransactionType>;
+}
+
+/**
+ * 
+ * @export
  * @interface GetAccountResponse
  */
 export interface GetAccountResponse extends ApiHandlerResponse {
@@ -536,6 +712,20 @@ export interface GetAccountTransactionsResponse extends ApiHandlerResponse {
      * @memberof GetAccountTransactionsResponse
      */
     result?: Array<TransactionType>;
+}
+
+/**
+ * 
+ * @export
+ * @interface GetAccountVotesResponse
+ */
+export interface GetAccountVotesResponse extends ApiHandlerResponse {
+    /**
+     * 
+     * @type {Array&lt;AccountVoteType&gt;}
+     * @memberof GetAccountVotesResponse
+     */
+    result?: Array<AccountVoteType>;
 }
 
 /**
@@ -644,10 +834,10 @@ export interface GetPeersResponse extends ApiHandlerResponse {
 export interface GetPendingTransactionsResponse extends ApiHandlerResponse {
     /**
      * 
-     * @type {Array&lt;TransactionType&gt;}
+     * @type {Array&lt;PendingTransactionType&gt;}
      * @memberof GetPendingTransactionsResponse
      */
-    result?: Array<TransactionType>;
+    result?: Array<PendingTransactionType>;
 }
 
 /**
@@ -693,7 +883,7 @@ export interface GetTransactionResponse extends ApiHandlerResponse {
  */
 export interface GetValidatorsResponse extends ApiHandlerResponse {
     /**
-     * 
+     * A list of validator addresses
      * @type {Array&lt;string&gt;}
      * @memberof GetValidatorsResponse
      */
@@ -721,7 +911,7 @@ export interface GetVoteResponse extends ApiHandlerResponse {
  */
 export interface GetVotesResponse extends ApiHandlerResponse {
     /**
-     * 
+     * A map of [voter address] => [votes]
      * @type {{ [key: string]: string; }}
      * @memberof GetVotesResponse
      */
@@ -735,7 +925,7 @@ export interface GetVotesResponse extends ApiHandlerResponse {
  */
 export interface ListAccountsResponse extends ApiHandlerResponse {
     /**
-     * 
+     * A list of account addresses
      * @type {Array&lt;string&gt;}
      * @memberof ListAccountsResponse
      */
@@ -745,19 +935,11 @@ export interface ListAccountsResponse extends ApiHandlerResponse {
 /**
  * 
  * @export
- * @interface SendTransactionResponse
- */
-export interface SendTransactionResponse extends ApiHandlerResponse {
-}
-
-/**
- * 
- * @export
  * @interface SignMessageResponse
  */
 export interface SignMessageResponse extends ApiHandlerResponse {
     /**
-     * 
+     * The message signature encoded in hexadecimal string
      * @type {string}
      * @memberof SignMessageResponse
      */
@@ -771,7 +953,7 @@ export interface SignMessageResponse extends ApiHandlerResponse {
  */
 export interface SignRawTransactionResponse extends ApiHandlerResponse {
     /**
-     * 
+     * The signed raw transaction encoded in hexadecimal string
      * @type {string}
      * @memberof SignRawTransactionResponse
      */
@@ -785,7 +967,7 @@ export interface SignRawTransactionResponse extends ApiHandlerResponse {
  */
 export interface VerifyMessageResponse extends ApiHandlerResponse {
     /**
-     * 
+     * Whether the signature is valid
      * @type {boolean}
      * @memberof VerifyMessageResponse
      */
@@ -802,7 +984,7 @@ export const SemuxApiFetchParamCreator = function (configuration?: Configuration
         /**
          * Adds a node to node manager.
          * @summary Add node
-         * @param {string} node Name of the node in host:port format
+         * @param {string} node Address of the node in host:port format
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -959,7 +1141,7 @@ export const SemuxApiFetchParamCreator = function (configuration?: Configuration
          * @param {string} fee Transaction fee in nano
          * @param {string} nonce Transaction nonce
          * @param {string} [to] Recipient&#39;s address
-         * @param {string} [value] Transaction value in nano
+         * @param {string} [value] Transaction value in nano SEM
          * @param {string} [timestamp] Transaction timestamp in milliseconds. Default to current time.
          * @param {string} [data] Hexadecimal encoded transaction data.
          * @param {*} [options] Override http request option.
@@ -1109,6 +1291,62 @@ export const SemuxApiFetchParamCreator = function (configuration?: Configuration
             };
         },
         /**
+         * Returns pending transactions from/to an account.
+         * @summary Get pending transactions of the account
+         * @param {string} address Address of account
+         * @param {string} from Starting range of transactions
+         * @param {string} to Ending range of transactions
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAccountPendingTransactions(address: string, from: string, to: string, options: any = {}): FetchArgs {
+            // verify required parameter 'address' is not null or undefined
+            if (address === null || address === undefined) {
+                throw new RequiredError('address','Required parameter address was null or undefined when calling getAccountPendingTransactions.');
+            }
+            // verify required parameter 'from' is not null or undefined
+            if (from === null || from === undefined) {
+                throw new RequiredError('from','Required parameter from was null or undefined when calling getAccountPendingTransactions.');
+            }
+            // verify required parameter 'to' is not null or undefined
+            if (to === null || to === undefined) {
+                throw new RequiredError('to','Required parameter to was null or undefined when calling getAccountPendingTransactions.');
+            }
+            const localVarPath = `/account/pending-transactions`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication basicAuth required
+            // http basic authentication required
+            if (configuration && (configuration.username || configuration.password)) {
+                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
+            }
+
+            if (address !== undefined) {
+                localVarQueryParameter['address'] = address;
+            }
+
+            if (from !== undefined) {
+                localVarQueryParameter['from'] = from;
+            }
+
+            if (to !== undefined) {
+                localVarQueryParameter['to'] = to;
+            }
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Returns transactions from/to an account.
          * @summary Get account transactions
          * @param {string} address Address of account
@@ -1152,6 +1390,44 @@ export const SemuxApiFetchParamCreator = function (configuration?: Configuration
 
             if (to !== undefined) {
                 localVarQueryParameter['to'] = to;
+            }
+
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Returns votes from the account.
+         * @summary Get account votes
+         * @param {string} address Address of account
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAccountVotes(address: string, options: any = {}): FetchArgs {
+            // verify required parameter 'address' is not null or undefined
+            if (address === null || address === undefined) {
+                throw new RequiredError('address','Required parameter address was null or undefined when calling getAccountVotes.');
+            }
+            const localVarPath = `/account/votes`;
+            const localVarUrlObj = url.parse(localVarPath, true);
+            const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication basicAuth required
+            // http basic authentication required
+            if (configuration && (configuration.username || configuration.password)) {
+                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
+            }
+
+            if (address !== undefined) {
+                localVarQueryParameter['address'] = address;
             }
 
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
@@ -1520,7 +1796,7 @@ export const SemuxApiFetchParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Get minimum fee and maximum size.
+         * Returns transaction limitations including minimum transaction fee and maximum transaction size.
          * @summary Get transaction limits
          * @param {string} type Type of transaction
          * @param {*} [options] Override http request option.
@@ -1558,7 +1834,7 @@ export const SemuxApiFetchParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Returns a list of validators.
+         * Returns a list of validators in Semux addresses.
          * @summary Get validators
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1634,8 +1910,8 @@ export const SemuxApiFetchParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Returns all the votes to a delegate
-         * @summary Get votes
+         * Returns all the votes to a delegate as a map of [voter address] => [votes]
+         * @summary Get a delegate's votes
          * @param {string} delegate Delegate address
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1704,8 +1980,8 @@ export const SemuxApiFetchParamCreator = function (configuration?: Configuration
          * Registers as a delegate
          * @summary Register delegate
          * @param {string} from Registering address
-         * @param {string} data Delegate name
-         * @param {string} [fee] Transaction fee
+         * @param {string} data Delegate name in hexadecimal encoded UTF-8 string, 16 bytes of data at maximum
+         * @param {string} [fee] Transaction fee in nano SEM, default to minimum fee if omitted
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1755,8 +2031,8 @@ export const SemuxApiFetchParamCreator = function (configuration?: Configuration
         /**
          * Sign a message.
          * @summary Sign a message
-         * @param {string} address Signing address
-         * @param {string} message Message to sign
+         * @param {string} address Signing address. The address must exist in the wallet.data of this Semux node.
+         * @param {string} message Message to sign in UTF-8 string
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1849,11 +2125,11 @@ export const SemuxApiFetchParamCreator = function (configuration?: Configuration
         /**
          * Transfers coins to another address.
          * @summary Transfer coins
-         * @param {string} from Sending address
-         * @param {string} to Receiving address
-         * @param {string} value Amount of SEM to transfer
-         * @param {string} [fee] Transaction fee
-         * @param {string} [data] Transaction data
+         * @param {string} from Sender&#39;s address. The address must exist in the wallet.data of this Semux node.
+         * @param {string} to Recipient&#39;s address
+         * @param {string} value Amount of SEM to transfer in nano SEM
+         * @param {string} [fee] Transaction fee in nano SEM, default to minimum fee if omitted
+         * @param {string} [data] Transaction data encoded in hexadecimal string
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1915,10 +2191,10 @@ export const SemuxApiFetchParamCreator = function (configuration?: Configuration
         /**
          * Unvotes for a delegate.
          * @summary Unvote
-         * @param {string} from Voting address
+         * @param {string} from Voter&#39;s address. The address must exist in the wallet.data of this Semux node.
          * @param {string} to Delegate address
-         * @param {string} value Vote amount
-         * @param {string} [fee] Transaction fee
+         * @param {string} value Number of votes in nano SEM
+         * @param {string} [fee] Transaction fee in nano SEM, default to minimum fee if omitted
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1976,8 +2252,8 @@ export const SemuxApiFetchParamCreator = function (configuration?: Configuration
         /**
          * Verify a signed message.
          * @summary Verify a message
-         * @param {string} address Address
-         * @param {string} message Message
+         * @param {string} address Address of the message signer
+         * @param {string} message Message in UTF-8 string
          * @param {string} signature Signature to verify
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2032,10 +2308,10 @@ export const SemuxApiFetchParamCreator = function (configuration?: Configuration
         /**
          * Votes for a delegate.
          * @summary Vote
-         * @param {string} from Voting address
+         * @param {string} from Voter&#39;s address. The address must exist in the wallet.data of this Semux node.
          * @param {string} to Delegate address
-         * @param {string} value Vote amount
-         * @param {string} [fee] Transaction fee
+         * @param {string} value Number of votes in nano SEM
+         * @param {string} [fee] Transaction fee in nano SEM, default to minimum fee if omitted
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -2102,7 +2378,7 @@ export const SemuxApiFp = function(configuration?: Configuration) {
         /**
          * Adds a node to node manager.
          * @summary Add node
-         * @param {string} node Name of the node in host:port format
+         * @param {string} node Address of the node in host:port format
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -2163,7 +2439,7 @@ export const SemuxApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        broadcastRawTransaction(raw: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<SendTransactionResponse> {
+        broadcastRawTransaction(raw: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<DoTransactionResponse> {
             const localVarFetchArgs = SemuxApiFetchParamCreator(configuration).broadcastRawTransaction(raw, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
@@ -2183,7 +2459,7 @@ export const SemuxApiFp = function(configuration?: Configuration) {
          * @param {string} fee Transaction fee in nano
          * @param {string} nonce Transaction nonce
          * @param {string} [to] Recipient&#39;s address
-         * @param {string} [value] Transaction value in nano
+         * @param {string} [value] Transaction value in nano SEM
          * @param {string} [timestamp] Transaction timestamp in milliseconds. Default to current time.
          * @param {string} [data] Hexadecimal encoded transaction data.
          * @param {*} [options] Override http request option.
@@ -2240,6 +2516,27 @@ export const SemuxApiFp = function(configuration?: Configuration) {
             };
         },
         /**
+         * Returns pending transactions from/to an account.
+         * @summary Get pending transactions of the account
+         * @param {string} address Address of account
+         * @param {string} from Starting range of transactions
+         * @param {string} to Ending range of transactions
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAccountPendingTransactions(address: string, from: string, to: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<GetAccountPendingTransactionsResponse> {
+            const localVarFetchArgs = SemuxApiFetchParamCreator(configuration).getAccountPendingTransactions(address, from, to, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
          * Returns transactions from/to an account.
          * @summary Get account transactions
          * @param {string} address Address of account
@@ -2250,6 +2547,25 @@ export const SemuxApiFp = function(configuration?: Configuration) {
          */
         getAccountTransactions(address: string, from: string, to: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<GetAccountTransactionsResponse> {
             const localVarFetchArgs = SemuxApiFetchParamCreator(configuration).getAccountTransactions(address, from, to, options);
+            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    } else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Returns votes from the account.
+         * @summary Get account votes
+         * @param {string} address Address of account
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAccountVotes(address: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<GetAccountVotesResponse> {
+            const localVarFetchArgs = SemuxApiFetchParamCreator(configuration).getAccountVotes(address, options);
             return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
                 return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
                     if (response.status >= 200 && response.status < 300) {
@@ -2463,7 +2779,7 @@ export const SemuxApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Get minimum fee and maximum size.
+         * Returns transaction limitations including minimum transaction fee and maximum transaction size.
          * @summary Get transaction limits
          * @param {string} type Type of transaction
          * @param {*} [options] Override http request option.
@@ -2482,7 +2798,7 @@ export const SemuxApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Returns a list of validators.
+         * Returns a list of validators in Semux addresses.
          * @summary Get validators
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2520,8 +2836,8 @@ export const SemuxApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * Returns all the votes to a delegate
-         * @summary Get votes
+         * Returns all the votes to a delegate as a map of [voter address] => [votes]
+         * @summary Get a delegate's votes
          * @param {string} delegate Delegate address
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2560,8 +2876,8 @@ export const SemuxApiFp = function(configuration?: Configuration) {
          * Registers as a delegate
          * @summary Register delegate
          * @param {string} from Registering address
-         * @param {string} data Delegate name
-         * @param {string} [fee] Transaction fee
+         * @param {string} data Delegate name in hexadecimal encoded UTF-8 string, 16 bytes of data at maximum
+         * @param {string} [fee] Transaction fee in nano SEM, default to minimum fee if omitted
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -2580,8 +2896,8 @@ export const SemuxApiFp = function(configuration?: Configuration) {
         /**
          * Sign a message.
          * @summary Sign a message
-         * @param {string} address Signing address
-         * @param {string} message Message to sign
+         * @param {string} address Signing address. The address must exist in the wallet.data of this Semux node.
+         * @param {string} message Message to sign in UTF-8 string
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -2620,11 +2936,11 @@ export const SemuxApiFp = function(configuration?: Configuration) {
         /**
          * Transfers coins to another address.
          * @summary Transfer coins
-         * @param {string} from Sending address
-         * @param {string} to Receiving address
-         * @param {string} value Amount of SEM to transfer
-         * @param {string} [fee] Transaction fee
-         * @param {string} [data] Transaction data
+         * @param {string} from Sender&#39;s address. The address must exist in the wallet.data of this Semux node.
+         * @param {string} to Recipient&#39;s address
+         * @param {string} value Amount of SEM to transfer in nano SEM
+         * @param {string} [fee] Transaction fee in nano SEM, default to minimum fee if omitted
+         * @param {string} [data] Transaction data encoded in hexadecimal string
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -2643,10 +2959,10 @@ export const SemuxApiFp = function(configuration?: Configuration) {
         /**
          * Unvotes for a delegate.
          * @summary Unvote
-         * @param {string} from Voting address
+         * @param {string} from Voter&#39;s address. The address must exist in the wallet.data of this Semux node.
          * @param {string} to Delegate address
-         * @param {string} value Vote amount
-         * @param {string} [fee] Transaction fee
+         * @param {string} value Number of votes in nano SEM
+         * @param {string} [fee] Transaction fee in nano SEM, default to minimum fee if omitted
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -2665,8 +2981,8 @@ export const SemuxApiFp = function(configuration?: Configuration) {
         /**
          * Verify a signed message.
          * @summary Verify a message
-         * @param {string} address Address
-         * @param {string} message Message
+         * @param {string} address Address of the message signer
+         * @param {string} message Message in UTF-8 string
          * @param {string} signature Signature to verify
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2686,10 +3002,10 @@ export const SemuxApiFp = function(configuration?: Configuration) {
         /**
          * Votes for a delegate.
          * @summary Vote
-         * @param {string} from Voting address
+         * @param {string} from Voter&#39;s address. The address must exist in the wallet.data of this Semux node.
          * @param {string} to Delegate address
-         * @param {string} value Vote amount
-         * @param {string} [fee] Transaction fee
+         * @param {string} value Number of votes in nano SEM
+         * @param {string} [fee] Transaction fee in nano SEM, default to minimum fee if omitted
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -2717,7 +3033,7 @@ export const SemuxApiFactory = function (configuration?: Configuration, fetch?: 
         /**
          * Adds a node to node manager.
          * @summary Add node
-         * @param {string} node Name of the node in host:port format
+         * @param {string} node Address of the node in host:port format
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -2762,7 +3078,7 @@ export const SemuxApiFactory = function (configuration?: Configuration, fetch?: 
          * @param {string} fee Transaction fee in nano
          * @param {string} nonce Transaction nonce
          * @param {string} [to] Recipient&#39;s address
-         * @param {string} [value] Transaction value in nano
+         * @param {string} [value] Transaction value in nano SEM
          * @param {string} [timestamp] Transaction timestamp in milliseconds. Default to current time.
          * @param {string} [data] Hexadecimal encoded transaction data.
          * @param {*} [options] Override http request option.
@@ -2792,6 +3108,18 @@ export const SemuxApiFactory = function (configuration?: Configuration, fetch?: 
             return SemuxApiFp(configuration).getAccount(address, options)(fetch, basePath);
         },
         /**
+         * Returns pending transactions from/to an account.
+         * @summary Get pending transactions of the account
+         * @param {string} address Address of account
+         * @param {string} from Starting range of transactions
+         * @param {string} to Ending range of transactions
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAccountPendingTransactions(address: string, from: string, to: string, options?: any) {
+            return SemuxApiFp(configuration).getAccountPendingTransactions(address, from, to, options)(fetch, basePath);
+        },
+        /**
          * Returns transactions from/to an account.
          * @summary Get account transactions
          * @param {string} address Address of account
@@ -2802,6 +3130,16 @@ export const SemuxApiFactory = function (configuration?: Configuration, fetch?: 
          */
         getAccountTransactions(address: string, from: string, to: string, options?: any) {
             return SemuxApiFp(configuration).getAccountTransactions(address, from, to, options)(fetch, basePath);
+        },
+        /**
+         * Returns votes from the account.
+         * @summary Get account votes
+         * @param {string} address Address of account
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAccountVotes(address: string, options?: any) {
+            return SemuxApiFp(configuration).getAccountVotes(address, options)(fetch, basePath);
         },
         /**
          * Returns a block by block hash.
@@ -2907,7 +3245,7 @@ export const SemuxApiFactory = function (configuration?: Configuration, fetch?: 
             return SemuxApiFp(configuration).getTransaction(hash, options)(fetch, basePath);
         },
         /**
-         * Get minimum fee and maximum size.
+         * Returns transaction limitations including minimum transaction fee and maximum transaction size.
          * @summary Get transaction limits
          * @param {string} type Type of transaction
          * @param {*} [options] Override http request option.
@@ -2917,7 +3255,7 @@ export const SemuxApiFactory = function (configuration?: Configuration, fetch?: 
             return SemuxApiFp(configuration).getTransactionLimits(type, options)(fetch, basePath);
         },
         /**
-         * Returns a list of validators.
+         * Returns a list of validators in Semux addresses.
          * @summary Get validators
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2937,8 +3275,8 @@ export const SemuxApiFactory = function (configuration?: Configuration, fetch?: 
             return SemuxApiFp(configuration).getVote(delegate, voter, options)(fetch, basePath);
         },
         /**
-         * Returns all the votes to a delegate
-         * @summary Get votes
+         * Returns all the votes to a delegate as a map of [voter address] => [votes]
+         * @summary Get a delegate's votes
          * @param {string} delegate Delegate address
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -2959,8 +3297,8 @@ export const SemuxApiFactory = function (configuration?: Configuration, fetch?: 
          * Registers as a delegate
          * @summary Register delegate
          * @param {string} from Registering address
-         * @param {string} data Delegate name
-         * @param {string} [fee] Transaction fee
+         * @param {string} data Delegate name in hexadecimal encoded UTF-8 string, 16 bytes of data at maximum
+         * @param {string} [fee] Transaction fee in nano SEM, default to minimum fee if omitted
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -2970,8 +3308,8 @@ export const SemuxApiFactory = function (configuration?: Configuration, fetch?: 
         /**
          * Sign a message.
          * @summary Sign a message
-         * @param {string} address Signing address
-         * @param {string} message Message to sign
+         * @param {string} address Signing address. The address must exist in the wallet.data of this Semux node.
+         * @param {string} message Message to sign in UTF-8 string
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -2992,11 +3330,11 @@ export const SemuxApiFactory = function (configuration?: Configuration, fetch?: 
         /**
          * Transfers coins to another address.
          * @summary Transfer coins
-         * @param {string} from Sending address
-         * @param {string} to Receiving address
-         * @param {string} value Amount of SEM to transfer
-         * @param {string} [fee] Transaction fee
-         * @param {string} [data] Transaction data
+         * @param {string} from Sender&#39;s address. The address must exist in the wallet.data of this Semux node.
+         * @param {string} to Recipient&#39;s address
+         * @param {string} value Amount of SEM to transfer in nano SEM
+         * @param {string} [fee] Transaction fee in nano SEM, default to minimum fee if omitted
+         * @param {string} [data] Transaction data encoded in hexadecimal string
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -3006,10 +3344,10 @@ export const SemuxApiFactory = function (configuration?: Configuration, fetch?: 
         /**
          * Unvotes for a delegate.
          * @summary Unvote
-         * @param {string} from Voting address
+         * @param {string} from Voter&#39;s address. The address must exist in the wallet.data of this Semux node.
          * @param {string} to Delegate address
-         * @param {string} value Vote amount
-         * @param {string} [fee] Transaction fee
+         * @param {string} value Number of votes in nano SEM
+         * @param {string} [fee] Transaction fee in nano SEM, default to minimum fee if omitted
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -3019,8 +3357,8 @@ export const SemuxApiFactory = function (configuration?: Configuration, fetch?: 
         /**
          * Verify a signed message.
          * @summary Verify a message
-         * @param {string} address Address
-         * @param {string} message Message
+         * @param {string} address Address of the message signer
+         * @param {string} message Message in UTF-8 string
          * @param {string} signature Signature to verify
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -3031,10 +3369,10 @@ export const SemuxApiFactory = function (configuration?: Configuration, fetch?: 
         /**
          * Votes for a delegate.
          * @summary Vote
-         * @param {string} from Voting address
+         * @param {string} from Voter&#39;s address. The address must exist in the wallet.data of this Semux node.
          * @param {string} to Delegate address
-         * @param {string} value Vote amount
-         * @param {string} [fee] Transaction fee
+         * @param {string} value Number of votes in nano SEM
+         * @param {string} [fee] Transaction fee in nano SEM, default to minimum fee if omitted
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -3054,7 +3392,7 @@ export class SemuxApi extends BaseAPI {
     /**
      * Adds a node to node manager.
      * @summary Add node
-     * @param {} node Name of the node in host:port format
+     * @param {} node Address of the node in host:port format
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SemuxApi
@@ -3107,7 +3445,7 @@ export class SemuxApi extends BaseAPI {
      * @param {} fee Transaction fee in nano
      * @param {} nonce Transaction nonce
      * @param {} [to] Recipient&#39;s address
-     * @param {} [value] Transaction value in nano
+     * @param {} [value] Transaction value in nano SEM
      * @param {} [timestamp] Transaction timestamp in milliseconds. Default to current time.
      * @param {} [data] Hexadecimal encoded transaction data.
      * @param {*} [options] Override http request option.
@@ -3143,6 +3481,20 @@ export class SemuxApi extends BaseAPI {
     }
 
     /**
+     * Returns pending transactions from/to an account.
+     * @summary Get pending transactions of the account
+     * @param {} address Address of account
+     * @param {} from Starting range of transactions
+     * @param {} to Ending range of transactions
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SemuxApi
+     */
+    public getAccountPendingTransactions(address: string, from: string, to: string, options?: any) {
+        return SemuxApiFp(this.configuration).getAccountPendingTransactions(address, from, to, options)(this.fetch, this.basePath);
+    }
+
+    /**
      * Returns transactions from/to an account.
      * @summary Get account transactions
      * @param {} address Address of account
@@ -3154,6 +3506,18 @@ export class SemuxApi extends BaseAPI {
      */
     public getAccountTransactions(address: string, from: string, to: string, options?: any) {
         return SemuxApiFp(this.configuration).getAccountTransactions(address, from, to, options)(this.fetch, this.basePath);
+    }
+
+    /**
+     * Returns votes from the account.
+     * @summary Get account votes
+     * @param {} address Address of account
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SemuxApi
+     */
+    public getAccountVotes(address: string, options?: any) {
+        return SemuxApiFp(this.configuration).getAccountVotes(address, options)(this.fetch, this.basePath);
     }
 
     /**
@@ -3282,7 +3646,7 @@ export class SemuxApi extends BaseAPI {
     }
 
     /**
-     * Get minimum fee and maximum size.
+     * Returns transaction limitations including minimum transaction fee and maximum transaction size.
      * @summary Get transaction limits
      * @param {} type Type of transaction
      * @param {*} [options] Override http request option.
@@ -3294,7 +3658,7 @@ export class SemuxApi extends BaseAPI {
     }
 
     /**
-     * Returns a list of validators.
+     * Returns a list of validators in Semux addresses.
      * @summary Get validators
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -3318,8 +3682,8 @@ export class SemuxApi extends BaseAPI {
     }
 
     /**
-     * Returns all the votes to a delegate
-     * @summary Get votes
+     * Returns all the votes to a delegate as a map of [voter address] => [votes]
+     * @summary Get a delegate's votes
      * @param {} delegate Delegate address
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -3344,8 +3708,8 @@ export class SemuxApi extends BaseAPI {
      * Registers as a delegate
      * @summary Register delegate
      * @param {} from Registering address
-     * @param {} data Delegate name
-     * @param {} [fee] Transaction fee
+     * @param {} data Delegate name in hexadecimal encoded UTF-8 string, 16 bytes of data at maximum
+     * @param {} [fee] Transaction fee in nano SEM, default to minimum fee if omitted
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SemuxApi
@@ -3357,8 +3721,8 @@ export class SemuxApi extends BaseAPI {
     /**
      * Sign a message.
      * @summary Sign a message
-     * @param {} address Signing address
-     * @param {} message Message to sign
+     * @param {} address Signing address. The address must exist in the wallet.data of this Semux node.
+     * @param {} message Message to sign in UTF-8 string
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SemuxApi
@@ -3383,11 +3747,11 @@ export class SemuxApi extends BaseAPI {
     /**
      * Transfers coins to another address.
      * @summary Transfer coins
-     * @param {} from Sending address
-     * @param {} to Receiving address
-     * @param {} value Amount of SEM to transfer
-     * @param {} [fee] Transaction fee
-     * @param {} [data] Transaction data
+     * @param {} from Sender&#39;s address. The address must exist in the wallet.data of this Semux node.
+     * @param {} to Recipient&#39;s address
+     * @param {} value Amount of SEM to transfer in nano SEM
+     * @param {} [fee] Transaction fee in nano SEM, default to minimum fee if omitted
+     * @param {} [data] Transaction data encoded in hexadecimal string
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SemuxApi
@@ -3399,10 +3763,10 @@ export class SemuxApi extends BaseAPI {
     /**
      * Unvotes for a delegate.
      * @summary Unvote
-     * @param {} from Voting address
+     * @param {} from Voter&#39;s address. The address must exist in the wallet.data of this Semux node.
      * @param {} to Delegate address
-     * @param {} value Vote amount
-     * @param {} [fee] Transaction fee
+     * @param {} value Number of votes in nano SEM
+     * @param {} [fee] Transaction fee in nano SEM, default to minimum fee if omitted
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SemuxApi
@@ -3414,8 +3778,8 @@ export class SemuxApi extends BaseAPI {
     /**
      * Verify a signed message.
      * @summary Verify a message
-     * @param {} address Address
-     * @param {} message Message
+     * @param {} address Address of the message signer
+     * @param {} message Message in UTF-8 string
      * @param {} signature Signature to verify
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -3428,10 +3792,10 @@ export class SemuxApi extends BaseAPI {
     /**
      * Votes for a delegate.
      * @summary Vote
-     * @param {} from Voting address
+     * @param {} from Voter&#39;s address. The address must exist in the wallet.data of this Semux node.
      * @param {} to Delegate address
-     * @param {} value Vote amount
-     * @param {} [fee] Transaction fee
+     * @param {} value Number of votes in nano SEM
+     * @param {} [fee] Transaction fee in nano SEM, default to minimum fee if omitted
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SemuxApi

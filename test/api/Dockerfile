@@ -13,8 +13,6 @@ RUN LINK="https://github.com/semuxproject/semux/releases/download/v1.1.0/semux-l
 
 RUN apt-get remove --yes curl jq
 
-EXPOSE 516
-
 WORKDIR /semux
 
 # import devnet key
