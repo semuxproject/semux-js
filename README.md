@@ -9,13 +9,23 @@ This library aims to providing javascript utilities for Semux client-side applic
 
 Visit [issues](https://github.com/semuxproject/semux-js-sdk/issues) page to see planned features or propose a feature request.
 
-# Install
+## Table of Contents
+
+- [Install](#install)
+- [Usage](#usage)
+- [Example Applications](#example-applications)
+- [Development](#development)
+- [Special Thanks](#special-thanks)
+- [Maintainers](#maintainers)
+- [License](#license)
+
+## Install
 
 ```
 npm install --save semux
 ```
 
-# Usage
+## Usage
 
 - [Hash](https://github.com/semuxproject/semux-js-sdk/blob/master/lib/Hash.spec.ts)
 - [Key & Signature](https://github.com/semuxproject/semux-js-sdk/blob/master/lib/Key.spec.ts)
@@ -23,11 +33,12 @@ npm install --save semux
 - [Byte Encoder](https://github.com/semuxproject/semux-js-sdk/blob/master/lib/SimpleDecoder.spec.ts) / [Byte Decoder](https://github.com/semuxproject/semux-js-sdk/blob/master/lib/SimpleDecoder.spec.ts)
 - [API Client](https://github.com/semuxproject/semux-js-sdk/blob/master/lib/api/api.spec.ts)
 
-# Example Applications
+## Example Applications
 
-- https://github.com/witoldsz/semux-light
+- Web Wallets
+  - https://github.com/witoldsz/semux-light
 
-# Browser Compatibility
+## Browser Compatibility
 
 - Chrome >= 65
 - Firefox >= 59
@@ -35,21 +46,21 @@ npm install --save semux
 - Edge >= 16
 - Safari >= 6
 
-# Development
+## Development
 
-## Install Modules
+### Install Modules
 
 ```
 npm install
 ```
 
-## Run Unit Tests
+### Run Unit Tests
 
 ```
 npm test
 ``` 
 
-## Run Browser Tests
+### Run Browser Tests
 
 Browser testing requires Chrome and Firefox installed.
 
@@ -57,20 +68,28 @@ Browser testing requires Chrome and Firefox installed.
 npm run-script test:browser
 ```
 
-## Format Source Code
+### Format Source Code
 
 ```
 npm run format
 ```
 
-## Check Source Code Formatting
+### Check Source Code Formatting
 
 ```
 npm run format:check
 ```
 
-# Special Thanks
+## Special Thanks
 
 This project is supported by [BrowserStack](https://www.browserstack.com/) to test cross-browser compatibility:
 
 [![BrowserStack Logo](https://i.imgur.com/tssTLRk.png)](https://www.browserstack.com/)
+
+## Maintainers
+
+[@cryptokat](https://github.com/cryptokat/).
+
+## License
+
+[MIT](LICENSE) © [Semux Foundation](https://github.com/semuxproject)
