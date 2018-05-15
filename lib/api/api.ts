@@ -205,11 +205,11 @@ export interface BlockType {
      */
     timestamp?: string;
     /**
-     * Block timestamp formatted in ISO-8601
-     * @type {Date}
+     * 
+     * @type {string}
      * @memberof BlockType
      */
-    date?: Date;
+    date?: string;
     /**
      * 
      * @type {string}

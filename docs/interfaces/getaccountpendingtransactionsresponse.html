@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>SignRawTransactionResponse | semux-js-sdk</title>
+	<title>GetAccountPendingTransactionsResponse | semux-js-sdk</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -54,10 +54,10 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="signrawtransactionresponse.html">SignRawTransactionResponse</a>
+					<a href="getaccountpendingtransactionsresponse.html">GetAccountPendingTransactionsResponse</a>
 				</li>
 			</ul>
-			<h1>Interface SignRawTransactionResponse</h1>
+			<h1>Interface GetAccountPendingTransactionsResponse</h1>
 		</div>
 	</div>
 </header>
@@ -70,7 +70,7 @@
 						<dt>export</dt>
 						<dd></dd>
 						<dt>interface</dt>
-						<dd><p>SignRawTransactionResponse</p>
+						<dd><p>GetAccountPendingTransactionsResponse</p>
 						</dd>
 					</dl>
 				</div>
@@ -82,7 +82,7 @@
 						<a href="apihandlerresponse.html" class="tsd-signature-type">ApiHandlerResponse</a>
 						<ul class="tsd-hierarchy">
 							<li>
-								<span class="target">SignRawTransactionResponse</span>
+								<span class="target">GetAccountPendingTransactionsResponse</span>
 							</li>
 						</ul>
 					</li>
@@ -95,9 +95,9 @@
 						<section class="tsd-index-section tsd-is-external">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="signrawtransactionresponse.html#message" class="tsd-kind-icon">message</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="signrawtransactionresponse.html#result" class="tsd-kind-icon">result</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="signrawtransactionresponse.html#success" class="tsd-kind-icon">success</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="getaccountpendingtransactionsresponse.html#message" class="tsd-kind-icon">message</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="getaccountpendingtransactionsresponse.html#result" class="tsd-kind-icon">result</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="getaccountpendingtransactionsresponse.html#success" class="tsd-kind-icon">success</a></li>
 							</ul>
 						</section>
 					</div>
@@ -129,22 +129,19 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
 					<a name="result" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> result</h3>
-					<div class="tsd-signature tsd-kind-icon">result<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<div class="tsd-signature tsd-kind-icon">result<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><a href="../modules/pendingtransactiontype.html" class="tsd-signature-type">PendingTransactionType</a><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/0b0d1e6/lib/api/api.ts#L960">lib/api/api.ts:960</a></li>
+							<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/0b0d1e6/lib/api/api.ts#L686">lib/api/api.ts:686</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>The signed raw transaction encoded in hexadecimal string</p>
-						</div>
 						<dl class="tsd-comment-tags">
 							<dt>type</dt>
-							<dd><p>{string}</p>
+							<dd><p>{Array&lt;PendingTransactionType&gt;}</p>
 							</dd>
 							<dt>memberof</dt>
-							<dd><p>SignRawTransactionResponse</p>
+							<dd><p>GetAccountPendingTransactionsResponse</p>
 							</dd>
 						</dl>
 					</div>
@@ -185,16 +182,16 @@
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-is-external">
-						<a href="signrawtransactionresponse.html" class="tsd-kind-icon">Sign<wbr>Raw<wbr>Transaction<wbr>Response</a>
+						<a href="getaccountpendingtransactionsresponse.html" class="tsd-kind-icon">Get<wbr>Account<wbr>Pending<wbr>Transactions<wbr>Response</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
-								<a href="signrawtransactionresponse.html#message" class="tsd-kind-icon">message</a>
+								<a href="getaccountpendingtransactionsresponse.html#message" class="tsd-kind-icon">message</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="signrawtransactionresponse.html#result" class="tsd-kind-icon">result</a>
+								<a href="getaccountpendingtransactionsresponse.html#result" class="tsd-kind-icon">result</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
-								<a href="signrawtransactionresponse.html#success" class="tsd-kind-icon">success</a>
+								<a href="getaccountpendingtransactionsresponse.html#success" class="tsd-kind-icon">success</a>
 							</li>
 						</ul>
 					</li>

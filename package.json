@@ -54,7 +54,7 @@
     "ripemd160": "^2.0.2",
     "tweetnacl": "^1.0.0",
     "unfetch": "^3.0.0",
-    "xmlhttprequest": "^1.8.0"
+    "xmlhttprequest": "git+https://github.com/driverdan/node-XMLHttpRequest.git#97966e4ca1c9f2cc5574d8775cbdacebfec75455"
   },
   "devDependencies": {
     "@types/chai": "^4.1.2",

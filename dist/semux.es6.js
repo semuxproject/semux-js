@@ -9961,6 +9961,65 @@ var RequiredError = /** @class */ (function (_super) {
     return RequiredError;
 }(Error));
 /**
+ * @export
+ * @namespace InfoType
+ */
+var InfoType;
+(function (InfoType) {
+    /**
+     * @export
+     * @enum {string}
+     */
+    var NetworkEnum;
+    (function (NetworkEnum) {
+        NetworkEnum[NetworkEnum["MAINNET"] = 'MAINNET'] = "MAINNET";
+        NetworkEnum[NetworkEnum["TESTNET"] = 'TESTNET'] = "TESTNET";
+        NetworkEnum[NetworkEnum["DEVNET"] = 'DEVNET'] = "DEVNET";
+    })(NetworkEnum = InfoType.NetworkEnum || (InfoType.NetworkEnum = {}));
+})(InfoType || (InfoType = {}));
+/**
+ * @export
+ * @namespace PendingTransactionType
+ */
+var PendingTransactionType;
+(function (PendingTransactionType) {
+    /**
+     * @export
+     * @enum {string}
+     */
+    var TypeEnum;
+    (function (TypeEnum) {
+        TypeEnum[TypeEnum["COINBASE"] = 'COINBASE'] = "COINBASE";
+        TypeEnum[TypeEnum["TRANSFER"] = 'TRANSFER'] = "TRANSFER";
+        TypeEnum[TypeEnum["DELEGATE"] = 'DELEGATE'] = "DELEGATE";
+        TypeEnum[TypeEnum["VOTE"] = 'VOTE'] = "VOTE";
+        TypeEnum[TypeEnum["UNVOTE"] = 'UNVOTE'] = "UNVOTE";
+        TypeEnum[TypeEnum["CREATE"] = 'CREATE'] = "CREATE";
+        TypeEnum[TypeEnum["CALL"] = 'CALL'] = "CALL";
+    })(TypeEnum = PendingTransactionType.TypeEnum || (PendingTransactionType.TypeEnum = {}));
+})(PendingTransactionType || (PendingTransactionType = {}));
+/**
+ * @export
+ * @namespace TransactionType
+ */
+var TransactionType;
+(function (TransactionType) {
+    /**
+     * @export
+     * @enum {string}
+     */
+    var TypeEnum;
+    (function (TypeEnum) {
+        TypeEnum[TypeEnum["COINBASE"] = 'COINBASE'] = "COINBASE";
+        TypeEnum[TypeEnum["TRANSFER"] = 'TRANSFER'] = "TRANSFER";
+        TypeEnum[TypeEnum["DELEGATE"] = 'DELEGATE'] = "DELEGATE";
+        TypeEnum[TypeEnum["VOTE"] = 'VOTE'] = "VOTE";
+        TypeEnum[TypeEnum["UNVOTE"] = 'UNVOTE'] = "UNVOTE";
+        TypeEnum[TypeEnum["CREATE"] = 'CREATE'] = "CREATE";
+        TypeEnum[TypeEnum["CALL"] = 'CALL'] = "CALL";
+    })(TypeEnum = TransactionType.TypeEnum || (TransactionType.TypeEnum = {}));
+})(TransactionType || (TransactionType = {}));
+/**
  * SemuxApi - fetch parameter creator
  * @export
  */
@@ -9969,7 +10028,7 @@ var SemuxApiFetchParamCreator = function (configuration) {
         /**
          * Adds a node to node manager.
          * @summary Add node
-         * @param {string} node Name of the node in host:port format
+         * @param {string} node Address of the node in host:port format
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -10114,7 +10173,7 @@ var SemuxApiFetchParamCreator = function (configuration) {
          * @param {string} fee Transaction fee in nano
          * @param {string} nonce Transaction nonce
          * @param {string} [to] Recipient&#39;s address
-         * @param {string} [value] Transaction value in nano
+         * @param {string} [value] Transaction value in nano SEM
          * @param {string} [timestamp] Transaction timestamp in milliseconds. Default to current time.
          * @param {string} [data] Hexadecimal encoded transaction data.
          * @param {*} [options] Override http request option.
@@ -10248,6 +10307,57 @@ var SemuxApiFetchParamCreator = function (configuration) {
             };
         },
         /**
+         * Returns pending transactions from/to an account.
+         * @summary Get pending transactions of the account
+         * @param {string} address Address of account
+         * @param {string} from Starting range of transactions
+         * @param {string} to Ending range of transactions
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAccountPendingTransactions: function (address, from, to, options) {
+            if (options === void 0) { options = {}; }
+            // verify required parameter 'address' is not null or undefined
+            if (address === null || address === undefined) {
+                throw new RequiredError('address', 'Required parameter address was null or undefined when calling getAccountPendingTransactions.');
+            }
+            // verify required parameter 'from' is not null or undefined
+            if (from === null || from === undefined) {
+                throw new RequiredError('from', 'Required parameter from was null or undefined when calling getAccountPendingTransactions.');
+            }
+            // verify required parameter 'to' is not null or undefined
+            if (to === null || to === undefined) {
+                throw new RequiredError('to', 'Required parameter to was null or undefined when calling getAccountPendingTransactions.');
+            }
+            var localVarPath = "/account/pending-transactions";
+            var localVarUrlObj = url.parse(localVarPath, true);
+            var localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            var localVarHeaderParameter = {};
+            var localVarQueryParameter = {};
+            // authentication basicAuth required
+            // http basic authentication required
+            if (configuration && (configuration.username || configuration.password)) {
+                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
+            }
+            if (address !== undefined) {
+                localVarQueryParameter['address'] = address;
+            }
+            if (from !== undefined) {
+                localVarQueryParameter['from'] = from;
+            }
+            if (to !== undefined) {
+                localVarQueryParameter['to'] = to;
+            }
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Returns transactions from/to an account.
          * @summary Get account transactions
          * @param {string} address Address of account
@@ -10288,6 +10398,41 @@ var SemuxApiFetchParamCreator = function (configuration) {
             }
             if (to !== undefined) {
                 localVarQueryParameter['to'] = to;
+            }
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Returns votes from the account.
+         * @summary Get account votes
+         * @param {string} address Address of account
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAccountVotes: function (address, options) {
+            if (options === void 0) { options = {}; }
+            // verify required parameter 'address' is not null or undefined
+            if (address === null || address === undefined) {
+                throw new RequiredError('address', 'Required parameter address was null or undefined when calling getAccountVotes.');
+            }
+            var localVarPath = "/account/votes";
+            var localVarUrlObj = url.parse(localVarPath, true);
+            var localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            var localVarHeaderParameter = {};
+            var localVarQueryParameter = {};
+            // authentication basicAuth required
+            // http basic authentication required
+            if (configuration && (configuration.username || configuration.password)) {
+                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
+            }
+            if (address !== undefined) {
+                localVarQueryParameter['address'] = address;
             }
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
@@ -10628,7 +10773,7 @@ var SemuxApiFetchParamCreator = function (configuration) {
             };
         },
         /**
-         * Get minimum fee and maximum size.
+         * Returns transaction limitations including minimum transaction fee and maximum transaction size.
          * @summary Get transaction limits
          * @param {string} type Type of transaction
          * @param {*} [options] Override http request option.
@@ -10663,7 +10808,7 @@ var SemuxApiFetchParamCreator = function (configuration) {
             };
         },
         /**
-         * Returns a list of validators.
+         * Returns a list of validators in Semux addresses.
          * @summary Get validators
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -10733,8 +10878,8 @@ var SemuxApiFetchParamCreator = function (configuration) {
             };
         },
         /**
-         * Returns all the votes to a delegate
-         * @summary Get votes
+         * Returns all the votes to a delegate as a map of [voter address] => [votes]
+         * @summary Get a delegate's votes
          * @param {string} delegate Delegate address
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -10798,8 +10943,8 @@ var SemuxApiFetchParamCreator = function (configuration) {
          * Registers as a delegate
          * @summary Register delegate
          * @param {string} from Registering address
-         * @param {string} data Delegate name
-         * @param {string} [fee] Transaction fee
+         * @param {string} data Delegate name in hexadecimal encoded UTF-8 string, 16 bytes of data at maximum
+         * @param {string} [fee] Transaction fee in nano SEM, default to minimum fee if omitted
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -10844,8 +10989,8 @@ var SemuxApiFetchParamCreator = function (configuration) {
         /**
          * Sign a message.
          * @summary Sign a message
-         * @param {string} address Signing address
-         * @param {string} message Message to sign
+         * @param {string} address Signing address. The address must exist in the wallet.data of this Semux node.
+         * @param {string} message Message to sign in UTF-8 string
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -10930,11 +11075,11 @@ var SemuxApiFetchParamCreator = function (configuration) {
         /**
          * Transfers coins to another address.
          * @summary Transfer coins
-         * @param {string} from Sending address
-         * @param {string} to Receiving address
-         * @param {string} value Amount of SEM to transfer
-         * @param {string} [fee] Transaction fee
-         * @param {string} [data] Transaction data
+         * @param {string} from Sender&#39;s address. The address must exist in the wallet.data of this Semux node.
+         * @param {string} to Recipient&#39;s address
+         * @param {string} value Amount of SEM to transfer in nano SEM
+         * @param {string} [fee] Transaction fee in nano SEM, default to minimum fee if omitted
+         * @param {string} [data] Transaction data encoded in hexadecimal string
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -10989,10 +11134,10 @@ var SemuxApiFetchParamCreator = function (configuration) {
         /**
          * Unvotes for a delegate.
          * @summary Unvote
-         * @param {string} from Voting address
+         * @param {string} from Voter&#39;s address. The address must exist in the wallet.data of this Semux node.
          * @param {string} to Delegate address
-         * @param {string} value Vote amount
-         * @param {string} [fee] Transaction fee
+         * @param {string} value Number of votes in nano SEM
+         * @param {string} [fee] Transaction fee in nano SEM, default to minimum fee if omitted
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -11044,8 +11189,8 @@ var SemuxApiFetchParamCreator = function (configuration) {
         /**
          * Verify a signed message.
          * @summary Verify a message
-         * @param {string} address Address
-         * @param {string} message Message
+         * @param {string} address Address of the message signer
+         * @param {string} message Message in UTF-8 string
          * @param {string} signature Signature to verify
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -11095,10 +11240,10 @@ var SemuxApiFetchParamCreator = function (configuration) {
         /**
          * Votes for a delegate.
          * @summary Vote
-         * @param {string} from Voting address
+         * @param {string} from Voter&#39;s address. The address must exist in the wallet.data of this Semux node.
          * @param {string} to Delegate address
-         * @param {string} value Vote amount
-         * @param {string} [fee] Transaction fee
+         * @param {string} value Number of votes in nano SEM
+         * @param {string} [fee] Transaction fee in nano SEM, default to minimum fee if omitted
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -11158,7 +11303,7 @@ var SemuxApiFp = function (configuration) {
         /**
          * Adds a node to node manager.
          * @summary Add node
-         * @param {string} node Name of the node in host:port format
+         * @param {string} node Address of the node in host:port format
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -11251,7 +11396,7 @@ var SemuxApiFp = function (configuration) {
          * @param {string} fee Transaction fee in nano
          * @param {string} nonce Transaction nonce
          * @param {string} [to] Recipient&#39;s address
-         * @param {string} [value] Transaction value in nano
+         * @param {string} [value] Transaction value in nano SEM
          * @param {string} [timestamp] Transaction timestamp in milliseconds. Default to current time.
          * @param {string} [data] Hexadecimal encoded transaction data.
          * @param {*} [options] Override http request option.
@@ -11317,6 +11462,30 @@ var SemuxApiFp = function (configuration) {
             };
         },
         /**
+         * Returns pending transactions from/to an account.
+         * @summary Get pending transactions of the account
+         * @param {string} address Address of account
+         * @param {string} from Starting range of transactions
+         * @param {string} to Ending range of transactions
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAccountPendingTransactions: function (address, from, to, options) {
+            var localVarFetchArgs = SemuxApiFetchParamCreator(configuration).getAccountPendingTransactions(address, from, to, options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
          * Returns transactions from/to an account.
          * @summary Get account transactions
          * @param {string} address Address of account
@@ -11327,6 +11496,28 @@ var SemuxApiFp = function (configuration) {
          */
         getAccountTransactions: function (address, from, to, options) {
             var localVarFetchArgs = SemuxApiFetchParamCreator(configuration).getAccountTransactions(address, from, to, options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Returns votes from the account.
+         * @summary Get account votes
+         * @param {string} address Address of account
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAccountVotes: function (address, options) {
+            var localVarFetchArgs = SemuxApiFetchParamCreator(configuration).getAccountVotes(address, options);
             return function (fetch, basePath) {
                 if (fetch === void 0) { fetch = portableFetch; }
                 if (basePath === void 0) { basePath = BASE_PATH; }
@@ -11576,7 +11767,7 @@ var SemuxApiFp = function (configuration) {
             };
         },
         /**
-         * Get minimum fee and maximum size.
+         * Returns transaction limitations including minimum transaction fee and maximum transaction size.
          * @summary Get transaction limits
          * @param {string} type Type of transaction
          * @param {*} [options] Override http request option.
@@ -11598,7 +11789,7 @@ var SemuxApiFp = function (configuration) {
             };
         },
         /**
-         * Returns a list of validators.
+         * Returns a list of validators in Semux addresses.
          * @summary Get validators
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -11642,8 +11833,8 @@ var SemuxApiFp = function (configuration) {
             };
         },
         /**
-         * Returns all the votes to a delegate
-         * @summary Get votes
+         * Returns all the votes to a delegate as a map of [voter address] => [votes]
+         * @summary Get a delegate's votes
          * @param {string} delegate Delegate address
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -11688,8 +11879,8 @@ var SemuxApiFp = function (configuration) {
          * Registers as a delegate
          * @summary Register delegate
          * @param {string} from Registering address
-         * @param {string} data Delegate name
-         * @param {string} [fee] Transaction fee
+         * @param {string} data Delegate name in hexadecimal encoded UTF-8 string, 16 bytes of data at maximum
+         * @param {string} [fee] Transaction fee in nano SEM, default to minimum fee if omitted
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -11711,8 +11902,8 @@ var SemuxApiFp = function (configuration) {
         /**
          * Sign a message.
          * @summary Sign a message
-         * @param {string} address Signing address
-         * @param {string} message Message to sign
+         * @param {string} address Signing address. The address must exist in the wallet.data of this Semux node.
+         * @param {string} message Message to sign in UTF-8 string
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -11757,11 +11948,11 @@ var SemuxApiFp = function (configuration) {
         /**
          * Transfers coins to another address.
          * @summary Transfer coins
-         * @param {string} from Sending address
-         * @param {string} to Receiving address
-         * @param {string} value Amount of SEM to transfer
-         * @param {string} [fee] Transaction fee
-         * @param {string} [data] Transaction data
+         * @param {string} from Sender&#39;s address. The address must exist in the wallet.data of this Semux node.
+         * @param {string} to Recipient&#39;s address
+         * @param {string} value Amount of SEM to transfer in nano SEM
+         * @param {string} [fee] Transaction fee in nano SEM, default to minimum fee if omitted
+         * @param {string} [data] Transaction data encoded in hexadecimal string
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -11783,10 +11974,10 @@ var SemuxApiFp = function (configuration) {
         /**
          * Unvotes for a delegate.
          * @summary Unvote
-         * @param {string} from Voting address
+         * @param {string} from Voter&#39;s address. The address must exist in the wallet.data of this Semux node.
          * @param {string} to Delegate address
-         * @param {string} value Vote amount
-         * @param {string} [fee] Transaction fee
+         * @param {string} value Number of votes in nano SEM
+         * @param {string} [fee] Transaction fee in nano SEM, default to minimum fee if omitted
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -11808,8 +11999,8 @@ var SemuxApiFp = function (configuration) {
         /**
          * Verify a signed message.
          * @summary Verify a message
-         * @param {string} address Address
-         * @param {string} message Message
+         * @param {string} address Address of the message signer
+         * @param {string} message Message in UTF-8 string
          * @param {string} signature Signature to verify
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -11832,10 +12023,10 @@ var SemuxApiFp = function (configuration) {
         /**
          * Votes for a delegate.
          * @summary Vote
-         * @param {string} from Voting address
+         * @param {string} from Voter&#39;s address. The address must exist in the wallet.data of this Semux node.
          * @param {string} to Delegate address
-         * @param {string} value Vote amount
-         * @param {string} [fee] Transaction fee
+         * @param {string} value Number of votes in nano SEM
+         * @param {string} [fee] Transaction fee in nano SEM, default to minimum fee if omitted
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -11870,7 +12061,7 @@ var SemuxApi = /** @class */ (function (_super) {
     /**
      * Adds a node to node manager.
      * @summary Add node
-     * @param {} node Name of the node in host:port format
+     * @param {} node Address of the node in host:port format
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SemuxApi
@@ -11919,7 +12110,7 @@ var SemuxApi = /** @class */ (function (_super) {
      * @param {} fee Transaction fee in nano
      * @param {} nonce Transaction nonce
      * @param {} [to] Recipient&#39;s address
-     * @param {} [value] Transaction value in nano
+     * @param {} [value] Transaction value in nano SEM
      * @param {} [timestamp] Transaction timestamp in milliseconds. Default to current time.
      * @param {} [data] Hexadecimal encoded transaction data.
      * @param {*} [options] Override http request option.
@@ -11952,6 +12143,19 @@ var SemuxApi = /** @class */ (function (_super) {
         return SemuxApiFp(this.configuration).getAccount(address, options)(this.fetch, this.basePath);
     };
     /**
+     * Returns pending transactions from/to an account.
+     * @summary Get pending transactions of the account
+     * @param {} address Address of account
+     * @param {} from Starting range of transactions
+     * @param {} to Ending range of transactions
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SemuxApi
+     */
+    SemuxApi.prototype.getAccountPendingTransactions = function (address, from, to, options) {
+        return SemuxApiFp(this.configuration).getAccountPendingTransactions(address, from, to, options)(this.fetch, this.basePath);
+    };
+    /**
      * Returns transactions from/to an account.
      * @summary Get account transactions
      * @param {} address Address of account
@@ -11963,6 +12167,17 @@ var SemuxApi = /** @class */ (function (_super) {
      */
     SemuxApi.prototype.getAccountTransactions = function (address, from, to, options) {
         return SemuxApiFp(this.configuration).getAccountTransactions(address, from, to, options)(this.fetch, this.basePath);
+    };
+    /**
+     * Returns votes from the account.
+     * @summary Get account votes
+     * @param {} address Address of account
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SemuxApi
+     */
+    SemuxApi.prototype.getAccountVotes = function (address, options) {
+        return SemuxApiFp(this.configuration).getAccountVotes(address, options)(this.fetch, this.basePath);
     };
     /**
      * Returns a block by block hash.
@@ -12079,7 +12294,7 @@ var SemuxApi = /** @class */ (function (_super) {
         return SemuxApiFp(this.configuration).getTransaction(hash, options)(this.fetch, this.basePath);
     };
     /**
-     * Get minimum fee and maximum size.
+     * Returns transaction limitations including minimum transaction fee and maximum transaction size.
      * @summary Get transaction limits
      * @param {} type Type of transaction
      * @param {*} [options] Override http request option.
@@ -12090,7 +12305,7 @@ var SemuxApi = /** @class */ (function (_super) {
         return SemuxApiFp(this.configuration).getTransactionLimits(type, options)(this.fetch, this.basePath);
     };
     /**
-     * Returns a list of validators.
+     * Returns a list of validators in Semux addresses.
      * @summary Get validators
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -12112,8 +12327,8 @@ var SemuxApi = /** @class */ (function (_super) {
         return SemuxApiFp(this.configuration).getVote(delegate, voter, options)(this.fetch, this.basePath);
     };
     /**
-     * Returns all the votes to a delegate
-     * @summary Get votes
+     * Returns all the votes to a delegate as a map of [voter address] => [votes]
+     * @summary Get a delegate's votes
      * @param {} delegate Delegate address
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -12136,8 +12351,8 @@ var SemuxApi = /** @class */ (function (_super) {
      * Registers as a delegate
      * @summary Register delegate
      * @param {} from Registering address
-     * @param {} data Delegate name
-     * @param {} [fee] Transaction fee
+     * @param {} data Delegate name in hexadecimal encoded UTF-8 string, 16 bytes of data at maximum
+     * @param {} [fee] Transaction fee in nano SEM, default to minimum fee if omitted
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SemuxApi
@@ -12148,8 +12363,8 @@ var SemuxApi = /** @class */ (function (_super) {
     /**
      * Sign a message.
      * @summary Sign a message
-     * @param {} address Signing address
-     * @param {} message Message to sign
+     * @param {} address Signing address. The address must exist in the wallet.data of this Semux node.
+     * @param {} message Message to sign in UTF-8 string
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SemuxApi
@@ -12172,11 +12387,11 @@ var SemuxApi = /** @class */ (function (_super) {
     /**
      * Transfers coins to another address.
      * @summary Transfer coins
-     * @param {} from Sending address
-     * @param {} to Receiving address
-     * @param {} value Amount of SEM to transfer
-     * @param {} [fee] Transaction fee
-     * @param {} [data] Transaction data
+     * @param {} from Sender&#39;s address. The address must exist in the wallet.data of this Semux node.
+     * @param {} to Recipient&#39;s address
+     * @param {} value Amount of SEM to transfer in nano SEM
+     * @param {} [fee] Transaction fee in nano SEM, default to minimum fee if omitted
+     * @param {} [data] Transaction data encoded in hexadecimal string
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SemuxApi
@@ -12187,10 +12402,10 @@ var SemuxApi = /** @class */ (function (_super) {
     /**
      * Unvotes for a delegate.
      * @summary Unvote
-     * @param {} from Voting address
+     * @param {} from Voter&#39;s address. The address must exist in the wallet.data of this Semux node.
      * @param {} to Delegate address
-     * @param {} value Vote amount
-     * @param {} [fee] Transaction fee
+     * @param {} value Number of votes in nano SEM
+     * @param {} [fee] Transaction fee in nano SEM, default to minimum fee if omitted
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SemuxApi
@@ -12201,8 +12416,8 @@ var SemuxApi = /** @class */ (function (_super) {
     /**
      * Verify a signed message.
      * @summary Verify a message
-     * @param {} address Address
-     * @param {} message Message
+     * @param {} address Address of the message signer
+     * @param {} message Message in UTF-8 string
      * @param {} signature Signature to verify
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -12214,10 +12429,10 @@ var SemuxApi = /** @class */ (function (_super) {
     /**
      * Votes for a delegate.
      * @summary Vote
-     * @param {} from Voting address
+     * @param {} from Voter&#39;s address. The address must exist in the wallet.data of this Semux node.
      * @param {} to Delegate address
-     * @param {} value Vote amount
-     * @param {} [fee] Transaction fee
+     * @param {} value Number of votes in nano SEM
+     * @param {} [fee] Transaction fee in nano SEM, default to minimum fee if omitted
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SemuxApi
@@ -19930,7 +20145,7 @@ var SimpleEncoder = /** @class */ (function () {
     return SimpleEncoder;
 }());
 
-var TransactionType = /** @class */ (function () {
+var TransactionType$1 = /** @class */ (function () {
     function TransactionType(code) {
         this.code = code;
     }
@@ -20105,7 +20320,7 @@ var Transaction = /** @class */ (function () {
         if (typeof sig !== "object" || !Key.verify(hash, sig)) {
             return new Error("Invalid signature");
         }
-        if (!this.getType().equals(TransactionType.COINBASE) &&
+        if (!this.getType().equals(TransactionType$1.COINBASE) &&
             Bytes.equal(sig.getAddress(), Constants.COINBASE_KEY.toAddressBytes())) {
             return new Error("Invalid signature");
         }
@@ -20128,7 +20343,7 @@ function encodeTx(tx) {
 function decodeTx(bytes) {
     var decoder = new SimpleDecoder(bytes, 0, bytes.length);
     var network = Network.of(decoder.readByte());
-    var type = TransactionType.of(decoder.readByte());
+    var type = TransactionType$1.of(decoder.readByte());
     var to = decoder.readBytes();
     var value = decoder.readLong();
     var fee = decoder.readLong();
@@ -20156,7 +20371,7 @@ var Semux = {
     SimpleDecoder: SimpleDecoder,
     SimpleEncoder: SimpleEncoder,
     Transaction: Transaction,
-    TransactionType: TransactionType,
+    TransactionType: TransactionType$1,
 };
 
 export default Semux;

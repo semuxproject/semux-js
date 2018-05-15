@@ -66,6 +66,13 @@
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section tsd-is-external">
+							<h3>Modules</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-module tsd-is-external"><a href="modules/infotype.html" class="tsd-kind-icon">Info<wbr>Type</a></li>
+								<li class="tsd-kind-module tsd-is-external"><a href="modules/pendingtransactiontype.html" class="tsd-kind-icon">Pending<wbr>Transaction<wbr>Type</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section tsd-is-external">
 							<h3>Classes</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-class tsd-is-external"><a href="classes/baseapi.html" class="tsd-kind-icon">BaseAPI</a></li>
@@ -90,6 +97,7 @@
 							<h3>Interfaces</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-interface tsd-is-external"><a href="interfaces/accounttype.html" class="tsd-kind-icon">Account<wbr>Type</a></li>
+								<li class="tsd-kind-interface tsd-is-external"><a href="interfaces/accountvotetype.html" class="tsd-kind-icon">Account<wbr>Vote<wbr>Type</a></li>
 								<li class="tsd-kind-interface tsd-is-external"><a href="interfaces/addnoderesponse.html" class="tsd-kind-icon">Add<wbr>Node<wbr>Response</a></li>
 								<li class="tsd-kind-interface tsd-is-external"><a href="interfaces/apihandlerresponse.html" class="tsd-kind-icon">Api<wbr>Handler<wbr>Response</a></li>
 								<li class="tsd-kind-interface tsd-is-external"><a href="interfaces/blocktype.html" class="tsd-kind-icon">Block<wbr>Type</a></li>
@@ -100,8 +108,10 @@
 								<li class="tsd-kind-interface tsd-is-external"><a href="interfaces/dotransactionresponse.html" class="tsd-kind-icon">Do<wbr>Transaction<wbr>Response</a></li>
 								<li class="tsd-kind-interface tsd-is-external"><a href="interfaces/fetchapi.html" class="tsd-kind-icon">FetchAPI</a></li>
 								<li class="tsd-kind-interface tsd-is-external"><a href="interfaces/fetchargs.html" class="tsd-kind-icon">Fetch<wbr>Args</a></li>
+								<li class="tsd-kind-interface tsd-is-external"><a href="interfaces/getaccountpendingtransactionsresponse.html" class="tsd-kind-icon">Get<wbr>Account<wbr>Pending<wbr>Transactions<wbr>Response</a></li>
 								<li class="tsd-kind-interface tsd-is-external"><a href="interfaces/getaccountresponse.html" class="tsd-kind-icon">Get<wbr>Account<wbr>Response</a></li>
 								<li class="tsd-kind-interface tsd-is-external"><a href="interfaces/getaccounttransactionsresponse.html" class="tsd-kind-icon">Get<wbr>Account<wbr>Transactions<wbr>Response</a></li>
+								<li class="tsd-kind-interface tsd-is-external"><a href="interfaces/getaccountvotesresponse.html" class="tsd-kind-icon">Get<wbr>Account<wbr>Votes<wbr>Response</a></li>
 								<li class="tsd-kind-interface tsd-is-external"><a href="interfaces/getblockresponse.html" class="tsd-kind-icon">Get<wbr>Block<wbr>Response</a></li>
 								<li class="tsd-kind-interface tsd-is-external"><a href="interfaces/getdelegateresponse.html" class="tsd-kind-icon">Get<wbr>Delegate<wbr>Response</a></li>
 								<li class="tsd-kind-interface tsd-is-external"><a href="interfaces/getdelegatesresponse.html" class="tsd-kind-icon">Get<wbr>Delegates<wbr>Response</a></li>
@@ -116,10 +126,8 @@
 								<li class="tsd-kind-interface tsd-is-external"><a href="interfaces/getvalidatorsresponse.html" class="tsd-kind-icon">Get<wbr>Validators<wbr>Response</a></li>
 								<li class="tsd-kind-interface tsd-is-external"><a href="interfaces/getvoteresponse.html" class="tsd-kind-icon">Get<wbr>Vote<wbr>Response</a></li>
 								<li class="tsd-kind-interface tsd-is-external"><a href="interfaces/getvotesresponse.html" class="tsd-kind-icon">Get<wbr>Votes<wbr>Response</a></li>
-								<li class="tsd-kind-interface tsd-is-external"><a href="interfaces/infotype.html" class="tsd-kind-icon">Info<wbr>Type</a></li>
 								<li class="tsd-kind-interface tsd-is-external"><a href="interfaces/listaccountsresponse.html" class="tsd-kind-icon">List<wbr>Accounts<wbr>Response</a></li>
 								<li class="tsd-kind-interface tsd-is-external"><a href="interfaces/peertype.html" class="tsd-kind-icon">Peer<wbr>Type</a></li>
-								<li class="tsd-kind-interface tsd-is-external"><a href="interfaces/sendtransactionresponse.html" class="tsd-kind-icon">Send<wbr>Transaction<wbr>Response</a></li>
 								<li class="tsd-kind-interface tsd-is-external"><a href="interfaces/signmessageresponse.html" class="tsd-kind-icon">Sign<wbr>Message<wbr>Response</a></li>
 								<li class="tsd-kind-interface tsd-is-external"><a href="interfaces/signrawtransactionresponse.html" class="tsd-kind-icon">Sign<wbr>Raw<wbr>Transaction<wbr>Response</a></li>
 								<li class="tsd-kind-interface tsd-is-external"><a href="interfaces/transactionlimitstype.html" class="tsd-kind-icon">Transaction<wbr>Limits<wbr>Type</a></li>
@@ -155,7 +163,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/1d8e3e1/lib/api/api.ts#L2715">lib/api/api.ts:2715</a></li>
+									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/0b0d1e6/lib/api/api.ts#L3031">lib/api/api.ts:3031</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -191,7 +199,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/1d8e3e1/lib/api/api.ts#L800">lib/api/api.ts:800</a></li>
+									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/0b0d1e6/lib/api/api.ts#L982">lib/api/api.ts:982</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -221,7 +229,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/1d8e3e1/lib/api/api.ts#L2100">lib/api/api.ts:2100</a></li>
+									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/0b0d1e6/lib/api/api.ts#L2376">lib/api/api.ts:2376</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -250,7 +258,7 @@
 					<div class="tsd-signature tsd-kind-icon">COLLECTION_<wbr>FORMATS<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/1d8e3e1/lib/api/api.ts#L26">lib/api/api.ts:26</a></li>
+							<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/0b0d1e6/lib/api/api.ts#L26">lib/api/api.ts:26</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -265,7 +273,7 @@
 						<div class="tsd-signature tsd-kind-icon">csv<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;,&quot;</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/1d8e3e1/lib/api/api.ts#L27">lib/api/api.ts:27</a></li>
+								<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/0b0d1e6/lib/api/api.ts#L27">lib/api/api.ts:27</a></li>
 							</ul>
 						</aside>
 					</section>
@@ -275,7 +283,7 @@
 						<div class="tsd-signature tsd-kind-icon">pipes<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;|&quot;</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/1d8e3e1/lib/api/api.ts#L30">lib/api/api.ts:30</a></li>
+								<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/0b0d1e6/lib/api/api.ts#L30">lib/api/api.ts:30</a></li>
 							</ul>
 						</aside>
 					</section>
@@ -285,7 +293,7 @@
 						<div class="tsd-signature tsd-kind-icon">ssv<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot; &quot;</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/1d8e3e1/lib/api/api.ts#L28">lib/api/api.ts:28</a></li>
+								<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/0b0d1e6/lib/api/api.ts#L28">lib/api/api.ts:28</a></li>
 							</ul>
 						</aside>
 					</section>
@@ -295,7 +303,7 @@
 						<div class="tsd-signature tsd-kind-icon">tsv<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> =&nbsp;&quot;	&quot;</span></div>
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/1d8e3e1/lib/api/api.ts#L29">lib/api/api.ts:29</a></li>
+								<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/0b0d1e6/lib/api/api.ts#L29">lib/api/api.ts:29</a></li>
 							</ul>
 						</aside>
 					</section>
@@ -307,6 +315,15 @@
 				<ul>
 					<li class="globals current ">
 						<a href="globals.html"><em>Globals</em></a>
+					</li>
+					<li class="label tsd-is-external">
+						<span>Externals</span>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/infotype.html">Info<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-module tsd-is-external">
+						<a href="modules/pendingtransactiontype.html">Pending<wbr>Transaction<wbr>Type</a>
 					</li>
 				</ul>
 			</nav>
@@ -364,6 +381,9 @@
 						<a href="interfaces/accounttype.html" class="tsd-kind-icon">Account<wbr>Type</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/accountvotetype.html" class="tsd-kind-icon">Account<wbr>Vote<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
 						<a href="interfaces/addnoderesponse.html" class="tsd-kind-icon">Add<wbr>Node<wbr>Response</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-is-external">
@@ -394,10 +414,16 @@
 						<a href="interfaces/fetchargs.html" class="tsd-kind-icon">Fetch<wbr>Args</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/getaccountpendingtransactionsresponse.html" class="tsd-kind-icon">Get<wbr>Account<wbr>Pending<wbr>Transactions<wbr>Response</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
 						<a href="interfaces/getaccountresponse.html" class="tsd-kind-icon">Get<wbr>Account<wbr>Response</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-is-external">
 						<a href="interfaces/getaccounttransactionsresponse.html" class="tsd-kind-icon">Get<wbr>Account<wbr>Transactions<wbr>Response</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/getaccountvotesresponse.html" class="tsd-kind-icon">Get<wbr>Account<wbr>Votes<wbr>Response</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-is-external">
 						<a href="interfaces/getblockresponse.html" class="tsd-kind-icon">Get<wbr>Block<wbr>Response</a>
@@ -442,16 +468,10 @@
 						<a href="interfaces/getvotesresponse.html" class="tsd-kind-icon">Get<wbr>Votes<wbr>Response</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/infotype.html" class="tsd-kind-icon">Info<wbr>Type</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
 						<a href="interfaces/listaccountsresponse.html" class="tsd-kind-icon">List<wbr>Accounts<wbr>Response</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-is-external">
 						<a href="interfaces/peertype.html" class="tsd-kind-icon">Peer<wbr>Type</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/sendtransactionresponse.html" class="tsd-kind-icon">Send<wbr>Transaction<wbr>Response</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-is-external">
 						<a href="interfaces/signmessageresponse.html" class="tsd-kind-icon">Sign<wbr>Message<wbr>Response</a>

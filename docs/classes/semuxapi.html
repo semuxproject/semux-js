@@ -114,7 +114,9 @@
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="semuxapi.html#composerawtransaction" class="tsd-kind-icon">compose<wbr>Raw<wbr>Transaction</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="semuxapi.html#createaccount" class="tsd-kind-icon">create<wbr>Account</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="semuxapi.html#getaccount" class="tsd-kind-icon">get<wbr>Account</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="semuxapi.html#getaccountpendingtransactions" class="tsd-kind-icon">get<wbr>Account<wbr>Pending<wbr>Transactions</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="semuxapi.html#getaccounttransactions" class="tsd-kind-icon">get<wbr>Account<wbr>Transactions</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="semuxapi.html#getaccountvotes" class="tsd-kind-icon">get<wbr>Account<wbr>Votes</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="semuxapi.html#getblockbyhash" class="tsd-kind-icon">get<wbr>Block<wbr>ByHash</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="semuxapi.html#getblockbynumber" class="tsd-kind-icon">get<wbr>Block<wbr>ByNumber</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="semuxapi.html#getdelegate" class="tsd-kind-icon">get<wbr>Delegate</a></li>
@@ -156,7 +158,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="baseapi.html">BaseAPI</a>.<a href="baseapi.html#constructor">constructor</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/1d8e3e1/lib/api/api.ts#L58">lib/api/api.ts:58</a></li>
+									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/0b0d1e6/lib/api/api.ts#L58">lib/api/api.ts:58</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -188,7 +190,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/1d8e3e1/lib/api/api.ts#L3062">lib/api/api.ts:3062</a></li>
+									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/0b0d1e6/lib/api/api.ts#L3400">lib/api/api.ts:3400</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -212,7 +214,7 @@
 								<li>
 									<h5>node: <span class="tsd-signature-type">string</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>Name of the node in host:port format</p>
+										<p>Address of the node in host:port format</p>
 									</div>
 								</li>
 								<li>
@@ -233,7 +235,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/1d8e3e1/lib/api/api.ts#L3074">lib/api/api.ts:3074</a></li>
+									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/0b0d1e6/lib/api/api.ts#L3412">lib/api/api.ts:3412</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -278,7 +280,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/1d8e3e1/lib/api/api.ts#L3086">lib/api/api.ts:3086</a></li>
+									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/0b0d1e6/lib/api/api.ts#L3424">lib/api/api.ts:3424</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -317,13 +319,13 @@
 					<a name="broadcastrawtransaction" class="tsd-anchor"></a>
 					<h3>broadcast<wbr>Raw<wbr>Transaction</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">broadcast<wbr>Raw<wbr>Transaction<span class="tsd-signature-symbol">(</span>raw<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/sendtransactionresponse.html" class="tsd-signature-type">SendTransactionResponse</a><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">broadcast<wbr>Raw<wbr>Transaction<span class="tsd-signature-symbol">(</span>raw<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/dotransactionresponse.html" class="tsd-signature-type">DoTransactionResponse</a><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/1d8e3e1/lib/api/api.ts#L3098">lib/api/api.ts:3098</a></li>
+									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/0b0d1e6/lib/api/api.ts#L3436">lib/api/api.ts:3436</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -354,7 +356,7 @@
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> options: <span class="tsd-signature-type">any</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/sendtransactionresponse.html" class="tsd-signature-type">SendTransactionResponse</a><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/dotransactionresponse.html" class="tsd-signature-type">DoTransactionResponse</a><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -368,7 +370,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/1d8e3e1/lib/api/api.ts#L3117">lib/api/api.ts:3117</a></li>
+									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/0b0d1e6/lib/api/api.ts#L3455">lib/api/api.ts:3455</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -443,7 +445,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/1d8e3e1/lib/api/api.ts#L3129">lib/api/api.ts:3129</a></li>
+									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/0b0d1e6/lib/api/api.ts#L3467">lib/api/api.ts:3467</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -485,7 +487,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/1d8e3e1/lib/api/api.ts#L3141">lib/api/api.ts:3141</a></li>
+									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/0b0d1e6/lib/api/api.ts#L3479">lib/api/api.ts:3479</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -521,6 +523,63 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external">
+					<a name="getaccountpendingtransactions" class="tsd-anchor"></a>
+					<h3>get<wbr>Account<wbr>Pending<wbr>Transactions</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Account<wbr>Pending<wbr>Transactions<span class="tsd-signature-symbol">(</span>address<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, from<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, to<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/getaccountpendingtransactionsresponse.html" class="tsd-signature-type">GetAccountPendingTransactionsResponse</a><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/0b0d1e6/lib/api/api.ts#L3493">lib/api/api.ts:3493</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns pending transactions from/to an account.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>summary</dt>
+									<dd><p>Get pending transactions of the account</p>
+									</dd>
+									<dt>throws</dt>
+									<dd><p>{RequiredError}</p>
+									</dd>
+									<dt>memberof</dt>
+									<dd><p>SemuxApi</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>address: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Address of account</p>
+									</div>
+								</li>
+								<li>
+									<h5>from: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Starting range of transactions</p>
+									</div>
+								</li>
+								<li>
+									<h5>to: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Ending range of transactions</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> options: <span class="tsd-signature-type">any</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/getaccountpendingtransactionsresponse.html" class="tsd-signature-type">GetAccountPendingTransactionsResponse</a><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external">
 					<a name="getaccounttransactions" class="tsd-anchor"></a>
 					<h3>get<wbr>Account<wbr>Transactions</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
@@ -530,7 +589,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/1d8e3e1/lib/api/api.ts#L3155">lib/api/api.ts:3155</a></li>
+									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/0b0d1e6/lib/api/api.ts#L3507">lib/api/api.ts:3507</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -578,6 +637,51 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external">
+					<a name="getaccountvotes" class="tsd-anchor"></a>
+					<h3>get<wbr>Account<wbr>Votes</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Account<wbr>Votes<span class="tsd-signature-symbol">(</span>address<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/getaccountvotesresponse.html" class="tsd-signature-type">GetAccountVotesResponse</a><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/0b0d1e6/lib/api/api.ts#L3519">lib/api/api.ts:3519</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns votes from the account.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>summary</dt>
+									<dd><p>Get account votes</p>
+									</dd>
+									<dt>throws</dt>
+									<dd><p>{RequiredError}</p>
+									</dd>
+									<dt>memberof</dt>
+									<dd><p>SemuxApi</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>address: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Address of account</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> options: <span class="tsd-signature-type">any</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/getaccountvotesresponse.html" class="tsd-signature-type">GetAccountVotesResponse</a><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external">
 					<a name="getblockbyhash" class="tsd-anchor"></a>
 					<h3>get<wbr>Block<wbr>ByHash</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
@@ -587,7 +691,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/1d8e3e1/lib/api/api.ts#L3167">lib/api/api.ts:3167</a></li>
+									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/0b0d1e6/lib/api/api.ts#L3531">lib/api/api.ts:3531</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -632,7 +736,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/1d8e3e1/lib/api/api.ts#L3179">lib/api/api.ts:3179</a></li>
+									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/0b0d1e6/lib/api/api.ts#L3543">lib/api/api.ts:3543</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -677,7 +781,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/1d8e3e1/lib/api/api.ts#L3191">lib/api/api.ts:3191</a></li>
+									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/0b0d1e6/lib/api/api.ts#L3555">lib/api/api.ts:3555</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -722,7 +826,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/1d8e3e1/lib/api/api.ts#L3202">lib/api/api.ts:3202</a></li>
+									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/0b0d1e6/lib/api/api.ts#L3566">lib/api/api.ts:3566</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -761,7 +865,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/1d8e3e1/lib/api/api.ts#L3213">lib/api/api.ts:3213</a></li>
+									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/0b0d1e6/lib/api/api.ts#L3577">lib/api/api.ts:3577</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -800,7 +904,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/1d8e3e1/lib/api/api.ts#L3224">lib/api/api.ts:3224</a></li>
+									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/0b0d1e6/lib/api/api.ts#L3588">lib/api/api.ts:3588</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -839,7 +943,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/1d8e3e1/lib/api/api.ts#L3235">lib/api/api.ts:3235</a></li>
+									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/0b0d1e6/lib/api/api.ts#L3599">lib/api/api.ts:3599</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -878,7 +982,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/1d8e3e1/lib/api/api.ts#L3246">lib/api/api.ts:3246</a></li>
+									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/0b0d1e6/lib/api/api.ts#L3610">lib/api/api.ts:3610</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -917,7 +1021,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/1d8e3e1/lib/api/api.ts#L3257">lib/api/api.ts:3257</a></li>
+									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/0b0d1e6/lib/api/api.ts#L3621">lib/api/api.ts:3621</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -956,7 +1060,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/1d8e3e1/lib/api/api.ts#L3268">lib/api/api.ts:3268</a></li>
+									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/0b0d1e6/lib/api/api.ts#L3632">lib/api/api.ts:3632</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -992,7 +1096,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/1d8e3e1/lib/api/api.ts#L3280">lib/api/api.ts:3280</a></li>
+									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/0b0d1e6/lib/api/api.ts#L3644">lib/api/api.ts:3644</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1037,12 +1141,12 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/1d8e3e1/lib/api/api.ts#L3292">lib/api/api.ts:3292</a></li>
+									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/0b0d1e6/lib/api/api.ts#L3656">lib/api/api.ts:3656</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Get minimum fee and maximum size.</p>
+									<p>Returns transaction limitations including minimum transaction fee and maximum transaction size.</p>
 								</div>
 								<dl class="tsd-comment-tags">
 									<dt>summary</dt>
@@ -1082,12 +1186,12 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/1d8e3e1/lib/api/api.ts#L3303">lib/api/api.ts:3303</a></li>
+									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/0b0d1e6/lib/api/api.ts#L3667">lib/api/api.ts:3667</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Returns a list of validators.</p>
+									<p>Returns a list of validators in Semux addresses.</p>
 								</div>
 								<dl class="tsd-comment-tags">
 									<dt>summary</dt>
@@ -1121,7 +1225,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/1d8e3e1/lib/api/api.ts#L3316">lib/api/api.ts:3316</a></li>
+									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/0b0d1e6/lib/api/api.ts#L3680">lib/api/api.ts:3680</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1172,16 +1276,16 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/1d8e3e1/lib/api/api.ts#L3328">lib/api/api.ts:3328</a></li>
+									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/0b0d1e6/lib/api/api.ts#L3692">lib/api/api.ts:3692</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Returns all the votes to a delegate</p>
+									<p>Returns all the votes to a delegate as a map of [voter address] =&gt; [votes]</p>
 								</div>
 								<dl class="tsd-comment-tags">
 									<dt>summary</dt>
-									<dd><p>Get votes</p>
+									<dd><p>Get a delegate&#39;s votes</p>
 									</dd>
 									<dt>throws</dt>
 									<dd><p>{RequiredError}</p>
@@ -1217,7 +1321,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/1d8e3e1/lib/api/api.ts#L3339">lib/api/api.ts:3339</a></li>
+									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/0b0d1e6/lib/api/api.ts#L3703">lib/api/api.ts:3703</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1256,7 +1360,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/1d8e3e1/lib/api/api.ts#L3353">lib/api/api.ts:3353</a></li>
+									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/0b0d1e6/lib/api/api.ts#L3717">lib/api/api.ts:3717</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1286,7 +1390,7 @@
 								<li>
 									<h5>data: <span class="tsd-signature-type">string</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>Delegate name</p>
+										<p>Delegate name in hexadecimal encoded UTF-8 string, 16 bytes of data at maximum</p>
 									</div>
 								</li>
 								<li>
@@ -1310,7 +1414,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/1d8e3e1/lib/api/api.ts#L3366">lib/api/api.ts:3366</a></li>
+									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/0b0d1e6/lib/api/api.ts#L3730">lib/api/api.ts:3730</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1334,13 +1438,13 @@
 								<li>
 									<h5>address: <span class="tsd-signature-type">string</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>Signing address</p>
+										<p>Signing address. The address must exist in the wallet.data of this Semux node.</p>
 									</div>
 								</li>
 								<li>
 									<h5>message: <span class="tsd-signature-type">string</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>Message to sign</p>
+										<p>Message to sign in UTF-8 string</p>
 									</div>
 								</li>
 								<li>
@@ -1361,7 +1465,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/1d8e3e1/lib/api/api.ts#L3379">lib/api/api.ts:3379</a></li>
+									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/0b0d1e6/lib/api/api.ts#L3743">lib/api/api.ts:3743</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1412,7 +1516,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/1d8e3e1/lib/api/api.ts#L3395">lib/api/api.ts:3395</a></li>
+									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/0b0d1e6/lib/api/api.ts#L3759">lib/api/api.ts:3759</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1436,19 +1540,19 @@
 								<li>
 									<h5>from: <span class="tsd-signature-type">string</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>Sending address</p>
+										<p>Sender&#39;s address. The address must exist in the wallet.data of this Semux node.</p>
 									</div>
 								</li>
 								<li>
 									<h5>to: <span class="tsd-signature-type">string</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>Receiving address</p>
+										<p>Recipient&#39;s address</p>
 									</div>
 								</li>
 								<li>
 									<h5>value: <span class="tsd-signature-type">string</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>Amount of SEM to transfer</p>
+										<p>Amount of SEM to transfer in nano SEM</p>
 									</div>
 								</li>
 								<li>
@@ -1475,7 +1579,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/1d8e3e1/lib/api/api.ts#L3410">lib/api/api.ts:3410</a></li>
+									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/0b0d1e6/lib/api/api.ts#L3774">lib/api/api.ts:3774</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1499,7 +1603,7 @@
 								<li>
 									<h5>from: <span class="tsd-signature-type">string</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>Voting address</p>
+										<p>Voter&#39;s address. The address must exist in the wallet.data of this Semux node.</p>
 									</div>
 								</li>
 								<li>
@@ -1511,7 +1615,7 @@
 								<li>
 									<h5>value: <span class="tsd-signature-type">string</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>Vote amount</p>
+										<p>Number of votes in nano SEM</p>
 									</div>
 								</li>
 								<li>
@@ -1535,7 +1639,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/1d8e3e1/lib/api/api.ts#L3424">lib/api/api.ts:3424</a></li>
+									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/0b0d1e6/lib/api/api.ts#L3788">lib/api/api.ts:3788</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1559,13 +1663,13 @@
 								<li>
 									<h5>address: <span class="tsd-signature-type">string</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>Address</p>
+										<p>Address of the message signer</p>
 									</div>
 								</li>
 								<li>
 									<h5>message: <span class="tsd-signature-type">string</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>Message</p>
+										<p>Message in UTF-8 string</p>
 									</div>
 								</li>
 								<li>
@@ -1592,7 +1696,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/1d8e3e1/lib/api/api.ts#L3439">lib/api/api.ts:3439</a></li>
+									<li>Defined in <a href="https://github.com/cryptokat/semux-js-sdk/blob/0b0d1e6/lib/api/api.ts#L3803">lib/api/api.ts:3803</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1616,7 +1720,7 @@
 								<li>
 									<h5>from: <span class="tsd-signature-type">string</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>Voting address</p>
+										<p>Voter&#39;s address. The address must exist in the wallet.data of this Semux node.</p>
 									</div>
 								</li>
 								<li>
@@ -1628,7 +1732,7 @@
 								<li>
 									<h5>value: <span class="tsd-signature-type">string</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>Vote amount</p>
+										<p>Number of votes in nano SEM</p>
 									</div>
 								</li>
 								<li>
@@ -1684,7 +1788,13 @@
 								<a href="semuxapi.html#getaccount" class="tsd-kind-icon">get<wbr>Account</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
+								<a href="semuxapi.html#getaccountpendingtransactions" class="tsd-kind-icon">get<wbr>Account<wbr>Pending<wbr>Transactions</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
 								<a href="semuxapi.html#getaccounttransactions" class="tsd-kind-icon">get<wbr>Account<wbr>Transactions</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
+								<a href="semuxapi.html#getaccountvotes" class="tsd-kind-icon">get<wbr>Account<wbr>Votes</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
 								<a href="semuxapi.html#getblockbyhash" class="tsd-kind-icon">get<wbr>Block<wbr>ByHash</a>
