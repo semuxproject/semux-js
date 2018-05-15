@@ -172,11 +172,11 @@ export interface BlockType {
      */
     timestamp?: string;
     /**
-     *
-     * @type {string}
+     * Block timestamp formatted in ISO-8601
+     * @type {Date}
      * @memberof BlockType
      */
-    date?: string;
+    date?: Date;
     /**
      *
      * @type {string}
