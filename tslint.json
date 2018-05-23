@@ -16,6 +16,7 @@
     "forin": false,
     "object-literal-sort-keys": false,
     "no-eval": false,
-    "no-string-literal": false
+    "no-string-literal": false,
+    "no-namespace": false
   }
 }

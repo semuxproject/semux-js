@@ -31,7 +31,7 @@ jobs:
     script:
     - docker build test/api/ &&
       docker-compose -f test/api/docker-compose.yml up -d &&
-      $(npm bin)/wait-on http-get://user:pass@localhost:5171/v2.0.0/ &&
+      $(npm bin)/wait-on http-get://user:pass@localhost:5171/v2.1.0/ &&
       npm run test:api
   - env: NAME="Linux Browser Tests (Chrome, Firefox, Electron)"
     addons:

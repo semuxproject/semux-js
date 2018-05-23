@@ -172,12 +172,6 @@ export interface BlockType {
      */
     timestamp?: string;
     /**
-     * Block timestamp formatted in ISO-8601
-     * @type {Date}
-     * @memberof BlockType
-     */
-    date?: Date;
-    /**
      *
      * @type {string}
      * @memberof BlockType
@@ -471,6 +465,37 @@ export declare namespace PendingTransactionType {
 /**
  *
  * @export
+ * @interface SyncingProgressType
+ */
+export interface SyncingProgressType {
+    /**
+     * Whether the node is syncing
+     * @type {boolean}
+     * @memberof SyncingProgressType
+     */
+    syncing: boolean;
+    /**
+     * The block height at which the sync started
+     * @type {string}
+     * @memberof SyncingProgressType
+     */
+    startingHeight?: string;
+    /**
+     * The current block height
+     * @type {string}
+     * @memberof SyncingProgressType
+     */
+    currentHeight?: string;
+    /**
+     * The target block height
+     * @type {string}
+     * @memberof SyncingProgressType
+     */
+    targetHeight?: string;
+}
+/**
+ *
+ * @export
  * @interface TransactionLimitsType
  */
 export interface TransactionLimitsType {
@@ -611,6 +636,13 @@ export interface CreateAccountResponse extends ApiHandlerResponse {
      * @memberof CreateAccountResponse
      */
     result?: string;
+}
+/**
+ *
+ * @export
+ * @interface DeleteAccountResponse
+ */
+export interface DeleteAccountResponse extends ApiHandlerResponse {
 }
 /**
  *
@@ -791,6 +823,19 @@ export interface GetRootResponse extends ApiHandlerResponse {
 /**
  *
  * @export
+ * @interface GetSyncingProgressResponse
+ */
+export interface GetSyncingProgressResponse extends ApiHandlerResponse {
+    /**
+     *
+     * @type {SyncingProgressType}
+     * @memberof GetSyncingProgressResponse
+     */
+    result: SyncingProgressType;
+}
+/**
+ *
+ * @export
  * @interface GetTransactionLimitsResponse
  */
 export interface GetTransactionLimitsResponse extends ApiHandlerResponse {
@@ -915,9 +960,10 @@ export declare const SemuxApiFetchParamCreator: (configuration?: Configuration) 
     addNode(node: string, options?: any): FetchArgs;
     addToBlacklist(ip: string, options?: any): FetchArgs;
     addToWhitelist(ip: string, options?: any): FetchArgs;
-    broadcastRawTransaction(raw: string, options?: any): FetchArgs;
+    broadcastRawTransaction(raw: string, validateNonce?: boolean, options?: any): FetchArgs;
     composeRawTransaction(network: string, type: string, fee: string, nonce: string, to?: string, value?: string, timestamp?: string, data?: string, options?: any): FetchArgs;
-    createAccount(name?: string, options?: any): FetchArgs;
+    createAccount(name?: string, privateKey?: string, options?: any): FetchArgs;
+    deleteAccount(address: string, options?: any): FetchArgs;
     getAccount(address: string, options?: any): FetchArgs;
     getAccountPendingTransactions(address: string, from: string, to: string, options?: any): FetchArgs;
     getAccountTransactions(address: string, from: string, to: string, options?: any): FetchArgs;
@@ -932,19 +978,20 @@ export declare const SemuxApiFetchParamCreator: (configuration?: Configuration) 
     getPeers(options?: any): FetchArgs;
     getPendingTransactions(options?: any): FetchArgs;
     getRoot(options?: any): FetchArgs;
+    getSyncingProgress(options?: any): FetchArgs;
     getTransaction(hash: string, options?: any): FetchArgs;
     getTransactionLimits(type: string, options?: any): FetchArgs;
     getValidators(options?: any): FetchArgs;
     getVote(delegate: string, voter: string, options?: any): FetchArgs;
     getVotes(delegate: string, options?: any): FetchArgs;
     listAccounts(options?: any): FetchArgs;
-    registerDelegate(from: string, data: string, fee?: string, options?: any): FetchArgs;
+    registerDelegate(from: string, data: string, fee?: string, nonce?: string, validateNonce?: boolean, options?: any): FetchArgs;
     signMessage(address: string, message: string, options?: any): FetchArgs;
     signRawTransaction(raw: string, address: string, options?: any): FetchArgs;
-    transfer(from: string, to: string, value: string, fee?: string, data?: string, options?: any): FetchArgs;
-    unvote(from: string, to: string, value: string, fee?: string, options?: any): FetchArgs;
+    transfer(from: string, to: string, value: string, fee?: string, nonce?: string, validateNonce?: boolean, data?: string, options?: any): FetchArgs;
+    unvote(from: string, to: string, value: string, fee?: string, nonce?: string, validateNonce?: boolean, options?: any): FetchArgs;
     verifyMessage(address: string, message: string, signature: string, options?: any): FetchArgs;
-    vote(from: string, to: string, value: string, fee?: string, options?: any): FetchArgs;
+    vote(from: string, to: string, value: string, fee?: string, nonce?: string, validateNonce?: boolean, options?: any): FetchArgs;
 };
 /**
  * SemuxApi - functional programming interface
@@ -954,9 +1001,10 @@ export declare const SemuxApiFp: (configuration?: Configuration) => {
     addNode(node: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<AddNodeResponse>;
     addToBlacklist(ip: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<ApiHandlerResponse>;
     addToWhitelist(ip: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<ApiHandlerResponse>;
-    broadcastRawTransaction(raw: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<DoTransactionResponse>;
+    broadcastRawTransaction(raw: string, validateNonce?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<DoTransactionResponse>;
     composeRawTransaction(network: string, type: string, fee: string, nonce: string, to?: string, value?: string, timestamp?: string, data?: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<ComposeRawTransactionResponse>;
-    createAccount(name?: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<CreateAccountResponse>;
+    createAccount(name?: string, privateKey?: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<CreateAccountResponse>;
+    deleteAccount(address: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<DeleteAccountResponse>;
     getAccount(address: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<GetAccountResponse>;
     getAccountPendingTransactions(address: string, from: string, to: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<GetAccountPendingTransactionsResponse>;
     getAccountTransactions(address: string, from: string, to: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<GetAccountTransactionsResponse>;
@@ -971,19 +1019,20 @@ export declare const SemuxApiFp: (configuration?: Configuration) => {
     getPeers(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<GetPeersResponse>;
     getPendingTransactions(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<GetPendingTransactionsResponse>;
     getRoot(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<GetRootResponse>;
+    getSyncingProgress(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<GetSyncingProgressResponse>;
     getTransaction(hash: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<GetTransactionResponse>;
     getTransactionLimits(type: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<GetTransactionLimitsResponse>;
     getValidators(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<GetValidatorsResponse>;
     getVote(delegate: string, voter: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<GetVoteResponse>;
     getVotes(delegate: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<GetVotesResponse>;
     listAccounts(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<ListAccountsResponse>;
-    registerDelegate(from: string, data: string, fee?: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<DoTransactionResponse>;
+    registerDelegate(from: string, data: string, fee?: string, nonce?: string, validateNonce?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<DoTransactionResponse>;
     signMessage(address: string, message: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<SignMessageResponse>;
     signRawTransaction(raw: string, address: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<SignRawTransactionResponse>;
-    transfer(from: string, to: string, value: string, fee?: string, data?: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<DoTransactionResponse>;
-    unvote(from: string, to: string, value: string, fee?: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<DoTransactionResponse>;
+    transfer(from: string, to: string, value: string, fee?: string, nonce?: string, validateNonce?: boolean, data?: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<DoTransactionResponse>;
+    unvote(from: string, to: string, value: string, fee?: string, nonce?: string, validateNonce?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<DoTransactionResponse>;
     verifyMessage(address: string, message: string, signature: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<VerifyMessageResponse>;
-    vote(from: string, to: string, value: string, fee?: string, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<DoTransactionResponse>;
+    vote(from: string, to: string, value: string, fee?: string, nonce?: string, validateNonce?: boolean, options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<DoTransactionResponse>;
 };
 /**
  * SemuxApi - factory interface
@@ -993,9 +1042,10 @@ export declare const SemuxApiFactory: (configuration?: Configuration, fetch?: Fe
     addNode(node: string, options?: any): Promise<AddNodeResponse>;
     addToBlacklist(ip: string, options?: any): Promise<ApiHandlerResponse>;
     addToWhitelist(ip: string, options?: any): Promise<ApiHandlerResponse>;
-    broadcastRawTransaction(raw: string, options?: any): Promise<DoTransactionResponse>;
+    broadcastRawTransaction(raw: string, validateNonce?: boolean, options?: any): Promise<DoTransactionResponse>;
     composeRawTransaction(network: string, type: string, fee: string, nonce: string, to?: string, value?: string, timestamp?: string, data?: string, options?: any): Promise<ComposeRawTransactionResponse>;
-    createAccount(name?: string, options?: any): Promise<CreateAccountResponse>;
+    createAccount(name?: string, privateKey?: string, options?: any): Promise<CreateAccountResponse>;
+    deleteAccount(address: string, options?: any): Promise<DeleteAccountResponse>;
     getAccount(address: string, options?: any): Promise<GetAccountResponse>;
     getAccountPendingTransactions(address: string, from: string, to: string, options?: any): Promise<GetAccountPendingTransactionsResponse>;
     getAccountTransactions(address: string, from: string, to: string, options?: any): Promise<GetAccountTransactionsResponse>;
@@ -1010,19 +1060,20 @@ export declare const SemuxApiFactory: (configuration?: Configuration, fetch?: Fe
     getPeers(options?: any): Promise<GetPeersResponse>;
     getPendingTransactions(options?: any): Promise<GetPendingTransactionsResponse>;
     getRoot(options?: any): Promise<GetRootResponse>;
+    getSyncingProgress(options?: any): Promise<GetSyncingProgressResponse>;
     getTransaction(hash: string, options?: any): Promise<GetTransactionResponse>;
     getTransactionLimits(type: string, options?: any): Promise<GetTransactionLimitsResponse>;
     getValidators(options?: any): Promise<GetValidatorsResponse>;
     getVote(delegate: string, voter: string, options?: any): Promise<GetVoteResponse>;
     getVotes(delegate: string, options?: any): Promise<GetVotesResponse>;
     listAccounts(options?: any): Promise<ListAccountsResponse>;
-    registerDelegate(from: string, data: string, fee?: string, options?: any): Promise<DoTransactionResponse>;
+    registerDelegate(from: string, data: string, fee?: string, nonce?: string, validateNonce?: boolean, options?: any): Promise<DoTransactionResponse>;
     signMessage(address: string, message: string, options?: any): Promise<SignMessageResponse>;
     signRawTransaction(raw: string, address: string, options?: any): Promise<SignRawTransactionResponse>;
-    transfer(from: string, to: string, value: string, fee?: string, data?: string, options?: any): Promise<DoTransactionResponse>;
-    unvote(from: string, to: string, value: string, fee?: string, options?: any): Promise<DoTransactionResponse>;
+    transfer(from: string, to: string, value: string, fee?: string, nonce?: string, validateNonce?: boolean, data?: string, options?: any): Promise<DoTransactionResponse>;
+    unvote(from: string, to: string, value: string, fee?: string, nonce?: string, validateNonce?: boolean, options?: any): Promise<DoTransactionResponse>;
     verifyMessage(address: string, message: string, signature: string, options?: any): Promise<VerifyMessageResponse>;
-    vote(from: string, to: string, value: string, fee?: string, options?: any): Promise<DoTransactionResponse>;
+    vote(from: string, to: string, value: string, fee?: string, nonce?: string, validateNonce?: boolean, options?: any): Promise<DoTransactionResponse>;
 };
 /**
  * SemuxApi - object-oriented interface
@@ -1061,12 +1112,13 @@ export declare class SemuxApi extends BaseAPI {
     /**
      * Broadcasts a raw transaction to the network.
      * @summary Broadcast a raw transaction
-     * @param {} raw Raw transaction
+     * @param {} raw Raw transaction encoded in hexadecimal string.
+     * @param {} [validateNonce] Whether to validate tx nonce against the current account state, default to false if omitted
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SemuxApi
      */
-    broadcastRawTransaction(raw: string, options?: any): Promise<DoTransactionResponse>;
+    broadcastRawTransaction(raw: string, validateNonce?: boolean, options?: any): Promise<DoTransactionResponse>;
     /**
      * Compose an unsigned raw transaction then return its hexadecimal encoded string. An unsigned raw transaction can be signed using /sign-raw-transaction API.
      * @summary Compose an unsigned raw transaction
@@ -1084,14 +1136,24 @@ export declare class SemuxApi extends BaseAPI {
      */
     composeRawTransaction(network: string, type: string, fee: string, nonce: string, to?: string, value?: string, timestamp?: string, data?: string, options?: any): Promise<ComposeRawTransactionResponse>;
     /**
-     * Creates a new account.
-     * @summary Create account
+     * Creates a new account by generating a new private key or importing an existing private key when parameter 'privateKey' is provided.
+     * @summary Create or import an account
      * @param {} [name] Assigned alias to the created account.
+     * @param {} [privateKey] The private key to be imported, create a new key if omitted
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SemuxApi
      */
-    createAccount(name?: string, options?: any): Promise<CreateAccountResponse>;
+    createAccount(name?: string, privateKey?: string, options?: any): Promise<CreateAccountResponse>;
+    /**
+     * Deletes an account from this wallet.
+     * @summary Delete account
+     * @param {} address Address of the account
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SemuxApi
+     */
+    deleteAccount(address: string, options?: any): Promise<DeleteAccountResponse>;
     /**
      * Returns an account.
      * @summary Get account
@@ -1216,6 +1278,14 @@ export declare class SemuxApi extends BaseAPI {
      */
     getRoot(options?: any): Promise<GetRootResponse>;
     /**
+     * Returns an object with data about the sync status
+     * @summary Get syncing progress
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SemuxApi
+     */
+    getSyncingProgress(options?: any): Promise<GetSyncingProgressResponse>;
+    /**
      * Returns a transactions if exists.
      * @summary Get transaction
      * @param {} hash Transaction hash
@@ -1274,11 +1344,13 @@ export declare class SemuxApi extends BaseAPI {
      * @param {} from Registering address
      * @param {} data Delegate name in hexadecimal encoded UTF-8 string, 16 bytes of data at maximum
      * @param {} [fee] Transaction fee in nano SEM, default to minimum fee if omitted
+     * @param {} [nonce] Transaction nonce, default to sender&#39;s nonce if omitted
+     * @param {} [validateNonce] Whether validate tx nonce against the current account state, default to false if omitted
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SemuxApi
      */
-    registerDelegate(from: string, data: string, fee?: string, options?: any): Promise<DoTransactionResponse>;
+    registerDelegate(from: string, data: string, fee?: string, nonce?: string, validateNonce?: boolean, options?: any): Promise<DoTransactionResponse>;
     /**
      * Sign a message.
      * @summary Sign a message
@@ -1306,12 +1378,14 @@ export declare class SemuxApi extends BaseAPI {
      * @param {} to Recipient&#39;s address
      * @param {} value Amount of SEM to transfer in nano SEM
      * @param {} [fee] Transaction fee in nano SEM, default to minimum fee if omitted
+     * @param {} [nonce] Transaction nonce, default to sender&#39;s nonce if omitted
+     * @param {} [validateNonce] Whether validate tx nonce against the current account state, default to false if omitted
      * @param {} [data] Transaction data encoded in hexadecimal string
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SemuxApi
      */
-    transfer(from: string, to: string, value: string, fee?: string, data?: string, options?: any): Promise<DoTransactionResponse>;
+    transfer(from: string, to: string, value: string, fee?: string, nonce?: string, validateNonce?: boolean, data?: string, options?: any): Promise<DoTransactionResponse>;
     /**
      * Unvotes for a delegate.
      * @summary Unvote
@@ -1319,11 +1393,13 @@ export declare class SemuxApi extends BaseAPI {
      * @param {} to Delegate address
      * @param {} value Number of votes in nano SEM
      * @param {} [fee] Transaction fee in nano SEM, default to minimum fee if omitted
+     * @param {} [nonce] Transaction nonce, default to sender&#39;s nonce if omitted
+     * @param {} [validateNonce] Whether validate tx nonce against the current account state, default to false if omitted
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SemuxApi
      */
-    unvote(from: string, to: string, value: string, fee?: string, options?: any): Promise<DoTransactionResponse>;
+    unvote(from: string, to: string, value: string, fee?: string, nonce?: string, validateNonce?: boolean, options?: any): Promise<DoTransactionResponse>;
     /**
      * Verify a signed message.
      * @summary Verify a message
@@ -1342,9 +1418,11 @@ export declare class SemuxApi extends BaseAPI {
      * @param {} to Delegate address
      * @param {} value Number of votes in nano SEM
      * @param {} [fee] Transaction fee in nano SEM, default to minimum fee if omitted
+     * @param {} [nonce] Transaction nonce, default to sender&#39;s nonce if omitted
+     * @param {} [validateNonce] Whether validate tx nonce against the current account state, default to false if omitted
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SemuxApi
      */
-    vote(from: string, to: string, value: string, fee?: string, options?: any): Promise<DoTransactionResponse>;
+    vote(from: string, to: string, value: string, fee?: string, nonce?: string, validateNonce?: boolean, options?: any): Promise<DoTransactionResponse>;
 }
