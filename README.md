@@ -25,6 +25,28 @@ Visit [issues](https://github.com/semuxproject/semux-js-sdk/issues) page to see 
 npm install --save semux
 ```
 
+## Getting Started
+
+**Node.js**
+
+```javascript
+// import semux module
+const Semux = require("semux");
+
+// create an API client
+const api = new Semux.Api(new Semux.ApiConfiguration({
+    username: "user",
+    password: "pass",
+    basePath: "http://localhost:5171/v2.1.0"
+}));
+
+// call GET /info API
+api
+  .getInfo({ mode: 'cors', credentials: 'include' })
+  .then(response => console.log(response))
+  .catch(err => console.error(err));
+```
+
 ## Usage
 
 - [Hash](https://github.com/semuxproject/semux-js-sdk/blob/master/lib/Hash.spec.ts)
@@ -92,4 +114,4 @@ This project is supported by [BrowserStack](https://www.browserstack.com/) to te
 
 ## License
 
-[MIT](LICENSE) © [Semux Foundation](https://github.com/semuxproject)
+[MIT](LICENSE) © [Semux Developers](https://github.com/semuxproject)
