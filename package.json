@@ -4,7 +4,7 @@
   "description": "Semux Javascript SDK Library",
   "main": "dist/semux.umd.js",
   "module": "dist/semux.es6.js",
-  "typings": "dist/types/index.d.ts",
+  "types": "dist/types/index.d.ts",
   "files": [
     "dist"
   ],
@@ -42,6 +42,9 @@
   },
   "homepage": "https://github.com/semuxproject/semux-js-sdk#readme",
   "dependencies": {
+    "@types/lodash": "^4.14.107",
+    "@types/long": "^4.0.0",
+    "@types/node": "^9",
     "atob": "^2.0",
     "blakejs": "^1.1.0",
     "btoa": "^1.2.1",
@@ -59,12 +62,8 @@
   },
   "devDependencies": {
     "@types/chai": "^4.1.2",
-    "@types/core-js": "^0.9.46",
     "@types/karma": "^1.7.3",
-    "@types/lodash": "^4.14.107",
-    "@types/long": "^3.0.32",
     "@types/mocha": "^2.2.48",
-    "@types/node": "^9",
     "browserstacktunnel-wrapper": "^2.0.2",
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
@@ -76,7 +75,7 @@
     "eslint-config-standard": "^11.0.0",
     "eslint-plugin-import": "^2.11.0",
     "eslint-plugin-node": "^6.0.1",
-    "eslint-plugin-promise": "^3.6.0",
+    "eslint-plugin-promise": "^3.8.0",
     "eslint-plugin-react": "^7.7.0",
     "eslint-plugin-standard": "^3.0.1",
     "eslint-plugin-typescript": "^0.9.0",

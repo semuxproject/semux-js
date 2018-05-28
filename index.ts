@@ -14,10 +14,10 @@ import SimpleEncoder from "./lib/SimpleEncoder";
 import Transaction from "./lib/Transaction";
 import TransactionType from "./lib/TransactionType";
 
-// export Semux object
-const Semux = {
-  Api: SemuxApi,
-  ApiConfiguration: Configuration,
+// export Semux module
+export {
+  SemuxApi,
+  Configuration as SemuxApiConfiguration,
   Bytes,
   Cast,
   Constants,
@@ -31,5 +31,3 @@ const Semux = {
   Transaction,
   TransactionType,
 };
-
-export default Semux;

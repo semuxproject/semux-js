@@ -20559,23 +20559,5 @@ function hashTx(tx) {
     return Hash.h256(encodeTx(tx));
 }
 
-// export Semux object
-var Semux = {
-    Api: SemuxApi,
-    ApiConfiguration: Configuration,
-    Bytes: Bytes,
-    Cast: Cast,
-    Constants: Constants,
-    Hash: Hash,
-    Key: Key,
-    KeyCodec: KeyCodec,
-    Network: Network,
-    Signature: Signature,
-    SimpleDecoder: SimpleDecoder,
-    SimpleEncoder: SimpleEncoder,
-    Transaction: Transaction,
-    TransactionType: TransactionType$1,
-};
-
-export default Semux;
+export { SemuxApi, Configuration as SemuxApiConfiguration, Bytes, Cast, Constants, Hash, Key, KeyCodec, Network, Signature, SimpleDecoder, SimpleEncoder, Transaction, TransactionType$1 as TransactionType };
 //# sourceMappingURL=semux.es6.js.map

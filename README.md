@@ -31,10 +31,10 @@ npm install --save semux
 
 ```javascript
 // import semux module
-const Semux = require("semux");
+const {SemuxApi, SemuxApiConfiguration} = require("semux");
 
 // create an API client
-const api = new Semux.Api(new Semux.ApiConfiguration({
+const api = new SemuxApi(new SemuxApiConfiguration({
     username: "user",
     password: "pass",
     basePath: "http://localhost:5171/v2.1.0"

@@ -1,8 +1,8 @@
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-	typeof define === 'function' && define.amd ? define(factory) :
-	(global.Semux = factory());
-}(this, (function () { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
+	typeof define === 'function' && define.amd ? define(['exports'], factory) :
+	(factory((global.Semux = {})));
+}(this, (function (exports) { 'use strict';
 
 function commonjsRequire () {
 	throw new Error('Dynamic requires are not currently supported by rollup-plugin-commonjs');
@@ -20565,25 +20565,22 @@ function hashTx(tx) {
     return Hash.h256(encodeTx(tx));
 }
 
-// export Semux object
-var Semux = {
-    Api: SemuxApi,
-    ApiConfiguration: Configuration,
-    Bytes: Bytes,
-    Cast: Cast,
-    Constants: Constants,
-    Hash: Hash,
-    Key: Key,
-    KeyCodec: KeyCodec,
-    Network: Network,
-    Signature: Signature,
-    SimpleDecoder: SimpleDecoder,
-    SimpleEncoder: SimpleEncoder,
-    Transaction: Transaction,
-    TransactionType: TransactionType$1,
-};
+exports.SemuxApi = SemuxApi;
+exports.SemuxApiConfiguration = Configuration;
+exports.Bytes = Bytes;
+exports.Cast = Cast;
+exports.Constants = Constants;
+exports.Hash = Hash;
+exports.Key = Key;
+exports.KeyCodec = KeyCodec;
+exports.Network = Network;
+exports.Signature = Signature;
+exports.SimpleDecoder = SimpleDecoder;
+exports.SimpleEncoder = SimpleEncoder;
+exports.Transaction = Transaction;
+exports.TransactionType = TransactionType$1;
 
-return Semux;
+Object.defineProperty(exports, '__esModule', { value: true });
 
 })));
 //# sourceMappingURL=semux.umd.js.map
