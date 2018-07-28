@@ -2,7 +2,6 @@
 
 [![NPM Status](https://img.shields.io/npm/v/semux.svg)](https://www.npmjs.com/package/semux)
 [![Travis Build Status](https://travis-ci.org/semuxproject/semux-js.svg?branch=master)](https://travis-ci.org/semuxproject/semux-js)
-[![BrowserStack Status](https://www.browserstack.com/automate/badge.svg?badge_key=eEVtNGR5NjNKcGdaMVp6N1RldVJsTmRpTTNQeGtQbVlvNER1R2dLWjlyST0tLTlQeG9WSlpJam8xOUIvYUc5NlBNN2c9PQ==--05e005a64351ce1375536b9931466c99c023ac13)](https://www.browserstack.com/automate/public-build/eEVtNGR5NjNKcGdaMVp6N1RldVJsTmRpTTNQeGtQbVlvNER1R2dLWjlyST0tLTlQeG9WSlpJam8xOUIvYUc5NlBNN2c9PQ==--05e005a64351ce1375536b9931466c99c023ac13)
 [![Coverage Status](https://coveralls.io/repos/github/semuxproject/semux-js/badge.svg?branch=master)](https://coveralls.io/github/semuxproject/semux-js?branch=master)
 
 This library aims to providing javascript utilities for Semux client-side applications, such as web wallet.
@@ -15,7 +14,6 @@ Visit [issues](https://github.com/semuxproject/semux-js/issues) page to see plan
 - [Usage](#usage)
 - [Example Applications](#example-applications)
 - [Development](#development)
-- [Special Thanks](#special-thanks)
 - [Maintainers](#maintainers)
 - [License](#license)
 
@@ -101,12 +99,6 @@ npm run format
 ```
 npm run format:check
 ```
-
-## Special Thanks
-
-This project is supported by [BrowserStack](https://www.browserstack.com/) to test cross-browser compatibility:
-
-[![BrowserStack Logo](https://i.imgur.com/tssTLRk.png)](https://www.browserstack.com/)
 
 ## Maintainers
 
