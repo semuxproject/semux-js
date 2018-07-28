@@ -20,7 +20,7 @@ Visit [issues](https://github.com/semuxproject/semux-js/issues) page to see plan
 ## Install
 
 ```
-npm install --save semux
+npm install --save semux-js
 ```
 
 ## Getting Started
@@ -29,7 +29,7 @@ npm install --save semux
 
 ```javascript
 // import semux module
-const {SemuxApi, SemuxApiConfiguration} = require("semux");
+const {SemuxApi, SemuxApiConfiguration} = require("semux-js");
 
 // create an API client
 const api = new SemuxApi(new SemuxApiConfiguration({
