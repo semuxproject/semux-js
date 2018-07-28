@@ -1,6 +1,6 @@
 # Semux Javascript SDK
 
-[![NPM Status](https://img.shields.io/npm/v/semux.svg)](https://www.npmjs.com/package/semux)
+[![NPM Status](https://img.shields.io/npm/v/semux-js.svg)](https://www.npmjs.com/package/semux-js)
 [![Travis Build Status](https://travis-ci.org/semuxproject/semux-js.svg?branch=master)](https://travis-ci.org/semuxproject/semux-js)
 [![Coverage Status](https://coveralls.io/repos/github/semuxproject/semux-js/badge.svg?branch=master)](https://coveralls.io/github/semuxproject/semux-js?branch=master)
 
