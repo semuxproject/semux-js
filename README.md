@@ -106,4 +106,4 @@ npm run format:check
 
 ## License
 
-[MIT](LICENSE) © [Semux Developers](https://github.com/semuxproject)
+[MIT](LICENSE) © [The Semux Developers](https://github.com/semuxproject)
