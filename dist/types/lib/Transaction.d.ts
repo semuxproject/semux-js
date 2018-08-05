@@ -1,4 +1,3 @@
-/// <reference types="long" />
 import Long from "long";
 import Key from "./Key";
 import Network from "./Network";

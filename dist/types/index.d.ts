@@ -12,4 +12,4 @@ import SimpleDecoder from "./lib/SimpleDecoder";
 import SimpleEncoder from "./lib/SimpleEncoder";
 import Transaction from "./lib/Transaction";
 import TransactionType from "./lib/TransactionType";
-export { SemuxApi, Configuration as SemuxApiConfiguration, Bytes, Cast, Constants, Hash, Key, KeyCodec, Network, Signature, SimpleDecoder, SimpleEncoder, Transaction, TransactionType };
+export { SemuxApi, Configuration as SemuxApiConfiguration, Bytes, Cast, Constants, Hash, Key, KeyCodec, Network, Signature, SimpleDecoder, SimpleEncoder, Transaction, TransactionType, };

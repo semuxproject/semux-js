@@ -1825,35 +1825,6 @@ export const SemuxApiFetchParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * 
-         * @summary Get root
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getRoot(options: any = {}): FetchArgs {
-            const localVarPath = `/`;
-            const localVarUrlObj = url.parse(localVarPath, true);
-            const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication basicAuth required
-            // http basic authentication required
-            if (configuration && (configuration.username || configuration.password)) {
-                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
-            }
-
-            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
-            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-            delete localVarUrlObj.search;
-            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
-
-            return {
-                url: url.format(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
          * Returns an object with data about the sync status
          * @summary Get syncing progress
          * @param {*} [options] Override http request option.
@@ -2928,24 +2899,6 @@ export const SemuxApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * 
-         * @summary Get root
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getRoot(options?: any): (fetch?: FetchAPI, basePath?: string) => Promise<GetRootResponse> {
-            const localVarFetchArgs = SemuxApiFetchParamCreator(configuration).getRoot(options);
-            return (fetch: FetchAPI = portableFetch, basePath: string = BASE_PATH) => {
-                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then((response) => {
-                    if (response.status >= 200 && response.status < 300) {
-                        return response.json();
-                    } else {
-                        throw response;
-                    }
-                });
-            };
-        },
-        /**
          * Returns an object with data about the sync status
          * @summary Get syncing progress
          * @param {*} [options] Override http request option.
@@ -3450,15 +3403,6 @@ export const SemuxApiFactory = function (configuration?: Configuration, fetch?: 
             return SemuxApiFp(configuration).getPendingTransactions(options)(fetch, basePath);
         },
         /**
-         * 
-         * @summary Get root
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getRoot(options?: any) {
-            return SemuxApiFp(configuration).getRoot(options)(fetch, basePath);
-        },
-        /**
          * Returns an object with data about the sync status
          * @summary Get syncing progress
          * @param {*} [options] Override http request option.
@@ -3875,17 +3819,6 @@ export class SemuxApi extends BaseAPI {
      */
     public getPendingTransactions(options?: any) {
         return SemuxApiFp(this.configuration).getPendingTransactions(options)(this.fetch, this.basePath);
-    }
-
-    /**
-     * 
-     * @summary Get root
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof SemuxApi
-     */
-    public getRoot(options?: any) {
-        return SemuxApiFp(this.configuration).getRoot(options)(this.fetch, this.basePath);
     }
 
     /**

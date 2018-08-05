@@ -34,7 +34,7 @@ var _descriptors = !_fails(function () {
 });
 
 var _core = createCommonjsModule(function (module) {
-var core = module.exports = { version: '2.5.6' };
+var core = module.exports = { version: '2.5.7' };
 if (typeof __e == 'number') __e = core; // eslint-disable-line no-undef
 });
 var _core_1 = _core.version;
@@ -4042,12 +4042,12 @@ _export(_export.P + _export.U + _export.F * _fails(function () {
     if ($slice !== undefined && end === undefined) return $slice.call(_anObject(this), start); // FF fix
     var len = _anObject(this).byteLength;
     var first = _toAbsoluteIndex(start, len);
-    var final = _toAbsoluteIndex(end === undefined ? len : end, len);
-    var result = new (_speciesConstructor(this, $ArrayBuffer))(_toLength(final - first));
+    var fin = _toAbsoluteIndex(end === undefined ? len : end, len);
+    var result = new (_speciesConstructor(this, $ArrayBuffer))(_toLength(fin - first));
     var viewS = new $DataView(this);
     var viewT = new $DataView(result);
     var index = 0;
-    while (first < final) {
+    while (first < fin) {
       viewT.setUint8(index++, viewS.getUint8(first++));
     } return result;
   }
@@ -9892,7 +9892,7 @@ var index = typeof fetch=='function' ? fetch.bind() : function(url, options) {
 	return new Promise( function (resolve, reject) {
 		var request = new XMLHttpRequest();
 
-		request.open(options.method || 'get', url);
+		request.open(options.method || 'get', url, true);
 
 		for (var i in options.headers) {
 			request.setRequestHeader(i, options.headers[i]);
@@ -9914,7 +9914,7 @@ var index = typeof fetch=='function' ? fetch.bind() : function(url, options) {
 				headers = {},
 				header;
 
-			request.getAllResponseHeaders().replace(/^(.*?):\s*([\s\S]*?)$/gm, function (m, key, value) {
+			request.getAllResponseHeaders().replace(/^(.*?):[^\S\n]*([\s\S]*?)$/gm, function (m, key, value) {
 				keys.push(key = key.toLowerCase());
 				all.push([key, value]);
 				header = headers[key];
@@ -9922,7 +9922,7 @@ var index = typeof fetch=='function' ? fetch.bind() : function(url, options) {
 			});
 
 			return {
-				ok: (request.status/200|0) == 1,		// 200-299
+				ok: (request.status/100|0) == 2,		// 200-299
 				status: request.status,
 				statusText: request.statusText,
 				url: request.responseURL,
@@ -10752,33 +10752,6 @@ var SemuxApiFetchParamCreator = function (configuration) {
         getPendingTransactions: function (options) {
             if (options === void 0) { options = {}; }
             var localVarPath = "/pending-transactions";
-            var localVarUrlObj = url.parse(localVarPath, true);
-            var localVarRequestOptions = Object.assign({ method: 'GET' }, options);
-            var localVarHeaderParameter = {};
-            var localVarQueryParameter = {};
-            // authentication basicAuth required
-            // http basic authentication required
-            if (configuration && (configuration.username || configuration.password)) {
-                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
-            }
-            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
-            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-            delete localVarUrlObj.search;
-            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
-            return {
-                url: url.format(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         *
-         * @summary Get root
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getRoot: function (options) {
-            if (options === void 0) { options = {}; }
-            var localVarPath = "/";
             var localVarUrlObj = url.parse(localVarPath, true);
             var localVarRequestOptions = Object.assign({ method: 'GET' }, options);
             var localVarHeaderParameter = {};
@@ -11867,27 +11840,6 @@ var SemuxApiFp = function (configuration) {
             };
         },
         /**
-         *
-         * @summary Get root
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getRoot: function (options) {
-            var localVarFetchArgs = SemuxApiFetchParamCreator(configuration).getRoot(options);
-            return function (fetch, basePath) {
-                if (fetch === void 0) { fetch = portableFetch; }
-                if (basePath === void 0) { basePath = BASE_PATH; }
-                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
-                    if (response.status >= 200 && response.status < 300) {
-                        return response.json();
-                    }
-                    else {
-                        throw response;
-                    }
-                });
-            };
-        },
-        /**
          * Returns an object with data about the sync status
          * @summary Get syncing progress
          * @param {*} [options] Override http request option.
@@ -12456,16 +12408,6 @@ var SemuxApi = /** @class */ (function (_super) {
      */
     SemuxApi.prototype.getPendingTransactions = function (options) {
         return SemuxApiFp(this.configuration).getPendingTransactions(options)(this.fetch, this.basePath);
-    };
-    /**
-     *
-     * @summary Get root
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof SemuxApi
-     */
-    SemuxApi.prototype.getRoot = function (options) {
-        return SemuxApiFp(this.configuration).getRoot(options)(this.fetch, this.basePath);
     };
     /**
      * Returns an object with data about the sync status

@@ -1,4 +1,3 @@
-/// <reference types="long" />
 import Long from "long";
 /**
  * Semux byte encoder.
