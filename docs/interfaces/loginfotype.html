@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>GetAccountTransactionsResponse | semux-js-sdk</title>
+	<title>LogInfoType | semux-js-sdk</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -54,10 +54,10 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="getaccounttransactionsresponse.html">GetAccountTransactionsResponse</a>
+					<a href="loginfotype.html">LogInfoType</a>
 				</li>
 			</ul>
-			<h1>Interface GetAccountTransactionsResponse</h1>
+			<h1>Interface LogInfoType</h1>
 		</div>
 	</div>
 </header>
@@ -70,7 +70,7 @@
 						<dt>export</dt>
 						<dd></dd>
 						<dt>interface</dt>
-						<dd><p>GetAccountTransactionsResponse</p>
+						<dd><p>LogInfoType</p>
 						</dd>
 					</dl>
 				</div>
@@ -79,12 +79,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<a href="apihandlerresponse.html" class="tsd-signature-type">ApiHandlerResponse</a>
-						<ul class="tsd-hierarchy">
-							<li>
-								<span class="target">GetAccountTransactionsResponse</span>
-							</li>
-						</ul>
+						<span class="target">LogInfoType</span>
 					</li>
 				</ul>
 			</section>
@@ -95,9 +90,9 @@
 						<section class="tsd-index-section tsd-is-external">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="getaccounttransactionsresponse.html#message" class="tsd-kind-icon">message</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="getaccounttransactionsresponse.html#result" class="tsd-kind-icon">result</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="getaccounttransactionsresponse.html#success" class="tsd-kind-icon">success</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="loginfotype.html#address" class="tsd-kind-icon">address</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="loginfotype.html#data" class="tsd-kind-icon">data</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="loginfotype.html#topics" class="tsd-kind-icon">topics</a></li>
 							</ul>
 						</section>
 					</div>
@@ -105,64 +100,71 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group tsd-is-external">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
-					<a name="message" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> message</h3>
-					<div class="tsd-signature tsd-kind-icon">message<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+					<a name="address" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> address</h3>
+					<div class="tsd-signature tsd-kind-icon">address<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from <a href="apihandlerresponse.html">ApiHandlerResponse</a>.<a href="apihandlerresponse.html#message">message</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/api/api.ts#L162">lib/api/api.ts:162</a></li>
+							<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/api/api.ts#L378">lib/api/api.ts:378</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Address encoded in hexadecimal string</p>
+						</div>
 						<dl class="tsd-comment-tags">
 							<dt>type</dt>
 							<dd><p>{string}</p>
 							</dd>
 							<dt>memberof</dt>
-							<dd><p>ApiHandlerResponse</p>
+							<dd><p>LogInfoType</p>
 							</dd>
 						</dl>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="result" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> result</h3>
-					<div class="tsd-signature tsd-kind-icon">result<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><a href="../classes/transactiontype.html" class="tsd-signature-type">TransactionType</a><span class="tsd-signature-symbol">&gt;</span></div>
+					<a name="data" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> data</h3>
+					<div class="tsd-signature tsd-kind-icon">data<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/api/api.ts#L724">lib/api/api.ts:724</a></li>
+							<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/api/api.ts#L384">lib/api/api.ts:384</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Log info data encoded in hexadecimal string</p>
+						</div>
 						<dl class="tsd-comment-tags">
 							<dt>type</dt>
-							<dd><p>{Array&lt;TransactionType&gt;}</p>
+							<dd><p>{string}</p>
 							</dd>
 							<dt>memberof</dt>
-							<dd><p>GetAccountTransactionsResponse</p>
+							<dd><p>LogInfoType</p>
 							</dd>
 						</dl>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
-					<a name="success" class="tsd-anchor"></a>
-					<h3>success</h3>
-					<div class="tsd-signature tsd-kind-icon">success<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+					<a name="topics" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> topics</h3>
+					<div class="tsd-signature tsd-kind-icon">topics<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from <a href="apihandlerresponse.html">ApiHandlerResponse</a>.<a href="apihandlerresponse.html#success">success</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/api/api.ts#L156">lib/api/api.ts:156</a></li>
+							<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/api/api.ts#L390">lib/api/api.ts:390</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Topics encoded in hexadecimal string</p>
+						</div>
 						<dl class="tsd-comment-tags">
 							<dt>type</dt>
-							<dd><p>{boolean}</p>
+							<dd><p>{Array&lt;string&gt;}</p>
 							</dd>
 							<dt>memberof</dt>
-							<dd><p>ApiHandlerResponse</p>
+							<dd><p>LogInfoType</p>
 							</dd>
 						</dl>
 					</div>
@@ -182,16 +184,16 @@
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-is-external">
-						<a href="getaccounttransactionsresponse.html" class="tsd-kind-icon">Get<wbr>Account<wbr>Transactions<wbr>Response</a>
+						<a href="loginfotype.html" class="tsd-kind-icon">Log<wbr>Info<wbr>Type</a>
 						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
-								<a href="getaccounttransactionsresponse.html#message" class="tsd-kind-icon">message</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+								<a href="loginfotype.html#address" class="tsd-kind-icon">address</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="getaccounttransactionsresponse.html#result" class="tsd-kind-icon">result</a>
+								<a href="loginfotype.html#data" class="tsd-kind-icon">data</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
-								<a href="getaccounttransactionsresponse.html#success" class="tsd-kind-icon">success</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+								<a href="loginfotype.html#topics" class="tsd-kind-icon">topics</a>
 							</li>
 						</ul>
 					</li>

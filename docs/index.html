@@ -78,10 +78,9 @@
 					<li><a href="#license">License</a></li>
 				</ul>
 				<h2 id="install">Install</h2>
-				<pre><code>npm <span class="hljs-keyword">install</span> <span class="hljs-comment">--save semux-js</span>
-</code></pre><h2 id="getting-started">Getting Started</h2>
+				<pre><code>npm <span class="hljs-keyword">install</span> <span class="hljs-comment">--save semux-js</span></code></pre><h2 id="getting-started">Getting Started</h2>
 				<p><strong>Node.js</strong></p>
-				<pre><code class="lang-javascript"><span class="hljs-comment">// import semux module</span>
+				<pre><code class="language-javascript"><span class="hljs-comment">// import semux module</span>
 <span class="hljs-keyword">const</span> {SemuxApi, SemuxApiConfiguration} = <span class="hljs-built_in">require</span>(<span class="hljs-string">"semux-js"</span>);
 
 <span class="hljs-comment">// create an API client</span>
@@ -95,8 +94,7 @@
 api
   .getInfo({ <span class="hljs-attr">mode</span>: <span class="hljs-string">'cors'</span>, <span class="hljs-attr">credentials</span>: <span class="hljs-string">'include'</span> })
   .then(<span class="hljs-function"><span class="hljs-params">response</span> =&gt;</span> <span class="hljs-built_in">console</span>.log(response))
-  .catch(<span class="hljs-function"><span class="hljs-params">err</span> =&gt;</span> <span class="hljs-built_in">console</span>.error(err));
-</code></pre>
+  .catch(<span class="hljs-function"><span class="hljs-params">err</span> =&gt;</span> <span class="hljs-built_in">console</span>.error(err));</code></pre>
 				<h2 id="usage">Usage</h2>
 				<ul>
 					<li><a href="https://github.com/semuxproject/semux-js/blob/master/lib/Hash.spec.ts">Hash</a></li>
@@ -122,17 +120,12 @@ api
 				</ul>
 				<h2 id="development">Development</h2>
 				<h3 id="install-modules">Install Modules</h3>
-				<pre><code>npm <span class="hljs-keyword">install</span>
-</code></pre><h3 id="run-unit-tests">Run Unit Tests</h3>
-				<pre><code>npm <span class="hljs-built_in">test</span>
-</code></pre><h3 id="run-browser-tests">Run Browser Tests</h3>
+				<pre><code>npm <span class="hljs-keyword">install</span></code></pre><h3 id="run-unit-tests">Run Unit Tests</h3>
+				<pre><code>npm <span class="hljs-built_in">test</span></code></pre><h3 id="run-browser-tests">Run Browser Tests</h3>
 				<p>Browser testing requires Chrome and Firefox installed.</p>
-				<pre><code>npm <span class="hljs-keyword">run</span><span class="bash">-script <span class="hljs-built_in">test</span>:browser</span>
-</code></pre><h3 id="format-source-code">Format Source Code</h3>
-				<pre><code>npm <span class="hljs-keyword">run</span><span class="bash"> format</span>
-</code></pre><h3 id="check-source-code-formatting">Check Source Code Formatting</h3>
-				<pre><code>npm <span class="hljs-keyword">run</span><span class="bash"> format:check</span>
-</code></pre><h2 id="maintainers">Maintainers</h2>
+				<pre><code>npm <span class="hljs-keyword">run</span><span class="bash">-script <span class="hljs-built_in">test</span>:browser</span></code></pre><h3 id="format-source-code">Format Source Code</h3>
+				<pre><code>npm <span class="hljs-keyword">run</span><span class="bash"> format</span></code></pre><h3 id="check-source-code-formatting">Check Source Code Formatting</h3>
+				<pre><code>npm <span class="hljs-keyword">run</span><span class="bash"> format:check</span></code></pre><h2 id="maintainers">Maintainers</h2>
 				<p><a href="https://github.com/cryptokat/">@cryptokat</a>.</p>
 				<h2 id="license">License</h2>
 				<p><a href="LICENSE">MIT</a> © <a href="https://github.com/semuxproject">The Semux Developers</a></p>
@@ -149,9 +142,6 @@ api
 					</li>
 					<li class=" tsd-kind-module tsd-is-external">
 						<a href="modules/infotype.html">Info<wbr>Type</a>
-					</li>
-					<li class=" tsd-kind-module tsd-is-external">
-						<a href="modules/pendingtransactiontype.html">Pending<wbr>Transaction<wbr>Type</a>
 					</li>
 				</ul>
 			</nav>
@@ -293,6 +283,9 @@ api
 						<a href="interfaces/gettransactionresponse.html" class="tsd-kind-icon">Get<wbr>Transaction<wbr>Response</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/gettransactionresultresponse.html" class="tsd-kind-icon">Get<wbr>Transaction<wbr>Result<wbr>Response</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
 						<a href="interfaces/getvalidatorsresponse.html" class="tsd-kind-icon">Get<wbr>Validators<wbr>Response</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-is-external">
@@ -303,6 +296,9 @@ api
 					</li>
 					<li class=" tsd-kind-interface tsd-is-external">
 						<a href="interfaces/listaccountsresponse.html" class="tsd-kind-icon">List<wbr>Accounts<wbr>Response</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/loginfotype.html" class="tsd-kind-icon">Log<wbr>Info<wbr>Type</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-is-external">
 						<a href="interfaces/peertype.html" class="tsd-kind-icon">Peer<wbr>Type</a>
@@ -318,6 +314,9 @@ api
 					</li>
 					<li class=" tsd-kind-interface tsd-is-external">
 						<a href="interfaces/transactionlimitstype.html" class="tsd-kind-icon">Transaction<wbr>Limits<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/transactionresulttype.html" class="tsd-kind-icon">Transaction<wbr>Result<wbr>Type</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-is-external">
 						<a href="interfaces/verifymessageresponse.html" class="tsd-kind-icon">Verify<wbr>Message<wbr>Response</a>

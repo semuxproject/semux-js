@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>TypeEnum | semux-js-sdk</title>
+	<title>TransactionResultType | semux-js-sdk</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -54,13 +54,10 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/pendingtransactiontype.html">PendingTransactionType</a>
-				</li>
-				<li>
-					<a href="pendingtransactiontype.typeenum.html">TypeEnum</a>
+					<a href="transactionresulttype.html">TransactionResultType</a>
 				</li>
 			</ul>
-			<h1>Enumeration TypeEnum</h1>
+			<h1>Interface TransactionResultType</h1>
 		</div>
 	</div>
 </header>
@@ -72,102 +69,144 @@
 					<dl class="tsd-comment-tags">
 						<dt>export</dt>
 						<dd></dd>
-						<dt>enum</dt>
-						<dd><p>{string}</p>
+						<dt>interface</dt>
+						<dd><p>TransactionResultType</p>
 						</dd>
 					</dl>
 				</div>
+			</section>
+			<section class="tsd-panel tsd-hierarchy">
+				<h3>Hierarchy</h3>
+				<ul class="tsd-hierarchy">
+					<li>
+						<span class="target">TransactionResultType</span>
+					</li>
+				</ul>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section tsd-is-external">
-							<h3>Enumeration members</h3>
+							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-enum-member tsd-parent-kind-enum tsd-is-external"><a href="pendingtransactiontype.typeenum.html#call" class="tsd-kind-icon">CALL</a></li>
-								<li class="tsd-kind-enum-member tsd-parent-kind-enum tsd-is-external"><a href="pendingtransactiontype.typeenum.html#coinbase" class="tsd-kind-icon">COINBASE</a></li>
-								<li class="tsd-kind-enum-member tsd-parent-kind-enum tsd-is-external"><a href="pendingtransactiontype.typeenum.html#create" class="tsd-kind-icon">CREATE</a></li>
-								<li class="tsd-kind-enum-member tsd-parent-kind-enum tsd-is-external"><a href="pendingtransactiontype.typeenum.html#delegate" class="tsd-kind-icon">DELEGATE</a></li>
-								<li class="tsd-kind-enum-member tsd-parent-kind-enum tsd-is-external"><a href="pendingtransactiontype.typeenum.html#transfer" class="tsd-kind-icon">TRANSFER</a></li>
-								<li class="tsd-kind-enum-member tsd-parent-kind-enum tsd-is-external"><a href="pendingtransactiontype.typeenum.html#unvote" class="tsd-kind-icon">UNVOTE</a></li>
-								<li class="tsd-kind-enum-member tsd-parent-kind-enum tsd-is-external"><a href="pendingtransactiontype.typeenum.html#vote" class="tsd-kind-icon">VOTE</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="transactionresulttype.html#blocknumber" class="tsd-kind-icon">block<wbr>Number</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="transactionresulttype.html#code" class="tsd-kind-icon">code</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="transactionresulttype.html#gasused" class="tsd-kind-icon">gas<wbr>Used</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="transactionresulttype.html#logs" class="tsd-kind-icon">logs</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="transactionresulttype.html#returndata" class="tsd-kind-icon">return<wbr>Data</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group tsd-is-external">
-				<h2>Enumeration members</h2>
-				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum tsd-is-external">
-					<a name="call" class="tsd-anchor"></a>
-					<h3>CALL</h3>
-					<div class="tsd-signature tsd-kind-icon">CALL<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;&lt;any&gt; &#x27;CALL&#x27;</span></div>
+				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+					<a name="blocknumber" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> block<wbr>Number</h3>
+					<div class="tsd-signature tsd-kind-icon">block<wbr>Number<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/3bcc286/lib/api/api.ts#L501">lib/api/api.ts:501</a></li>
+							<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/api/api.ts#L518">lib/api/api.ts:518</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<dl class="tsd-comment-tags">
+							<dt>type</dt>
+							<dd><p>{string}</p>
+							</dd>
+							<dt>memberof</dt>
+							<dd><p>TransactionResultType</p>
+							</dd>
+						</dl>
+					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum tsd-is-external">
-					<a name="coinbase" class="tsd-anchor"></a>
-					<h3>COINBASE</h3>
-					<div class="tsd-signature tsd-kind-icon">COINBASE<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;&lt;any&gt; &#x27;COINBASE&#x27;</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+					<a name="code" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> code</h3>
+					<div class="tsd-signature tsd-kind-icon">code<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/3bcc286/lib/api/api.ts#L495">lib/api/api.ts:495</a></li>
+							<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/api/api.ts#L542">lib/api/api.ts:542</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The status of the transaction</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>type</dt>
+							<dd><p>{string}</p>
+							</dd>
+							<dt>memberof</dt>
+							<dd><p>TransactionResultType</p>
+							</dd>
+						</dl>
+					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum tsd-is-external">
-					<a name="create" class="tsd-anchor"></a>
-					<h3>CREATE</h3>
-					<div class="tsd-signature tsd-kind-icon">CREATE<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;&lt;any&gt; &#x27;CREATE&#x27;</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+					<a name="gasused" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> gas<wbr>Used</h3>
+					<div class="tsd-signature tsd-kind-icon">gas<wbr>Used<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/3bcc286/lib/api/api.ts#L500">lib/api/api.ts:500</a></li>
+							<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/api/api.ts#L536">lib/api/api.ts:536</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<dl class="tsd-comment-tags">
+							<dt>type</dt>
+							<dd><p>{string}</p>
+							</dd>
+							<dt>memberof</dt>
+							<dd><p>TransactionResultType</p>
+							</dd>
+						</dl>
+					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum tsd-is-external">
-					<a name="delegate" class="tsd-anchor"></a>
-					<h3>DELEGATE</h3>
-					<div class="tsd-signature tsd-kind-icon">DELEGATE<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;&lt;any&gt; &#x27;DELEGATE&#x27;</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+					<a name="logs" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> logs</h3>
+					<div class="tsd-signature tsd-kind-icon">logs<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><a href="loginfotype.html" class="tsd-signature-type">LogInfoType</a><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/3bcc286/lib/api/api.ts#L497">lib/api/api.ts:497</a></li>
+							<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/api/api.ts#L524">lib/api/api.ts:524</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<dl class="tsd-comment-tags">
+							<dt>type</dt>
+							<dd><p>{Array&lt;LogInfoType&gt;}</p>
+							</dd>
+							<dt>memberof</dt>
+							<dd><p>TransactionResultType</p>
+							</dd>
+						</dl>
+					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum tsd-is-external">
-					<a name="transfer" class="tsd-anchor"></a>
-					<h3>TRANSFER</h3>
-					<div class="tsd-signature tsd-kind-icon">TRANSFER<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;&lt;any&gt; &#x27;TRANSFER&#x27;</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+					<a name="returndata" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> return<wbr>Data</h3>
+					<div class="tsd-signature tsd-kind-icon">return<wbr>Data<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/3bcc286/lib/api/api.ts#L496">lib/api/api.ts:496</a></li>
+							<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/api/api.ts#L530">lib/api/api.ts:530</a></li>
 						</ul>
 					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum tsd-is-external">
-					<a name="unvote" class="tsd-anchor"></a>
-					<h3>UNVOTE</h3>
-					<div class="tsd-signature tsd-kind-icon">UNVOTE<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;&lt;any&gt; &#x27;UNVOTE&#x27;</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/3bcc286/lib/api/api.ts#L499">lib/api/api.ts:499</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum tsd-is-external">
-					<a name="vote" class="tsd-anchor"></a>
-					<h3>VOTE</h3>
-					<div class="tsd-signature tsd-kind-icon">VOTE<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> =&nbsp;&lt;any&gt; &#x27;VOTE&#x27;</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/3bcc286/lib/api/api.ts#L498">lib/api/api.ts:498</a></li>
-						</ul>
-					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Return data encoded in hexadecimal string</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>type</dt>
+							<dd><p>{string}</p>
+							</dd>
+							<dt>memberof</dt>
+							<dd><p>TransactionResultType</p>
+							</dd>
+						</dl>
+					</div>
 				</section>
 			</section>
 		</div>
@@ -177,76 +216,34 @@
 					<li class="globals  ">
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
-					<li class="label tsd-is-external">
-						<span>Externals</span>
-					</li>
-					<li class=" tsd-kind-module tsd-is-external">
-						<a href="../modules/infotype.html">Info<wbr>Type</a>
-					</li>
-					<li class="current tsd-kind-module tsd-is-external">
-						<a href="../modules/pendingtransactiontype.html">Pending<wbr>Transaction<wbr>Type</a>
-					</li>
 				</ul>
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-enum tsd-parent-kind-module tsd-is-external">
-						<a href="pendingtransactiontype.typeenum.html" class="tsd-kind-icon">Type<wbr>Enum</a>
+					<li class="current tsd-kind-interface tsd-is-external">
+						<a href="transactionresulttype.html" class="tsd-kind-icon">Transaction<wbr>Result<wbr>Type</a>
 						<ul>
-							<li class=" tsd-kind-enum-member tsd-parent-kind-enum tsd-is-external">
-								<a href="pendingtransactiontype.typeenum.html#call" class="tsd-kind-icon">CALL</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+								<a href="transactionresulttype.html#blocknumber" class="tsd-kind-icon">block<wbr>Number</a>
 							</li>
-							<li class=" tsd-kind-enum-member tsd-parent-kind-enum tsd-is-external">
-								<a href="pendingtransactiontype.typeenum.html#coinbase" class="tsd-kind-icon">COINBASE</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+								<a href="transactionresulttype.html#code" class="tsd-kind-icon">code</a>
 							</li>
-							<li class=" tsd-kind-enum-member tsd-parent-kind-enum tsd-is-external">
-								<a href="pendingtransactiontype.typeenum.html#create" class="tsd-kind-icon">CREATE</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+								<a href="transactionresulttype.html#gasused" class="tsd-kind-icon">gas<wbr>Used</a>
 							</li>
-							<li class=" tsd-kind-enum-member tsd-parent-kind-enum tsd-is-external">
-								<a href="pendingtransactiontype.typeenum.html#delegate" class="tsd-kind-icon">DELEGATE</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+								<a href="transactionresulttype.html#logs" class="tsd-kind-icon">logs</a>
 							</li>
-							<li class=" tsd-kind-enum-member tsd-parent-kind-enum tsd-is-external">
-								<a href="pendingtransactiontype.typeenum.html#transfer" class="tsd-kind-icon">TRANSFER</a>
-							</li>
-							<li class=" tsd-kind-enum-member tsd-parent-kind-enum tsd-is-external">
-								<a href="pendingtransactiontype.typeenum.html#unvote" class="tsd-kind-icon">UNVOTE</a>
-							</li>
-							<li class=" tsd-kind-enum-member tsd-parent-kind-enum tsd-is-external">
-								<a href="pendingtransactiontype.typeenum.html#vote" class="tsd-kind-icon">VOTE</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+								<a href="transactionresulttype.html#returndata" class="tsd-kind-icon">return<wbr>Data</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-property tsd-parent-kind-module tsd-is-external">
-						<a href="../modules/pendingtransactiontype.html#data" class="tsd-kind-icon">data</a>
-					</li>
-					<li class=" tsd-kind-property tsd-parent-kind-module tsd-is-external">
-						<a href="../modules/pendingtransactiontype.html#fee" class="tsd-kind-icon">fee</a>
-					</li>
-					<li class=" tsd-kind-property tsd-parent-kind-module tsd-is-external">
-						<a href="../modules/pendingtransactiontype.html#from" class="tsd-kind-icon">from</a>
-					</li>
-					<li class=" tsd-kind-property tsd-parent-kind-module tsd-is-external">
-						<a href="../modules/pendingtransactiontype.html#hash" class="tsd-kind-icon">hash</a>
-					</li>
-					<li class=" tsd-kind-property tsd-parent-kind-module tsd-is-external">
-						<a href="../modules/pendingtransactiontype.html#nonce" class="tsd-kind-icon">nonce</a>
-					</li>
-					<li class=" tsd-kind-property tsd-parent-kind-module tsd-is-external">
-						<a href="../modules/pendingtransactiontype.html#timestamp" class="tsd-kind-icon">timestamp</a>
-					</li>
-					<li class=" tsd-kind-property tsd-parent-kind-module tsd-is-external">
-						<a href="../modules/pendingtransactiontype.html#to" class="tsd-kind-icon">to</a>
-					</li>
-					<li class=" tsd-kind-property tsd-parent-kind-module tsd-is-external">
-						<a href="../modules/pendingtransactiontype.html#type" class="tsd-kind-icon">type</a>
-					</li>
-					<li class=" tsd-kind-property tsd-parent-kind-module tsd-is-external">
-						<a href="../modules/pendingtransactiontype.html#value" class="tsd-kind-icon">value</a>
-					</li>
 				</ul>
 			</nav>
 		</div>
