@@ -40,7 +40,7 @@ var _descriptors = !_fails(function () {
 });
 
 var _core = createCommonjsModule(function (module) {
-var core = module.exports = { version: '2.5.7' };
+var core = module.exports = { version: '2.6.5' };
 if (typeof __e == 'number') __e = core; // eslint-disable-line no-undef
 });
 var _core_1 = _core.version;
@@ -118,14 +118,31 @@ var _uid = function (key) {
   return 'Symbol('.concat(key === undefined ? '' : key, ')_', (++id + px).toString(36));
 };
 
+var _library = false;
+
+var _shared = createCommonjsModule(function (module) {
+var SHARED = '__core-js_shared__';
+var store = _global[SHARED] || (_global[SHARED] = {});
+
+(module.exports = function (key, value) {
+  return store[key] || (store[key] = value !== undefined ? value : {});
+})('versions', []).push({
+  version: _core.version,
+  mode: _library ? 'pure' : 'global',
+  copyright: '© 2019 Denis Pushkarev (zloirock.ru)'
+});
+});
+
+var _functionToString = _shared('native-function-to-string', Function.toString);
+
 var _redefine = createCommonjsModule(function (module) {
 var SRC = _uid('src');
+
 var TO_STRING = 'toString';
-var $toString = Function[TO_STRING];
-var TPL = ('' + $toString).split(TO_STRING);
+var TPL = ('' + _functionToString).split(TO_STRING);
 
 _core.inspectSource = function (it) {
-  return $toString.call(it);
+  return _functionToString.call(it);
 };
 
 (module.exports = function (O, key, val, safe) {
@@ -145,7 +162,7 @@ _core.inspectSource = function (it) {
   }
 // add fake Function#toString for correct work wrapped methods / constructors with methods like LoDash isNative
 })(Function.prototype, TO_STRING, function toString() {
-  return typeof this == 'function' && this[SRC] || $toString.call(this);
+  return typeof this == 'function' && this[SRC] || _functionToString.call(this);
 });
 });
 
@@ -274,21 +291,6 @@ var _meta_2 = _meta.NEED;
 var _meta_3 = _meta.fastKey;
 var _meta_4 = _meta.getWeak;
 var _meta_5 = _meta.onFreeze;
-
-var _library = false;
-
-var _shared = createCommonjsModule(function (module) {
-var SHARED = '__core-js_shared__';
-var store = _global[SHARED] || (_global[SHARED] = {});
-
-(module.exports = function (key, value) {
-  return store[key] || (store[key] = value !== undefined ? value : {});
-})('versions', []).push({
-  version: _core.version,
-  mode: _library ? 'pure' : 'global',
-  copyright: '© 2018 Denis Pushkarev (zloirock.ru)'
-});
-});
 
 var _wks = createCommonjsModule(function (module) {
 var store = _shared('wks');
@@ -2637,6 +2639,69 @@ if (_descriptors && (!CORRECT_NEW || _fails(function () {
 
 _setSpecies('RegExp');
 
+var nativeExec = RegExp.prototype.exec;
+// This always refers to the native implementation, because the
+// String#replace polyfill uses ./fix-regexp-well-known-symbol-logic.js,
+// which loads this file before patching the method.
+var nativeReplace = String.prototype.replace;
+
+var patchedExec = nativeExec;
+
+var LAST_INDEX = 'lastIndex';
+
+var UPDATES_LAST_INDEX_WRONG = (function () {
+  var re1 = /a/,
+      re2 = /b*/g;
+  nativeExec.call(re1, 'a');
+  nativeExec.call(re2, 'a');
+  return re1[LAST_INDEX] !== 0 || re2[LAST_INDEX] !== 0;
+})();
+
+// nonparticipating capturing group, copied from es5-shim's String#split patch.
+var NPCG_INCLUDED = /()??/.exec('')[1] !== undefined;
+
+var PATCH = UPDATES_LAST_INDEX_WRONG || NPCG_INCLUDED;
+
+if (PATCH) {
+  patchedExec = function exec(str) {
+    var re = this;
+    var lastIndex, reCopy, match, i;
+
+    if (NPCG_INCLUDED) {
+      reCopy = new RegExp('^' + re.source + '$(?!\\s)', _flags.call(re));
+    }
+    if (UPDATES_LAST_INDEX_WRONG) lastIndex = re[LAST_INDEX];
+
+    match = nativeExec.call(re, str);
+
+    if (UPDATES_LAST_INDEX_WRONG && match) {
+      re[LAST_INDEX] = re.global ? match.index + match[0].length : lastIndex;
+    }
+    if (NPCG_INCLUDED && match && match.length > 1) {
+      // Fix browsers whose `exec` methods don't consistently return `undefined`
+      // for NPCG, like IE8. NOTE: This doesn' work for /(.?)?/
+      // eslint-disable-next-line no-loop-func
+      nativeReplace.call(match[0], reCopy, function () {
+        for (i = 1; i < arguments.length - 2; i++) {
+          if (arguments[i] === undefined) match[i] = undefined;
+        }
+      });
+    }
+
+    return match;
+  };
+}
+
+var _regexpExec = patchedExec;
+
+_export({
+  target: 'RegExp',
+  proto: true,
+  forced: _regexpExec !== /./.exec
+}, {
+  exec: _regexpExec
+});
+
 // 21.2.5.3 get RegExp.prototype.flags()
 if (_descriptors && /./g.flags != 'g') _objectDp.f(RegExp.prototype, 'flags', {
   configurable: true,
@@ -2664,16 +2729,109 @@ if (_fails(function () { return $toString$1.call({ source: 'a', flags: 'b' }) !=
   });
 }
 
+var at = _stringAt(true);
+
+ // `AdvanceStringIndex` abstract operation
+// https://tc39.github.io/ecma262/#sec-advancestringindex
+var _advanceStringIndex = function (S, index, unicode) {
+  return index + (unicode ? at(S, index).length : 1);
+};
+
+var builtinExec = RegExp.prototype.exec;
+
+ // `RegExpExec` abstract operation
+// https://tc39.github.io/ecma262/#sec-regexpexec
+var _regexpExecAbstract = function (R, S) {
+  var exec = R.exec;
+  if (typeof exec === 'function') {
+    var result = exec.call(R, S);
+    if (typeof result !== 'object') {
+      throw new TypeError('RegExp exec method returned something other than an Object or null');
+    }
+    return result;
+  }
+  if (_classof(R) !== 'RegExp') {
+    throw new TypeError('RegExp#exec called on incompatible receiver');
+  }
+  return builtinExec.call(R, S);
+};
+
+var SPECIES$2 = _wks('species');
+
+var REPLACE_SUPPORTS_NAMED_GROUPS = !_fails(function () {
+  // #replace needs built-in support for named groups.
+  // #match works fine because it just return the exec results, even if it has
+  // a "grops" property.
+  var re = /./;
+  re.exec = function () {
+    var result = [];
+    result.groups = { a: '7' };
+    return result;
+  };
+  return ''.replace(re, '$<a>') !== '7';
+});
+
+var SPLIT_WORKS_WITH_OVERWRITTEN_EXEC = (function () {
+  // Chrome 51 has a buggy "split" implementation when RegExp#exec !== nativeExec
+  var re = /(?:)/;
+  var originalExec = re.exec;
+  re.exec = function () { return originalExec.apply(this, arguments); };
+  var result = 'ab'.split(re);
+  return result.length === 2 && result[0] === 'a' && result[1] === 'b';
+})();
+
 var _fixReWks = function (KEY, length, exec) {
   var SYMBOL = _wks(KEY);
-  var fns = exec(_defined, SYMBOL, ''[KEY]);
-  var strfn = fns[0];
-  var rxfn = fns[1];
-  if (_fails(function () {
+
+  var DELEGATES_TO_SYMBOL = !_fails(function () {
+    // String methods call symbol-named RegEp methods
     var O = {};
     O[SYMBOL] = function () { return 7; };
     return ''[KEY](O) != 7;
-  })) {
+  });
+
+  var DELEGATES_TO_EXEC = DELEGATES_TO_SYMBOL ? !_fails(function () {
+    // Symbol-named RegExp methods call .exec
+    var execCalled = false;
+    var re = /a/;
+    re.exec = function () { execCalled = true; return null; };
+    if (KEY === 'split') {
+      // RegExp[@@split] doesn't call the regex's exec method, but first creates
+      // a new one. We need to return the patched regex when creating the new one.
+      re.constructor = {};
+      re.constructor[SPECIES$2] = function () { return re; };
+    }
+    re[SYMBOL]('');
+    return !execCalled;
+  }) : undefined;
+
+  if (
+    !DELEGATES_TO_SYMBOL ||
+    !DELEGATES_TO_EXEC ||
+    (KEY === 'replace' && !REPLACE_SUPPORTS_NAMED_GROUPS) ||
+    (KEY === 'split' && !SPLIT_WORKS_WITH_OVERWRITTEN_EXEC)
+  ) {
+    var nativeRegExpMethod = /./[SYMBOL];
+    var fns = exec(
+      _defined,
+      SYMBOL,
+      ''[KEY],
+      function maybeCallNative(nativeMethod, regexp, str, arg2, forceStringMethod) {
+        if (regexp.exec === _regexpExec) {
+          if (DELEGATES_TO_SYMBOL && !forceStringMethod) {
+            // The native String method already delegates to @@method (this
+            // polyfilled function), leasing to infinite recursion.
+            // We avoid it by directly calling the native @@method method.
+            return { done: true, value: nativeRegExpMethod.call(regexp, str, arg2) };
+          }
+          return { done: true, value: nativeMethod.call(str, regexp, arg2) };
+        }
+        return { done: false };
+      }
+    );
+    var strfn = fns[0];
+    var rxfn = fns[1];
+
     _redefine(String.prototype, KEY, strfn);
     _hide(RegExp.prototype, SYMBOL, length == 2
       // 21.2.5.8 RegExp.prototype[@@replace](string, replaceValue)
@@ -2687,45 +2845,199 @@ var _fixReWks = function (KEY, length, exec) {
 };
 
 // @@match logic
-_fixReWks('match', 1, function (defined, MATCH, $match) {
-  // 21.1.3.11 String.prototype.match(regexp)
-  return [function match(regexp) {
-    var O = defined(this);
-    var fn = regexp == undefined ? undefined : regexp[MATCH];
-    return fn !== undefined ? fn.call(regexp, O) : new RegExp(regexp)[MATCH](String(O));
-  }, $match];
+_fixReWks('match', 1, function (defined, MATCH, $match, maybeCallNative) {
+  return [
+    // `String.prototype.match` method
+    // https://tc39.github.io/ecma262/#sec-string.prototype.match
+    function match(regexp) {
+      var O = defined(this);
+      var fn = regexp == undefined ? undefined : regexp[MATCH];
+      return fn !== undefined ? fn.call(regexp, O) : new RegExp(regexp)[MATCH](String(O));
+    },
+    // `RegExp.prototype[@@match]` method
+    // https://tc39.github.io/ecma262/#sec-regexp.prototype-@@match
+    function (regexp) {
+      var res = maybeCallNative($match, regexp, this);
+      if (res.done) return res.value;
+      var rx = _anObject(regexp);
+      var S = String(this);
+      if (!rx.global) return _regexpExecAbstract(rx, S);
+      var fullUnicode = rx.unicode;
+      rx.lastIndex = 0;
+      var A = [];
+      var n = 0;
+      var result;
+      while ((result = _regexpExecAbstract(rx, S)) !== null) {
+        var matchStr = String(result[0]);
+        A[n] = matchStr;
+        if (matchStr === '') rx.lastIndex = _advanceStringIndex(S, _toLength(rx.lastIndex), fullUnicode);
+        n++;
+      }
+      return n === 0 ? null : A;
+    }
+  ];
 });
 
+var max$1 = Math.max;
+var min$2 = Math.min;
+var floor$3 = Math.floor;
+var SUBSTITUTION_SYMBOLS = /\$([$&`']|\d\d?|<[^>]*>)/g;
+var SUBSTITUTION_SYMBOLS_NO_NAMED = /\$([$&`']|\d\d?)/g;
+
+var maybeToString = function (it) {
+  return it === undefined ? it : String(it);
+};
+
 // @@replace logic
-_fixReWks('replace', 2, function (defined, REPLACE, $replace) {
-  // 21.1.3.14 String.prototype.replace(searchValue, replaceValue)
-  return [function replace(searchValue, replaceValue) {
-    var O = defined(this);
-    var fn = searchValue == undefined ? undefined : searchValue[REPLACE];
-    return fn !== undefined
-      ? fn.call(searchValue, O, replaceValue)
-      : $replace.call(String(O), searchValue, replaceValue);
-  }, $replace];
+_fixReWks('replace', 2, function (defined, REPLACE, $replace, maybeCallNative) {
+  return [
+    // `String.prototype.replace` method
+    // https://tc39.github.io/ecma262/#sec-string.prototype.replace
+    function replace(searchValue, replaceValue) {
+      var O = defined(this);
+      var fn = searchValue == undefined ? undefined : searchValue[REPLACE];
+      return fn !== undefined
+        ? fn.call(searchValue, O, replaceValue)
+        : $replace.call(String(O), searchValue, replaceValue);
+    },
+    // `RegExp.prototype[@@replace]` method
+    // https://tc39.github.io/ecma262/#sec-regexp.prototype-@@replace
+    function (regexp, replaceValue) {
+      var res = maybeCallNative($replace, regexp, this, replaceValue);
+      if (res.done) return res.value;
+
+      var rx = _anObject(regexp);
+      var S = String(this);
+      var functionalReplace = typeof replaceValue === 'function';
+      if (!functionalReplace) replaceValue = String(replaceValue);
+      var global = rx.global;
+      if (global) {
+        var fullUnicode = rx.unicode;
+        rx.lastIndex = 0;
+      }
+      var results = [];
+      while (true) {
+        var result = _regexpExecAbstract(rx, S);
+        if (result === null) break;
+        results.push(result);
+        if (!global) break;
+        var matchStr = String(result[0]);
+        if (matchStr === '') rx.lastIndex = _advanceStringIndex(S, _toLength(rx.lastIndex), fullUnicode);
+      }
+      var accumulatedResult = '';
+      var nextSourcePosition = 0;
+      for (var i = 0; i < results.length; i++) {
+        result = results[i];
+        var matched = String(result[0]);
+        var position = max$1(min$2(_toInteger(result.index), S.length), 0);
+        var captures = [];
+        // NOTE: This is equivalent to
+        //   captures = result.slice(1).map(maybeToString)
+        // but for some reason `nativeSlice.call(result, 1, result.length)` (called in
+        // the slice polyfill when slicing native arrays) "doesn't work" in safari 9 and
+        // causes a crash (https://pastebin.com/N21QzeQA) when trying to debug it.
+        for (var j = 1; j < result.length; j++) captures.push(maybeToString(result[j]));
+        var namedCaptures = result.groups;
+        if (functionalReplace) {
+          var replacerArgs = [matched].concat(captures, position, S);
+          if (namedCaptures !== undefined) replacerArgs.push(namedCaptures);
+          var replacement = String(replaceValue.apply(undefined, replacerArgs));
+        } else {
+          replacement = getSubstitution(matched, S, position, captures, namedCaptures, replaceValue);
+        }
+        if (position >= nextSourcePosition) {
+          accumulatedResult += S.slice(nextSourcePosition, position) + replacement;
+          nextSourcePosition = position + matched.length;
+        }
+      }
+      return accumulatedResult + S.slice(nextSourcePosition);
+    }
+  ];
+
+    // https://tc39.github.io/ecma262/#sec-getsubstitution
+  function getSubstitution(matched, str, position, captures, namedCaptures, replacement) {
+    var tailPos = position + matched.length;
+    var m = captures.length;
+    var symbols = SUBSTITUTION_SYMBOLS_NO_NAMED;
+    if (namedCaptures !== undefined) {
+      namedCaptures = _toObject(namedCaptures);
+      symbols = SUBSTITUTION_SYMBOLS;
+    }
+    return $replace.call(replacement, symbols, function (match, ch) {
+      var capture;
+      switch (ch.charAt(0)) {
+        case '$': return '$';
+        case '&': return matched;
+        case '`': return str.slice(0, position);
+        case "'": return str.slice(tailPos);
+        case '<':
+          capture = namedCaptures[ch.slice(1, -1)];
+          break;
+        default: // \d\d?
+          var n = +ch;
+          if (n === 0) return match;
+          if (n > m) {
+            var f = floor$3(n / 10);
+            if (f === 0) return match;
+            if (f <= m) return captures[f - 1] === undefined ? ch.charAt(1) : captures[f - 1] + ch.charAt(1);
+            return match;
+          }
+          capture = captures[n - 1];
+      }
+      return capture === undefined ? '' : capture;
+    });
+  }
 });
 
 // @@search logic
-_fixReWks('search', 1, function (defined, SEARCH, $search) {
-  // 21.1.3.15 String.prototype.search(regexp)
-  return [function search(regexp) {
-    var O = defined(this);
-    var fn = regexp == undefined ? undefined : regexp[SEARCH];
-    return fn !== undefined ? fn.call(regexp, O) : new RegExp(regexp)[SEARCH](String(O));
-  }, $search];
+_fixReWks('search', 1, function (defined, SEARCH, $search, maybeCallNative) {
+  return [
+    // `String.prototype.search` method
+    // https://tc39.github.io/ecma262/#sec-string.prototype.search
+    function search(regexp) {
+      var O = defined(this);
+      var fn = regexp == undefined ? undefined : regexp[SEARCH];
+      return fn !== undefined ? fn.call(regexp, O) : new RegExp(regexp)[SEARCH](String(O));
+    },
+    // `RegExp.prototype[@@search]` method
+    // https://tc39.github.io/ecma262/#sec-regexp.prototype-@@search
+    function (regexp) {
+      var res = maybeCallNative($search, regexp, this);
+      if (res.done) return res.value;
+      var rx = _anObject(regexp);
+      var S = String(this);
+      var previousLastIndex = rx.lastIndex;
+      if (!_sameValue(previousLastIndex, 0)) rx.lastIndex = 0;
+      var result = _regexpExecAbstract(rx, S);
+      if (!_sameValue(rx.lastIndex, previousLastIndex)) rx.lastIndex = previousLastIndex;
+      return result === null ? -1 : result.index;
+    }
+  ];
 });
 
+// 7.3.20 SpeciesConstructor(O, defaultConstructor)
+
+
+var SPECIES$3 = _wks('species');
+var _speciesConstructor = function (O, D) {
+  var C = _anObject(O).constructor;
+  var S;
+  return C === undefined || (S = _anObject(C)[SPECIES$3]) == undefined ? D : _aFunction(S);
+};
+
+var $min = Math.min;
+var $push = [].push;
+var $SPLIT = 'split';
+var LENGTH = 'length';
+var LAST_INDEX$1 = 'lastIndex';
+var MAX_UINT32 = 0xffffffff;
+
+// babel-minify transpiles RegExp('x', 'y') -> /x/y and it causes SyntaxError
+var SUPPORTS_Y = !_fails(function () { });
+
 // @@split logic
-_fixReWks('split', 2, function (defined, SPLIT, $split) {
-  var isRegExp = _isRegexp;
-  var _split = $split;
-  var $push = [].push;
-  var $SPLIT = 'split';
-  var LENGTH = 'length';
-  var LAST_INDEX = 'lastIndex';
+_fixReWks('split', 2, function (defined, SPLIT, $split, maybeCallNative) {
+  var internalSplit;
   if (
     'abbc'[$SPLIT](/(b)*/)[1] == 'c' ||
     'test'[$SPLIT](/(?:)/, -1)[LENGTH] != 4 ||
@@ -2734,41 +3046,32 @@ _fixReWks('split', 2, function (defined, SPLIT, $split) {
     '.'[$SPLIT](/()()/)[LENGTH] > 1 ||
     ''[$SPLIT](/.?/)[LENGTH]
   ) {
-    var NPCG = /()??/.exec('')[1] === undefined; // nonparticipating capturing group
     // based on es5-shim implementation, need to rework it
-    $split = function (separator, limit) {
+    internalSplit = function (separator, limit) {
       var string = String(this);
       if (separator === undefined && limit === 0) return [];
       // If `separator` is not a regex, use native split
-      if (!isRegExp(separator)) return _split.call(string, separator, limit);
+      if (!_isRegexp(separator)) return $split.call(string, separator, limit);
       var output = [];
       var flags = (separator.ignoreCase ? 'i' : '') +
                   (separator.multiline ? 'm' : '') +
                   (separator.unicode ? 'u' : '') +
                   (separator.sticky ? 'y' : '');
       var lastLastIndex = 0;
-      var splitLimit = limit === undefined ? 4294967295 : limit >>> 0;
+      var splitLimit = limit === undefined ? MAX_UINT32 : limit >>> 0;
       // Make `global` and avoid `lastIndex` issues by working with a copy
       var separatorCopy = new RegExp(separator.source, flags + 'g');
-      var separator2, match, lastIndex, lastLength, i;
-      // Doesn't need flags gy, but they don't hurt
-      if (!NPCG) separator2 = new RegExp('^' + separatorCopy.source + '$(?!\\s)', flags);
-      while (match = separatorCopy.exec(string)) {
-        // `separatorCopy.lastIndex` is not reliable cross-browser
-        lastIndex = match.index + match[0][LENGTH];
+      var match, lastIndex, lastLength;
+      while (match = _regexpExec.call(separatorCopy, string)) {
+        lastIndex = separatorCopy[LAST_INDEX$1];
         if (lastIndex > lastLastIndex) {
           output.push(string.slice(lastLastIndex, match.index));
-          // Fix browsers whose `exec` methods don't consistently return `undefined` for NPCG
-          // eslint-disable-next-line no-loop-func
-          if (!NPCG && match[LENGTH] > 1) match[0].replace(separator2, function () {
-            for (i = 1; i < arguments[LENGTH] - 2; i++) if (arguments[i] === undefined) match[i] = undefined;
-          });
           if (match[LENGTH] > 1 && match.index < string[LENGTH]) $push.apply(output, match.slice(1));
           lastLength = match[0][LENGTH];
           lastLastIndex = lastIndex;
           if (output[LENGTH] >= splitLimit) break;
         }
-        if (separatorCopy[LAST_INDEX] === match.index) separatorCopy[LAST_INDEX]++; // Avoid an infinite loop
+        if (separatorCopy[LAST_INDEX$1] === match.index) separatorCopy[LAST_INDEX$1]++; // Avoid an infinite loop
       }
       if (lastLastIndex === string[LENGTH]) {
         if (lastLength || !separatorCopy.test('')) output.push('');
@@ -2777,16 +3080,74 @@ _fixReWks('split', 2, function (defined, SPLIT, $split) {
     };
   // Chakra, V8
   } else if ('0'[$SPLIT](undefined, 0)[LENGTH]) {
-    $split = function (separator, limit) {
-      return separator === undefined && limit === 0 ? [] : _split.call(this, separator, limit);
+    internalSplit = function (separator, limit) {
+      return separator === undefined && limit === 0 ? [] : $split.call(this, separator, limit);
     };
+  } else {
+    internalSplit = $split;
   }
-  // 21.1.3.17 String.prototype.split(separator, limit)
-  return [function split(separator, limit) {
-    var O = defined(this);
-    var fn = separator == undefined ? undefined : separator[SPLIT];
-    return fn !== undefined ? fn.call(separator, O, limit) : $split.call(String(O), separator, limit);
-  }, $split];
+
+  return [
+    // `String.prototype.split` method
+    // https://tc39.github.io/ecma262/#sec-string.prototype.split
+    function split(separator, limit) {
+      var O = defined(this);
+      var splitter = separator == undefined ? undefined : separator[SPLIT];
+      return splitter !== undefined
+        ? splitter.call(separator, O, limit)
+        : internalSplit.call(String(O), separator, limit);
+    },
+    // `RegExp.prototype[@@split]` method
+    // https://tc39.github.io/ecma262/#sec-regexp.prototype-@@split
+    //
+    // NOTE: This cannot be properly polyfilled in engines that don't support
+    // the 'y' flag.
+    function (regexp, limit) {
+      var res = maybeCallNative(internalSplit, regexp, this, limit, internalSplit !== $split);
+      if (res.done) return res.value;
+
+      var rx = _anObject(regexp);
+      var S = String(this);
+      var C = _speciesConstructor(rx, RegExp);
+
+      var unicodeMatching = rx.unicode;
+      var flags = (rx.ignoreCase ? 'i' : '') +
+                  (rx.multiline ? 'm' : '') +
+                  (rx.unicode ? 'u' : '') +
+                  (SUPPORTS_Y ? 'y' : 'g');
+
+      // ^(? + rx + ) is needed, in combination with some S slicing, to
+      // simulate the 'y' flag.
+      var splitter = new C(SUPPORTS_Y ? rx : '^(?:' + rx.source + ')', flags);
+      var lim = limit === undefined ? MAX_UINT32 : limit >>> 0;
+      if (lim === 0) return [];
+      if (S.length === 0) return _regexpExecAbstract(splitter, S) === null ? [S] : [];
+      var p = 0;
+      var q = 0;
+      var A = [];
+      while (q < S.length) {
+        splitter.lastIndex = SUPPORTS_Y ? q : 0;
+        var z = _regexpExecAbstract(splitter, SUPPORTS_Y ? S : S.slice(q));
+        var e;
+        if (
+          z === null ||
+          (e = $min(_toLength(splitter.lastIndex + (SUPPORTS_Y ? 0 : q)), S.length)) === p
+        ) {
+          q = _advanceStringIndex(S, q, unicodeMatching);
+        } else {
+          A.push(S.slice(p, q));
+          if (A.length === lim) return A;
+          for (var i = 1; i <= z.length - 1; i++) {
+            A.push(z[i]);
+            if (A.length === lim) return A;
+          }
+          q = p = e;
+        }
+      }
+      A.push(S.slice(p));
+      return A;
+    }
+  ];
 });
 
 var _anInstance = function (it, Constructor, name, forbiddenField) {
@@ -2816,16 +3177,6 @@ var exports = module.exports = function (iterable, entries, fn, that, ITERATOR) 
 exports.BREAK = BREAK;
 exports.RETURN = RETURN;
 });
-
-// 7.3.20 SpeciesConstructor(O, defaultConstructor)
-
-
-var SPECIES$2 = _wks('species');
-var _speciesConstructor = function (O, D) {
-  var C = _anObject(O).constructor;
-  var S;
-  return C === undefined || (S = _anObject(C)[SPECIES$2]) == undefined ? D : _aFunction(S);
-};
 
 var process = _global.process;
 var setTask = _global.setImmediate;
@@ -3635,6 +3986,7 @@ var _collectionWeak = {
 };
 
 var es6_weakMap = createCommonjsModule(function (module) {
+
 var each = _arrayMethods(0);
 
 
@@ -3642,12 +3994,12 @@ var each = _arrayMethods(0);
 
 
 
-
+var NATIVE_WEAK_MAP = _validateCollection;
+var IS_IE11 = !_global.ActiveXObject && 'ActiveXObject' in _global;
 var WEAK_MAP = 'WeakMap';
 var getWeak = _meta.getWeak;
 var isExtensible = Object.isExtensible;
 var uncaughtFrozenStore = _collectionWeak.ufstore;
-var tmp = {};
 var InternalMap;
 
 var wrapper = function (get) {
@@ -3675,7 +4027,7 @@ var methods = {
 var $WeakMap = module.exports = _collection(WEAK_MAP, wrapper, methods, _collectionWeak, true, true);
 
 // IE11 WeakMap frozen keys fix
-if (_fails(function () { return new $WeakMap().set((Object.freeze || Object)(tmp), 7).get(tmp) != 7; })) {
+if (NATIVE_WEAK_MAP && IS_IE11) {
   InternalMap = _collectionWeak.getConstructor(wrapper, WEAK_MAP);
   _objectAssign(InternalMap.prototype, methods);
   _meta.NEED = true;
@@ -5003,7 +5355,9 @@ var _stringPad = function (that, maxLength, fillString, left) {
 
 
 // https://github.com/zloirock/core-js/issues/280
-_export(_export.P + _export.F * /Version\/10\.\d+(\.\d+)? Safari\//.test(_userAgent), 'String', {
+var WEBKIT_BUG = /Version\/10\.\d+(\.\d+)?( Mobile\/\w+)? Safari\//.test(_userAgent);
+
+_export(_export.P + _export.F * WEBKIT_BUG, 'String', {
   padStart: function padStart(maxLength /* , fillString = ' ' */) {
     return _stringPad(this, maxLength, arguments.length > 1 ? arguments[1] : undefined, true);
   }
@@ -5015,7 +5369,9 @@ _export(_export.P + _export.F * /Version\/10\.\d+(\.\d+)? Safari\//.test(_userAg
 
 
 // https://github.com/zloirock/core-js/issues/280
-_export(_export.P + _export.F * /Version\/10\.\d+(\.\d+)? Safari\//.test(_userAgent), 'String', {
+var WEBKIT_BUG$1 = /Version\/10\.\d+(\.\d+)?( Mobile\/\w+)? Safari\//.test(_userAgent);
+
+_export(_export.P + _export.F * WEBKIT_BUG$1, 'String', {
   padEnd: function padEnd(maxLength /* , fillString = ' ' */) {
     return _stringPad(this, maxLength, arguments.length > 1 ? arguments[1] : undefined, false);
   }
@@ -5921,9 +6277,12 @@ and limitations under the License.
 ***************************************************************************** */
 /* global Reflect, Promise */
 
-var extendStatics = Object.setPrototypeOf ||
-    ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-    function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+var extendStatics = function(d, b) {
+    extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return extendStatics(d, b);
+};
 
 function __extends(d, b) {
     extendStatics(d, b);
@@ -5958,7 +6317,7 @@ var errors = {
 
 /** Convenience shortcuts */
 var baseMinusTMin = base - tMin;
-var floor$3 = Math.floor;
+var floor$4 = Math.floor;
 var stringFromCharCode = String.fromCharCode;
 
 /*--------------------------------------------------------------------------*/
@@ -6079,12 +6438,12 @@ function digitToBasic(digit, flag) {
  */
 function adapt(delta, numPoints, firstTime) {
   var k = 0;
-  delta = firstTime ? floor$3(delta / damp) : delta >> 1;
-  delta += floor$3(delta / numPoints);
+  delta = firstTime ? floor$4(delta / damp) : delta >> 1;
+  delta += floor$4(delta / numPoints);
   for ( /* no initialization */ ; delta > baseMinusTMin * tMax >> 1; k += base) {
-    delta = floor$3(delta / baseMinusTMin);
+    delta = floor$4(delta / baseMinusTMin);
   }
-  return floor$3(k + (baseMinusTMin + 1) * delta / (delta + skew));
+  return floor$4(k + (baseMinusTMin + 1) * delta / (delta + skew));
 }
 
 /**
@@ -6158,7 +6517,7 @@ function encode(input) {
     // Increase `delta` enough to advance the decoder's <n,i> state to <m,0>,
     // but guard against overflow
     handledCPCountPlusOne = handledCPCount + 1;
-    if (m - n > floor$3((maxInt - delta) / handledCPCountPlusOne)) {
+    if (m - n > floor$4((maxInt - delta) / handledCPCountPlusOne)) {
       error('overflow');
     }
 
@@ -6184,7 +6543,7 @@ function encode(input) {
           output.push(
             stringFromCharCode(digitToBasic(t + qMinusT % baseMinusT, 0))
           );
-          q = floor$3(qMinusT / baseMinusT);
+          q = floor$4(qMinusT / baseMinusT);
         }
 
         output.push(stringFromCharCode(digitToBasic(q, 0)));
@@ -8985,7 +9344,7 @@ function hasOwnProperty$1(obj, prop) {
   return Object.prototype.hasOwnProperty.call(obj, prop);
 }
 
-var util = {
+var require$$0 = {
   inherits: inherits$1,
   _extend: _extend,
   log: log$1,
@@ -9009,33 +9368,6 @@ var util = {
   format: format,
   debuglog: debuglog
 }
-
-
-var util$1 = Object.freeze({
-	format: format,
-	deprecate: deprecate,
-	debuglog: debuglog,
-	inspect: inspect,
-	isArray: isArray$1,
-	isBoolean: isBoolean,
-	isNull: isNull,
-	isNullOrUndefined: isNullOrUndefined,
-	isNumber: isNumber,
-	isString: isString,
-	isSymbol: isSymbol$1,
-	isUndefined: isUndefined,
-	isRegExp: isRegExp,
-	isObject: isObject,
-	isDate: isDate,
-	isError: isError,
-	isFunction: isFunction,
-	isPrimitive: isPrimitive,
-	isBuffer: isBuffer$1,
-	log: log$1,
-	inherits: inherits$1,
-	_extend: _extend,
-	default: util
-});
 
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -9912,7 +10244,7 @@ var index = typeof fetch=='function' ? fetch.bind() : function(url, options) {
 
 		request.onerror = reject;
 
-		request.send(options.body);
+		request.send(options.body || null);
 
 		function response() {
 			var keys = [],
@@ -10000,27 +10332,6 @@ var InfoType;
         NetworkEnum[NetworkEnum["DEVNET"] = 'DEVNET'] = "DEVNET";
     })(NetworkEnum = InfoType.NetworkEnum || (InfoType.NetworkEnum = {}));
 })(InfoType || (InfoType = {}));
-/**
- * @export
- * @namespace PendingTransactionType
- */
-var PendingTransactionType;
-(function (PendingTransactionType) {
-    /**
-     * @export
-     * @enum {string}
-     */
-    var TypeEnum;
-    (function (TypeEnum) {
-        TypeEnum[TypeEnum["COINBASE"] = 'COINBASE'] = "COINBASE";
-        TypeEnum[TypeEnum["TRANSFER"] = 'TRANSFER'] = "TRANSFER";
-        TypeEnum[TypeEnum["DELEGATE"] = 'DELEGATE'] = "DELEGATE";
-        TypeEnum[TypeEnum["VOTE"] = 'VOTE'] = "VOTE";
-        TypeEnum[TypeEnum["UNVOTE"] = 'UNVOTE'] = "UNVOTE";
-        TypeEnum[TypeEnum["CREATE"] = 'CREATE'] = "CREATE";
-        TypeEnum[TypeEnum["CALL"] = 'CALL'] = "CALL";
-    })(TypeEnum = PendingTransactionType.TypeEnum || (PendingTransactionType.TypeEnum = {}));
-})(PendingTransactionType || (PendingTransactionType = {}));
 /**
  * @export
  * @namespace TransactionType
@@ -10193,10 +10504,93 @@ var SemuxApiFetchParamCreator = function (configuration) {
             };
         },
         /**
+         * Call a VM contract.
+         * @summary Call a contract.
+         * @param {string} from Sender&#39;s address. The address must exist in the wallet.data of this Semux node.
+         * @param {string} to Recipient&#39;s address (the contract address)
+         * @param {string} value Amount of SEM to transfer in nano SEM
+         * @param {string} gasPrice The gas price
+         * @param {string} gas The gas limit for the call
+         * @param {string} [nonce] Transaction nonce, default to sender&#39;s nonce if omitted
+         * @param {boolean} [validateNonce] Whether validate tx nonce against the current account state, default to false if omitted
+         * @param {string} [data] Transaction data encoded in hexadecimal string
+         * @param {boolean} [local] Specifies whether this is a local (free) call, or a transaction
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        call: function (from, to, value, gasPrice, gas, nonce, validateNonce, data, local, options) {
+            if (options === void 0) { options = {}; }
+            // verify required parameter 'from' is not null or undefined
+            if (from === null || from === undefined) {
+                throw new RequiredError('from', 'Required parameter from was null or undefined when calling call.');
+            }
+            // verify required parameter 'to' is not null or undefined
+            if (to === null || to === undefined) {
+                throw new RequiredError('to', 'Required parameter to was null or undefined when calling call.');
+            }
+            // verify required parameter 'value' is not null or undefined
+            if (value === null || value === undefined) {
+                throw new RequiredError('value', 'Required parameter value was null or undefined when calling call.');
+            }
+            // verify required parameter 'gasPrice' is not null or undefined
+            if (gasPrice === null || gasPrice === undefined) {
+                throw new RequiredError('gasPrice', 'Required parameter gasPrice was null or undefined when calling call.');
+            }
+            // verify required parameter 'gas' is not null or undefined
+            if (gas === null || gas === undefined) {
+                throw new RequiredError('gas', 'Required parameter gas was null or undefined when calling call.');
+            }
+            var localVarPath = "/transaction/call";
+            var localVarUrlObj = url.parse(localVarPath, true);
+            var localVarRequestOptions = Object.assign({ method: 'POST' }, options);
+            var localVarHeaderParameter = {};
+            var localVarQueryParameter = {};
+            // authentication basicAuth required
+            // http basic authentication required
+            if (configuration && (configuration.username || configuration.password)) {
+                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
+            }
+            if (from !== undefined) {
+                localVarQueryParameter['from'] = from;
+            }
+            if (to !== undefined) {
+                localVarQueryParameter['to'] = to;
+            }
+            if (value !== undefined) {
+                localVarQueryParameter['value'] = value;
+            }
+            if (nonce !== undefined) {
+                localVarQueryParameter['nonce'] = nonce;
+            }
+            if (validateNonce !== undefined) {
+                localVarQueryParameter['validateNonce'] = validateNonce;
+            }
+            if (data !== undefined) {
+                localVarQueryParameter['data'] = data;
+            }
+            if (gasPrice !== undefined) {
+                localVarQueryParameter['gasPrice'] = gasPrice;
+            }
+            if (gas !== undefined) {
+                localVarQueryParameter['gas'] = gas;
+            }
+            if (local !== undefined) {
+                localVarQueryParameter['local'] = local;
+            }
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Compose an unsigned raw transaction then return its hexadecimal encoded string. An unsigned raw transaction can be signed using /sign-raw-transaction API.
          * @summary Compose an unsigned raw transaction
-         * @param {string} network Network name
-         * @param {string} type Transaction type
+         * @param {&#39;MAINNET&#39; | &#39;TESTNET&#39; | &#39;DEVNET&#39;} network Network name
+         * @param {&#39;TRANSFER&#39; | &#39;DELEGATE&#39; | &#39;VOTE&#39; | &#39;UNVOTE&#39;} type Transaction type
          * @param {string} fee Transaction fee in nano
          * @param {string} nonce Transaction nonce
          * @param {string} [to] Recipient&#39;s address
@@ -10257,6 +10651,73 @@ var SemuxApiFetchParamCreator = function (configuration) {
             }
             if (data !== undefined) {
                 localVarQueryParameter['data'] = data;
+            }
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Create a VM contract.
+         * @summary Create a contract
+         * @param {string} from Sender&#39;s address. The address must exist in the wallet.data of this Semux node.
+         * @param {string} data The contract data encoded in hexadecimal string
+         * @param {string} gasPrice The gas price
+         * @param {string} gas The gas limit for the call
+         * @param {string} [nonce] Transaction nonce, default to sender&#39;s nonce if omitted
+         * @param {boolean} [validateNonce] Whether validate tx nonce against the current account state, default to false if omitted
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        create: function (from, data, gasPrice, gas, nonce, validateNonce, options) {
+            if (options === void 0) { options = {}; }
+            // verify required parameter 'from' is not null or undefined
+            if (from === null || from === undefined) {
+                throw new RequiredError('from', 'Required parameter from was null or undefined when calling create.');
+            }
+            // verify required parameter 'data' is not null or undefined
+            if (data === null || data === undefined) {
+                throw new RequiredError('data', 'Required parameter data was null or undefined when calling create.');
+            }
+            // verify required parameter 'gasPrice' is not null or undefined
+            if (gasPrice === null || gasPrice === undefined) {
+                throw new RequiredError('gasPrice', 'Required parameter gasPrice was null or undefined when calling create.');
+            }
+            // verify required parameter 'gas' is not null or undefined
+            if (gas === null || gas === undefined) {
+                throw new RequiredError('gas', 'Required parameter gas was null or undefined when calling create.');
+            }
+            var localVarPath = "/transaction/create";
+            var localVarUrlObj = url.parse(localVarPath, true);
+            var localVarRequestOptions = Object.assign({ method: 'POST' }, options);
+            var localVarHeaderParameter = {};
+            var localVarQueryParameter = {};
+            // authentication basicAuth required
+            // http basic authentication required
+            if (configuration && (configuration.username || configuration.password)) {
+                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
+            }
+            if (from !== undefined) {
+                localVarQueryParameter['from'] = from;
+            }
+            if (nonce !== undefined) {
+                localVarQueryParameter['nonce'] = nonce;
+            }
+            if (validateNonce !== undefined) {
+                localVarQueryParameter['validateNonce'] = validateNonce;
+            }
+            if (data !== undefined) {
+                localVarQueryParameter['data'] = data;
+            }
+            if (gasPrice !== undefined) {
+                localVarQueryParameter['gasPrice'] = gasPrice;
+            }
+            if (gas !== undefined) {
+                localVarQueryParameter['gas'] = gas;
             }
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
@@ -10841,7 +11302,7 @@ var SemuxApiFetchParamCreator = function (configuration) {
         /**
          * Returns transaction limitations including minimum transaction fee and maximum transaction size.
          * @summary Get transaction limits
-         * @param {string} type Type of transaction
+         * @param {&#39;COINBASE&#39; | &#39;TRANSFER&#39; | &#39;DELEGATE&#39; | &#39;VOTE&#39; | &#39;UNVOTE&#39; | &#39;CREATE&#39; | &#39;CALL&#39;} type Type of transaction
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -10863,6 +11324,41 @@ var SemuxApiFetchParamCreator = function (configuration) {
             }
             if (type !== undefined) {
                 localVarQueryParameter['type'] = type;
+            }
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Returns the result of the requested transaction.
+         * @summary Get transaction result
+         * @param {string} hash Transaction hash
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getTransactionResult: function (hash, options) {
+            if (options === void 0) { options = {}; }
+            // verify required parameter 'hash' is not null or undefined
+            if (hash === null || hash === undefined) {
+                throw new RequiredError('hash', 'Required parameter hash was null or undefined when calling getTransactionResult.');
+            }
+            var localVarPath = "/transaction-result";
+            var localVarUrlObj = url.parse(localVarPath, true);
+            var localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            var localVarHeaderParameter = {};
+            var localVarQueryParameter = {};
+            // authentication basicAuth required
+            // http basic authentication required
+            if (configuration && (configuration.username || configuration.password)) {
+                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
+            }
+            if (hash !== undefined) {
+                localVarQueryParameter['hash'] = hash;
             }
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
@@ -11488,10 +11984,40 @@ var SemuxApiFp = function (configuration) {
             };
         },
         /**
+         * Call a VM contract.
+         * @summary Call a contract.
+         * @param {string} from Sender&#39;s address. The address must exist in the wallet.data of this Semux node.
+         * @param {string} to Recipient&#39;s address (the contract address)
+         * @param {string} value Amount of SEM to transfer in nano SEM
+         * @param {string} gasPrice The gas price
+         * @param {string} gas The gas limit for the call
+         * @param {string} [nonce] Transaction nonce, default to sender&#39;s nonce if omitted
+         * @param {boolean} [validateNonce] Whether validate tx nonce against the current account state, default to false if omitted
+         * @param {string} [data] Transaction data encoded in hexadecimal string
+         * @param {boolean} [local] Specifies whether this is a local (free) call, or a transaction
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        call: function (from, to, value, gasPrice, gas, nonce, validateNonce, data, local, options) {
+            var localVarFetchArgs = SemuxApiFetchParamCreator(configuration).call(from, to, value, gasPrice, gas, nonce, validateNonce, data, local, options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
          * Compose an unsigned raw transaction then return its hexadecimal encoded string. An unsigned raw transaction can be signed using /sign-raw-transaction API.
          * @summary Compose an unsigned raw transaction
-         * @param {string} network Network name
-         * @param {string} type Transaction type
+         * @param {&#39;MAINNET&#39; | &#39;TESTNET&#39; | &#39;DEVNET&#39;} network Network name
+         * @param {&#39;TRANSFER&#39; | &#39;DELEGATE&#39; | &#39;VOTE&#39; | &#39;UNVOTE&#39;} type Transaction type
          * @param {string} fee Transaction fee in nano
          * @param {string} nonce Transaction nonce
          * @param {string} [to] Recipient&#39;s address
@@ -11503,6 +12029,33 @@ var SemuxApiFp = function (configuration) {
          */
         composeRawTransaction: function (network, type, fee, nonce, to, value, timestamp, data, options) {
             var localVarFetchArgs = SemuxApiFetchParamCreator(configuration).composeRawTransaction(network, type, fee, nonce, to, value, timestamp, data, options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Create a VM contract.
+         * @summary Create a contract
+         * @param {string} from Sender&#39;s address. The address must exist in the wallet.data of this Semux node.
+         * @param {string} data The contract data encoded in hexadecimal string
+         * @param {string} gasPrice The gas price
+         * @param {string} gas The gas limit for the call
+         * @param {string} [nonce] Transaction nonce, default to sender&#39;s nonce if omitted
+         * @param {boolean} [validateNonce] Whether validate tx nonce against the current account state, default to false if omitted
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        create: function (from, data, gasPrice, gas, nonce, validateNonce, options) {
+            var localVarFetchArgs = SemuxApiFetchParamCreator(configuration).create(from, data, gasPrice, gas, nonce, validateNonce, options);
             return function (fetch, basePath) {
                 if (fetch === void 0) { fetch = portableFetch; }
                 if (basePath === void 0) { basePath = BASE_PATH; }
@@ -11891,12 +12444,34 @@ var SemuxApiFp = function (configuration) {
         /**
          * Returns transaction limitations including minimum transaction fee and maximum transaction size.
          * @summary Get transaction limits
-         * @param {string} type Type of transaction
+         * @param {&#39;COINBASE&#39; | &#39;TRANSFER&#39; | &#39;DELEGATE&#39; | &#39;VOTE&#39; | &#39;UNVOTE&#39; | &#39;CREATE&#39; | &#39;CALL&#39;} type Type of transaction
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         getTransactionLimits: function (type, options) {
             var localVarFetchArgs = SemuxApiFetchParamCreator(configuration).getTransactionLimits(type, options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Returns the result of the requested transaction.
+         * @summary Get transaction result
+         * @param {string} hash Transaction hash
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getTransactionResult: function (hash, options) {
+            var localVarFetchArgs = SemuxApiFetchParamCreator(configuration).getTransactionResult(hash, options);
             return function (fetch, basePath) {
                 if (fetch === void 0) { fetch = portableFetch; }
                 if (basePath === void 0) { basePath = BASE_PATH; }
@@ -12234,6 +12809,25 @@ var SemuxApi = /** @class */ (function (_super) {
         return SemuxApiFp(this.configuration).broadcastRawTransaction(raw, validateNonce, options)(this.fetch, this.basePath);
     };
     /**
+     * Call a VM contract.
+     * @summary Call a contract.
+     * @param {} from Sender&#39;s address. The address must exist in the wallet.data of this Semux node.
+     * @param {} to Recipient&#39;s address (the contract address)
+     * @param {} value Amount of SEM to transfer in nano SEM
+     * @param {} gasPrice The gas price
+     * @param {} gas The gas limit for the call
+     * @param {} [nonce] Transaction nonce, default to sender&#39;s nonce if omitted
+     * @param {} [validateNonce] Whether validate tx nonce against the current account state, default to false if omitted
+     * @param {} [data] Transaction data encoded in hexadecimal string
+     * @param {} [local] Specifies whether this is a local (free) call, or a transaction
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SemuxApi
+     */
+    SemuxApi.prototype.call = function (from, to, value, gasPrice, gas, nonce, validateNonce, data, local, options) {
+        return SemuxApiFp(this.configuration).call(from, to, value, gasPrice, gas, nonce, validateNonce, data, local, options)(this.fetch, this.basePath);
+    };
+    /**
      * Compose an unsigned raw transaction then return its hexadecimal encoded string. An unsigned raw transaction can be signed using /sign-raw-transaction API.
      * @summary Compose an unsigned raw transaction
      * @param {} network Network name
@@ -12250,6 +12844,22 @@ var SemuxApi = /** @class */ (function (_super) {
      */
     SemuxApi.prototype.composeRawTransaction = function (network, type, fee, nonce, to, value, timestamp, data, options) {
         return SemuxApiFp(this.configuration).composeRawTransaction(network, type, fee, nonce, to, value, timestamp, data, options)(this.fetch, this.basePath);
+    };
+    /**
+     * Create a VM contract.
+     * @summary Create a contract
+     * @param {} from Sender&#39;s address. The address must exist in the wallet.data of this Semux node.
+     * @param {} data The contract data encoded in hexadecimal string
+     * @param {} gasPrice The gas price
+     * @param {} gas The gas limit for the call
+     * @param {} [nonce] Transaction nonce, default to sender&#39;s nonce if omitted
+     * @param {} [validateNonce] Whether validate tx nonce against the current account state, default to false if omitted
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SemuxApi
+     */
+    SemuxApi.prototype.create = function (from, data, gasPrice, gas, nonce, validateNonce, options) {
+        return SemuxApiFp(this.configuration).create(from, data, gasPrice, gas, nonce, validateNonce, options)(this.fetch, this.basePath);
     };
     /**
      * Creates a new account by generating a new private key or importing an existing private key when parameter 'privateKey' is provided.
@@ -12448,6 +13058,17 @@ var SemuxApi = /** @class */ (function (_super) {
         return SemuxApiFp(this.configuration).getTransactionLimits(type, options)(this.fetch, this.basePath);
     };
     /**
+     * Returns the result of the requested transaction.
+     * @summary Get transaction result
+     * @param {} hash Transaction hash
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SemuxApi
+     */
+    SemuxApi.prototype.getTransactionResult = function (hash, options) {
+        return SemuxApiFp(this.configuration).getTransactionResult(hash, options)(this.fetch, this.basePath);
+    };
+    /**
      * Returns a list of validators in Semux addresses.
      * @summary Get validators
      * @param {*} [options] Override http request option.
@@ -12599,7 +13220,7 @@ var SemuxApi = /** @class */ (function (_super) {
  * Semux API
  * Semux is an experimental high-performance blockchain platform that powers decentralized application.
  *
- * OpenAPI spec version: 2.1.0
+ * OpenAPI spec version: 2.2.0
  *
  *
  * NOTE: This class is auto generated by the swagger code generator program.
@@ -14058,7 +14679,7 @@ function testSpeed (hashFn, N, M) {
   }
 }
 
-var util$2 = {
+var util = {
   normalizeInput: normalizeInput,
   toHex: toHex$1,
   debugPrint: debugPrint,
@@ -14310,7 +14931,7 @@ function blake2bFinal (ctx) {
 function blake2b (input, key, outlen) {
   // preprocess inputs
   outlen = outlen || 64;
-  input = util$2.normalizeInput(input);
+  input = util.normalizeInput(input);
 
   // do the math
   var ctx = blake2bInit(outlen, key);
@@ -14328,7 +14949,7 @@ function blake2b (input, key, outlen) {
 // - outlen - optional output length in bytes, default 64
 function blake2bHex (input, key, outlen) {
   var output = blake2b(input, key, outlen);
-  return util$2.toHex(output)
+  return util.toHex(output)
 }
 
 var blake2b_1 = {
@@ -14501,7 +15122,7 @@ function blake2sFinal (ctx) {
 function blake2s (input, key, outlen) {
   // preprocess inputs
   outlen = outlen || 32;
-  input = util$2.normalizeInput(input);
+  input = util.normalizeInput(input);
 
   // do the math
   var ctx = blake2sInit(outlen, key);
@@ -14519,7 +15140,7 @@ function blake2s (input, key, outlen) {
 // - outlen - optional output length in bytes, default 64
 function blake2sHex (input, key, outlen) {
   var output = blake2s(input, key, outlen);
-  return util$2.toHex(output)
+  return util.toHex(output)
 }
 
 var blake2s_1 = {
@@ -14569,8 +15190,6 @@ if (typeof Object.create === 'function') {
   };
 }
 });
-
-var require$$0 = ( util$1 && util ) || util$1;
 
 var inherits$2 = createCommonjsModule(function (module) {
 try {
@@ -17012,21 +17631,8 @@ Stream.prototype.pipe = function(dest, options) {
   return dest;
 };
 
-
-var stream = Object.freeze({
-	default: Stream,
-	Readable: Readable,
-	Writable: Writable,
-	Duplex: Duplex,
-	Transform: Transform,
-	PassThrough: PassThrough,
-	Stream: Stream
-});
-
-var require$$1 = ( stream && Stream ) || stream;
-
 var Buffer$1 = safeBuffer.Buffer;
-var Transform$1 = require$$1.Transform;
+var Transform$1 = Stream.Transform;
 
 
 function throwIfNotStringOrBuffer (val, prefix) {
@@ -17482,14 +18088,7 @@ var KeyCodec = /** @class */ (function () {
     return KeyCodec;
 }());
 
-var empty$1 = {};
-
-
-var empty$2 = Object.freeze({
-	default: empty$1
-});
-
-var require$$0$1 = ( empty$2 && empty$1 ) || empty$2;
+var require$$0$1 = {};
 
 var naclFast = createCommonjsModule(function (module) {
 (function(nacl) {
@@ -19900,7 +20499,7 @@ else if (require('detect-node')) {
     }
 }
 
-var LENGTH = 96;
+var LENGTH$1 = 96;
 var S_LEN = 64;
 var A_LEN = 32;
 /**
@@ -19923,7 +20522,7 @@ var Signature = /** @class */ (function () {
     }
     Object.defineProperty(Signature, "LENGTH", {
         get: function () {
-            return LENGTH;
+            return LENGTH$1;
         },
         enumerable: true,
         configurable: true
@@ -19933,10 +20532,10 @@ var Signature = /** @class */ (function () {
      * @returns {Signature}
      */
     Signature.fromBytes = function (bytes) {
-        if (bytes.length !== LENGTH) {
+        if (bytes.length !== LENGTH$1) {
             throw new Error("Invalid length of bytes.");
         }
-        return new Signature(bytes.slice(0, S_LEN), bytes.slice(S_LEN, LENGTH));
+        return new Signature(bytes.slice(0, S_LEN), bytes.slice(S_LEN, LENGTH$1));
     };
     Signature.prototype.getSignedMsg = function () {
         return this.signedMsg.slice();

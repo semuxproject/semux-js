@@ -7,7 +7,6 @@ import Network from "../Network";
 import Transaction from "../Transaction";
 import TransactionType from "../TransactionType";
 import * as API from "./api";
-import {PendingTransactionType} from "./api";
 import {Configuration} from "./configuration";
 
 const DEV_KEY = Key.importEncodedPrivateKey(Buffer.from(
@@ -70,9 +69,9 @@ describe("Semux API Test", () => {
     await sleep(500);
 
     const responsePendingTxs = await api.getPendingTransactions();
-    const pendingTxs: API.PendingTransactionType[] = [{
+    const pendingTxs: API.TransactionType[] = [{
       "hash": `0x${Buffer.from(tx.getHash().buffer).toString('hex')}`,
-      "type": PendingTransactionType.TypeEnum.TRANSFER,
+      "type": API.TransactionType.TypeEnum.TRANSFER,
       "from": `0x${DEV_ADDRESS}`,
       "to": `0x${DEV_ADDRESS}`,
       "value": "1234567890",
