@@ -14,6 +14,8 @@ describe("Transaction", () => {
       TEST_V.to,
       TEST_V.value,
       TEST_V.fee,
+      TEST_V.gas,
+      TEST_V.gasPrice,
       TEST_V.nonce,
       TEST_V.timestamp,
       TEST_V.data,
@@ -26,6 +28,8 @@ describe("Transaction", () => {
   TEST_V.to = Buffer.from("06f7e63b7556c4602b1e258172eb2abf2831c89f", "hex");
   TEST_V.value = Long.fromString("2");
   TEST_V.fee = Long.fromString("5000000");
+  TEST_V.gas = Long.fromString("0");
+  TEST_V.gasPrice = Long.fromString("0");
   TEST_V.nonce = Long.fromString("1");
   TEST_V.timestamp = Long.fromString("1520489540520");
   TEST_V.data = Buffer.from("64617461", "hex");

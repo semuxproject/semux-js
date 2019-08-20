@@ -26,6 +26,8 @@ export default class Transaction {
       tx.getTo(),
       tx.getValue(),
       tx.getFee(),
+      tx.getGas(),
+      tx.getGasPrice(),
       tx.getNonce(),
       tx.getTimestamp(),
       tx.getData(),
@@ -39,6 +41,8 @@ export default class Transaction {
   private readonly to: Uint8Array;
   private readonly value: Long;
   private readonly fee: Long;
+  private readonly gas: Long;
+  private readonly gasPrice: Long;
   private readonly nonce: Long;
   private readonly timestamp: Long;
   private readonly data: Uint8Array;
@@ -51,6 +55,8 @@ export default class Transaction {
     to: Uint8Array,
     value: Long,
     fee: Long,
+    gas: Long,
+    gasPrice: Long,
     nonce: Long,
     timestamp: Long,
     data: Uint8Array,
@@ -62,6 +68,8 @@ export default class Transaction {
     this.to = to.slice();
     this.value = value;
     this.fee = fee;
+    this.gas = gas;
+    this.gasPrice = gasPrice;
     this.nonce = nonce;
     this.timestamp = timestamp;
     this.data = data.slice();
@@ -91,6 +99,14 @@ export default class Transaction {
 
   public getFee(): Long {
     return this.fee;
+  }
+
+  public getGas(): Long {
+    return this.gas;
+  }
+
+  public getGasPrice(): Long {
+    return this.gasPrice;
   }
 
   public getNonce(): Long {
@@ -196,6 +212,12 @@ function encodeTx(tx: Transaction): Uint8Array {
   encoder.writeLong(tx.getNonce());
   encoder.writeLong(tx.getTimestamp());
   encoder.writeBytes(tx.getData());
+
+  const isVM = tx.getType() == TransactionType.CALL || tx.getType() == TransactionType.CREATE;
+  if (isVM) {
+    encoder.writeLong(tx.getGas());
+    encoder.writeLong(tx.getGasPrice());
+  }
   return encoder.toBytes();
 }
 
@@ -209,12 +231,18 @@ function decodeTx(bytes: Uint8Array): Transaction {
   const nonce = decoder.readLong();
   const timestamp = decoder.readLong();
   const data = decoder.readBytes();
+
+  const isVM = type == TransactionType.CALL || type == TransactionType.CREATE;
+  const gas = isVM ? decoder.readLong() : Long.fromString("0");
+  const gasPrice = isVM ? decoder.readLong() : Long.fromString("0");
   return new Transaction(
     network,
     type,
     to,
     value,
     fee,
+    gas,
+    gasPrice,
     nonce,
     timestamp,
     data,

@@ -57,6 +57,8 @@ describe("Semux API Test", () => {
       Buffer.from(DEV_ADDRESS, "hex"),
       Long.fromString("1234567890"),
       Long.fromString("5000000"),
+      Long.fromString("0"),
+      Long.fromString("0"),
       Long.fromNumber(0),
       Long.fromNumber(new Date().getTime()),
       data

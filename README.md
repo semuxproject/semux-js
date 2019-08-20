@@ -35,7 +35,7 @@ const {SemuxApi, SemuxApiConfiguration} = require("semux-js");
 const api = new SemuxApi(new SemuxApiConfiguration({
     username: "user",
     password: "pass",
-    basePath: "http://localhost:5171/v2.1.0"
+    basePath: "http://localhost:5171/v2.3.0"
 }));
 
 // call GET /info API
