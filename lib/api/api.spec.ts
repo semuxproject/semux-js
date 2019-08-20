@@ -76,6 +76,8 @@ describe("Semux API Test", () => {
       "to": `0x${DEV_ADDRESS}`,
       "value": "1234567890",
       "fee": "5000000",
+      "gas": "0",
+      "gasPrice": "0",
       "nonce": "0",
       "timestamp": tx.getTimestamp().toString(),
       "data": `0x${Buffer.from(data.buffer).toString('hex')}`
