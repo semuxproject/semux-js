@@ -116,6 +116,7 @@
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="semuxapi.html#create" class="tsd-kind-icon">create</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="semuxapi.html#createaccount" class="tsd-kind-icon">create<wbr>Account</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="semuxapi.html#deleteaccount" class="tsd-kind-icon">delete<wbr>Account</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="semuxapi.html#estimategas" class="tsd-kind-icon">estimate<wbr>Gas</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="semuxapi.html#getaccount" class="tsd-kind-icon">get<wbr>Account</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="semuxapi.html#getaccountpendingtransactions" class="tsd-kind-icon">get<wbr>Account<wbr>Pending<wbr>Transactions</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="semuxapi.html#getaccounttransactions" class="tsd-kind-icon">get<wbr>Account<wbr>Transactions</a></li>
@@ -137,6 +138,7 @@
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="semuxapi.html#getvote" class="tsd-kind-icon">get<wbr>Vote</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="semuxapi.html#getvotes" class="tsd-kind-icon">get<wbr>Votes</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="semuxapi.html#listaccounts" class="tsd-kind-icon">list<wbr>Accounts</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="semuxapi.html#localcall" class="tsd-kind-icon">local<wbr>Call</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="semuxapi.html#registerdelegate" class="tsd-kind-icon">register<wbr>Delegate</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="semuxapi.html#signmessage" class="tsd-kind-icon">sign<wbr>Message</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="semuxapi.html#signrawtransaction" class="tsd-kind-icon">sign<wbr>Raw<wbr>Transaction</a></li>
@@ -162,7 +164,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="baseapi.html">BaseAPI</a>.<a href="baseapi.html#constructor">constructor</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/api/api.ts#L58">lib/api/api.ts:58</a></li>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/api/api.ts#L58">lib/api/api.ts:58</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -194,7 +196,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/api/api.ts#L3895">lib/api/api.ts:3895</a></li>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/api/api.ts#L4218">lib/api/api.ts:4218</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -239,7 +241,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/api/api.ts#L3907">lib/api/api.ts:3907</a></li>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/api/api.ts#L4230">lib/api/api.ts:4230</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -284,7 +286,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/api/api.ts#L3919">lib/api/api.ts:3919</a></li>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/api/api.ts#L4242">lib/api/api.ts:4242</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -323,13 +325,13 @@
 					<a name="broadcastrawtransaction" class="tsd-anchor"></a>
 					<h3>broadcast<wbr>Raw<wbr>Transaction</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">broadcast<wbr>Raw<wbr>Transaction<span class="tsd-signature-symbol">(</span>raw<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, validateNonce<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/dotransactionresponse.html" class="tsd-signature-type">DoTransactionResponse</a><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">broadcast<wbr>Raw<wbr>Transaction<span class="tsd-signature-symbol">(</span>raw<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/dotransactionresponse.html" class="tsd-signature-type">DoTransactionResponse</a><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/api/api.ts#L3932">lib/api/api.ts:3932</a></li>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/api/api.ts#L4254">lib/api/api.ts:4254</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -357,9 +359,6 @@
 									</div>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> validateNonce: <span class="tsd-signature-type">boolean</span></h5>
-								</li>
-								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> options: <span class="tsd-signature-type">any</span></h5>
 								</li>
 							</ul>
@@ -371,13 +370,13 @@
 					<a name="call" class="tsd-anchor"></a>
 					<h3>call</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">call<span class="tsd-signature-symbol">(</span>from<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, to<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, gasPrice<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, gas<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, nonce<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, validateNonce<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span>, data<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, local<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/dotransactionresponse.html" class="tsd-signature-type">DoTransactionResponse</a><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">call<span class="tsd-signature-symbol">(</span>from<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, to<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, gas<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, gasPrice<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, value<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, nonce<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, data<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/dotransactionresponse.html" class="tsd-signature-type">DoTransactionResponse</a><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/api/api.ts#L3952">lib/api/api.ts:3952</a></li>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/api/api.ts#L4272">lib/api/api.ts:4272</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -411,34 +410,25 @@
 									</div>
 								</li>
 								<li>
-									<h5>value: <span class="tsd-signature-type">string</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>Amount of SEM to transfer in nano SEM</p>
-									</div>
-								</li>
-								<li>
-									<h5>gasPrice: <span class="tsd-signature-type">string</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>The gas price</p>
-									</div>
-								</li>
-								<li>
 									<h5>gas: <span class="tsd-signature-type">string</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>The gas limit for the call</p>
 									</div>
 								</li>
 								<li>
+									<h5>gasPrice: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The gas price in nano SEM</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> value: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> nonce: <span class="tsd-signature-type">string</span></h5>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> validateNonce: <span class="tsd-signature-type">boolean</span></h5>
-								</li>
-								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> data: <span class="tsd-signature-type">string</span></h5>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> local: <span class="tsd-signature-type">boolean</span></h5>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> options: <span class="tsd-signature-type">any</span></h5>
@@ -452,13 +442,13 @@
 					<a name="composerawtransaction" class="tsd-anchor"></a>
 					<h3>compose<wbr>Raw<wbr>Transaction</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">compose<wbr>Raw<wbr>Transaction<span class="tsd-signature-symbol">(</span>network<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">"MAINNET"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"TESTNET"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"DEVNET"</span>, type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">"TRANSFER"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"DELEGATE"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"VOTE"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"UNVOTE"</span>, fee<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, nonce<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, to<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, value<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, timestamp<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, data<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/composerawtransactionresponse.html" class="tsd-signature-type">ComposeRawTransactionResponse</a><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">compose<wbr>Raw<wbr>Transaction<span class="tsd-signature-symbol">(</span>network<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">"MAINNET"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"TESTNET"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"DEVNET"</span>, type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">"TRANSFER"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"DELEGATE"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"VOTE"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"UNVOTE"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"CREATE"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"CALL"</span>, to<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, fee<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, nonce<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, timestamp<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, data<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, gas<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, gasPrice<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/composerawtransactionresponse.html" class="tsd-signature-type">ComposeRawTransactionResponse</a><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/api/api.ts#L3971">lib/api/api.ts:3971</a></li>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/api/api.ts#L4293">lib/api/api.ts:4293</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -486,34 +476,40 @@
 									</div>
 								</li>
 								<li>
-									<h5>type: <span class="tsd-signature-type">"TRANSFER"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"DELEGATE"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"VOTE"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"UNVOTE"</span></h5>
+									<h5>type: <span class="tsd-signature-type">"TRANSFER"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"DELEGATE"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"VOTE"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"UNVOTE"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"CREATE"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"CALL"</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>Transaction type</p>
 									</div>
 								</li>
 								<li>
-									<h5>fee: <span class="tsd-signature-type">string</span></h5>
+									<h5>to: <span class="tsd-signature-type">string</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>Transaction fee in nano</p>
+										<p>Recipient&#39;s address</p>
 									</div>
 								</li>
 								<li>
-									<h5>nonce: <span class="tsd-signature-type">string</span></h5>
+									<h5>value: <span class="tsd-signature-type">string</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>Transaction nonce</p>
+										<p>Amount of value to transfer in nano SEM</p>
 									</div>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> to: <span class="tsd-signature-type">string</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> fee: <span class="tsd-signature-type">string</span></h5>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> value: <span class="tsd-signature-type">string</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> nonce: <span class="tsd-signature-type">string</span></h5>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> timestamp: <span class="tsd-signature-type">string</span></h5>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> data: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> gas: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> gasPrice: <span class="tsd-signature-type">string</span></h5>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> options: <span class="tsd-signature-type">any</span></h5>
@@ -527,13 +523,13 @@
 					<a name="create" class="tsd-anchor"></a>
 					<h3>create</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">create<span class="tsd-signature-symbol">(</span>from<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, data<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, gasPrice<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, gas<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, nonce<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, validateNonce<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/dotransactionresponse.html" class="tsd-signature-type">DoTransactionResponse</a><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">create<span class="tsd-signature-symbol">(</span>from<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, data<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, gas<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, gasPrice<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, value<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, nonce<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/dotransactionresponse.html" class="tsd-signature-type">DoTransactionResponse</a><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/api/api.ts#L3988">lib/api/api.ts:3988</a></li>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/api/api.ts#L4310">lib/api/api.ts:4310</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -567,22 +563,22 @@
 									</div>
 								</li>
 								<li>
-									<h5>gasPrice: <span class="tsd-signature-type">string</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>The gas price</p>
-									</div>
-								</li>
-								<li>
 									<h5>gas: <span class="tsd-signature-type">string</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>The gas limit for the call</p>
 									</div>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> nonce: <span class="tsd-signature-type">string</span></h5>
+									<h5>gasPrice: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The gas price</p>
+									</div>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> validateNonce: <span class="tsd-signature-type">boolean</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> value: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> nonce: <span class="tsd-signature-type">string</span></h5>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> options: <span class="tsd-signature-type">any</span></h5>
@@ -602,7 +598,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/api/api.ts#L4001">lib/api/api.ts:4001</a></li>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/api/api.ts#L4323">lib/api/api.ts:4323</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -647,7 +643,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/api/api.ts#L4013">lib/api/api.ts:4013</a></li>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/api/api.ts#L4335">lib/api/api.ts:4335</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -683,6 +679,69 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external">
+					<a name="estimategas" class="tsd-anchor"></a>
+					<h3>estimate<wbr>Gas</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">estimate<wbr>Gas<span class="tsd-signature-symbol">(</span>to<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, from<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, value<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, nonce<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, data<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, gas<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, gasPrice<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/estimategasresponse.html" class="tsd-signature-type">EstimateGasResponse</a><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/api/api.ts#L4353">lib/api/api.ts:4353</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Estimate the gas usage of a transaction.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>summary</dt>
+									<dd><p>Estimate gas</p>
+									</dd>
+									<dt>throws</dt>
+									<dd><p>{RequiredError}</p>
+									</dd>
+									<dt>memberof</dt>
+									<dd><p>SemuxApi</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>to: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Recipient&#39;s address (the contract address)</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> from: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> value: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> nonce: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> data: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> gas: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> gasPrice: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> options: <span class="tsd-signature-type">any</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/estimategasresponse.html" class="tsd-signature-type">EstimateGasResponse</a><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external">
 					<a name="getaccount" class="tsd-anchor"></a>
 					<h3>get<wbr>Account</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
@@ -692,7 +751,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/api/api.ts#L4025">lib/api/api.ts:4025</a></li>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/api/api.ts#L4365">lib/api/api.ts:4365</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -737,7 +796,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/api/api.ts#L4039">lib/api/api.ts:4039</a></li>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/api/api.ts#L4379">lib/api/api.ts:4379</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -794,7 +853,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/api/api.ts#L4053">lib/api/api.ts:4053</a></li>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/api/api.ts#L4393">lib/api/api.ts:4393</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -851,7 +910,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/api/api.ts#L4065">lib/api/api.ts:4065</a></li>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/api/api.ts#L4405">lib/api/api.ts:4405</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -896,7 +955,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/api/api.ts#L4077">lib/api/api.ts:4077</a></li>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/api/api.ts#L4417">lib/api/api.ts:4417</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -941,7 +1000,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/api/api.ts#L4089">lib/api/api.ts:4089</a></li>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/api/api.ts#L4429">lib/api/api.ts:4429</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -986,7 +1045,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/api/api.ts#L4101">lib/api/api.ts:4101</a></li>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/api/api.ts#L4441">lib/api/api.ts:4441</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1031,7 +1090,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/api/api.ts#L4112">lib/api/api.ts:4112</a></li>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/api/api.ts#L4452">lib/api/api.ts:4452</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1070,7 +1129,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/api/api.ts#L4123">lib/api/api.ts:4123</a></li>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/api/api.ts#L4463">lib/api/api.ts:4463</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1109,7 +1168,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/api/api.ts#L4134">lib/api/api.ts:4134</a></li>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/api/api.ts#L4474">lib/api/api.ts:4474</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1148,7 +1207,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/api/api.ts#L4145">lib/api/api.ts:4145</a></li>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/api/api.ts#L4485">lib/api/api.ts:4485</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1187,7 +1246,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/api/api.ts#L4156">lib/api/api.ts:4156</a></li>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/api/api.ts#L4496">lib/api/api.ts:4496</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1226,7 +1285,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/api/api.ts#L4167">lib/api/api.ts:4167</a></li>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/api/api.ts#L4507">lib/api/api.ts:4507</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1265,7 +1324,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/api/api.ts#L4178">lib/api/api.ts:4178</a></li>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/api/api.ts#L4518">lib/api/api.ts:4518</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1304,7 +1363,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/api/api.ts#L4190">lib/api/api.ts:4190</a></li>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/api/api.ts#L4530">lib/api/api.ts:4530</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1349,7 +1408,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/api/api.ts#L4202">lib/api/api.ts:4202</a></li>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/api/api.ts#L4542">lib/api/api.ts:4542</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1394,7 +1453,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/api/api.ts#L4214">lib/api/api.ts:4214</a></li>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/api/api.ts#L4554">lib/api/api.ts:4554</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1439,7 +1498,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/api/api.ts#L4225">lib/api/api.ts:4225</a></li>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/api/api.ts#L4565">lib/api/api.ts:4565</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1478,7 +1537,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/api/api.ts#L4238">lib/api/api.ts:4238</a></li>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/api/api.ts#L4578">lib/api/api.ts:4578</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1529,7 +1588,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/api/api.ts#L4250">lib/api/api.ts:4250</a></li>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/api/api.ts#L4590">lib/api/api.ts:4590</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1574,7 +1633,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/api/api.ts#L4261">lib/api/api.ts:4261</a></li>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/api/api.ts#L4601">lib/api/api.ts:4601</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1604,16 +1663,79 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external">
-					<a name="registerdelegate" class="tsd-anchor"></a>
-					<h3>register<wbr>Delegate</h3>
+					<a name="localcall" class="tsd-anchor"></a>
+					<h3>local<wbr>Call</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">register<wbr>Delegate<span class="tsd-signature-symbol">(</span>from<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, data<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, fee<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, nonce<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, validateNonce<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/dotransactionresponse.html" class="tsd-signature-type">DoTransactionResponse</a><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">local<wbr>Call<span class="tsd-signature-symbol">(</span>to<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, from<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, value<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, nonce<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, data<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, gas<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, gasPrice<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/callresponse.html" class="tsd-signature-type">CallResponse</a><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/api/api.ts#L4277">lib/api/api.ts:4277</a></li>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/api/api.ts#L4619">lib/api/api.ts:4619</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Executes a new message call immediately without creating a transaction on the block chain.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>summary</dt>
+									<dd><p>Make a local call</p>
+									</dd>
+									<dt>throws</dt>
+									<dd><p>{RequiredError}</p>
+									</dd>
+									<dt>memberof</dt>
+									<dd><p>SemuxApi</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>to: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Recipient&#39;s address (the contract address)</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> from: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> value: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> nonce: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> data: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> gas: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> gasPrice: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> options: <span class="tsd-signature-type">any</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/callresponse.html" class="tsd-signature-type">CallResponse</a><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external">
+					<a name="registerdelegate" class="tsd-anchor"></a>
+					<h3>register<wbr>Delegate</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">register<wbr>Delegate<span class="tsd-signature-symbol">(</span>from<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, data<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, fee<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, nonce<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/dotransactionresponse.html" class="tsd-signature-type">DoTransactionResponse</a><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/api/api.ts#L4634">lib/api/api.ts:4634</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1653,9 +1775,6 @@
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> nonce: <span class="tsd-signature-type">string</span></h5>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> validateNonce: <span class="tsd-signature-type">boolean</span></h5>
-								</li>
-								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> options: <span class="tsd-signature-type">any</span></h5>
 								</li>
 							</ul>
@@ -1673,7 +1792,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/api/api.ts#L4290">lib/api/api.ts:4290</a></li>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/api/api.ts#L4647">lib/api/api.ts:4647</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1724,7 +1843,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/api/api.ts#L4303">lib/api/api.ts:4303</a></li>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/api/api.ts#L4660">lib/api/api.ts:4660</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1769,13 +1888,13 @@
 					<a name="transfer" class="tsd-anchor"></a>
 					<h3>transfer</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">transfer<span class="tsd-signature-symbol">(</span>from<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, to<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, fee<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, nonce<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, validateNonce<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span>, data<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/dotransactionresponse.html" class="tsd-signature-type">DoTransactionResponse</a><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">transfer<span class="tsd-signature-symbol">(</span>from<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, to<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, fee<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, nonce<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, data<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/dotransactionresponse.html" class="tsd-signature-type">DoTransactionResponse</a><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/api/api.ts#L4321">lib/api/api.ts:4321</a></li>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/api/api.ts#L4677">lib/api/api.ts:4677</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1799,7 +1918,7 @@
 								<li>
 									<h5>from: <span class="tsd-signature-type">string</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>Sender&#39;s address. The address must exist in the wallet.data of this Semux node.</p>
+										<p>Sender&#39;s address. The account must exist in the wallet of this node.</p>
 									</div>
 								</li>
 								<li>
@@ -1811,7 +1930,7 @@
 								<li>
 									<h5>value: <span class="tsd-signature-type">string</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>Amount of SEM to transfer in nano SEM</p>
+										<p>Amount of value to transfer in nano SEM</p>
 									</div>
 								</li>
 								<li>
@@ -1819,9 +1938,6 @@
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> nonce: <span class="tsd-signature-type">string</span></h5>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> validateNonce: <span class="tsd-signature-type">boolean</span></h5>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> data: <span class="tsd-signature-type">string</span></h5>
@@ -1838,13 +1954,13 @@
 					<a name="unvote" class="tsd-anchor"></a>
 					<h3>unvote</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">unvote<span class="tsd-signature-symbol">(</span>from<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, to<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, fee<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, nonce<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, validateNonce<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/dotransactionresponse.html" class="tsd-signature-type">DoTransactionResponse</a><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">unvote<span class="tsd-signature-symbol">(</span>from<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, to<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, fee<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, nonce<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/dotransactionresponse.html" class="tsd-signature-type">DoTransactionResponse</a><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/api/api.ts#L4338">lib/api/api.ts:4338</a></li>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/api/api.ts#L4693">lib/api/api.ts:4693</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1890,9 +2006,6 @@
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> nonce: <span class="tsd-signature-type">string</span></h5>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> validateNonce: <span class="tsd-signature-type">boolean</span></h5>
-								</li>
-								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> options: <span class="tsd-signature-type">any</span></h5>
 								</li>
 							</ul>
@@ -1910,7 +2023,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/api/api.ts#L4352">lib/api/api.ts:4352</a></li>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/api/api.ts#L4707">lib/api/api.ts:4707</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1961,13 +2074,13 @@
 					<a name="vote" class="tsd-anchor"></a>
 					<h3>vote</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">vote<span class="tsd-signature-symbol">(</span>from<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, to<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, fee<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, nonce<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, validateNonce<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/dotransactionresponse.html" class="tsd-signature-type">DoTransactionResponse</a><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">vote<span class="tsd-signature-symbol">(</span>from<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, to<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, fee<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, nonce<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span>, options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/dotransactionresponse.html" class="tsd-signature-type">DoTransactionResponse</a><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/api/api.ts#L4369">lib/api/api.ts:4369</a></li>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/api/api.ts#L4723">lib/api/api.ts:4723</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -2011,9 +2124,6 @@
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> nonce: <span class="tsd-signature-type">string</span></h5>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> validateNonce: <span class="tsd-signature-type">boolean</span></h5>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> options: <span class="tsd-signature-type">any</span></h5>
@@ -2069,6 +2179,9 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
 								<a href="semuxapi.html#deleteaccount" class="tsd-kind-icon">delete<wbr>Account</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
+								<a href="semuxapi.html#estimategas" class="tsd-kind-icon">estimate<wbr>Gas</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
 								<a href="semuxapi.html#getaccount" class="tsd-kind-icon">get<wbr>Account</a>
@@ -2134,6 +2247,9 @@
 								<a href="semuxapi.html#listaccounts" class="tsd-kind-icon">list<wbr>Accounts</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
+								<a href="semuxapi.html#localcall" class="tsd-kind-icon">local<wbr>Call</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
 								<a href="semuxapi.html#registerdelegate" class="tsd-kind-icon">register<wbr>Delegate</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
@@ -2175,6 +2291,7 @@
 				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
 				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
 				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
@@ -2223,7 +2340,7 @@
 	</div>
 </footer>
 <div class="container tsd-generator">
-	<p>Generated using <a href="http://typedoc.org/" target="_blank">TypeDoc</a></p>
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
 </div>
 <div class="overlay"></div>
 <script src="../assets/js/main.js"></script>

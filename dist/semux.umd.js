@@ -10409,7 +10409,7 @@ var SemuxApiFetchParamCreator = function (configuration) {
             }
             var localVarPath = "/blacklist";
             var localVarUrlObj = url.parse(localVarPath, true);
-            var localVarRequestOptions = Object.assign({ method: 'PUT' }, options);
+            var localVarRequestOptions = Object.assign({ method: 'POST' }, options);
             var localVarHeaderParameter = {};
             var localVarQueryParameter = {};
             // authentication basicAuth required
@@ -10444,7 +10444,7 @@ var SemuxApiFetchParamCreator = function (configuration) {
             }
             var localVarPath = "/whitelist";
             var localVarUrlObj = url.parse(localVarPath, true);
-            var localVarRequestOptions = Object.assign({ method: 'PUT' }, options);
+            var localVarRequestOptions = Object.assign({ method: 'POST' }, options);
             var localVarHeaderParameter = {};
             var localVarQueryParameter = {};
             // authentication basicAuth required
@@ -10468,11 +10468,10 @@ var SemuxApiFetchParamCreator = function (configuration) {
          * Broadcasts a raw transaction to the network.
          * @summary Broadcast a raw transaction
          * @param {string} raw Raw transaction encoded in hexadecimal string.
-         * @param {boolean} [validateNonce] Whether to validate tx nonce against the current account state, default to false if omitted
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        broadcastRawTransaction: function (raw, validateNonce, options) {
+        broadcastRawTransaction: function (raw, options) {
             if (options === void 0) { options = {}; }
             // verify required parameter 'raw' is not null or undefined
             if (raw === null || raw === undefined) {
@@ -10491,9 +10490,6 @@ var SemuxApiFetchParamCreator = function (configuration) {
             if (raw !== undefined) {
                 localVarQueryParameter['raw'] = raw;
             }
-            if (validateNonce !== undefined) {
-                localVarQueryParameter['validateNonce'] = validateNonce;
-            }
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
             delete localVarUrlObj.search;
@@ -10508,17 +10504,15 @@ var SemuxApiFetchParamCreator = function (configuration) {
          * @summary Call a contract.
          * @param {string} from Sender&#39;s address. The address must exist in the wallet.data of this Semux node.
          * @param {string} to Recipient&#39;s address (the contract address)
-         * @param {string} value Amount of SEM to transfer in nano SEM
-         * @param {string} gasPrice The gas price
          * @param {string} gas The gas limit for the call
+         * @param {string} gasPrice The gas price in nano SEM
+         * @param {string} [value] Amount of value to transfer in nano SEM
          * @param {string} [nonce] Transaction nonce, default to sender&#39;s nonce if omitted
-         * @param {boolean} [validateNonce] Whether validate tx nonce against the current account state, default to false if omitted
          * @param {string} [data] Transaction data encoded in hexadecimal string
-         * @param {boolean} [local] Specifies whether this is a local (free) call, or a transaction
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        call: function (from, to, value, gasPrice, gas, nonce, validateNonce, data, local, options) {
+        call: function (from, to, gas, gasPrice, value, nonce, data, options) {
             if (options === void 0) { options = {}; }
             // verify required parameter 'from' is not null or undefined
             if (from === null || from === undefined) {
@@ -10528,17 +10522,13 @@ var SemuxApiFetchParamCreator = function (configuration) {
             if (to === null || to === undefined) {
                 throw new RequiredError('to', 'Required parameter to was null or undefined when calling call.');
             }
-            // verify required parameter 'value' is not null or undefined
-            if (value === null || value === undefined) {
-                throw new RequiredError('value', 'Required parameter value was null or undefined when calling call.');
+            // verify required parameter 'gas' is not null or undefined
+            if (gas === null || gas === undefined) {
+                throw new RequiredError('gas', 'Required parameter gas was null or undefined when calling call.');
             }
             // verify required parameter 'gasPrice' is not null or undefined
             if (gasPrice === null || gasPrice === undefined) {
                 throw new RequiredError('gasPrice', 'Required parameter gasPrice was null or undefined when calling call.');
-            }
-            // verify required parameter 'gas' is not null or undefined
-            if (gas === null || gas === undefined) {
-                throw new RequiredError('gas', 'Required parameter gas was null or undefined when calling call.');
             }
             var localVarPath = "/transaction/call";
             var localVarUrlObj = url.parse(localVarPath, true);
@@ -10562,20 +10552,14 @@ var SemuxApiFetchParamCreator = function (configuration) {
             if (nonce !== undefined) {
                 localVarQueryParameter['nonce'] = nonce;
             }
-            if (validateNonce !== undefined) {
-                localVarQueryParameter['validateNonce'] = validateNonce;
-            }
             if (data !== undefined) {
                 localVarQueryParameter['data'] = data;
-            }
-            if (gasPrice !== undefined) {
-                localVarQueryParameter['gasPrice'] = gasPrice;
             }
             if (gas !== undefined) {
                 localVarQueryParameter['gas'] = gas;
             }
-            if (local !== undefined) {
-                localVarQueryParameter['local'] = local;
+            if (gasPrice !== undefined) {
+                localVarQueryParameter['gasPrice'] = gasPrice;
             }
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
@@ -10590,17 +10574,19 @@ var SemuxApiFetchParamCreator = function (configuration) {
          * Compose an unsigned raw transaction then return its hexadecimal encoded string. An unsigned raw transaction can be signed using /sign-raw-transaction API.
          * @summary Compose an unsigned raw transaction
          * @param {&#39;MAINNET&#39; | &#39;TESTNET&#39; | &#39;DEVNET&#39;} network Network name
-         * @param {&#39;TRANSFER&#39; | &#39;DELEGATE&#39; | &#39;VOTE&#39; | &#39;UNVOTE&#39;} type Transaction type
-         * @param {string} fee Transaction fee in nano
-         * @param {string} nonce Transaction nonce
-         * @param {string} [to] Recipient&#39;s address
-         * @param {string} [value] Transaction value in nano SEM
+         * @param {&#39;TRANSFER&#39; | &#39;DELEGATE&#39; | &#39;VOTE&#39; | &#39;UNVOTE&#39; | &#39;CREATE&#39; | &#39;CALL&#39;} type Transaction type
+         * @param {string} to Recipient&#39;s address
+         * @param {string} value Amount of value to transfer in nano SEM
+         * @param {string} [fee] Transaction fee in nano SEM, default to minimum fee if omitted
+         * @param {string} [nonce] Transaction nonce, default to sender&#39;s nonce if omitted
          * @param {string} [timestamp] Transaction timestamp in milliseconds. Default to current time.
          * @param {string} [data] Hexadecimal encoded transaction data.
+         * @param {string} [gas] The gas limit for the call
+         * @param {string} [gasPrice] The gas price
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        composeRawTransaction: function (network, type, fee, nonce, to, value, timestamp, data, options) {
+        composeRawTransaction: function (network, type, to, value, fee, nonce, timestamp, data, gas, gasPrice, options) {
             if (options === void 0) { options = {}; }
             // verify required parameter 'network' is not null or undefined
             if (network === null || network === undefined) {
@@ -10610,13 +10596,13 @@ var SemuxApiFetchParamCreator = function (configuration) {
             if (type === null || type === undefined) {
                 throw new RequiredError('type', 'Required parameter type was null or undefined when calling composeRawTransaction.');
             }
-            // verify required parameter 'fee' is not null or undefined
-            if (fee === null || fee === undefined) {
-                throw new RequiredError('fee', 'Required parameter fee was null or undefined when calling composeRawTransaction.');
+            // verify required parameter 'to' is not null or undefined
+            if (to === null || to === undefined) {
+                throw new RequiredError('to', 'Required parameter to was null or undefined when calling composeRawTransaction.');
             }
-            // verify required parameter 'nonce' is not null or undefined
-            if (nonce === null || nonce === undefined) {
-                throw new RequiredError('nonce', 'Required parameter nonce was null or undefined when calling composeRawTransaction.');
+            // verify required parameter 'value' is not null or undefined
+            if (value === null || value === undefined) {
+                throw new RequiredError('value', 'Required parameter value was null or undefined when calling composeRawTransaction.');
             }
             var localVarPath = "/compose-raw-transaction";
             var localVarUrlObj = url.parse(localVarPath, true);
@@ -10634,23 +10620,29 @@ var SemuxApiFetchParamCreator = function (configuration) {
             if (type !== undefined) {
                 localVarQueryParameter['type'] = type;
             }
-            if (fee !== undefined) {
-                localVarQueryParameter['fee'] = fee;
-            }
-            if (nonce !== undefined) {
-                localVarQueryParameter['nonce'] = nonce;
-            }
             if (to !== undefined) {
                 localVarQueryParameter['to'] = to;
             }
             if (value !== undefined) {
                 localVarQueryParameter['value'] = value;
             }
+            if (fee !== undefined) {
+                localVarQueryParameter['fee'] = fee;
+            }
+            if (nonce !== undefined) {
+                localVarQueryParameter['nonce'] = nonce;
+            }
             if (timestamp !== undefined) {
                 localVarQueryParameter['timestamp'] = timestamp;
             }
             if (data !== undefined) {
                 localVarQueryParameter['data'] = data;
+            }
+            if (gas !== undefined) {
+                localVarQueryParameter['gas'] = gas;
+            }
+            if (gasPrice !== undefined) {
+                localVarQueryParameter['gasPrice'] = gasPrice;
             }
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
@@ -10666,14 +10658,14 @@ var SemuxApiFetchParamCreator = function (configuration) {
          * @summary Create a contract
          * @param {string} from Sender&#39;s address. The address must exist in the wallet.data of this Semux node.
          * @param {string} data The contract data encoded in hexadecimal string
-         * @param {string} gasPrice The gas price
          * @param {string} gas The gas limit for the call
+         * @param {string} gasPrice The gas price
+         * @param {string} [value] Amount of SEM to transfer in nano SEM
          * @param {string} [nonce] Transaction nonce, default to sender&#39;s nonce if omitted
-         * @param {boolean} [validateNonce] Whether validate tx nonce against the current account state, default to false if omitted
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        create: function (from, data, gasPrice, gas, nonce, validateNonce, options) {
+        create: function (from, data, gas, gasPrice, value, nonce, options) {
             if (options === void 0) { options = {}; }
             // verify required parameter 'from' is not null or undefined
             if (from === null || from === undefined) {
@@ -10683,13 +10675,13 @@ var SemuxApiFetchParamCreator = function (configuration) {
             if (data === null || data === undefined) {
                 throw new RequiredError('data', 'Required parameter data was null or undefined when calling create.');
             }
-            // verify required parameter 'gasPrice' is not null or undefined
-            if (gasPrice === null || gasPrice === undefined) {
-                throw new RequiredError('gasPrice', 'Required parameter gasPrice was null or undefined when calling create.');
-            }
             // verify required parameter 'gas' is not null or undefined
             if (gas === null || gas === undefined) {
                 throw new RequiredError('gas', 'Required parameter gas was null or undefined when calling create.');
+            }
+            // verify required parameter 'gasPrice' is not null or undefined
+            if (gasPrice === null || gasPrice === undefined) {
+                throw new RequiredError('gasPrice', 'Required parameter gasPrice was null or undefined when calling create.');
             }
             var localVarPath = "/transaction/create";
             var localVarUrlObj = url.parse(localVarPath, true);
@@ -10704,20 +10696,20 @@ var SemuxApiFetchParamCreator = function (configuration) {
             if (from !== undefined) {
                 localVarQueryParameter['from'] = from;
             }
+            if (value !== undefined) {
+                localVarQueryParameter['value'] = value;
+            }
             if (nonce !== undefined) {
                 localVarQueryParameter['nonce'] = nonce;
-            }
-            if (validateNonce !== undefined) {
-                localVarQueryParameter['validateNonce'] = validateNonce;
             }
             if (data !== undefined) {
                 localVarQueryParameter['data'] = data;
             }
-            if (gasPrice !== undefined) {
-                localVarQueryParameter['gasPrice'] = gasPrice;
-            }
             if (gas !== undefined) {
                 localVarQueryParameter['gas'] = gas;
+            }
+            if (gasPrice !== undefined) {
+                localVarQueryParameter['gasPrice'] = gasPrice;
             }
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
@@ -10788,6 +10780,65 @@ var SemuxApiFetchParamCreator = function (configuration) {
             }
             if (address !== undefined) {
                 localVarQueryParameter['address'] = address;
+            }
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Estimate the gas usage of a transaction.
+         * @summary Estimate gas
+         * @param {string} to Recipient&#39;s address (the contract address)
+         * @param {string} [from] Sender&#39;s address. The address must exist in the wallet.data of this Semux node.
+         * @param {string} [value] Amount of value to transfer in nano SEM
+         * @param {string} [nonce] Transaction nonce, default to sender&#39;s nonce if omitted
+         * @param {string} [data] Transaction data encoded in hexadecimal string
+         * @param {string} [gas] The gas limit for the call
+         * @param {string} [gasPrice] The gas price in SEM
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        estimateGas: function (to, from, value, nonce, data, gas, gasPrice, options) {
+            if (options === void 0) { options = {}; }
+            // verify required parameter 'to' is not null or undefined
+            if (to === null || to === undefined) {
+                throw new RequiredError('to', 'Required parameter to was null or undefined when calling estimateGas.');
+            }
+            var localVarPath = "/estimate-gas";
+            var localVarUrlObj = url.parse(localVarPath, true);
+            var localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            var localVarHeaderParameter = {};
+            var localVarQueryParameter = {};
+            // authentication basicAuth required
+            // http basic authentication required
+            if (configuration && (configuration.username || configuration.password)) {
+                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
+            }
+            if (from !== undefined) {
+                localVarQueryParameter['from'] = from;
+            }
+            if (to !== undefined) {
+                localVarQueryParameter['to'] = to;
+            }
+            if (value !== undefined) {
+                localVarQueryParameter['value'] = value;
+            }
+            if (nonce !== undefined) {
+                localVarQueryParameter['nonce'] = nonce;
+            }
+            if (data !== undefined) {
+                localVarQueryParameter['data'] = data;
+            }
+            if (gas !== undefined) {
+                localVarQueryParameter['gas'] = gas;
+            }
+            if (gasPrice !== undefined) {
+                localVarQueryParameter['gasPrice'] = gasPrice;
             }
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
@@ -11502,17 +11553,75 @@ var SemuxApiFetchParamCreator = function (configuration) {
             };
         },
         /**
+         * Executes a new message call immediately without creating a transaction on the block chain.
+         * @summary Make a local call
+         * @param {string} to Recipient&#39;s address (the contract address)
+         * @param {string} [from] Sender&#39;s address. The address must exist in the wallet.data of this Semux node.
+         * @param {string} [value] Amount of value to transfer in nano SEM
+         * @param {string} [nonce] Transaction nonce, default to sender&#39;s nonce if omitted
+         * @param {string} [data] Transaction data encoded in hexadecimal string
+         * @param {string} [gas] The gas limit for the call
+         * @param {string} [gasPrice] The gas price in nanoSEM
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        localCall: function (to, from, value, nonce, data, gas, gasPrice, options) {
+            if (options === void 0) { options = {}; }
+            // verify required parameter 'to' is not null or undefined
+            if (to === null || to === undefined) {
+                throw new RequiredError('to', 'Required parameter to was null or undefined when calling localCall.');
+            }
+            var localVarPath = "/call";
+            var localVarUrlObj = url.parse(localVarPath, true);
+            var localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            var localVarHeaderParameter = {};
+            var localVarQueryParameter = {};
+            // authentication basicAuth required
+            // http basic authentication required
+            if (configuration && (configuration.username || configuration.password)) {
+                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
+            }
+            if (from !== undefined) {
+                localVarQueryParameter['from'] = from;
+            }
+            if (to !== undefined) {
+                localVarQueryParameter['to'] = to;
+            }
+            if (value !== undefined) {
+                localVarQueryParameter['value'] = value;
+            }
+            if (nonce !== undefined) {
+                localVarQueryParameter['nonce'] = nonce;
+            }
+            if (data !== undefined) {
+                localVarQueryParameter['data'] = data;
+            }
+            if (gas !== undefined) {
+                localVarQueryParameter['gas'] = gas;
+            }
+            if (gasPrice !== undefined) {
+                localVarQueryParameter['gasPrice'] = gasPrice;
+            }
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Registers as a delegate
          * @summary Register delegate
          * @param {string} from Registering address
          * @param {string} data Delegate name in hexadecimal encoded UTF-8 string, 16 bytes of data at maximum
          * @param {string} [fee] Transaction fee in nano SEM, default to minimum fee if omitted
          * @param {string} [nonce] Transaction nonce, default to sender&#39;s nonce if omitted
-         * @param {boolean} [validateNonce] Whether validate tx nonce against the current account state, default to false if omitted
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        registerDelegate: function (from, data, fee, nonce, validateNonce, options) {
+        registerDelegate: function (from, data, fee, nonce, options) {
             if (options === void 0) { options = {}; }
             // verify required parameter 'from' is not null or undefined
             if (from === null || from === undefined) {
@@ -11535,17 +11644,14 @@ var SemuxApiFetchParamCreator = function (configuration) {
             if (from !== undefined) {
                 localVarQueryParameter['from'] = from;
             }
-            if (data !== undefined) {
-                localVarQueryParameter['data'] = data;
-            }
             if (fee !== undefined) {
                 localVarQueryParameter['fee'] = fee;
             }
             if (nonce !== undefined) {
                 localVarQueryParameter['nonce'] = nonce;
             }
-            if (validateNonce !== undefined) {
-                localVarQueryParameter['validateNonce'] = validateNonce;
+            if (data !== undefined) {
+                localVarQueryParameter['data'] = data;
             }
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
@@ -11645,17 +11751,16 @@ var SemuxApiFetchParamCreator = function (configuration) {
         /**
          * Transfers coins to another address.
          * @summary Transfer coins
-         * @param {string} from Sender&#39;s address. The address must exist in the wallet.data of this Semux node.
+         * @param {string} from Sender&#39;s address. The account must exist in the wallet of this node.
          * @param {string} to Recipient&#39;s address
-         * @param {string} value Amount of SEM to transfer in nano SEM
+         * @param {string} value Amount of value to transfer in nano SEM
          * @param {string} [fee] Transaction fee in nano SEM, default to minimum fee if omitted
          * @param {string} [nonce] Transaction nonce, default to sender&#39;s nonce if omitted
-         * @param {boolean} [validateNonce] Whether validate tx nonce against the current account state, default to false if omitted
          * @param {string} [data] Transaction data encoded in hexadecimal string
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        transfer: function (from, to, value, fee, nonce, validateNonce, data, options) {
+        transfer: function (from, to, value, fee, nonce, data, options) {
             if (options === void 0) { options = {}; }
             // verify required parameter 'from' is not null or undefined
             if (from === null || from === undefined) {
@@ -11694,9 +11799,6 @@ var SemuxApiFetchParamCreator = function (configuration) {
             if (nonce !== undefined) {
                 localVarQueryParameter['nonce'] = nonce;
             }
-            if (validateNonce !== undefined) {
-                localVarQueryParameter['validateNonce'] = validateNonce;
-            }
             if (data !== undefined) {
                 localVarQueryParameter['data'] = data;
             }
@@ -11717,11 +11819,10 @@ var SemuxApiFetchParamCreator = function (configuration) {
          * @param {string} value Number of votes in nano SEM
          * @param {string} [fee] Transaction fee in nano SEM, default to minimum fee if omitted
          * @param {string} [nonce] Transaction nonce, default to sender&#39;s nonce if omitted
-         * @param {boolean} [validateNonce] Whether validate tx nonce against the current account state, default to false if omitted
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        unvote: function (from, to, value, fee, nonce, validateNonce, options) {
+        unvote: function (from, to, value, fee, nonce, options) {
             if (options === void 0) { options = {}; }
             // verify required parameter 'from' is not null or undefined
             if (from === null || from === undefined) {
@@ -11759,9 +11860,6 @@ var SemuxApiFetchParamCreator = function (configuration) {
             }
             if (nonce !== undefined) {
                 localVarQueryParameter['nonce'] = nonce;
-            }
-            if (validateNonce !== undefined) {
-                localVarQueryParameter['validateNonce'] = validateNonce;
             }
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
@@ -11831,11 +11929,10 @@ var SemuxApiFetchParamCreator = function (configuration) {
          * @param {string} value Number of votes in nano SEM
          * @param {string} [fee] Transaction fee in nano SEM, default to minimum fee if omitted
          * @param {string} [nonce] Transaction nonce, default to sender&#39;s nonce if omitted
-         * @param {boolean} [validateNonce] Whether validate tx nonce against the current account state, default to false if omitted
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        vote: function (from, to, value, fee, nonce, validateNonce, options) {
+        vote: function (from, to, value, fee, nonce, options) {
             if (options === void 0) { options = {}; }
             // verify required parameter 'from' is not null or undefined
             if (from === null || from === undefined) {
@@ -11873,9 +11970,6 @@ var SemuxApiFetchParamCreator = function (configuration) {
             }
             if (nonce !== undefined) {
                 localVarQueryParameter['nonce'] = nonce;
-            }
-            if (validateNonce !== undefined) {
-                localVarQueryParameter['validateNonce'] = validateNonce;
             }
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
@@ -11964,12 +12058,11 @@ var SemuxApiFp = function (configuration) {
          * Broadcasts a raw transaction to the network.
          * @summary Broadcast a raw transaction
          * @param {string} raw Raw transaction encoded in hexadecimal string.
-         * @param {boolean} [validateNonce] Whether to validate tx nonce against the current account state, default to false if omitted
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        broadcastRawTransaction: function (raw, validateNonce, options) {
-            var localVarFetchArgs = SemuxApiFetchParamCreator(configuration).broadcastRawTransaction(raw, validateNonce, options);
+        broadcastRawTransaction: function (raw, options) {
+            var localVarFetchArgs = SemuxApiFetchParamCreator(configuration).broadcastRawTransaction(raw, options);
             return function (fetch, basePath) {
                 if (fetch === void 0) { fetch = portableFetch; }
                 if (basePath === void 0) { basePath = BASE_PATH; }
@@ -11988,18 +12081,16 @@ var SemuxApiFp = function (configuration) {
          * @summary Call a contract.
          * @param {string} from Sender&#39;s address. The address must exist in the wallet.data of this Semux node.
          * @param {string} to Recipient&#39;s address (the contract address)
-         * @param {string} value Amount of SEM to transfer in nano SEM
-         * @param {string} gasPrice The gas price
          * @param {string} gas The gas limit for the call
+         * @param {string} gasPrice The gas price in nano SEM
+         * @param {string} [value] Amount of value to transfer in nano SEM
          * @param {string} [nonce] Transaction nonce, default to sender&#39;s nonce if omitted
-         * @param {boolean} [validateNonce] Whether validate tx nonce against the current account state, default to false if omitted
          * @param {string} [data] Transaction data encoded in hexadecimal string
-         * @param {boolean} [local] Specifies whether this is a local (free) call, or a transaction
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        call: function (from, to, value, gasPrice, gas, nonce, validateNonce, data, local, options) {
-            var localVarFetchArgs = SemuxApiFetchParamCreator(configuration).call(from, to, value, gasPrice, gas, nonce, validateNonce, data, local, options);
+        call: function (from, to, gas, gasPrice, value, nonce, data, options) {
+            var localVarFetchArgs = SemuxApiFetchParamCreator(configuration).call(from, to, gas, gasPrice, value, nonce, data, options);
             return function (fetch, basePath) {
                 if (fetch === void 0) { fetch = portableFetch; }
                 if (basePath === void 0) { basePath = BASE_PATH; }
@@ -12017,18 +12108,20 @@ var SemuxApiFp = function (configuration) {
          * Compose an unsigned raw transaction then return its hexadecimal encoded string. An unsigned raw transaction can be signed using /sign-raw-transaction API.
          * @summary Compose an unsigned raw transaction
          * @param {&#39;MAINNET&#39; | &#39;TESTNET&#39; | &#39;DEVNET&#39;} network Network name
-         * @param {&#39;TRANSFER&#39; | &#39;DELEGATE&#39; | &#39;VOTE&#39; | &#39;UNVOTE&#39;} type Transaction type
-         * @param {string} fee Transaction fee in nano
-         * @param {string} nonce Transaction nonce
-         * @param {string} [to] Recipient&#39;s address
-         * @param {string} [value] Transaction value in nano SEM
+         * @param {&#39;TRANSFER&#39; | &#39;DELEGATE&#39; | &#39;VOTE&#39; | &#39;UNVOTE&#39; | &#39;CREATE&#39; | &#39;CALL&#39;} type Transaction type
+         * @param {string} to Recipient&#39;s address
+         * @param {string} value Amount of value to transfer in nano SEM
+         * @param {string} [fee] Transaction fee in nano SEM, default to minimum fee if omitted
+         * @param {string} [nonce] Transaction nonce, default to sender&#39;s nonce if omitted
          * @param {string} [timestamp] Transaction timestamp in milliseconds. Default to current time.
          * @param {string} [data] Hexadecimal encoded transaction data.
+         * @param {string} [gas] The gas limit for the call
+         * @param {string} [gasPrice] The gas price
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        composeRawTransaction: function (network, type, fee, nonce, to, value, timestamp, data, options) {
-            var localVarFetchArgs = SemuxApiFetchParamCreator(configuration).composeRawTransaction(network, type, fee, nonce, to, value, timestamp, data, options);
+        composeRawTransaction: function (network, type, to, value, fee, nonce, timestamp, data, gas, gasPrice, options) {
+            var localVarFetchArgs = SemuxApiFetchParamCreator(configuration).composeRawTransaction(network, type, to, value, fee, nonce, timestamp, data, gas, gasPrice, options);
             return function (fetch, basePath) {
                 if (fetch === void 0) { fetch = portableFetch; }
                 if (basePath === void 0) { basePath = BASE_PATH; }
@@ -12047,15 +12140,15 @@ var SemuxApiFp = function (configuration) {
          * @summary Create a contract
          * @param {string} from Sender&#39;s address. The address must exist in the wallet.data of this Semux node.
          * @param {string} data The contract data encoded in hexadecimal string
-         * @param {string} gasPrice The gas price
          * @param {string} gas The gas limit for the call
+         * @param {string} gasPrice The gas price
+         * @param {string} [value] Amount of SEM to transfer in nano SEM
          * @param {string} [nonce] Transaction nonce, default to sender&#39;s nonce if omitted
-         * @param {boolean} [validateNonce] Whether validate tx nonce against the current account state, default to false if omitted
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        create: function (from, data, gasPrice, gas, nonce, validateNonce, options) {
-            var localVarFetchArgs = SemuxApiFetchParamCreator(configuration).create(from, data, gasPrice, gas, nonce, validateNonce, options);
+        create: function (from, data, gas, gasPrice, value, nonce, options) {
+            var localVarFetchArgs = SemuxApiFetchParamCreator(configuration).create(from, data, gas, gasPrice, value, nonce, options);
             return function (fetch, basePath) {
                 if (fetch === void 0) { fetch = portableFetch; }
                 if (basePath === void 0) { basePath = BASE_PATH; }
@@ -12101,6 +12194,34 @@ var SemuxApiFp = function (configuration) {
          */
         deleteAccount: function (address, options) {
             var localVarFetchArgs = SemuxApiFetchParamCreator(configuration).deleteAccount(address, options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Estimate the gas usage of a transaction.
+         * @summary Estimate gas
+         * @param {string} to Recipient&#39;s address (the contract address)
+         * @param {string} [from] Sender&#39;s address. The address must exist in the wallet.data of this Semux node.
+         * @param {string} [value] Amount of value to transfer in nano SEM
+         * @param {string} [nonce] Transaction nonce, default to sender&#39;s nonce if omitted
+         * @param {string} [data] Transaction data encoded in hexadecimal string
+         * @param {string} [gas] The gas limit for the call
+         * @param {string} [gasPrice] The gas price in SEM
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        estimateGas: function (to, from, value, nonce, data, gas, gasPrice, options) {
+            var localVarFetchArgs = SemuxApiFetchParamCreator(configuration).estimateGas(to, from, value, nonce, data, gas, gasPrice, options);
             return function (fetch, basePath) {
                 if (fetch === void 0) { fetch = portableFetch; }
                 if (basePath === void 0) { basePath = BASE_PATH; }
@@ -12573,18 +12694,45 @@ var SemuxApiFp = function (configuration) {
             };
         },
         /**
+         * Executes a new message call immediately without creating a transaction on the block chain.
+         * @summary Make a local call
+         * @param {string} to Recipient&#39;s address (the contract address)
+         * @param {string} [from] Sender&#39;s address. The address must exist in the wallet.data of this Semux node.
+         * @param {string} [value] Amount of value to transfer in nano SEM
+         * @param {string} [nonce] Transaction nonce, default to sender&#39;s nonce if omitted
+         * @param {string} [data] Transaction data encoded in hexadecimal string
+         * @param {string} [gas] The gas limit for the call
+         * @param {string} [gasPrice] The gas price in nanoSEM
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        localCall: function (to, from, value, nonce, data, gas, gasPrice, options) {
+            var localVarFetchArgs = SemuxApiFetchParamCreator(configuration).localCall(to, from, value, nonce, data, gas, gasPrice, options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
          * Registers as a delegate
          * @summary Register delegate
          * @param {string} from Registering address
          * @param {string} data Delegate name in hexadecimal encoded UTF-8 string, 16 bytes of data at maximum
          * @param {string} [fee] Transaction fee in nano SEM, default to minimum fee if omitted
          * @param {string} [nonce] Transaction nonce, default to sender&#39;s nonce if omitted
-         * @param {boolean} [validateNonce] Whether validate tx nonce against the current account state, default to false if omitted
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        registerDelegate: function (from, data, fee, nonce, validateNonce, options) {
-            var localVarFetchArgs = SemuxApiFetchParamCreator(configuration).registerDelegate(from, data, fee, nonce, validateNonce, options);
+        registerDelegate: function (from, data, fee, nonce, options) {
+            var localVarFetchArgs = SemuxApiFetchParamCreator(configuration).registerDelegate(from, data, fee, nonce, options);
             return function (fetch, basePath) {
                 if (fetch === void 0) { fetch = portableFetch; }
                 if (basePath === void 0) { basePath = BASE_PATH; }
@@ -12647,18 +12795,17 @@ var SemuxApiFp = function (configuration) {
         /**
          * Transfers coins to another address.
          * @summary Transfer coins
-         * @param {string} from Sender&#39;s address. The address must exist in the wallet.data of this Semux node.
+         * @param {string} from Sender&#39;s address. The account must exist in the wallet of this node.
          * @param {string} to Recipient&#39;s address
-         * @param {string} value Amount of SEM to transfer in nano SEM
+         * @param {string} value Amount of value to transfer in nano SEM
          * @param {string} [fee] Transaction fee in nano SEM, default to minimum fee if omitted
          * @param {string} [nonce] Transaction nonce, default to sender&#39;s nonce if omitted
-         * @param {boolean} [validateNonce] Whether validate tx nonce against the current account state, default to false if omitted
          * @param {string} [data] Transaction data encoded in hexadecimal string
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        transfer: function (from, to, value, fee, nonce, validateNonce, data, options) {
-            var localVarFetchArgs = SemuxApiFetchParamCreator(configuration).transfer(from, to, value, fee, nonce, validateNonce, data, options);
+        transfer: function (from, to, value, fee, nonce, data, options) {
+            var localVarFetchArgs = SemuxApiFetchParamCreator(configuration).transfer(from, to, value, fee, nonce, data, options);
             return function (fetch, basePath) {
                 if (fetch === void 0) { fetch = portableFetch; }
                 if (basePath === void 0) { basePath = BASE_PATH; }
@@ -12680,12 +12827,11 @@ var SemuxApiFp = function (configuration) {
          * @param {string} value Number of votes in nano SEM
          * @param {string} [fee] Transaction fee in nano SEM, default to minimum fee if omitted
          * @param {string} [nonce] Transaction nonce, default to sender&#39;s nonce if omitted
-         * @param {boolean} [validateNonce] Whether validate tx nonce against the current account state, default to false if omitted
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        unvote: function (from, to, value, fee, nonce, validateNonce, options) {
-            var localVarFetchArgs = SemuxApiFetchParamCreator(configuration).unvote(from, to, value, fee, nonce, validateNonce, options);
+        unvote: function (from, to, value, fee, nonce, options) {
+            var localVarFetchArgs = SemuxApiFetchParamCreator(configuration).unvote(from, to, value, fee, nonce, options);
             return function (fetch, basePath) {
                 if (fetch === void 0) { fetch = portableFetch; }
                 if (basePath === void 0) { basePath = BASE_PATH; }
@@ -12731,12 +12877,11 @@ var SemuxApiFp = function (configuration) {
          * @param {string} value Number of votes in nano SEM
          * @param {string} [fee] Transaction fee in nano SEM, default to minimum fee if omitted
          * @param {string} [nonce] Transaction nonce, default to sender&#39;s nonce if omitted
-         * @param {boolean} [validateNonce] Whether validate tx nonce against the current account state, default to false if omitted
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        vote: function (from, to, value, fee, nonce, validateNonce, options) {
-            var localVarFetchArgs = SemuxApiFetchParamCreator(configuration).vote(from, to, value, fee, nonce, validateNonce, options);
+        vote: function (from, to, value, fee, nonce, options) {
+            var localVarFetchArgs = SemuxApiFetchParamCreator(configuration).vote(from, to, value, fee, nonce, options);
             return function (fetch, basePath) {
                 if (fetch === void 0) { fetch = portableFetch; }
                 if (basePath === void 0) { basePath = BASE_PATH; }
@@ -12800,66 +12945,65 @@ var SemuxApi = /** @class */ (function (_super) {
      * Broadcasts a raw transaction to the network.
      * @summary Broadcast a raw transaction
      * @param {} raw Raw transaction encoded in hexadecimal string.
-     * @param {} [validateNonce] Whether to validate tx nonce against the current account state, default to false if omitted
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SemuxApi
      */
-    SemuxApi.prototype.broadcastRawTransaction = function (raw, validateNonce, options) {
-        return SemuxApiFp(this.configuration).broadcastRawTransaction(raw, validateNonce, options)(this.fetch, this.basePath);
+    SemuxApi.prototype.broadcastRawTransaction = function (raw, options) {
+        return SemuxApiFp(this.configuration).broadcastRawTransaction(raw, options)(this.fetch, this.basePath);
     };
     /**
      * Call a VM contract.
      * @summary Call a contract.
      * @param {} from Sender&#39;s address. The address must exist in the wallet.data of this Semux node.
      * @param {} to Recipient&#39;s address (the contract address)
-     * @param {} value Amount of SEM to transfer in nano SEM
-     * @param {} gasPrice The gas price
      * @param {} gas The gas limit for the call
+     * @param {} gasPrice The gas price in nano SEM
+     * @param {} [value] Amount of value to transfer in nano SEM
      * @param {} [nonce] Transaction nonce, default to sender&#39;s nonce if omitted
-     * @param {} [validateNonce] Whether validate tx nonce against the current account state, default to false if omitted
      * @param {} [data] Transaction data encoded in hexadecimal string
-     * @param {} [local] Specifies whether this is a local (free) call, or a transaction
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SemuxApi
      */
-    SemuxApi.prototype.call = function (from, to, value, gasPrice, gas, nonce, validateNonce, data, local, options) {
-        return SemuxApiFp(this.configuration).call(from, to, value, gasPrice, gas, nonce, validateNonce, data, local, options)(this.fetch, this.basePath);
+    SemuxApi.prototype.call = function (from, to, gas, gasPrice, value, nonce, data, options) {
+        return SemuxApiFp(this.configuration).call(from, to, gas, gasPrice, value, nonce, data, options)(this.fetch, this.basePath);
     };
     /**
      * Compose an unsigned raw transaction then return its hexadecimal encoded string. An unsigned raw transaction can be signed using /sign-raw-transaction API.
      * @summary Compose an unsigned raw transaction
      * @param {} network Network name
      * @param {} type Transaction type
-     * @param {} fee Transaction fee in nano
-     * @param {} nonce Transaction nonce
-     * @param {} [to] Recipient&#39;s address
-     * @param {} [value] Transaction value in nano SEM
+     * @param {} to Recipient&#39;s address
+     * @param {} value Amount of value to transfer in nano SEM
+     * @param {} [fee] Transaction fee in nano SEM, default to minimum fee if omitted
+     * @param {} [nonce] Transaction nonce, default to sender&#39;s nonce if omitted
      * @param {} [timestamp] Transaction timestamp in milliseconds. Default to current time.
      * @param {} [data] Hexadecimal encoded transaction data.
+     * @param {} [gas] The gas limit for the call
+     * @param {} [gasPrice] The gas price
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SemuxApi
      */
-    SemuxApi.prototype.composeRawTransaction = function (network, type, fee, nonce, to, value, timestamp, data, options) {
-        return SemuxApiFp(this.configuration).composeRawTransaction(network, type, fee, nonce, to, value, timestamp, data, options)(this.fetch, this.basePath);
+    SemuxApi.prototype.composeRawTransaction = function (network, type, to, value, fee, nonce, timestamp, data, gas, gasPrice, options) {
+        return SemuxApiFp(this.configuration).composeRawTransaction(network, type, to, value, fee, nonce, timestamp, data, gas, gasPrice, options)(this.fetch, this.basePath);
     };
     /**
      * Create a VM contract.
      * @summary Create a contract
      * @param {} from Sender&#39;s address. The address must exist in the wallet.data of this Semux node.
      * @param {} data The contract data encoded in hexadecimal string
-     * @param {} gasPrice The gas price
      * @param {} gas The gas limit for the call
+     * @param {} gasPrice The gas price
+     * @param {} [value] Amount of SEM to transfer in nano SEM
      * @param {} [nonce] Transaction nonce, default to sender&#39;s nonce if omitted
-     * @param {} [validateNonce] Whether validate tx nonce against the current account state, default to false if omitted
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SemuxApi
      */
-    SemuxApi.prototype.create = function (from, data, gasPrice, gas, nonce, validateNonce, options) {
-        return SemuxApiFp(this.configuration).create(from, data, gasPrice, gas, nonce, validateNonce, options)(this.fetch, this.basePath);
+    SemuxApi.prototype.create = function (from, data, gas, gasPrice, value, nonce, options) {
+        return SemuxApiFp(this.configuration).create(from, data, gas, gasPrice, value, nonce, options)(this.fetch, this.basePath);
     };
     /**
      * Creates a new account by generating a new private key or importing an existing private key when parameter 'privateKey' is provided.
@@ -12883,6 +13027,23 @@ var SemuxApi = /** @class */ (function (_super) {
      */
     SemuxApi.prototype.deleteAccount = function (address, options) {
         return SemuxApiFp(this.configuration).deleteAccount(address, options)(this.fetch, this.basePath);
+    };
+    /**
+     * Estimate the gas usage of a transaction.
+     * @summary Estimate gas
+     * @param {} to Recipient&#39;s address (the contract address)
+     * @param {} [from] Sender&#39;s address. The address must exist in the wallet.data of this Semux node.
+     * @param {} [value] Amount of value to transfer in nano SEM
+     * @param {} [nonce] Transaction nonce, default to sender&#39;s nonce if omitted
+     * @param {} [data] Transaction data encoded in hexadecimal string
+     * @param {} [gas] The gas limit for the call
+     * @param {} [gasPrice] The gas price in SEM
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SemuxApi
+     */
+    SemuxApi.prototype.estimateGas = function (to, from, value, nonce, data, gas, gasPrice, options) {
+        return SemuxApiFp(this.configuration).estimateGas(to, from, value, nonce, data, gas, gasPrice, options)(this.fetch, this.basePath);
     };
     /**
      * Returns an account.
@@ -13112,19 +13273,35 @@ var SemuxApi = /** @class */ (function (_super) {
         return SemuxApiFp(this.configuration).listAccounts(options)(this.fetch, this.basePath);
     };
     /**
+     * Executes a new message call immediately without creating a transaction on the block chain.
+     * @summary Make a local call
+     * @param {} to Recipient&#39;s address (the contract address)
+     * @param {} [from] Sender&#39;s address. The address must exist in the wallet.data of this Semux node.
+     * @param {} [value] Amount of value to transfer in nano SEM
+     * @param {} [nonce] Transaction nonce, default to sender&#39;s nonce if omitted
+     * @param {} [data] Transaction data encoded in hexadecimal string
+     * @param {} [gas] The gas limit for the call
+     * @param {} [gasPrice] The gas price in nanoSEM
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SemuxApi
+     */
+    SemuxApi.prototype.localCall = function (to, from, value, nonce, data, gas, gasPrice, options) {
+        return SemuxApiFp(this.configuration).localCall(to, from, value, nonce, data, gas, gasPrice, options)(this.fetch, this.basePath);
+    };
+    /**
      * Registers as a delegate
      * @summary Register delegate
      * @param {} from Registering address
      * @param {} data Delegate name in hexadecimal encoded UTF-8 string, 16 bytes of data at maximum
      * @param {} [fee] Transaction fee in nano SEM, default to minimum fee if omitted
      * @param {} [nonce] Transaction nonce, default to sender&#39;s nonce if omitted
-     * @param {} [validateNonce] Whether validate tx nonce against the current account state, default to false if omitted
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SemuxApi
      */
-    SemuxApi.prototype.registerDelegate = function (from, data, fee, nonce, validateNonce, options) {
-        return SemuxApiFp(this.configuration).registerDelegate(from, data, fee, nonce, validateNonce, options)(this.fetch, this.basePath);
+    SemuxApi.prototype.registerDelegate = function (from, data, fee, nonce, options) {
+        return SemuxApiFp(this.configuration).registerDelegate(from, data, fee, nonce, options)(this.fetch, this.basePath);
     };
     /**
      * Sign a message.
@@ -13153,19 +13330,18 @@ var SemuxApi = /** @class */ (function (_super) {
     /**
      * Transfers coins to another address.
      * @summary Transfer coins
-     * @param {} from Sender&#39;s address. The address must exist in the wallet.data of this Semux node.
+     * @param {} from Sender&#39;s address. The account must exist in the wallet of this node.
      * @param {} to Recipient&#39;s address
-     * @param {} value Amount of SEM to transfer in nano SEM
+     * @param {} value Amount of value to transfer in nano SEM
      * @param {} [fee] Transaction fee in nano SEM, default to minimum fee if omitted
      * @param {} [nonce] Transaction nonce, default to sender&#39;s nonce if omitted
-     * @param {} [validateNonce] Whether validate tx nonce against the current account state, default to false if omitted
      * @param {} [data] Transaction data encoded in hexadecimal string
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SemuxApi
      */
-    SemuxApi.prototype.transfer = function (from, to, value, fee, nonce, validateNonce, data, options) {
-        return SemuxApiFp(this.configuration).transfer(from, to, value, fee, nonce, validateNonce, data, options)(this.fetch, this.basePath);
+    SemuxApi.prototype.transfer = function (from, to, value, fee, nonce, data, options) {
+        return SemuxApiFp(this.configuration).transfer(from, to, value, fee, nonce, data, options)(this.fetch, this.basePath);
     };
     /**
      * Unvotes for a delegate.
@@ -13175,13 +13351,12 @@ var SemuxApi = /** @class */ (function (_super) {
      * @param {} value Number of votes in nano SEM
      * @param {} [fee] Transaction fee in nano SEM, default to minimum fee if omitted
      * @param {} [nonce] Transaction nonce, default to sender&#39;s nonce if omitted
-     * @param {} [validateNonce] Whether validate tx nonce against the current account state, default to false if omitted
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SemuxApi
      */
-    SemuxApi.prototype.unvote = function (from, to, value, fee, nonce, validateNonce, options) {
-        return SemuxApiFp(this.configuration).unvote(from, to, value, fee, nonce, validateNonce, options)(this.fetch, this.basePath);
+    SemuxApi.prototype.unvote = function (from, to, value, fee, nonce, options) {
+        return SemuxApiFp(this.configuration).unvote(from, to, value, fee, nonce, options)(this.fetch, this.basePath);
     };
     /**
      * Verify a signed message.
@@ -13204,13 +13379,12 @@ var SemuxApi = /** @class */ (function (_super) {
      * @param {} value Number of votes in nano SEM
      * @param {} [fee] Transaction fee in nano SEM, default to minimum fee if omitted
      * @param {} [nonce] Transaction nonce, default to sender&#39;s nonce if omitted
-     * @param {} [validateNonce] Whether validate tx nonce against the current account state, default to false if omitted
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SemuxApi
      */
-    SemuxApi.prototype.vote = function (from, to, value, fee, nonce, validateNonce, options) {
-        return SemuxApiFp(this.configuration).vote(from, to, value, fee, nonce, validateNonce, options)(this.fetch, this.basePath);
+    SemuxApi.prototype.vote = function (from, to, value, fee, nonce, options) {
+        return SemuxApiFp(this.configuration).vote(from, to, value, fee, nonce, options)(this.fetch, this.basePath);
     };
     return SemuxApi;
 }(BaseAPI));
@@ -13220,7 +13394,7 @@ var SemuxApi = /** @class */ (function (_super) {
  * Semux API
  * Semux is an experimental high-performance blockchain platform that powers decentralized application.
  *
- * OpenAPI spec version: 2.2.0
+ * OpenAPI spec version: 2.3.0
  *
  *
  * NOTE: This class is auto generated by the swagger code generator program.

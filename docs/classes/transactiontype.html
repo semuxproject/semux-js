@@ -105,6 +105,8 @@
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-external"><a href="transactiontype.html#data" class="tsd-kind-icon">data</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-external"><a href="transactiontype.html#fee" class="tsd-kind-icon">fee</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-external"><a href="transactiontype.html#from" class="tsd-kind-icon">from</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-external"><a href="transactiontype.html#gas" class="tsd-kind-icon">gas</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-external"><a href="transactiontype.html#gasprice" class="tsd-kind-icon">gas<wbr>Price</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-external"><a href="transactiontype.html#hash" class="tsd-kind-icon">hash</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-external"><a href="transactiontype.html#nonce" class="tsd-kind-icon">nonce</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-external"><a href="transactiontype.html#timestamp" class="tsd-kind-icon">timestamp</a></li>
@@ -148,7 +150,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/TransactionType.ts#L37">lib/TransactionType.ts:37</a></li>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/TransactionType.ts#L37">lib/TransactionType.ts:37</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -170,7 +172,7 @@
 					<div class="tsd-signature tsd-kind-icon">data<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/api/api.ts#L604">lib/api/api.ts:604</a></li>
+							<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/api/api.ts#L708">lib/api/api.ts:708</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -193,12 +195,12 @@
 					<div class="tsd-signature tsd-kind-icon">fee<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/api/api.ts#L586">lib/api/api.ts:586</a></li>
+							<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/api/api.ts#L690">lib/api/api.ts:690</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Transaction fee in nano SEM</p>
+							<p>Transaction fee in nano SEM. For CREATE/CALL, this field is zero; use gas instead</p>
 						</div>
 						<dl class="tsd-comment-tags">
 							<dt>type</dt>
@@ -216,7 +218,7 @@
 					<div class="tsd-signature tsd-kind-icon">from<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/api/api.ts#L568">lib/api/api.ts:568</a></li>
+							<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/api/api.ts#L672">lib/api/api.ts:672</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -234,15 +236,64 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-external">
+					<a name="gas" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> gas</h3>
+					<div class="tsd-signature tsd-kind-icon">gas<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/api/api.ts#L714">lib/api/api.ts:714</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The gas limit set by the sender</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>type</dt>
+							<dd><p>{string}</p>
+							</dd>
+							<dt>memberof</dt>
+							<dd><p>TransactionType</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-external">
+					<a name="gasprice" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> gas<wbr>Price</h3>
+					<div class="tsd-signature tsd-kind-icon">gas<wbr>Price<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/api/api.ts#L720">lib/api/api.ts:720</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The gas Price set by the sender</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>type</dt>
+							<dd><p>{string}</p>
+							</dd>
+							<dt>memberof</dt>
+							<dd><p>TransactionType</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-external">
 					<a name="hash" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> hash</h3>
 					<div class="tsd-signature tsd-kind-icon">hash<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/api/api.ts#L556">lib/api/api.ts:556</a></li>
+							<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/api/api.ts#L660">lib/api/api.ts:660</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The transaction hash</p>
+						</div>
 						<dl class="tsd-comment-tags">
 							<dt>type</dt>
 							<dd><p>{string}</p>
@@ -259,10 +310,13 @@
 					<div class="tsd-signature tsd-kind-icon">nonce<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/api/api.ts#L592">lib/api/api.ts:592</a></li>
+							<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/api/api.ts#L696">lib/api/api.ts:696</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The nonce of the sender</p>
+						</div>
 						<dl class="tsd-comment-tags">
 							<dt>type</dt>
 							<dd><p>{string}</p>
@@ -279,12 +333,12 @@
 					<div class="tsd-signature tsd-kind-icon">timestamp<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/api/api.ts#L598">lib/api/api.ts:598</a></li>
+							<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/api/api.ts#L702">lib/api/api.ts:702</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Transaction timestamp in milliseconds specified by the transaction creator. There can be a time drift up to 2 hours.</p>
+							<p>Transaction timestamp in milliseconds specified by the sender. There can be a time drift up to 2 hours.</p>
 						</div>
 						<dl class="tsd-comment-tags">
 							<dt>type</dt>
@@ -302,7 +356,7 @@
 					<div class="tsd-signature tsd-kind-icon">to<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/api/api.ts#L574">lib/api/api.ts:574</a></li>
+							<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/api/api.ts#L678">lib/api/api.ts:678</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -325,10 +379,13 @@
 					<div class="tsd-signature tsd-kind-icon">type<span class="tsd-signature-symbol">:</span> <a href="../enums/transactiontype.typeenum.html" class="tsd-signature-type">TypeEnum</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/api/api.ts#L562">lib/api/api.ts:562</a></li>
+							<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/api/api.ts#L666">lib/api/api.ts:666</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The transaction type</p>
+						</div>
 						<dl class="tsd-comment-tags">
 							<dt>type</dt>
 							<dd><p>{string}</p>
@@ -345,7 +402,7 @@
 					<div class="tsd-signature tsd-kind-icon">value<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/api/api.ts#L580">lib/api/api.ts:580</a></li>
+							<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/api/api.ts#L684">lib/api/api.ts:684</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -375,7 +432,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/TransactionType.ts#L14">lib/TransactionType.ts:14</a></li>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/TransactionType.ts#L14">lib/TransactionType.ts:14</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">TransactionType</span></h4>
@@ -392,7 +449,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/TransactionType.ts#L2">lib/TransactionType.ts:2</a></li>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/TransactionType.ts#L2">lib/TransactionType.ts:2</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">TransactionType</span></h4>
@@ -409,7 +466,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/TransactionType.ts#L12">lib/TransactionType.ts:12</a></li>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/TransactionType.ts#L12">lib/TransactionType.ts:12</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">TransactionType</span></h4>
@@ -426,7 +483,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/TransactionType.ts#L6">lib/TransactionType.ts:6</a></li>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/TransactionType.ts#L6">lib/TransactionType.ts:6</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">TransactionType</span></h4>
@@ -443,7 +500,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/TransactionType.ts#L4">lib/TransactionType.ts:4</a></li>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/TransactionType.ts#L4">lib/TransactionType.ts:4</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">TransactionType</span></h4>
@@ -460,7 +517,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/TransactionType.ts#L10">lib/TransactionType.ts:10</a></li>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/TransactionType.ts#L10">lib/TransactionType.ts:10</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">TransactionType</span></h4>
@@ -477,7 +534,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/TransactionType.ts#L8">lib/TransactionType.ts:8</a></li>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/TransactionType.ts#L8">lib/TransactionType.ts:8</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">TransactionType</span></h4>
@@ -497,7 +554,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/TransactionType.ts#L47">lib/TransactionType.ts:47</a></li>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/TransactionType.ts#L47">lib/TransactionType.ts:47</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -520,7 +577,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/TransactionType.ts#L43">lib/TransactionType.ts:43</a></li>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/TransactionType.ts#L43">lib/TransactionType.ts:43</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
@@ -537,7 +594,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/TransactionType.ts#L16">lib/TransactionType.ts:16</a></li>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/TransactionType.ts#L16">lib/TransactionType.ts:16</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -581,6 +638,12 @@
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-external">
 								<a href="transactiontype.html#from" class="tsd-kind-icon">from</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-external">
+								<a href="transactiontype.html#gas" class="tsd-kind-icon">gas</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-external">
+								<a href="transactiontype.html#gasprice" class="tsd-kind-icon">gas<wbr>Price</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-external">
 								<a href="transactiontype.html#hash" class="tsd-kind-icon">hash</a>
@@ -651,6 +714,7 @@
 				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
 				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
 				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
@@ -699,7 +763,7 @@
 	</div>
 </footer>
 <div class="container tsd-generator">
-	<p>Generated using <a href="http://typedoc.org/" target="_blank">TypeDoc</a></p>
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
 </div>
 <div class="overlay"></div>
 <script src="../assets/js/main.js"></script>

@@ -92,7 +92,12 @@
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="transactionresulttype.html#blocknumber" class="tsd-kind-icon">block<wbr>Number</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="transactionresulttype.html#code" class="tsd-kind-icon">code</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="transactionresulttype.html#contractaddress" class="tsd-kind-icon">contract<wbr>Address</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="transactionresulttype.html#fee" class="tsd-kind-icon">fee</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="transactionresulttype.html#gas" class="tsd-kind-icon">gas</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="transactionresulttype.html#gasprice" class="tsd-kind-icon">gas<wbr>Price</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="transactionresulttype.html#gasused" class="tsd-kind-icon">gas<wbr>Used</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="transactionresulttype.html#internaltransactions" class="tsd-kind-icon">internal<wbr>Transactions</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="transactionresulttype.html#logs" class="tsd-kind-icon">logs</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="transactionresulttype.html#returndata" class="tsd-kind-icon">return<wbr>Data</a></li>
 							</ul>
@@ -108,10 +113,13 @@
 					<div class="tsd-signature tsd-kind-icon">block<wbr>Number<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/api/api.ts#L518">lib/api/api.ts:518</a></li>
+							<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/api/api.ts#L592">lib/api/api.ts:592</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The number of block that included the transaction</p>
+						</div>
 						<dl class="tsd-comment-tags">
 							<dt>type</dt>
 							<dd><p>{string}</p>
@@ -128,7 +136,7 @@
 					<div class="tsd-signature tsd-kind-icon">code<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/api/api.ts#L542">lib/api/api.ts:542</a></li>
+							<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/api/api.ts#L598">lib/api/api.ts:598</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -146,18 +154,136 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+					<a name="contractaddress" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> contract<wbr>Address</h3>
+					<div class="tsd-signature tsd-kind-icon">contract<wbr>Address<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/api/api.ts#L616">lib/api/api.ts:616</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Contract address if this is a CREATE transaction, or NULL</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>type</dt>
+							<dd><p>{string}</p>
+							</dd>
+							<dt>memberof</dt>
+							<dd><p>TransactionResultType</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+					<a name="fee" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> fee</h3>
+					<div class="tsd-signature tsd-kind-icon">fee<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/api/api.ts#L640">lib/api/api.ts:640</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The transaction fee in nano SEM. For VM transactions, this field is zero</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>type</dt>
+							<dd><p>{string}</p>
+							</dd>
+							<dt>memberof</dt>
+							<dd><p>TransactionResultType</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+					<a name="gas" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> gas</h3>
+					<div class="tsd-signature tsd-kind-icon">gas<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/api/api.ts#L622">lib/api/api.ts:622</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The gas limit set by the sender</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>type</dt>
+							<dd><p>{string}</p>
+							</dd>
+							<dt>memberof</dt>
+							<dd><p>TransactionResultType</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+					<a name="gasprice" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> gas<wbr>Price</h3>
+					<div class="tsd-signature tsd-kind-icon">gas<wbr>Price<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/api/api.ts#L628">lib/api/api.ts:628</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The gas Price set by the sender</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>type</dt>
+							<dd><p>{string}</p>
+							</dd>
+							<dt>memberof</dt>
+							<dd><p>TransactionResultType</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
 					<a name="gasused" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> gas<wbr>Used</h3>
 					<div class="tsd-signature tsd-kind-icon">gas<wbr>Used<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/api/api.ts#L536">lib/api/api.ts:536</a></li>
+							<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/api/api.ts#L634">lib/api/api.ts:634</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The gas consumed. For non-VM transactions, this field is zero</p>
+						</div>
 						<dl class="tsd-comment-tags">
 							<dt>type</dt>
 							<dd><p>{string}</p>
+							</dd>
+							<dt>memberof</dt>
+							<dd><p>TransactionResultType</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+					<a name="internaltransactions" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> internal<wbr>Transactions</h3>
+					<div class="tsd-signature tsd-kind-icon">internal<wbr>Transactions<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><a href="internaltransactiontype.html" class="tsd-signature-type">InternalTransactionType</a><span class="tsd-signature-symbol">&gt;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/api/api.ts#L646">lib/api/api.ts:646</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Internal transactions generated when executing this transaction</p>
+						</div>
+						<dl class="tsd-comment-tags">
+							<dt>type</dt>
+							<dd><p>{Array&lt;InternalTransactionType&gt;}</p>
 							</dd>
 							<dt>memberof</dt>
 							<dd><p>TransactionResultType</p>
@@ -171,10 +297,13 @@
 					<div class="tsd-signature tsd-kind-icon">logs<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><a href="loginfotype.html" class="tsd-signature-type">LogInfoType</a><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/api/api.ts#L524">lib/api/api.ts:524</a></li>
+							<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/api/api.ts#L604">lib/api/api.ts:604</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Logs produced when executing this transaction</p>
+						</div>
 						<dl class="tsd-comment-tags">
 							<dt>type</dt>
 							<dd><p>{Array&lt;LogInfoType&gt;}</p>
@@ -191,7 +320,7 @@
 					<div class="tsd-signature tsd-kind-icon">return<wbr>Data<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/98c0780/lib/api/api.ts#L530">lib/api/api.ts:530</a></li>
+							<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/api/api.ts#L610">lib/api/api.ts:610</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -232,7 +361,22 @@
 								<a href="transactionresulttype.html#code" class="tsd-kind-icon">code</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+								<a href="transactionresulttype.html#contractaddress" class="tsd-kind-icon">contract<wbr>Address</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+								<a href="transactionresulttype.html#fee" class="tsd-kind-icon">fee</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+								<a href="transactionresulttype.html#gas" class="tsd-kind-icon">gas</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+								<a href="transactionresulttype.html#gasprice" class="tsd-kind-icon">gas<wbr>Price</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
 								<a href="transactionresulttype.html#gasused" class="tsd-kind-icon">gas<wbr>Used</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
+								<a href="transactionresulttype.html#internaltransactions" class="tsd-kind-icon">internal<wbr>Transactions</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
 								<a href="transactionresulttype.html#logs" class="tsd-kind-icon">logs</a>
@@ -261,6 +405,7 @@
 				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
 				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
 				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
@@ -309,7 +454,7 @@
 	</div>
 </footer>
 <div class="container tsd-generator">
-	<p>Generated using <a href="http://typedoc.org/" target="_blank">TypeDoc</a></p>
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
 </div>
 <div class="overlay"></div>
 <script src="../assets/js/main.js"></script>
