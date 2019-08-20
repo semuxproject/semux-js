@@ -1,6 +1,6 @@
 {
   "name": "semux-js",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "description": "Semux Javascript SDK Library",
   "main": "dist/semux.umd.js",
   "module": "dist/semux.es6.js",

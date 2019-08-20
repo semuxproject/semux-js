@@ -1,5 +1,5 @@
 module.exports = {
-  name: "semux-js-sdk",
+  name: "semux-js",
   out: "docs",
   target: "es5",
   theme: "default",
