@@ -21138,12 +21138,14 @@ var TransactionType$1 = /** @class */ (function () {
 }());
 
 var Transaction = /** @class */ (function () {
-    function Transaction(network, type, to, value, fee, nonce, timestamp, data, hash, signature) {
+    function Transaction(network, type, to, value, fee, gas, gasPrice, nonce, timestamp, data, hash, signature) {
         this.network = network;
         this.type = type;
         this.to = to.slice();
         this.value = value;
         this.fee = fee;
+        this.gas = gas;
+        this.gasPrice = gasPrice;
         this.nonce = nonce;
         this.timestamp = timestamp;
         this.data = data.slice();
@@ -21159,7 +21161,7 @@ var Transaction = /** @class */ (function () {
         var hash = decoder.readBytes();
         var tx = decodeTx(decoder.readBytes());
         var signature = Signature.fromBytes(decoder.readBytes());
-        return new Transaction(Network.of(tx.getNetworkId()), tx.getType(), tx.getTo(), tx.getValue(), tx.getFee(), tx.getNonce(), tx.getTimestamp(), tx.getData(), hash, signature);
+        return new Transaction(Network.of(tx.getNetworkId()), tx.getType(), tx.getTo(), tx.getValue(), tx.getFee(), tx.getGas(), tx.getGasPrice(), tx.getNonce(), tx.getTimestamp(), tx.getData(), hash, signature);
     };
     Transaction.prototype.getNetworkId = function () {
         return this.network.getId();
@@ -21178,6 +21180,12 @@ var Transaction = /** @class */ (function () {
     };
     Transaction.prototype.getFee = function () {
         return this.fee;
+    };
+    Transaction.prototype.getGas = function () {
+        return this.gas;
+    };
+    Transaction.prototype.getGasPrice = function () {
+        return this.gasPrice;
     };
     Transaction.prototype.getNonce = function () {
         return this.nonce;
@@ -21262,6 +21270,11 @@ function encodeTx(tx) {
     encoder.writeLong(tx.getNonce());
     encoder.writeLong(tx.getTimestamp());
     encoder.writeBytes(tx.getData());
+    var isVM = tx.getType() === TransactionType$1.CALL || tx.getType() === TransactionType$1.CREATE;
+    if (isVM) {
+        encoder.writeLong(tx.getGas());
+        encoder.writeLong(tx.getGasPrice());
+    }
     return encoder.toBytes();
 }
 function decodeTx(bytes) {
@@ -21274,7 +21287,10 @@ function decodeTx(bytes) {
     var nonce = decoder.readLong();
     var timestamp = decoder.readLong();
     var data = decoder.readBytes();
-    return new Transaction(network, type, to, value, fee, nonce, timestamp, data);
+    var isVM = type === TransactionType$1.CALL || type === TransactionType$1.CREATE;
+    var gas = isVM ? decoder.readLong() : long_1.fromString("0");
+    var gasPrice = isVM ? decoder.readLong() : long_1.fromString("0");
+    return new Transaction(network, type, to, value, fee, gas, gasPrice, nonce, timestamp, data);
 }
 function hashTx(tx) {
     return Hash.h256(encodeTx(tx));

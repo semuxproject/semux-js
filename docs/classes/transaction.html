@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Transaction | semux-js-sdk</title>
+	<title>Transaction | semux-js</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -22,7 +22,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="../index.html" class="title">semux-js-sdk</a>
+					<a href="../index.html" class="title">semux-js</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -87,6 +87,8 @@
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="transaction.html#getdata" class="tsd-kind-icon">get<wbr>Data</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="transaction.html#getfee" class="tsd-kind-icon">get<wbr>Fee</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="transaction.html#getgas" class="tsd-kind-icon">get<wbr>Gas</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="transaction.html#getgasprice" class="tsd-kind-icon">get<wbr>Gas<wbr>Price</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="transaction.html#gethash" class="tsd-kind-icon">get<wbr>Hash</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="transaction.html#getnetwork" class="tsd-kind-icon">get<wbr>Network</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-external"><a href="transaction.html#getnetworkid" class="tsd-kind-icon">get<wbr>Network<wbr>Id</a></li>
@@ -111,13 +113,13 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-is-external">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Transaction<span class="tsd-signature-symbol">(</span>network<span class="tsd-signature-symbol">: </span><a href="network.html" class="tsd-signature-type">Network</a>, type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TransactionType</span>, to<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Uint8Array</span>, value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Long</span>, fee<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Long</span>, nonce<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Long</span>, timestamp<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Long</span>, data<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Uint8Array</span>, hash<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Uint8Array</span>, signature<span class="tsd-signature-symbol">?: </span><a href="signature.html" class="tsd-signature-type">Signature</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="transaction.html" class="tsd-signature-type">Transaction</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Transaction<span class="tsd-signature-symbol">(</span>network<span class="tsd-signature-symbol">: </span><a href="network.html" class="tsd-signature-type">Network</a>, type<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">TransactionType</span>, to<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Uint8Array</span>, value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Long</span>, fee<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Long</span>, gas<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Long</span>, gasPrice<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Long</span>, nonce<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Long</span>, timestamp<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Long</span>, data<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Uint8Array</span>, hash<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Uint8Array</span>, signature<span class="tsd-signature-symbol">?: </span><a href="signature.html" class="tsd-signature-type">Signature</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="transaction.html" class="tsd-signature-type">Transaction</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/Transaction.ts#L46">lib/Transaction.ts:46</a></li>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/ccdecdc/lib/Transaction.ts#L50">lib/Transaction.ts:50</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -136,6 +138,12 @@
 								</li>
 								<li>
 									<h5>fee: <span class="tsd-signature-type">Long</span></h5>
+								</li>
+								<li>
+									<h5>gas: <span class="tsd-signature-type">Long</span></h5>
+								</li>
+								<li>
+									<h5>gasPrice: <span class="tsd-signature-type">Long</span></h5>
 								</li>
 								<li>
 									<h5>nonce: <span class="tsd-signature-type">Long</span></h5>
@@ -170,7 +178,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/Transaction.ts#L104">lib/Transaction.ts:104</a></li>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/ccdecdc/lib/Transaction.ts#L120">lib/Transaction.ts:120</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Uint8Array</span></h4>
@@ -187,7 +195,41 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/Transaction.ts#L92">lib/Transaction.ts:92</a></li>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/ccdecdc/lib/Transaction.ts#L100">lib/Transaction.ts:100</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Long</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external">
+					<a name="getgas" class="tsd-anchor"></a>
+					<h3>get<wbr>Gas</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Gas<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Long</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/ccdecdc/lib/Transaction.ts#L104">lib/Transaction.ts:104</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Long</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-external">
+					<a name="getgasprice" class="tsd-anchor"></a>
+					<h3>get<wbr>Gas<wbr>Price</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-external">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Gas<wbr>Price<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Long</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/ccdecdc/lib/Transaction.ts#L108">lib/Transaction.ts:108</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Long</span></h4>
@@ -204,7 +246,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/Transaction.ts#L112">lib/Transaction.ts:112</a></li>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/ccdecdc/lib/Transaction.ts#L128">lib/Transaction.ts:128</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Uint8Array</span></h4>
@@ -221,7 +263,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/Transaction.ts#L76">lib/Transaction.ts:76</a></li>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/ccdecdc/lib/Transaction.ts#L84">lib/Transaction.ts:84</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="network.html" class="tsd-signature-type">Network</a></h4>
@@ -238,7 +280,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/Transaction.ts#L72">lib/Transaction.ts:72</a></li>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/ccdecdc/lib/Transaction.ts#L80">lib/Transaction.ts:80</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
@@ -255,7 +297,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/Transaction.ts#L96">lib/Transaction.ts:96</a></li>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/ccdecdc/lib/Transaction.ts#L112">lib/Transaction.ts:112</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Long</span></h4>
@@ -272,7 +314,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/Transaction.ts#L108">lib/Transaction.ts:108</a></li>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/ccdecdc/lib/Transaction.ts#L124">lib/Transaction.ts:124</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="signature.html" class="tsd-signature-type">Signature</a>
@@ -292,7 +334,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/Transaction.ts#L100">lib/Transaction.ts:100</a></li>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/ccdecdc/lib/Transaction.ts#L116">lib/Transaction.ts:116</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Long</span></h4>
@@ -309,7 +351,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/Transaction.ts#L84">lib/Transaction.ts:84</a></li>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/ccdecdc/lib/Transaction.ts#L92">lib/Transaction.ts:92</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Uint8Array</span></h4>
@@ -326,7 +368,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/Transaction.ts#L80">lib/Transaction.ts:80</a></li>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/ccdecdc/lib/Transaction.ts#L88">lib/Transaction.ts:88</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">TransactionType</span></h4>
@@ -343,7 +385,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/Transaction.ts#L88">lib/Transaction.ts:88</a></li>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/ccdecdc/lib/Transaction.ts#L96">lib/Transaction.ts:96</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Long</span></h4>
@@ -360,7 +402,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/Transaction.ts#L116">lib/Transaction.ts:116</a></li>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/ccdecdc/lib/Transaction.ts#L132">lib/Transaction.ts:132</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -383,7 +425,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/Transaction.ts#L121">lib/Transaction.ts:121</a></li>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/ccdecdc/lib/Transaction.ts#L137">lib/Transaction.ts:137</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Uint8Array</span></h4>
@@ -400,7 +442,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/Transaction.ts#L138">lib/Transaction.ts:138</a></li>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/ccdecdc/lib/Transaction.ts#L154">lib/Transaction.ts:154</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -432,7 +474,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/e101405/lib/Transaction.ts#L18">lib/Transaction.ts:18</a></li>
+									<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/ccdecdc/lib/Transaction.ts#L18">lib/Transaction.ts:18</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -472,6 +514,12 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
 								<a href="transaction.html#getfee" class="tsd-kind-icon">get<wbr>Fee</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
+								<a href="transaction.html#getgas" class="tsd-kind-icon">get<wbr>Gas</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
+								<a href="transaction.html#getgasprice" class="tsd-kind-icon">get<wbr>Gas<wbr>Price</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-external">
 								<a href="transaction.html#gethash" class="tsd-kind-icon">get<wbr>Hash</a>
