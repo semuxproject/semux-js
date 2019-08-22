@@ -3,6 +3,7 @@
 [![NPM Status](https://img.shields.io/npm/v/semux-js.svg)](https://www.npmjs.com/package/semux-js)
 [![Travis Build Status](https://travis-ci.org/semuxproject/semux-js.svg?branch=master)](https://travis-ci.org/semuxproject/semux-js)
 [![Coverage Status](https://coveralls.io/repos/github/semuxproject/semux-js/badge.svg?branch=master)](https://coveralls.io/github/semuxproject/semux-js?branch=master)
+[![BrowserStack Status](https://automate.browserstack.com/badge.svg?badge_key=YlBOaW1nM3A0UnNSeGlWTkJ3dkJmTnFFZWJybGlJTmtENnB1ZStFSlNqbz0tLWIrdjN0TTh5S2lEdlVOSUoyQlRHOXc9PQ==--5c8afe70294da44aa09f8091b6f0c530bc8ec229)](https://automate.browserstack.com/public-build/YlBOaW1nM3A0UnNSeGlWTkJ3dkJmTnFFZWJybGlJTmtENnB1ZStFSlNqbz0tLWIrdjN0TTh5S2lEdlVOSUoyQlRHOXc9PQ==--5c8afe70294da44aa09f8091b6f0c530bc8ec229)
 
 This library aims to providing javascript utilities for Semux client-side applications, such as web wallet.
 
