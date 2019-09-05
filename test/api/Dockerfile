@@ -4,8 +4,8 @@ WORKDIR /
 
 RUN apt-get update && apt-get install --yes curl jq
 
-RUN LINK="https://github.com/semuxproject/semux-core/releases/download/v2.1.0/semux-linux-2.1.0-89fd56a.tar.gz" && \
-    TARBALL="semux-linux-2.1.0-89fd56a.tar.gz" && \
+RUN LINK="https://github.com/semuxproject/semux-core/releases/download/v2.1.0/semux-linux-2.1.0-8ab47f3.tar.gz" && \
+    TARBALL="semux-linux-2.1.0-8ab47f3.tar.gz" && \
     curl -Lo ${TARBALL} ${LINK} && \
     mkdir -p /semux && \
     tar -xzf ${TARBALL} -C /semux --strip-components=1 && \
