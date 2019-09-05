@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>SyncingProgressType | semux-js</title>
+	<title>LocalCreateResponse | semux-js</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -54,10 +54,10 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="syncingprogresstype.html">SyncingProgressType</a>
+					<a href="localcreateresponse.html">LocalCreateResponse</a>
 				</li>
 			</ul>
-			<h1>Interface SyncingProgressType</h1>
+			<h1>Interface LocalCreateResponse</h1>
 		</div>
 	</div>
 </header>
@@ -70,7 +70,7 @@
 						<dt>export</dt>
 						<dd></dd>
 						<dt>interface</dt>
-						<dd><p>SyncingProgressType</p>
+						<dd><p>LocalCreateResponse</p>
 						</dd>
 					</dl>
 				</div>
@@ -79,7 +79,12 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">SyncingProgressType</span>
+						<a href="apihandlerresponse.html" class="tsd-signature-type">ApiHandlerResponse</a>
+						<ul class="tsd-hierarchy">
+							<li>
+								<span class="target">LocalCreateResponse</span>
+							</li>
+						</ul>
 					</li>
 				</ul>
 			</section>
@@ -90,10 +95,9 @@
 						<section class="tsd-index-section tsd-is-external">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="syncingprogresstype.html#currentheight" class="tsd-kind-icon">current<wbr>Height</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="syncingprogresstype.html#startingheight" class="tsd-kind-icon">starting<wbr>Height</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="syncingprogresstype.html#syncing" class="tsd-kind-icon">syncing</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="syncingprogresstype.html#targetheight" class="tsd-kind-icon">target<wbr>Height</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="localcreateresponse.html#message" class="tsd-kind-icon">message</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-external"><a href="localcreateresponse.html#result" class="tsd-kind-icon">result</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="localcreateresponse.html#success" class="tsd-kind-icon">success</a></li>
 							</ul>
 						</section>
 					</div>
@@ -101,94 +105,70 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group tsd-is-external">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="currentheight" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> current<wbr>Height</h3>
-					<div class="tsd-signature tsd-kind-icon">current<wbr>Height<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+					<a name="message" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> message</h3>
+					<div class="tsd-signature tsd-kind-icon">message<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
+						<p>Inherited from <a href="apihandlerresponse.html">ApiHandlerResponse</a>.<a href="apihandlerresponse.html#message">message</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/ccdecdc/lib/api/api.ts#L546">lib/api/api.ts:546</a></li>
+							<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/605cef0/lib/api/api.ts#L168">lib/api/api.ts:168</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>The current block height</p>
+							<p>Success/error message</p>
 						</div>
 						<dl class="tsd-comment-tags">
 							<dt>type</dt>
 							<dd><p>{string}</p>
 							</dd>
 							<dt>memberof</dt>
-							<dd><p>SyncingProgressType</p>
+							<dd><p>ApiHandlerResponse</p>
 							</dd>
 						</dl>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="startingheight" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> starting<wbr>Height</h3>
-					<div class="tsd-signature tsd-kind-icon">starting<wbr>Height<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+					<a name="result" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> result</h3>
+					<div class="tsd-signature tsd-kind-icon">result<span class="tsd-signature-symbol">:</span> <a href="transactionresulttype.html" class="tsd-signature-type">TransactionResultType</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/ccdecdc/lib/api/api.ts#L540">lib/api/api.ts:540</a></li>
+							<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/605cef0/lib/api/api.ts#L1182">lib/api/api.ts:1182</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>The block height at which the sync started</p>
-						</div>
 						<dl class="tsd-comment-tags">
 							<dt>type</dt>
-							<dd><p>{string}</p>
+							<dd><p>{TransactionResultType}</p>
 							</dd>
 							<dt>memberof</dt>
-							<dd><p>SyncingProgressType</p>
+							<dd><p>LocalCreateResponse</p>
 							</dd>
 						</dl>
 					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="syncing" class="tsd-anchor"></a>
-					<h3>syncing</h3>
-					<div class="tsd-signature tsd-kind-icon">syncing<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+					<a name="success" class="tsd-anchor"></a>
+					<h3>success</h3>
+					<div class="tsd-signature tsd-kind-icon">success<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
 					<aside class="tsd-sources">
+						<p>Inherited from <a href="apihandlerresponse.html">ApiHandlerResponse</a>.<a href="apihandlerresponse.html#success">success</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/ccdecdc/lib/api/api.ts#L534">lib/api/api.ts:534</a></li>
+							<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/605cef0/lib/api/api.ts#L162">lib/api/api.ts:162</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Whether the node is syncing</p>
+							<p>Whether this operation was processed successfully</p>
 						</div>
 						<dl class="tsd-comment-tags">
 							<dt>type</dt>
 							<dd><p>{boolean}</p>
 							</dd>
 							<dt>memberof</dt>
-							<dd><p>SyncingProgressType</p>
-							</dd>
-						</dl>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-					<a name="targetheight" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> target<wbr>Height</h3>
-					<div class="tsd-signature tsd-kind-icon">target<wbr>Height<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/semuxproject/semux-js/blob/ccdecdc/lib/api/api.ts#L552">lib/api/api.ts:552</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>The target block height</p>
-						</div>
-						<dl class="tsd-comment-tags">
-							<dt>type</dt>
-							<dd><p>{string}</p>
-							</dd>
-							<dt>memberof</dt>
-							<dd><p>SyncingProgressType</p>
+							<dd><p>ApiHandlerResponse</p>
 							</dd>
 						</dl>
 					</div>
@@ -208,19 +188,16 @@
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-is-external">
-						<a href="syncingprogresstype.html" class="tsd-kind-icon">Syncing<wbr>Progress<wbr>Type</a>
+						<a href="localcreateresponse.html" class="tsd-kind-icon">Local<wbr>Create<wbr>Response</a>
 						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="syncingprogresstype.html#currentheight" class="tsd-kind-icon">current<wbr>Height</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+								<a href="localcreateresponse.html#message" class="tsd-kind-icon">message</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="syncingprogresstype.html#startingheight" class="tsd-kind-icon">starting<wbr>Height</a>
+								<a href="localcreateresponse.html#result" class="tsd-kind-icon">result</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="syncingprogresstype.html#syncing" class="tsd-kind-icon">syncing</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-external">
-								<a href="syncingprogresstype.html#targetheight" class="tsd-kind-icon">target<wbr>Height</a>
+							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
+								<a href="localcreateresponse.html#success" class="tsd-kind-icon">success</a>
 							</li>
 						</ul>
 					</li>

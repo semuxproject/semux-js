@@ -10348,504 +10348,14 @@ var TransactionType;
     })(TypeEnum = TransactionType.TypeEnum || (TransactionType.TypeEnum = {}));
 })(TransactionType || (TransactionType = {}));
 /**
- * SemuxApi - fetch parameter creator
+ * AccountApi - fetch parameter creator
  * @export
  */
-var SemuxApiFetchParamCreator = function (configuration) {
+var AccountApiFetchParamCreator = function (configuration) {
     return {
         /**
-         * Adds a node to node manager.
-         * @summary Add node
-         * @param {string} node Address of the node in host:port format
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        addNode: function (node, options) {
-            if (options === void 0) { options = {}; }
-            // verify required parameter 'node' is not null or undefined
-            if (node === null || node === undefined) {
-                throw new RequiredError('node', 'Required parameter node was null or undefined when calling addNode.');
-            }
-            var localVarPath = "/node";
-            var localVarUrlObj = url.parse(localVarPath, true);
-            var localVarRequestOptions = Object.assign({ method: 'POST' }, options);
-            var localVarHeaderParameter = {};
-            var localVarQueryParameter = {};
-            // authentication basicAuth required
-            // http basic authentication required
-            if (configuration && (configuration.username || configuration.password)) {
-                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
-            }
-            if (node !== undefined) {
-                localVarQueryParameter['node'] = node;
-            }
-            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
-            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-            delete localVarUrlObj.search;
-            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
-            return {
-                url: url.format(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * Adds an IP address to blacklist.
-         * @summary Add to blacklist
-         * @param {string} ip IP address
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        addToBlacklist: function (ip, options) {
-            if (options === void 0) { options = {}; }
-            // verify required parameter 'ip' is not null or undefined
-            if (ip === null || ip === undefined) {
-                throw new RequiredError('ip', 'Required parameter ip was null or undefined when calling addToBlacklist.');
-            }
-            var localVarPath = "/blacklist";
-            var localVarUrlObj = url.parse(localVarPath, true);
-            var localVarRequestOptions = Object.assign({ method: 'POST' }, options);
-            var localVarHeaderParameter = {};
-            var localVarQueryParameter = {};
-            // authentication basicAuth required
-            // http basic authentication required
-            if (configuration && (configuration.username || configuration.password)) {
-                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
-            }
-            if (ip !== undefined) {
-                localVarQueryParameter['ip'] = ip;
-            }
-            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
-            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-            delete localVarUrlObj.search;
-            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
-            return {
-                url: url.format(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * Adds an IP address to whitelist.
-         * @summary Add to whitelist
-         * @param {string} ip IP address
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        addToWhitelist: function (ip, options) {
-            if (options === void 0) { options = {}; }
-            // verify required parameter 'ip' is not null or undefined
-            if (ip === null || ip === undefined) {
-                throw new RequiredError('ip', 'Required parameter ip was null or undefined when calling addToWhitelist.');
-            }
-            var localVarPath = "/whitelist";
-            var localVarUrlObj = url.parse(localVarPath, true);
-            var localVarRequestOptions = Object.assign({ method: 'POST' }, options);
-            var localVarHeaderParameter = {};
-            var localVarQueryParameter = {};
-            // authentication basicAuth required
-            // http basic authentication required
-            if (configuration && (configuration.username || configuration.password)) {
-                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
-            }
-            if (ip !== undefined) {
-                localVarQueryParameter['ip'] = ip;
-            }
-            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
-            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-            delete localVarUrlObj.search;
-            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
-            return {
-                url: url.format(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * Broadcasts a raw transaction to the network.
-         * @summary Broadcast a raw transaction
-         * @param {string} raw Raw transaction encoded in hexadecimal string.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        broadcastRawTransaction: function (raw, options) {
-            if (options === void 0) { options = {}; }
-            // verify required parameter 'raw' is not null or undefined
-            if (raw === null || raw === undefined) {
-                throw new RequiredError('raw', 'Required parameter raw was null or undefined when calling broadcastRawTransaction.');
-            }
-            var localVarPath = "/transaction/raw";
-            var localVarUrlObj = url.parse(localVarPath, true);
-            var localVarRequestOptions = Object.assign({ method: 'POST' }, options);
-            var localVarHeaderParameter = {};
-            var localVarQueryParameter = {};
-            // authentication basicAuth required
-            // http basic authentication required
-            if (configuration && (configuration.username || configuration.password)) {
-                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
-            }
-            if (raw !== undefined) {
-                localVarQueryParameter['raw'] = raw;
-            }
-            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
-            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-            delete localVarUrlObj.search;
-            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
-            return {
-                url: url.format(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * Call a VM contract.
-         * @summary Call a contract.
-         * @param {string} from Sender&#39;s address. The address must exist in the wallet.data of this Semux node.
-         * @param {string} to Recipient&#39;s address (the contract address)
-         * @param {string} gas The gas limit for the call
-         * @param {string} gasPrice The gas price in nano SEM
-         * @param {string} [value] Amount of value to transfer in nano SEM
-         * @param {string} [nonce] Transaction nonce, default to sender&#39;s nonce if omitted
-         * @param {string} [data] Transaction data encoded in hexadecimal string
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        call: function (from, to, gas, gasPrice, value, nonce, data, options) {
-            if (options === void 0) { options = {}; }
-            // verify required parameter 'from' is not null or undefined
-            if (from === null || from === undefined) {
-                throw new RequiredError('from', 'Required parameter from was null or undefined when calling call.');
-            }
-            // verify required parameter 'to' is not null or undefined
-            if (to === null || to === undefined) {
-                throw new RequiredError('to', 'Required parameter to was null or undefined when calling call.');
-            }
-            // verify required parameter 'gas' is not null or undefined
-            if (gas === null || gas === undefined) {
-                throw new RequiredError('gas', 'Required parameter gas was null or undefined when calling call.');
-            }
-            // verify required parameter 'gasPrice' is not null or undefined
-            if (gasPrice === null || gasPrice === undefined) {
-                throw new RequiredError('gasPrice', 'Required parameter gasPrice was null or undefined when calling call.');
-            }
-            var localVarPath = "/transaction/call";
-            var localVarUrlObj = url.parse(localVarPath, true);
-            var localVarRequestOptions = Object.assign({ method: 'POST' }, options);
-            var localVarHeaderParameter = {};
-            var localVarQueryParameter = {};
-            // authentication basicAuth required
-            // http basic authentication required
-            if (configuration && (configuration.username || configuration.password)) {
-                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
-            }
-            if (from !== undefined) {
-                localVarQueryParameter['from'] = from;
-            }
-            if (to !== undefined) {
-                localVarQueryParameter['to'] = to;
-            }
-            if (value !== undefined) {
-                localVarQueryParameter['value'] = value;
-            }
-            if (nonce !== undefined) {
-                localVarQueryParameter['nonce'] = nonce;
-            }
-            if (data !== undefined) {
-                localVarQueryParameter['data'] = data;
-            }
-            if (gas !== undefined) {
-                localVarQueryParameter['gas'] = gas;
-            }
-            if (gasPrice !== undefined) {
-                localVarQueryParameter['gasPrice'] = gasPrice;
-            }
-            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
-            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-            delete localVarUrlObj.search;
-            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
-            return {
-                url: url.format(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * Compose an unsigned raw transaction then return its hexadecimal encoded string. An unsigned raw transaction can be signed using /sign-raw-transaction API.
-         * @summary Compose an unsigned raw transaction
-         * @param {&#39;MAINNET&#39; | &#39;TESTNET&#39; | &#39;DEVNET&#39;} network Network name
-         * @param {&#39;TRANSFER&#39; | &#39;DELEGATE&#39; | &#39;VOTE&#39; | &#39;UNVOTE&#39; | &#39;CREATE&#39; | &#39;CALL&#39;} type Transaction type
-         * @param {string} to Recipient&#39;s address
-         * @param {string} value Amount of value to transfer in nano SEM
-         * @param {string} [fee] Transaction fee in nano SEM, default to minimum fee if omitted
-         * @param {string} [nonce] Transaction nonce, default to sender&#39;s nonce if omitted
-         * @param {string} [timestamp] Transaction timestamp in milliseconds. Default to current time.
-         * @param {string} [data] Hexadecimal encoded transaction data.
-         * @param {string} [gas] The gas limit for the call
-         * @param {string} [gasPrice] The gas price
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        composeRawTransaction: function (network, type, to, value, fee, nonce, timestamp, data, gas, gasPrice, options) {
-            if (options === void 0) { options = {}; }
-            // verify required parameter 'network' is not null or undefined
-            if (network === null || network === undefined) {
-                throw new RequiredError('network', 'Required parameter network was null or undefined when calling composeRawTransaction.');
-            }
-            // verify required parameter 'type' is not null or undefined
-            if (type === null || type === undefined) {
-                throw new RequiredError('type', 'Required parameter type was null or undefined when calling composeRawTransaction.');
-            }
-            // verify required parameter 'to' is not null or undefined
-            if (to === null || to === undefined) {
-                throw new RequiredError('to', 'Required parameter to was null or undefined when calling composeRawTransaction.');
-            }
-            // verify required parameter 'value' is not null or undefined
-            if (value === null || value === undefined) {
-                throw new RequiredError('value', 'Required parameter value was null or undefined when calling composeRawTransaction.');
-            }
-            var localVarPath = "/compose-raw-transaction";
-            var localVarUrlObj = url.parse(localVarPath, true);
-            var localVarRequestOptions = Object.assign({ method: 'GET' }, options);
-            var localVarHeaderParameter = {};
-            var localVarQueryParameter = {};
-            // authentication basicAuth required
-            // http basic authentication required
-            if (configuration && (configuration.username || configuration.password)) {
-                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
-            }
-            if (network !== undefined) {
-                localVarQueryParameter['network'] = network;
-            }
-            if (type !== undefined) {
-                localVarQueryParameter['type'] = type;
-            }
-            if (to !== undefined) {
-                localVarQueryParameter['to'] = to;
-            }
-            if (value !== undefined) {
-                localVarQueryParameter['value'] = value;
-            }
-            if (fee !== undefined) {
-                localVarQueryParameter['fee'] = fee;
-            }
-            if (nonce !== undefined) {
-                localVarQueryParameter['nonce'] = nonce;
-            }
-            if (timestamp !== undefined) {
-                localVarQueryParameter['timestamp'] = timestamp;
-            }
-            if (data !== undefined) {
-                localVarQueryParameter['data'] = data;
-            }
-            if (gas !== undefined) {
-                localVarQueryParameter['gas'] = gas;
-            }
-            if (gasPrice !== undefined) {
-                localVarQueryParameter['gasPrice'] = gasPrice;
-            }
-            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
-            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-            delete localVarUrlObj.search;
-            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
-            return {
-                url: url.format(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * Create a VM contract.
-         * @summary Create a contract
-         * @param {string} from Sender&#39;s address. The address must exist in the wallet.data of this Semux node.
-         * @param {string} data The contract data encoded in hexadecimal string
-         * @param {string} gas The gas limit for the call
-         * @param {string} gasPrice The gas price
-         * @param {string} [value] Amount of SEM to transfer in nano SEM
-         * @param {string} [nonce] Transaction nonce, default to sender&#39;s nonce if omitted
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        create: function (from, data, gas, gasPrice, value, nonce, options) {
-            if (options === void 0) { options = {}; }
-            // verify required parameter 'from' is not null or undefined
-            if (from === null || from === undefined) {
-                throw new RequiredError('from', 'Required parameter from was null or undefined when calling create.');
-            }
-            // verify required parameter 'data' is not null or undefined
-            if (data === null || data === undefined) {
-                throw new RequiredError('data', 'Required parameter data was null or undefined when calling create.');
-            }
-            // verify required parameter 'gas' is not null or undefined
-            if (gas === null || gas === undefined) {
-                throw new RequiredError('gas', 'Required parameter gas was null or undefined when calling create.');
-            }
-            // verify required parameter 'gasPrice' is not null or undefined
-            if (gasPrice === null || gasPrice === undefined) {
-                throw new RequiredError('gasPrice', 'Required parameter gasPrice was null or undefined when calling create.');
-            }
-            var localVarPath = "/transaction/create";
-            var localVarUrlObj = url.parse(localVarPath, true);
-            var localVarRequestOptions = Object.assign({ method: 'POST' }, options);
-            var localVarHeaderParameter = {};
-            var localVarQueryParameter = {};
-            // authentication basicAuth required
-            // http basic authentication required
-            if (configuration && (configuration.username || configuration.password)) {
-                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
-            }
-            if (from !== undefined) {
-                localVarQueryParameter['from'] = from;
-            }
-            if (value !== undefined) {
-                localVarQueryParameter['value'] = value;
-            }
-            if (nonce !== undefined) {
-                localVarQueryParameter['nonce'] = nonce;
-            }
-            if (data !== undefined) {
-                localVarQueryParameter['data'] = data;
-            }
-            if (gas !== undefined) {
-                localVarQueryParameter['gas'] = gas;
-            }
-            if (gasPrice !== undefined) {
-                localVarQueryParameter['gasPrice'] = gasPrice;
-            }
-            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
-            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-            delete localVarUrlObj.search;
-            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
-            return {
-                url: url.format(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * Creates a new account by generating a new private key or importing an existing private key when parameter 'privateKey' is provided.
-         * @summary Create or import an account
-         * @param {string} [name] Assigned alias to the created account.
-         * @param {string} [privateKey] The private key to be imported, create a new key if omitted
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        createAccount: function (name, privateKey, options) {
-            if (options === void 0) { options = {}; }
-            var localVarPath = "/account";
-            var localVarUrlObj = url.parse(localVarPath, true);
-            var localVarRequestOptions = Object.assign({ method: 'POST' }, options);
-            var localVarHeaderParameter = {};
-            var localVarQueryParameter = {};
-            // authentication basicAuth required
-            // http basic authentication required
-            if (configuration && (configuration.username || configuration.password)) {
-                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
-            }
-            if (name !== undefined) {
-                localVarQueryParameter['name'] = name;
-            }
-            if (privateKey !== undefined) {
-                localVarQueryParameter['privateKey'] = privateKey;
-            }
-            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
-            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-            delete localVarUrlObj.search;
-            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
-            return {
-                url: url.format(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * Deletes an account from this wallet.
-         * @summary Delete account
-         * @param {string} address Address of the account
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        deleteAccount: function (address, options) {
-            if (options === void 0) { options = {}; }
-            // verify required parameter 'address' is not null or undefined
-            if (address === null || address === undefined) {
-                throw new RequiredError('address', 'Required parameter address was null or undefined when calling deleteAccount.');
-            }
-            var localVarPath = "/account";
-            var localVarUrlObj = url.parse(localVarPath, true);
-            var localVarRequestOptions = Object.assign({ method: 'DELETE' }, options);
-            var localVarHeaderParameter = {};
-            var localVarQueryParameter = {};
-            // authentication basicAuth required
-            // http basic authentication required
-            if (configuration && (configuration.username || configuration.password)) {
-                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
-            }
-            if (address !== undefined) {
-                localVarQueryParameter['address'] = address;
-            }
-            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
-            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-            delete localVarUrlObj.search;
-            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
-            return {
-                url: url.format(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * Estimate the gas usage of a transaction.
-         * @summary Estimate gas
-         * @param {string} to Recipient&#39;s address (the contract address)
-         * @param {string} [from] Sender&#39;s address. The address must exist in the wallet.data of this Semux node.
-         * @param {string} [value] Amount of value to transfer in nano SEM
-         * @param {string} [nonce] Transaction nonce, default to sender&#39;s nonce if omitted
-         * @param {string} [data] Transaction data encoded in hexadecimal string
-         * @param {string} [gas] The gas limit for the call
-         * @param {string} [gasPrice] The gas price in SEM
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        estimateGas: function (to, from, value, nonce, data, gas, gasPrice, options) {
-            if (options === void 0) { options = {}; }
-            // verify required parameter 'to' is not null or undefined
-            if (to === null || to === undefined) {
-                throw new RequiredError('to', 'Required parameter to was null or undefined when calling estimateGas.');
-            }
-            var localVarPath = "/estimate-gas";
-            var localVarUrlObj = url.parse(localVarPath, true);
-            var localVarRequestOptions = Object.assign({ method: 'GET' }, options);
-            var localVarHeaderParameter = {};
-            var localVarQueryParameter = {};
-            // authentication basicAuth required
-            // http basic authentication required
-            if (configuration && (configuration.username || configuration.password)) {
-                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
-            }
-            if (from !== undefined) {
-                localVarQueryParameter['from'] = from;
-            }
-            if (to !== undefined) {
-                localVarQueryParameter['to'] = to;
-            }
-            if (value !== undefined) {
-                localVarQueryParameter['value'] = value;
-            }
-            if (nonce !== undefined) {
-                localVarQueryParameter['nonce'] = nonce;
-            }
-            if (data !== undefined) {
-                localVarQueryParameter['data'] = data;
-            }
-            if (gas !== undefined) {
-                localVarQueryParameter['gas'] = gas;
-            }
-            if (gasPrice !== undefined) {
-                localVarQueryParameter['gasPrice'] = gasPrice;
-            }
-            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
-            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-            delete localVarUrlObj.search;
-            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
-            return {
-                url: url.format(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * Returns an account.
-         * @summary Get account
+         * Returns the basic information about an account.
+         * @summary Get account info
          * @param {string} address Address of account
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -10868,6 +10378,92 @@ var SemuxApiFetchParamCreator = function (configuration) {
             }
             if (address !== undefined) {
                 localVarQueryParameter['address'] = address;
+            }
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Returns the code of an account.
+         * @summary Get account code
+         * @param {string} address Address of account
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAccountCode: function (address, options) {
+            if (options === void 0) { options = {}; }
+            // verify required parameter 'address' is not null or undefined
+            if (address === null || address === undefined) {
+                throw new RequiredError('address', 'Required parameter address was null or undefined when calling getAccountCode.');
+            }
+            var localVarPath = "/account/code";
+            var localVarUrlObj = url.parse(localVarPath, true);
+            var localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            var localVarHeaderParameter = {};
+            var localVarQueryParameter = {};
+            // authentication basicAuth required
+            // http basic authentication required
+            if (configuration && (configuration.username || configuration.password)) {
+                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
+            }
+            if (address !== undefined) {
+                localVarQueryParameter['address'] = address;
+            }
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Returns internal transactions from/to an account.
+         * @summary Get account internal transactions
+         * @param {string} address Address of account
+         * @param {string} from Starting range of transactions
+         * @param {string} to Ending range of transactions
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAccountInternalTransactions: function (address, from, to, options) {
+            if (options === void 0) { options = {}; }
+            // verify required parameter 'address' is not null or undefined
+            if (address === null || address === undefined) {
+                throw new RequiredError('address', 'Required parameter address was null or undefined when calling getAccountInternalTransactions.');
+            }
+            // verify required parameter 'from' is not null or undefined
+            if (from === null || from === undefined) {
+                throw new RequiredError('from', 'Required parameter from was null or undefined when calling getAccountInternalTransactions.');
+            }
+            // verify required parameter 'to' is not null or undefined
+            if (to === null || to === undefined) {
+                throw new RequiredError('to', 'Required parameter to was null or undefined when calling getAccountInternalTransactions.');
+            }
+            var localVarPath = "/account/internal-transactions";
+            var localVarUrlObj = url.parse(localVarPath, true);
+            var localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            var localVarHeaderParameter = {};
+            var localVarQueryParameter = {};
+            // authentication basicAuth required
+            // http basic authentication required
+            if (configuration && (configuration.username || configuration.password)) {
+                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
+            }
+            if (address !== undefined) {
+                localVarQueryParameter['address'] = address;
+            }
+            if (from !== undefined) {
+                localVarQueryParameter['from'] = from;
+            }
+            if (to !== undefined) {
+                localVarQueryParameter['to'] = to;
             }
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
@@ -10919,6 +10515,49 @@ var SemuxApiFetchParamCreator = function (configuration) {
             }
             if (to !== undefined) {
                 localVarQueryParameter['to'] = to;
+            }
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Returns the storage value mapped to the given key of an account.
+         * @summary Get account storage
+         * @param {string} address Address of account
+         * @param {string} key The storage key
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAccountStorage: function (address, key, options) {
+            if (options === void 0) { options = {}; }
+            // verify required parameter 'address' is not null or undefined
+            if (address === null || address === undefined) {
+                throw new RequiredError('address', 'Required parameter address was null or undefined when calling getAccountStorage.');
+            }
+            // verify required parameter 'key' is not null or undefined
+            if (key === null || key === undefined) {
+                throw new RequiredError('key', 'Required parameter key was null or undefined when calling getAccountStorage.');
+            }
+            var localVarPath = "/account/storage";
+            var localVarUrlObj = url.parse(localVarPath, true);
+            var localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            var localVarHeaderParameter = {};
+            var localVarQueryParameter = {};
+            // authentication basicAuth required
+            // http basic authentication required
+            if (configuration && (configuration.username || configuration.password)) {
+                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
+            }
+            if (address !== undefined) {
+                localVarQueryParameter['address'] = address;
+            }
+            if (key !== undefined) {
+                localVarQueryParameter['key'] = key;
             }
             localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
             // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
@@ -11015,6 +10654,280 @@ var SemuxApiFetchParamCreator = function (configuration) {
                 options: localVarRequestOptions,
             };
         },
+    };
+};
+/**
+ * AccountApi - functional programming interface
+ * @export
+ */
+var AccountApiFp = function (configuration) {
+    return {
+        /**
+         * Returns the basic information about an account.
+         * @summary Get account info
+         * @param {string} address Address of account
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAccount: function (address, options) {
+            var localVarFetchArgs = AccountApiFetchParamCreator(configuration).getAccount(address, options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Returns the code of an account.
+         * @summary Get account code
+         * @param {string} address Address of account
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAccountCode: function (address, options) {
+            var localVarFetchArgs = AccountApiFetchParamCreator(configuration).getAccountCode(address, options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Returns internal transactions from/to an account.
+         * @summary Get account internal transactions
+         * @param {string} address Address of account
+         * @param {string} from Starting range of transactions
+         * @param {string} to Ending range of transactions
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAccountInternalTransactions: function (address, from, to, options) {
+            var localVarFetchArgs = AccountApiFetchParamCreator(configuration).getAccountInternalTransactions(address, from, to, options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Returns pending transactions from/to an account.
+         * @summary Get pending transactions of the account
+         * @param {string} address Address of account
+         * @param {string} from Starting range of transactions
+         * @param {string} to Ending range of transactions
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAccountPendingTransactions: function (address, from, to, options) {
+            var localVarFetchArgs = AccountApiFetchParamCreator(configuration).getAccountPendingTransactions(address, from, to, options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Returns the storage value mapped to the given key of an account.
+         * @summary Get account storage
+         * @param {string} address Address of account
+         * @param {string} key The storage key
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAccountStorage: function (address, key, options) {
+            var localVarFetchArgs = AccountApiFetchParamCreator(configuration).getAccountStorage(address, key, options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Returns transactions from/to an account.
+         * @summary Get account transactions
+         * @param {string} address Address of account
+         * @param {string} from Starting range of transactions
+         * @param {string} to Ending range of transactions
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAccountTransactions: function (address, from, to, options) {
+            var localVarFetchArgs = AccountApiFetchParamCreator(configuration).getAccountTransactions(address, from, to, options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Returns votes from the account.
+         * @summary Get account votes
+         * @param {string} address Address of account
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAccountVotes: function (address, options) {
+            var localVarFetchArgs = AccountApiFetchParamCreator(configuration).getAccountVotes(address, options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+    };
+};
+/**
+ * AccountApi - object-oriented interface
+ * @export
+ * @class AccountApi
+ * @extends {BaseAPI}
+ */
+var AccountApi = /** @class */ (function (_super) {
+    __extends(AccountApi, _super);
+    function AccountApi() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    /**
+     * Returns the basic information about an account.
+     * @summary Get account info
+     * @param {} address Address of account
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountApi
+     */
+    AccountApi.prototype.getAccount = function (address, options) {
+        return AccountApiFp(this.configuration).getAccount(address, options)(this.fetch, this.basePath);
+    };
+    /**
+     * Returns the code of an account.
+     * @summary Get account code
+     * @param {} address Address of account
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountApi
+     */
+    AccountApi.prototype.getAccountCode = function (address, options) {
+        return AccountApiFp(this.configuration).getAccountCode(address, options)(this.fetch, this.basePath);
+    };
+    /**
+     * Returns internal transactions from/to an account.
+     * @summary Get account internal transactions
+     * @param {} address Address of account
+     * @param {} from Starting range of transactions
+     * @param {} to Ending range of transactions
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountApi
+     */
+    AccountApi.prototype.getAccountInternalTransactions = function (address, from, to, options) {
+        return AccountApiFp(this.configuration).getAccountInternalTransactions(address, from, to, options)(this.fetch, this.basePath);
+    };
+    /**
+     * Returns pending transactions from/to an account.
+     * @summary Get pending transactions of the account
+     * @param {} address Address of account
+     * @param {} from Starting range of transactions
+     * @param {} to Ending range of transactions
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountApi
+     */
+    AccountApi.prototype.getAccountPendingTransactions = function (address, from, to, options) {
+        return AccountApiFp(this.configuration).getAccountPendingTransactions(address, from, to, options)(this.fetch, this.basePath);
+    };
+    /**
+     * Returns the storage value mapped to the given key of an account.
+     * @summary Get account storage
+     * @param {} address Address of account
+     * @param {} key The storage key
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountApi
+     */
+    AccountApi.prototype.getAccountStorage = function (address, key, options) {
+        return AccountApiFp(this.configuration).getAccountStorage(address, key, options)(this.fetch, this.basePath);
+    };
+    /**
+     * Returns transactions from/to an account.
+     * @summary Get account transactions
+     * @param {} address Address of account
+     * @param {} from Starting range of transactions
+     * @param {} to Ending range of transactions
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountApi
+     */
+    AccountApi.prototype.getAccountTransactions = function (address, from, to, options) {
+        return AccountApiFp(this.configuration).getAccountTransactions(address, from, to, options)(this.fetch, this.basePath);
+    };
+    /**
+     * Returns votes from the account.
+     * @summary Get account votes
+     * @param {} address Address of account
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AccountApi
+     */
+    AccountApi.prototype.getAccountVotes = function (address, options) {
+        return AccountApiFp(this.configuration).getAccountVotes(address, options)(this.fetch, this.basePath);
+    };
+    return AccountApi;
+}(BaseAPI));
+/**
+ * BlockchainApi - fetch parameter creator
+ * @export
+ */
+var BlockchainApiFetchParamCreator = function (configuration) {
+    return {
         /**
          * Returns a block by block hash.
          * @summary Get block by hash
@@ -11086,97 +10999,8 @@ var SemuxApiFetchParamCreator = function (configuration) {
             };
         },
         /**
-         * Returns a delegate.
-         * @summary Get a delegate
-         * @param {string} address Delegate address
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getDelegate: function (address, options) {
-            if (options === void 0) { options = {}; }
-            // verify required parameter 'address' is not null or undefined
-            if (address === null || address === undefined) {
-                throw new RequiredError('address', 'Required parameter address was null or undefined when calling getDelegate.');
-            }
-            var localVarPath = "/delegate";
-            var localVarUrlObj = url.parse(localVarPath, true);
-            var localVarRequestOptions = Object.assign({ method: 'GET' }, options);
-            var localVarHeaderParameter = {};
-            var localVarQueryParameter = {};
-            // authentication basicAuth required
-            // http basic authentication required
-            if (configuration && (configuration.username || configuration.password)) {
-                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
-            }
-            if (address !== undefined) {
-                localVarQueryParameter['address'] = address;
-            }
-            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
-            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-            delete localVarUrlObj.search;
-            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
-            return {
-                url: url.format(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * Returns a list of delegates.
-         * @summary Get all delegates
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getDelegates: function (options) {
-            if (options === void 0) { options = {}; }
-            var localVarPath = "/delegates";
-            var localVarUrlObj = url.parse(localVarPath, true);
-            var localVarRequestOptions = Object.assign({ method: 'GET' }, options);
-            var localVarHeaderParameter = {};
-            var localVarQueryParameter = {};
-            // authentication basicAuth required
-            // http basic authentication required
-            if (configuration && (configuration.username || configuration.password)) {
-                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
-            }
-            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
-            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-            delete localVarUrlObj.search;
-            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
-            return {
-                url: url.format(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * Returns kernel info.
-         * @summary Get info
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getInfo: function (options) {
-            if (options === void 0) { options = {}; }
-            var localVarPath = "/info";
-            var localVarUrlObj = url.parse(localVarPath, true);
-            var localVarRequestOptions = Object.assign({ method: 'GET' }, options);
-            var localVarHeaderParameter = {};
-            var localVarQueryParameter = {};
-            // authentication basicAuth required
-            // http basic authentication required
-            if (configuration && (configuration.username || configuration.password)) {
-                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
-            }
-            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
-            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-            delete localVarUrlObj.search;
-            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
-            return {
-                url: url.format(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
          * Returns the latest block.
-         * @summary Get latest block
+         * @summary Get the latest block
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -11203,94 +11027,13 @@ var SemuxApiFetchParamCreator = function (configuration) {
         },
         /**
          * Returns the number of the latest block.
-         * @summary Get latest block number
+         * @summary Get the number of the latest block
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         getLatestBlockNumber: function (options) {
             if (options === void 0) { options = {}; }
             var localVarPath = "/latest-block-number";
-            var localVarUrlObj = url.parse(localVarPath, true);
-            var localVarRequestOptions = Object.assign({ method: 'GET' }, options);
-            var localVarHeaderParameter = {};
-            var localVarQueryParameter = {};
-            // authentication basicAuth required
-            // http basic authentication required
-            if (configuration && (configuration.username || configuration.password)) {
-                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
-            }
-            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
-            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-            delete localVarUrlObj.search;
-            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
-            return {
-                url: url.format(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * Returns connected peers.
-         * @summary Get peers
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getPeers: function (options) {
-            if (options === void 0) { options = {}; }
-            var localVarPath = "/peers";
-            var localVarUrlObj = url.parse(localVarPath, true);
-            var localVarRequestOptions = Object.assign({ method: 'GET' }, options);
-            var localVarHeaderParameter = {};
-            var localVarQueryParameter = {};
-            // authentication basicAuth required
-            // http basic authentication required
-            if (configuration && (configuration.username || configuration.password)) {
-                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
-            }
-            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
-            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-            delete localVarUrlObj.search;
-            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
-            return {
-                url: url.format(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * Returns all the pending transactions.
-         * @summary Get pending transactions
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getPendingTransactions: function (options) {
-            if (options === void 0) { options = {}; }
-            var localVarPath = "/pending-transactions";
-            var localVarUrlObj = url.parse(localVarPath, true);
-            var localVarRequestOptions = Object.assign({ method: 'GET' }, options);
-            var localVarHeaderParameter = {};
-            var localVarQueryParameter = {};
-            // authentication basicAuth required
-            // http basic authentication required
-            if (configuration && (configuration.username || configuration.password)) {
-                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
-            }
-            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
-            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-            delete localVarUrlObj.search;
-            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
-            return {
-                url: url.format(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * Returns an object with data about the sync status
-         * @summary Get syncing progress
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getSyncingProgress: function (options) {
-            if (options === void 0) { options = {}; }
-            var localVarPath = "/syncing";
             var localVarUrlObj = url.parse(localVarPath, true);
             var localVarRequestOptions = Object.assign({ method: 'GET' }, options);
             var localVarHeaderParameter = {};
@@ -11414,9 +11157,327 @@ var SemuxApiFetchParamCreator = function (configuration) {
                 options: localVarRequestOptions,
             };
         },
+    };
+};
+/**
+ * BlockchainApi - functional programming interface
+ * @export
+ */
+var BlockchainApiFp = function (configuration) {
+    return {
+        /**
+         * Returns a block by block hash.
+         * @summary Get block by hash
+         * @param {string} hash Hash of block
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getBlockByHash: function (hash, options) {
+            var localVarFetchArgs = BlockchainApiFetchParamCreator(configuration).getBlockByHash(hash, options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Returns a block by block number.
+         * @summary Get block by number
+         * @param {string} number Number of block
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getBlockByNumber: function (number, options) {
+            var localVarFetchArgs = BlockchainApiFetchParamCreator(configuration).getBlockByNumber(number, options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Returns the latest block.
+         * @summary Get the latest block
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getLatestBlock: function (options) {
+            var localVarFetchArgs = BlockchainApiFetchParamCreator(configuration).getLatestBlock(options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Returns the number of the latest block.
+         * @summary Get the number of the latest block
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getLatestBlockNumber: function (options) {
+            var localVarFetchArgs = BlockchainApiFetchParamCreator(configuration).getLatestBlockNumber(options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Returns a transactions if exists.
+         * @summary Get transaction
+         * @param {string} hash Transaction hash
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getTransaction: function (hash, options) {
+            var localVarFetchArgs = BlockchainApiFetchParamCreator(configuration).getTransaction(hash, options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Returns transaction limitations including minimum transaction fee and maximum transaction size.
+         * @summary Get transaction limits
+         * @param {&#39;COINBASE&#39; | &#39;TRANSFER&#39; | &#39;DELEGATE&#39; | &#39;VOTE&#39; | &#39;UNVOTE&#39; | &#39;CREATE&#39; | &#39;CALL&#39;} type Type of transaction
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getTransactionLimits: function (type, options) {
+            var localVarFetchArgs = BlockchainApiFetchParamCreator(configuration).getTransactionLimits(type, options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Returns the result of the requested transaction.
+         * @summary Get transaction result
+         * @param {string} hash Transaction hash
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getTransactionResult: function (hash, options) {
+            var localVarFetchArgs = BlockchainApiFetchParamCreator(configuration).getTransactionResult(hash, options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+    };
+};
+/**
+ * BlockchainApi - object-oriented interface
+ * @export
+ * @class BlockchainApi
+ * @extends {BaseAPI}
+ */
+var BlockchainApi = /** @class */ (function (_super) {
+    __extends(BlockchainApi, _super);
+    function BlockchainApi() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    /**
+     * Returns a block by block hash.
+     * @summary Get block by hash
+     * @param {} hash Hash of block
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BlockchainApi
+     */
+    BlockchainApi.prototype.getBlockByHash = function (hash, options) {
+        return BlockchainApiFp(this.configuration).getBlockByHash(hash, options)(this.fetch, this.basePath);
+    };
+    /**
+     * Returns a block by block number.
+     * @summary Get block by number
+     * @param {} number Number of block
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BlockchainApi
+     */
+    BlockchainApi.prototype.getBlockByNumber = function (number, options) {
+        return BlockchainApiFp(this.configuration).getBlockByNumber(number, options)(this.fetch, this.basePath);
+    };
+    /**
+     * Returns the latest block.
+     * @summary Get the latest block
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BlockchainApi
+     */
+    BlockchainApi.prototype.getLatestBlock = function (options) {
+        return BlockchainApiFp(this.configuration).getLatestBlock(options)(this.fetch, this.basePath);
+    };
+    /**
+     * Returns the number of the latest block.
+     * @summary Get the number of the latest block
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BlockchainApi
+     */
+    BlockchainApi.prototype.getLatestBlockNumber = function (options) {
+        return BlockchainApiFp(this.configuration).getLatestBlockNumber(options)(this.fetch, this.basePath);
+    };
+    /**
+     * Returns a transactions if exists.
+     * @summary Get transaction
+     * @param {} hash Transaction hash
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BlockchainApi
+     */
+    BlockchainApi.prototype.getTransaction = function (hash, options) {
+        return BlockchainApiFp(this.configuration).getTransaction(hash, options)(this.fetch, this.basePath);
+    };
+    /**
+     * Returns transaction limitations including minimum transaction fee and maximum transaction size.
+     * @summary Get transaction limits
+     * @param {} type Type of transaction
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BlockchainApi
+     */
+    BlockchainApi.prototype.getTransactionLimits = function (type, options) {
+        return BlockchainApiFp(this.configuration).getTransactionLimits(type, options)(this.fetch, this.basePath);
+    };
+    /**
+     * Returns the result of the requested transaction.
+     * @summary Get transaction result
+     * @param {} hash Transaction hash
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BlockchainApi
+     */
+    BlockchainApi.prototype.getTransactionResult = function (hash, options) {
+        return BlockchainApiFp(this.configuration).getTransactionResult(hash, options)(this.fetch, this.basePath);
+    };
+    return BlockchainApi;
+}(BaseAPI));
+/**
+ * DelegateApi - fetch parameter creator
+ * @export
+ */
+var DelegateApiFetchParamCreator = function (configuration) {
+    return {
+        /**
+         * Returns the information about delegate.
+         * @summary Get delegate info
+         * @param {string} address Delegate address
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getDelegate: function (address, options) {
+            if (options === void 0) { options = {}; }
+            // verify required parameter 'address' is not null or undefined
+            if (address === null || address === undefined) {
+                throw new RequiredError('address', 'Required parameter address was null or undefined when calling getDelegate.');
+            }
+            var localVarPath = "/delegate";
+            var localVarUrlObj = url.parse(localVarPath, true);
+            var localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            var localVarHeaderParameter = {};
+            var localVarQueryParameter = {};
+            // authentication basicAuth required
+            // http basic authentication required
+            if (configuration && (configuration.username || configuration.password)) {
+                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
+            }
+            if (address !== undefined) {
+                localVarQueryParameter['address'] = address;
+            }
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Returns a list of delegates.
+         * @summary Get all delegates
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getDelegates: function (options) {
+            if (options === void 0) { options = {}; }
+            var localVarPath = "/delegates";
+            var localVarUrlObj = url.parse(localVarPath, true);
+            var localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            var localVarHeaderParameter = {};
+            var localVarQueryParameter = {};
+            // authentication basicAuth required
+            // http basic authentication required
+            if (configuration && (configuration.username || configuration.password)) {
+                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
+            }
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
         /**
          * Returns a list of validators in Semux addresses.
-         * @summary Get validators
+         * @summary Get all validators
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -11443,7 +11504,7 @@ var SemuxApiFetchParamCreator = function (configuration) {
         },
         /**
          * Returns the vote from a voter to a delegate.
-         * @summary Get vote
+         * @summary Get the vote between a delegate and a voter
          * @param {string} delegate Delegate address
          * @param {string} voter Voter address
          * @param {*} [options] Override http request option.
@@ -11486,7 +11547,7 @@ var SemuxApiFetchParamCreator = function (configuration) {
         },
         /**
          * Returns all the votes to a delegate as a map of [voter address] => [votes]
-         * @summary Get a delegate's votes
+         * @summary Get all votes of a delegate
          * @param {string} delegate Delegate address
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -11519,15 +11580,312 @@ var SemuxApiFetchParamCreator = function (configuration) {
                 options: localVarRequestOptions,
             };
         },
+    };
+};
+/**
+ * DelegateApi - functional programming interface
+ * @export
+ */
+var DelegateApiFp = function (configuration) {
+    return {
         /**
-         * Returns accounts in the wallet.
-         * @summary List accounts
+         * Returns the information about delegate.
+         * @summary Get delegate info
+         * @param {string} address Delegate address
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listAccounts: function (options) {
+        getDelegate: function (address, options) {
+            var localVarFetchArgs = DelegateApiFetchParamCreator(configuration).getDelegate(address, options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Returns a list of delegates.
+         * @summary Get all delegates
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getDelegates: function (options) {
+            var localVarFetchArgs = DelegateApiFetchParamCreator(configuration).getDelegates(options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Returns a list of validators in Semux addresses.
+         * @summary Get all validators
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getValidators: function (options) {
+            var localVarFetchArgs = DelegateApiFetchParamCreator(configuration).getValidators(options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Returns the vote from a voter to a delegate.
+         * @summary Get the vote between a delegate and a voter
+         * @param {string} delegate Delegate address
+         * @param {string} voter Voter address
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getVote: function (delegate, voter, options) {
+            var localVarFetchArgs = DelegateApiFetchParamCreator(configuration).getVote(delegate, voter, options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Returns all the votes to a delegate as a map of [voter address] => [votes]
+         * @summary Get all votes of a delegate
+         * @param {string} delegate Delegate address
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getVotes: function (delegate, options) {
+            var localVarFetchArgs = DelegateApiFetchParamCreator(configuration).getVotes(delegate, options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+    };
+};
+/**
+ * DelegateApi - object-oriented interface
+ * @export
+ * @class DelegateApi
+ * @extends {BaseAPI}
+ */
+var DelegateApi = /** @class */ (function (_super) {
+    __extends(DelegateApi, _super);
+    function DelegateApi() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    /**
+     * Returns the information about delegate.
+     * @summary Get delegate info
+     * @param {} address Delegate address
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DelegateApi
+     */
+    DelegateApi.prototype.getDelegate = function (address, options) {
+        return DelegateApiFp(this.configuration).getDelegate(address, options)(this.fetch, this.basePath);
+    };
+    /**
+     * Returns a list of delegates.
+     * @summary Get all delegates
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DelegateApi
+     */
+    DelegateApi.prototype.getDelegates = function (options) {
+        return DelegateApiFp(this.configuration).getDelegates(options)(this.fetch, this.basePath);
+    };
+    /**
+     * Returns a list of validators in Semux addresses.
+     * @summary Get all validators
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DelegateApi
+     */
+    DelegateApi.prototype.getValidators = function (options) {
+        return DelegateApiFp(this.configuration).getValidators(options)(this.fetch, this.basePath);
+    };
+    /**
+     * Returns the vote from a voter to a delegate.
+     * @summary Get the vote between a delegate and a voter
+     * @param {} delegate Delegate address
+     * @param {} voter Voter address
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DelegateApi
+     */
+    DelegateApi.prototype.getVote = function (delegate, voter, options) {
+        return DelegateApiFp(this.configuration).getVote(delegate, voter, options)(this.fetch, this.basePath);
+    };
+    /**
+     * Returns all the votes to a delegate as a map of [voter address] => [votes]
+     * @summary Get all votes of a delegate
+     * @param {} delegate Delegate address
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DelegateApi
+     */
+    DelegateApi.prototype.getVotes = function (delegate, options) {
+        return DelegateApiFp(this.configuration).getVotes(delegate, options)(this.fetch, this.basePath);
+    };
+    return DelegateApi;
+}(BaseAPI));
+/**
+ * NodeApi - fetch parameter creator
+ * @export
+ */
+var NodeApiFetchParamCreator = function (configuration) {
+    return {
+        /**
+         * Adds a node to node manager.
+         * @summary Add a node to connect
+         * @param {string} node Address of the node in host:port format
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        addNode: function (node, options) {
             if (options === void 0) { options = {}; }
-            var localVarPath = "/accounts";
+            // verify required parameter 'node' is not null or undefined
+            if (node === null || node === undefined) {
+                throw new RequiredError('node', 'Required parameter node was null or undefined when calling addNode.');
+            }
+            var localVarPath = "/node";
+            var localVarUrlObj = url.parse(localVarPath, true);
+            var localVarRequestOptions = Object.assign({ method: 'POST' }, options);
+            var localVarHeaderParameter = {};
+            var localVarQueryParameter = {};
+            // authentication basicAuth required
+            // http basic authentication required
+            if (configuration && (configuration.username || configuration.password)) {
+                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
+            }
+            if (node !== undefined) {
+                localVarQueryParameter['node'] = node;
+            }
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Adds an IP address to blacklist.
+         * @summary Add an IP to blacklist
+         * @param {string} ip IP address
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        addToBlacklist: function (ip, options) {
+            if (options === void 0) { options = {}; }
+            // verify required parameter 'ip' is not null or undefined
+            if (ip === null || ip === undefined) {
+                throw new RequiredError('ip', 'Required parameter ip was null or undefined when calling addToBlacklist.');
+            }
+            var localVarPath = "/blacklist";
+            var localVarUrlObj = url.parse(localVarPath, true);
+            var localVarRequestOptions = Object.assign({ method: 'POST' }, options);
+            var localVarHeaderParameter = {};
+            var localVarQueryParameter = {};
+            // authentication basicAuth required
+            // http basic authentication required
+            if (configuration && (configuration.username || configuration.password)) {
+                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
+            }
+            if (ip !== undefined) {
+                localVarQueryParameter['ip'] = ip;
+            }
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Adds an IP address to whitelist.
+         * @summary Add an IP to whitelist
+         * @param {string} ip IP address
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        addToWhitelist: function (ip, options) {
+            if (options === void 0) { options = {}; }
+            // verify required parameter 'ip' is not null or undefined
+            if (ip === null || ip === undefined) {
+                throw new RequiredError('ip', 'Required parameter ip was null or undefined when calling addToWhitelist.');
+            }
+            var localVarPath = "/whitelist";
+            var localVarUrlObj = url.parse(localVarPath, true);
+            var localVarRequestOptions = Object.assign({ method: 'POST' }, options);
+            var localVarHeaderParameter = {};
+            var localVarQueryParameter = {};
+            // authentication basicAuth required
+            // http basic authentication required
+            if (configuration && (configuration.username || configuration.password)) {
+                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
+            }
+            if (ip !== undefined) {
+                localVarQueryParameter['ip'] = ip;
+            }
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Returns kernel info.
+         * @summary Get node info
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getInfo: function (options) {
+            if (options === void 0) { options = {}; }
+            var localVarPath = "/info";
             var localVarUrlObj = url.parse(localVarPath, true);
             var localVarRequestOptions = Object.assign({ method: 'GET' }, options);
             var localVarHeaderParameter = {};
@@ -11547,27 +11905,992 @@ var SemuxApiFetchParamCreator = function (configuration) {
             };
         },
         /**
-         * Executes a new message call immediately without creating a transaction on the block chain.
-         * @summary Make a local call
-         * @param {string} to Recipient&#39;s address (the contract address)
-         * @param {string} [from] Sender&#39;s address. The address must exist in the wallet.data of this Semux node.
-         * @param {string} [value] Amount of value to transfer in nano SEM
-         * @param {string} [nonce] Transaction nonce, default to sender&#39;s nonce if omitted
-         * @param {string} [data] Transaction data encoded in hexadecimal string
-         * @param {string} [gas] The gas limit for the call
-         * @param {string} [gasPrice] The gas price in nanoSEM
+         * Returns all connected peers.
+         * @summary Get all peers
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        localCall: function (to, from, value, nonce, data, gas, gasPrice, options) {
+        getPeers: function (options) {
+            if (options === void 0) { options = {}; }
+            var localVarPath = "/peers";
+            var localVarUrlObj = url.parse(localVarPath, true);
+            var localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            var localVarHeaderParameter = {};
+            var localVarQueryParameter = {};
+            // authentication basicAuth required
+            // http basic authentication required
+            if (configuration && (configuration.username || configuration.password)) {
+                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
+            }
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Returns all the pending transactions.
+         * @summary Get pending transactions
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getPendingTransactions: function (options) {
+            if (options === void 0) { options = {}; }
+            var localVarPath = "/pending-transactions";
+            var localVarUrlObj = url.parse(localVarPath, true);
+            var localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            var localVarHeaderParameter = {};
+            var localVarQueryParameter = {};
+            // authentication basicAuth required
+            // http basic authentication required
+            if (configuration && (configuration.username || configuration.password)) {
+                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
+            }
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Returns an object with data about the sync status
+         * @summary Get syncing status
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSyncingStatus: function (options) {
+            if (options === void 0) { options = {}; }
+            var localVarPath = "/syncing-status";
+            var localVarUrlObj = url.parse(localVarPath, true);
+            var localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            var localVarHeaderParameter = {};
+            var localVarQueryParameter = {};
+            // authentication basicAuth required
+            // http basic authentication required
+            if (configuration && (configuration.username || configuration.password)) {
+                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
+            }
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    };
+};
+/**
+ * NodeApi - functional programming interface
+ * @export
+ */
+var NodeApiFp = function (configuration) {
+    return {
+        /**
+         * Adds a node to node manager.
+         * @summary Add a node to connect
+         * @param {string} node Address of the node in host:port format
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        addNode: function (node, options) {
+            var localVarFetchArgs = NodeApiFetchParamCreator(configuration).addNode(node, options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Adds an IP address to blacklist.
+         * @summary Add an IP to blacklist
+         * @param {string} ip IP address
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        addToBlacklist: function (ip, options) {
+            var localVarFetchArgs = NodeApiFetchParamCreator(configuration).addToBlacklist(ip, options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Adds an IP address to whitelist.
+         * @summary Add an IP to whitelist
+         * @param {string} ip IP address
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        addToWhitelist: function (ip, options) {
+            var localVarFetchArgs = NodeApiFetchParamCreator(configuration).addToWhitelist(ip, options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Returns kernel info.
+         * @summary Get node info
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getInfo: function (options) {
+            var localVarFetchArgs = NodeApiFetchParamCreator(configuration).getInfo(options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Returns all connected peers.
+         * @summary Get all peers
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getPeers: function (options) {
+            var localVarFetchArgs = NodeApiFetchParamCreator(configuration).getPeers(options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Returns all the pending transactions.
+         * @summary Get pending transactions
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getPendingTransactions: function (options) {
+            var localVarFetchArgs = NodeApiFetchParamCreator(configuration).getPendingTransactions(options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Returns an object with data about the sync status
+         * @summary Get syncing status
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSyncingStatus: function (options) {
+            var localVarFetchArgs = NodeApiFetchParamCreator(configuration).getSyncingStatus(options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+    };
+};
+/**
+ * NodeApi - object-oriented interface
+ * @export
+ * @class NodeApi
+ * @extends {BaseAPI}
+ */
+var NodeApi = /** @class */ (function (_super) {
+    __extends(NodeApi, _super);
+    function NodeApi() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    /**
+     * Adds a node to node manager.
+     * @summary Add a node to connect
+     * @param {} node Address of the node in host:port format
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof NodeApi
+     */
+    NodeApi.prototype.addNode = function (node, options) {
+        return NodeApiFp(this.configuration).addNode(node, options)(this.fetch, this.basePath);
+    };
+    /**
+     * Adds an IP address to blacklist.
+     * @summary Add an IP to blacklist
+     * @param {} ip IP address
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof NodeApi
+     */
+    NodeApi.prototype.addToBlacklist = function (ip, options) {
+        return NodeApiFp(this.configuration).addToBlacklist(ip, options)(this.fetch, this.basePath);
+    };
+    /**
+     * Adds an IP address to whitelist.
+     * @summary Add an IP to whitelist
+     * @param {} ip IP address
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof NodeApi
+     */
+    NodeApi.prototype.addToWhitelist = function (ip, options) {
+        return NodeApiFp(this.configuration).addToWhitelist(ip, options)(this.fetch, this.basePath);
+    };
+    /**
+     * Returns kernel info.
+     * @summary Get node info
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof NodeApi
+     */
+    NodeApi.prototype.getInfo = function (options) {
+        return NodeApiFp(this.configuration).getInfo(options)(this.fetch, this.basePath);
+    };
+    /**
+     * Returns all connected peers.
+     * @summary Get all peers
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof NodeApi
+     */
+    NodeApi.prototype.getPeers = function (options) {
+        return NodeApiFp(this.configuration).getPeers(options)(this.fetch, this.basePath);
+    };
+    /**
+     * Returns all the pending transactions.
+     * @summary Get pending transactions
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof NodeApi
+     */
+    NodeApi.prototype.getPendingTransactions = function (options) {
+        return NodeApiFp(this.configuration).getPendingTransactions(options)(this.fetch, this.basePath);
+    };
+    /**
+     * Returns an object with data about the sync status
+     * @summary Get syncing status
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof NodeApi
+     */
+    NodeApi.prototype.getSyncingStatus = function (options) {
+        return NodeApiFp(this.configuration).getSyncingStatus(options)(this.fetch, this.basePath);
+    };
+    return NodeApi;
+}(BaseAPI));
+/**
+ * ToolApi - fetch parameter creator
+ * @export
+ */
+var ToolApiFetchParamCreator = function (configuration) {
+    return {
+        /**
+         * Broadcasts a signed raw transaction to the network.
+         * @summary Broadcast a raw transaction
+         * @param {string} raw Raw transaction encoded in hexadecimal string.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        broadcastRawTransaction: function (raw, options) {
+            if (options === void 0) { options = {}; }
+            // verify required parameter 'raw' is not null or undefined
+            if (raw === null || raw === undefined) {
+                throw new RequiredError('raw', 'Required parameter raw was null or undefined when calling broadcastRawTransaction.');
+            }
+            var localVarPath = "/broadcast-raw-transaction";
+            var localVarUrlObj = url.parse(localVarPath, true);
+            var localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            var localVarHeaderParameter = {};
+            var localVarQueryParameter = {};
+            // authentication basicAuth required
+            // http basic authentication required
+            if (configuration && (configuration.username || configuration.password)) {
+                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
+            }
+            if (raw !== undefined) {
+                localVarQueryParameter['raw'] = raw;
+            }
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Compose an unsigned raw transaction then return its hexadecimal encoded string. An unsigned raw transaction can be signed using /sign-raw-transaction API.
+         * @summary Compose an unsigned raw transaction
+         * @param {&#39;MAINNET&#39; | &#39;TESTNET&#39; | &#39;DEVNET&#39;} network Network name
+         * @param {&#39;TRANSFER&#39; | &#39;DELEGATE&#39; | &#39;VOTE&#39; | &#39;UNVOTE&#39; | &#39;CREATE&#39; | &#39;CALL&#39;} type Transaction type
+         * @param {string} to Recipient&#39;s address
+         * @param {string} value Amount of value to transfer in nano SEM
+         * @param {string} [fee] Transaction fee in nano SEM, default to minimum fee if omitted
+         * @param {string} [nonce] Transaction nonce, default to sender&#39;s nonce if omitted
+         * @param {string} [timestamp] Transaction timestamp in milliseconds. Default to current time.
+         * @param {string} [data] Hexadecimal encoded transaction data.
+         * @param {string} [gas] The gas limit for the call
+         * @param {string} [gasPrice] The gas price
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        composeRawTransaction: function (network, type, to, value, fee, nonce, timestamp, data, gas, gasPrice, options) {
+            if (options === void 0) { options = {}; }
+            // verify required parameter 'network' is not null or undefined
+            if (network === null || network === undefined) {
+                throw new RequiredError('network', 'Required parameter network was null or undefined when calling composeRawTransaction.');
+            }
+            // verify required parameter 'type' is not null or undefined
+            if (type === null || type === undefined) {
+                throw new RequiredError('type', 'Required parameter type was null or undefined when calling composeRawTransaction.');
+            }
+            // verify required parameter 'to' is not null or undefined
+            if (to === null || to === undefined) {
+                throw new RequiredError('to', 'Required parameter to was null or undefined when calling composeRawTransaction.');
+            }
+            // verify required parameter 'value' is not null or undefined
+            if (value === null || value === undefined) {
+                throw new RequiredError('value', 'Required parameter value was null or undefined when calling composeRawTransaction.');
+            }
+            var localVarPath = "/compose-raw-transaction";
+            var localVarUrlObj = url.parse(localVarPath, true);
+            var localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            var localVarHeaderParameter = {};
+            var localVarQueryParameter = {};
+            // authentication basicAuth required
+            // http basic authentication required
+            if (configuration && (configuration.username || configuration.password)) {
+                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
+            }
+            if (network !== undefined) {
+                localVarQueryParameter['network'] = network;
+            }
+            if (type !== undefined) {
+                localVarQueryParameter['type'] = type;
+            }
+            if (to !== undefined) {
+                localVarQueryParameter['to'] = to;
+            }
+            if (value !== undefined) {
+                localVarQueryParameter['value'] = value;
+            }
+            if (fee !== undefined) {
+                localVarQueryParameter['fee'] = fee;
+            }
+            if (nonce !== undefined) {
+                localVarQueryParameter['nonce'] = nonce;
+            }
+            if (timestamp !== undefined) {
+                localVarQueryParameter['timestamp'] = timestamp;
+            }
+            if (data !== undefined) {
+                localVarQueryParameter['data'] = data;
+            }
+            if (gas !== undefined) {
+                localVarQueryParameter['gas'] = gas;
+            }
+            if (gasPrice !== undefined) {
+                localVarQueryParameter['gasPrice'] = gasPrice;
+            }
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Estimate the gas usage of a transaction.
+         * @summary Estimate gas usage
+         * @param {string} to Recipient&#39;s address (the contract address)
+         * @param {string} [value] Amount of value to transfer in nano SEM
+         * @param {string} [data] Transaction data encoded in hexadecimal string
+         * @param {string} [gas] The gas limit for the call
+         * @param {string} [gasPrice] The gas price in nano SEM
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        estimateGas: function (to, value, data, gas, gasPrice, options) {
+            if (options === void 0) { options = {}; }
+            // verify required parameter 'to' is not null or undefined
+            if (to === null || to === undefined) {
+                throw new RequiredError('to', 'Required parameter to was null or undefined when calling estimateGas.');
+            }
+            var localVarPath = "/estimate-gas";
+            var localVarUrlObj = url.parse(localVarPath, true);
+            var localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            var localVarHeaderParameter = {};
+            var localVarQueryParameter = {};
+            // authentication basicAuth required
+            // http basic authentication required
+            if (configuration && (configuration.username || configuration.password)) {
+                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
+            }
+            if (to !== undefined) {
+                localVarQueryParameter['to'] = to;
+            }
+            if (value !== undefined) {
+                localVarQueryParameter['value'] = value;
+            }
+            if (data !== undefined) {
+                localVarQueryParameter['data'] = data;
+            }
+            if (gas !== undefined) {
+                localVarQueryParameter['gas'] = gas;
+            }
+            if (gasPrice !== undefined) {
+                localVarQueryParameter['gasPrice'] = gasPrice;
+            }
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Executes a new message call immediately without creating a transaction on the block chain.
+         * @summary Make a local call
+         * @param {string} to Recipient&#39;s address (the contract address)
+         * @param {string} [value] Amount of value to transfer in nano SEM
+         * @param {string} [data] Transaction data encoded in hexadecimal string
+         * @param {string} [gas] The gas limit for the call
+         * @param {string} [gasPrice] The gas price in nano SEM
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        localCall: function (to, value, data, gas, gasPrice, options) {
             if (options === void 0) { options = {}; }
             // verify required parameter 'to' is not null or undefined
             if (to === null || to === undefined) {
                 throw new RequiredError('to', 'Required parameter to was null or undefined when calling localCall.');
             }
-            var localVarPath = "/call";
+            var localVarPath = "/local-call";
             var localVarUrlObj = url.parse(localVarPath, true);
             var localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            var localVarHeaderParameter = {};
+            var localVarQueryParameter = {};
+            // authentication basicAuth required
+            // http basic authentication required
+            if (configuration && (configuration.username || configuration.password)) {
+                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
+            }
+            if (to !== undefined) {
+                localVarQueryParameter['to'] = to;
+            }
+            if (value !== undefined) {
+                localVarQueryParameter['value'] = value;
+            }
+            if (data !== undefined) {
+                localVarQueryParameter['data'] = data;
+            }
+            if (gas !== undefined) {
+                localVarQueryParameter['gas'] = gas;
+            }
+            if (gasPrice !== undefined) {
+                localVarQueryParameter['gasPrice'] = gasPrice;
+            }
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Executes a contract deployment immediately without creating a transaction on the block chain.
+         * @summary Make a local create
+         * @param {string} [value] Amount of value to transfer in nano SEM
+         * @param {string} [data] Transaction data encoded in hexadecimal string
+         * @param {string} [gas] The gas limit for the call
+         * @param {string} [gasPrice] The gas price in nano SEM
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        localCreate: function (value, data, gas, gasPrice, options) {
+            if (options === void 0) { options = {}; }
+            var localVarPath = "/local-create";
+            var localVarUrlObj = url.parse(localVarPath, true);
+            var localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            var localVarHeaderParameter = {};
+            var localVarQueryParameter = {};
+            // authentication basicAuth required
+            // http basic authentication required
+            if (configuration && (configuration.username || configuration.password)) {
+                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
+            }
+            if (value !== undefined) {
+                localVarQueryParameter['value'] = value;
+            }
+            if (data !== undefined) {
+                localVarQueryParameter['data'] = data;
+            }
+            if (gas !== undefined) {
+                localVarQueryParameter['gas'] = gas;
+            }
+            if (gasPrice !== undefined) {
+                localVarQueryParameter['gasPrice'] = gasPrice;
+            }
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Verify a signed message.
+         * @summary Verify a message
+         * @param {string} address Address of the message signer
+         * @param {string} message Message in UTF-8 string
+         * @param {string} signature Signature to verify
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        verifyMessage: function (address, message, signature, options) {
+            if (options === void 0) { options = {}; }
+            // verify required parameter 'address' is not null or undefined
+            if (address === null || address === undefined) {
+                throw new RequiredError('address', 'Required parameter address was null or undefined when calling verifyMessage.');
+            }
+            // verify required parameter 'message' is not null or undefined
+            if (message === null || message === undefined) {
+                throw new RequiredError('message', 'Required parameter message was null or undefined when calling verifyMessage.');
+            }
+            // verify required parameter 'signature' is not null or undefined
+            if (signature === null || signature === undefined) {
+                throw new RequiredError('signature', 'Required parameter signature was null or undefined when calling verifyMessage.');
+            }
+            var localVarPath = "/verify-message";
+            var localVarUrlObj = url.parse(localVarPath, true);
+            var localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            var localVarHeaderParameter = {};
+            var localVarQueryParameter = {};
+            // authentication basicAuth required
+            // http basic authentication required
+            if (configuration && (configuration.username || configuration.password)) {
+                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
+            }
+            if (address !== undefined) {
+                localVarQueryParameter['address'] = address;
+            }
+            if (message !== undefined) {
+                localVarQueryParameter['message'] = message;
+            }
+            if (signature !== undefined) {
+                localVarQueryParameter['signature'] = signature;
+            }
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    };
+};
+/**
+ * ToolApi - functional programming interface
+ * @export
+ */
+var ToolApiFp = function (configuration) {
+    return {
+        /**
+         * Broadcasts a signed raw transaction to the network.
+         * @summary Broadcast a raw transaction
+         * @param {string} raw Raw transaction encoded in hexadecimal string.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        broadcastRawTransaction: function (raw, options) {
+            var localVarFetchArgs = ToolApiFetchParamCreator(configuration).broadcastRawTransaction(raw, options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Compose an unsigned raw transaction then return its hexadecimal encoded string. An unsigned raw transaction can be signed using /sign-raw-transaction API.
+         * @summary Compose an unsigned raw transaction
+         * @param {&#39;MAINNET&#39; | &#39;TESTNET&#39; | &#39;DEVNET&#39;} network Network name
+         * @param {&#39;TRANSFER&#39; | &#39;DELEGATE&#39; | &#39;VOTE&#39; | &#39;UNVOTE&#39; | &#39;CREATE&#39; | &#39;CALL&#39;} type Transaction type
+         * @param {string} to Recipient&#39;s address
+         * @param {string} value Amount of value to transfer in nano SEM
+         * @param {string} [fee] Transaction fee in nano SEM, default to minimum fee if omitted
+         * @param {string} [nonce] Transaction nonce, default to sender&#39;s nonce if omitted
+         * @param {string} [timestamp] Transaction timestamp in milliseconds. Default to current time.
+         * @param {string} [data] Hexadecimal encoded transaction data.
+         * @param {string} [gas] The gas limit for the call
+         * @param {string} [gasPrice] The gas price
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        composeRawTransaction: function (network, type, to, value, fee, nonce, timestamp, data, gas, gasPrice, options) {
+            var localVarFetchArgs = ToolApiFetchParamCreator(configuration).composeRawTransaction(network, type, to, value, fee, nonce, timestamp, data, gas, gasPrice, options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Estimate the gas usage of a transaction.
+         * @summary Estimate gas usage
+         * @param {string} to Recipient&#39;s address (the contract address)
+         * @param {string} [value] Amount of value to transfer in nano SEM
+         * @param {string} [data] Transaction data encoded in hexadecimal string
+         * @param {string} [gas] The gas limit for the call
+         * @param {string} [gasPrice] The gas price in nano SEM
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        estimateGas: function (to, value, data, gas, gasPrice, options) {
+            var localVarFetchArgs = ToolApiFetchParamCreator(configuration).estimateGas(to, value, data, gas, gasPrice, options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Executes a new message call immediately without creating a transaction on the block chain.
+         * @summary Make a local call
+         * @param {string} to Recipient&#39;s address (the contract address)
+         * @param {string} [value] Amount of value to transfer in nano SEM
+         * @param {string} [data] Transaction data encoded in hexadecimal string
+         * @param {string} [gas] The gas limit for the call
+         * @param {string} [gasPrice] The gas price in nano SEM
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        localCall: function (to, value, data, gas, gasPrice, options) {
+            var localVarFetchArgs = ToolApiFetchParamCreator(configuration).localCall(to, value, data, gas, gasPrice, options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Executes a contract deployment immediately without creating a transaction on the block chain.
+         * @summary Make a local create
+         * @param {string} [value] Amount of value to transfer in nano SEM
+         * @param {string} [data] Transaction data encoded in hexadecimal string
+         * @param {string} [gas] The gas limit for the call
+         * @param {string} [gasPrice] The gas price in nano SEM
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        localCreate: function (value, data, gas, gasPrice, options) {
+            var localVarFetchArgs = ToolApiFetchParamCreator(configuration).localCreate(value, data, gas, gasPrice, options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Verify a signed message.
+         * @summary Verify a message
+         * @param {string} address Address of the message signer
+         * @param {string} message Message in UTF-8 string
+         * @param {string} signature Signature to verify
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        verifyMessage: function (address, message, signature, options) {
+            var localVarFetchArgs = ToolApiFetchParamCreator(configuration).verifyMessage(address, message, signature, options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+    };
+};
+/**
+ * ToolApi - object-oriented interface
+ * @export
+ * @class ToolApi
+ * @extends {BaseAPI}
+ */
+var ToolApi = /** @class */ (function (_super) {
+    __extends(ToolApi, _super);
+    function ToolApi() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    /**
+     * Broadcasts a signed raw transaction to the network.
+     * @summary Broadcast a raw transaction
+     * @param {} raw Raw transaction encoded in hexadecimal string.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ToolApi
+     */
+    ToolApi.prototype.broadcastRawTransaction = function (raw, options) {
+        return ToolApiFp(this.configuration).broadcastRawTransaction(raw, options)(this.fetch, this.basePath);
+    };
+    /**
+     * Compose an unsigned raw transaction then return its hexadecimal encoded string. An unsigned raw transaction can be signed using /sign-raw-transaction API.
+     * @summary Compose an unsigned raw transaction
+     * @param {} network Network name
+     * @param {} type Transaction type
+     * @param {} to Recipient&#39;s address
+     * @param {} value Amount of value to transfer in nano SEM
+     * @param {} [fee] Transaction fee in nano SEM, default to minimum fee if omitted
+     * @param {} [nonce] Transaction nonce, default to sender&#39;s nonce if omitted
+     * @param {} [timestamp] Transaction timestamp in milliseconds. Default to current time.
+     * @param {} [data] Hexadecimal encoded transaction data.
+     * @param {} [gas] The gas limit for the call
+     * @param {} [gasPrice] The gas price
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ToolApi
+     */
+    ToolApi.prototype.composeRawTransaction = function (network, type, to, value, fee, nonce, timestamp, data, gas, gasPrice, options) {
+        return ToolApiFp(this.configuration).composeRawTransaction(network, type, to, value, fee, nonce, timestamp, data, gas, gasPrice, options)(this.fetch, this.basePath);
+    };
+    /**
+     * Estimate the gas usage of a transaction.
+     * @summary Estimate gas usage
+     * @param {} to Recipient&#39;s address (the contract address)
+     * @param {} [value] Amount of value to transfer in nano SEM
+     * @param {} [data] Transaction data encoded in hexadecimal string
+     * @param {} [gas] The gas limit for the call
+     * @param {} [gasPrice] The gas price in nano SEM
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ToolApi
+     */
+    ToolApi.prototype.estimateGas = function (to, value, data, gas, gasPrice, options) {
+        return ToolApiFp(this.configuration).estimateGas(to, value, data, gas, gasPrice, options)(this.fetch, this.basePath);
+    };
+    /**
+     * Executes a new message call immediately without creating a transaction on the block chain.
+     * @summary Make a local call
+     * @param {} to Recipient&#39;s address (the contract address)
+     * @param {} [value] Amount of value to transfer in nano SEM
+     * @param {} [data] Transaction data encoded in hexadecimal string
+     * @param {} [gas] The gas limit for the call
+     * @param {} [gasPrice] The gas price in nano SEM
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ToolApi
+     */
+    ToolApi.prototype.localCall = function (to, value, data, gas, gasPrice, options) {
+        return ToolApiFp(this.configuration).localCall(to, value, data, gas, gasPrice, options)(this.fetch, this.basePath);
+    };
+    /**
+     * Executes a contract deployment immediately without creating a transaction on the block chain.
+     * @summary Make a local create
+     * @param {} [value] Amount of value to transfer in nano SEM
+     * @param {} [data] Transaction data encoded in hexadecimal string
+     * @param {} [gas] The gas limit for the call
+     * @param {} [gasPrice] The gas price in nano SEM
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ToolApi
+     */
+    ToolApi.prototype.localCreate = function (value, data, gas, gasPrice, options) {
+        return ToolApiFp(this.configuration).localCreate(value, data, gas, gasPrice, options)(this.fetch, this.basePath);
+    };
+    /**
+     * Verify a signed message.
+     * @summary Verify a message
+     * @param {} address Address of the message signer
+     * @param {} message Message in UTF-8 string
+     * @param {} signature Signature to verify
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ToolApi
+     */
+    ToolApi.prototype.verifyMessage = function (address, message, signature, options) {
+        return ToolApiFp(this.configuration).verifyMessage(address, message, signature, options)(this.fetch, this.basePath);
+    };
+    return ToolApi;
+}(BaseAPI));
+/**
+ * WalletApi - fetch parameter creator
+ * @export
+ */
+var WalletApiFetchParamCreator = function (configuration) {
+    return {
+        /**
+         * Broadcasts a raw transaction to the network.
+         * @summary Broadcast a raw transaction
+         * @param {string} raw Raw transaction encoded in hexadecimal string.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        broadcastRawTransactionDeprecated: function (raw, options) {
+            if (options === void 0) { options = {}; }
+            // verify required parameter 'raw' is not null or undefined
+            if (raw === null || raw === undefined) {
+                throw new RequiredError('raw', 'Required parameter raw was null or undefined when calling broadcastRawTransactionDeprecated.');
+            }
+            var localVarPath = "/transaction/raw";
+            var localVarUrlObj = url.parse(localVarPath, true);
+            var localVarRequestOptions = Object.assign({ method: 'POST' }, options);
+            var localVarHeaderParameter = {};
+            var localVarQueryParameter = {};
+            // authentication basicAuth required
+            // http basic authentication required
+            if (configuration && (configuration.username || configuration.password)) {
+                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
+            }
+            if (raw !== undefined) {
+                localVarQueryParameter['raw'] = raw;
+            }
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Call a VM contract.
+         * @summary Call a contract
+         * @param {string} from Sender&#39;s address. The address must exist in the wallet.data of this Semux node.
+         * @param {string} to Recipient&#39;s address (the contract address)
+         * @param {string} gas The gas limit for the call
+         * @param {string} gasPrice The gas price in nano SEM
+         * @param {string} [value] Amount of value to transfer in nano SEM
+         * @param {string} [nonce] Transaction nonce, default to sender&#39;s nonce if omitted
+         * @param {string} [data] Transaction data encoded in hexadecimal string
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        call: function (from, to, gas, gasPrice, value, nonce, data, options) {
+            if (options === void 0) { options = {}; }
+            // verify required parameter 'from' is not null or undefined
+            if (from === null || from === undefined) {
+                throw new RequiredError('from', 'Required parameter from was null or undefined when calling call.');
+            }
+            // verify required parameter 'to' is not null or undefined
+            if (to === null || to === undefined) {
+                throw new RequiredError('to', 'Required parameter to was null or undefined when calling call.');
+            }
+            // verify required parameter 'gas' is not null or undefined
+            if (gas === null || gas === undefined) {
+                throw new RequiredError('gas', 'Required parameter gas was null or undefined when calling call.');
+            }
+            // verify required parameter 'gasPrice' is not null or undefined
+            if (gasPrice === null || gasPrice === undefined) {
+                throw new RequiredError('gasPrice', 'Required parameter gasPrice was null or undefined when calling call.');
+            }
+            var localVarPath = "/transaction/call";
+            var localVarUrlObj = url.parse(localVarPath, true);
+            var localVarRequestOptions = Object.assign({ method: 'POST' }, options);
             var localVarHeaderParameter = {};
             var localVarQueryParameter = {};
             // authentication basicAuth required
@@ -11606,8 +12929,145 @@ var SemuxApiFetchParamCreator = function (configuration) {
             };
         },
         /**
+         * Create a VM contract.
+         * @summary Deploy a contract
+         * @param {string} from Sender&#39;s address. The address must exist in the wallet.data of this Semux node.
+         * @param {string} data The contract data encoded in hexadecimal string
+         * @param {string} gas The gas limit for the call
+         * @param {string} gasPrice The gas price
+         * @param {string} [value] Amount of SEM to transfer in nano SEM
+         * @param {string} [nonce] Transaction nonce, default to sender&#39;s nonce if omitted
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        create: function (from, data, gas, gasPrice, value, nonce, options) {
+            if (options === void 0) { options = {}; }
+            // verify required parameter 'from' is not null or undefined
+            if (from === null || from === undefined) {
+                throw new RequiredError('from', 'Required parameter from was null or undefined when calling create.');
+            }
+            // verify required parameter 'data' is not null or undefined
+            if (data === null || data === undefined) {
+                throw new RequiredError('data', 'Required parameter data was null or undefined when calling create.');
+            }
+            // verify required parameter 'gas' is not null or undefined
+            if (gas === null || gas === undefined) {
+                throw new RequiredError('gas', 'Required parameter gas was null or undefined when calling create.');
+            }
+            // verify required parameter 'gasPrice' is not null or undefined
+            if (gasPrice === null || gasPrice === undefined) {
+                throw new RequiredError('gasPrice', 'Required parameter gasPrice was null or undefined when calling create.');
+            }
+            var localVarPath = "/transaction/create";
+            var localVarUrlObj = url.parse(localVarPath, true);
+            var localVarRequestOptions = Object.assign({ method: 'POST' }, options);
+            var localVarHeaderParameter = {};
+            var localVarQueryParameter = {};
+            // authentication basicAuth required
+            // http basic authentication required
+            if (configuration && (configuration.username || configuration.password)) {
+                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
+            }
+            if (from !== undefined) {
+                localVarQueryParameter['from'] = from;
+            }
+            if (value !== undefined) {
+                localVarQueryParameter['value'] = value;
+            }
+            if (nonce !== undefined) {
+                localVarQueryParameter['nonce'] = nonce;
+            }
+            if (data !== undefined) {
+                localVarQueryParameter['data'] = data;
+            }
+            if (gas !== undefined) {
+                localVarQueryParameter['gas'] = gas;
+            }
+            if (gasPrice !== undefined) {
+                localVarQueryParameter['gasPrice'] = gasPrice;
+            }
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Creates a new account by generating a new private key or importing an existing private key when parameter 'privateKey' is provided.
+         * @summary Create or import an account to wallet
+         * @param {string} [name] Assigned alias to the created account.
+         * @param {string} [privateKey] The private key to be imported, create a new key if omitted
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createAccount: function (name, privateKey, options) {
+            if (options === void 0) { options = {}; }
+            var localVarPath = "/create-account";
+            var localVarUrlObj = url.parse(localVarPath, true);
+            var localVarRequestOptions = Object.assign({ method: 'POST' }, options);
+            var localVarHeaderParameter = {};
+            var localVarQueryParameter = {};
+            // authentication basicAuth required
+            // http basic authentication required
+            if (configuration && (configuration.username || configuration.password)) {
+                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
+            }
+            if (name !== undefined) {
+                localVarQueryParameter['name'] = name;
+            }
+            if (privateKey !== undefined) {
+                localVarQueryParameter['privateKey'] = privateKey;
+            }
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Creates a new account by generating a new private key or importing an existing private key when parameter 'privateKey' is provided.
+         * @summary Create or import an account
+         * @param {string} [name] Assigned alias to the created account.
+         * @param {string} [privateKey] The private key to be imported, create a new key if omitted
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createAccountDeprecated: function (name, privateKey, options) {
+            if (options === void 0) { options = {}; }
+            var localVarPath = "/account";
+            var localVarUrlObj = url.parse(localVarPath, true);
+            var localVarRequestOptions = Object.assign({ method: 'POST' }, options);
+            var localVarHeaderParameter = {};
+            var localVarQueryParameter = {};
+            // authentication basicAuth required
+            // http basic authentication required
+            if (configuration && (configuration.username || configuration.password)) {
+                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
+            }
+            if (name !== undefined) {
+                localVarQueryParameter['name'] = name;
+            }
+            if (privateKey !== undefined) {
+                localVarQueryParameter['privateKey'] = privateKey;
+            }
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Registers as a delegate
-         * @summary Register delegate
+         * @summary Register as delegate
          * @param {string} from Registering address
          * @param {string} data Delegate name in hexadecimal encoded UTF-8 string, 16 bytes of data at maximum
          * @param {string} [fee] Transaction fee in nano SEM, default to minimum fee if omitted
@@ -11615,15 +13075,15 @@ var SemuxApiFetchParamCreator = function (configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        registerDelegate: function (from, data, fee, nonce, options) {
+        delegate: function (from, data, fee, nonce, options) {
             if (options === void 0) { options = {}; }
             // verify required parameter 'from' is not null or undefined
             if (from === null || from === undefined) {
-                throw new RequiredError('from', 'Required parameter from was null or undefined when calling registerDelegate.');
+                throw new RequiredError('from', 'Required parameter from was null or undefined when calling delegate.');
             }
             // verify required parameter 'data' is not null or undefined
             if (data === null || data === undefined) {
-                throw new RequiredError('data', 'Required parameter data was null or undefined when calling registerDelegate.');
+                throw new RequiredError('data', 'Required parameter data was null or undefined when calling delegate.');
             }
             var localVarPath = "/transaction/delegate";
             var localVarUrlObj = url.parse(localVarPath, true);
@@ -11657,6 +13117,103 @@ var SemuxApiFetchParamCreator = function (configuration) {
             };
         },
         /**
+         * Deletes an account from this wallet.
+         * @summary Delete an account from wallet
+         * @param {string} address Address of the account
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteAccount: function (address, options) {
+            if (options === void 0) { options = {}; }
+            // verify required parameter 'address' is not null or undefined
+            if (address === null || address === undefined) {
+                throw new RequiredError('address', 'Required parameter address was null or undefined when calling deleteAccount.');
+            }
+            var localVarPath = "/delete-account";
+            var localVarUrlObj = url.parse(localVarPath, true);
+            var localVarRequestOptions = Object.assign({ method: 'POST' }, options);
+            var localVarHeaderParameter = {};
+            var localVarQueryParameter = {};
+            // authentication basicAuth required
+            // http basic authentication required
+            if (configuration && (configuration.username || configuration.password)) {
+                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
+            }
+            if (address !== undefined) {
+                localVarQueryParameter['address'] = address;
+            }
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Deletes an account from this wallet.
+         * @summary Delete account
+         * @param {string} address Address of the account
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteAccountDeprecated: function (address, options) {
+            if (options === void 0) { options = {}; }
+            // verify required parameter 'address' is not null or undefined
+            if (address === null || address === undefined) {
+                throw new RequiredError('address', 'Required parameter address was null or undefined when calling deleteAccountDeprecated.');
+            }
+            var localVarPath = "/account";
+            var localVarUrlObj = url.parse(localVarPath, true);
+            var localVarRequestOptions = Object.assign({ method: 'DELETE' }, options);
+            var localVarHeaderParameter = {};
+            var localVarQueryParameter = {};
+            // authentication basicAuth required
+            // http basic authentication required
+            if (configuration && (configuration.username || configuration.password)) {
+                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
+            }
+            if (address !== undefined) {
+                localVarQueryParameter['address'] = address;
+            }
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Returns accounts in the wallet.
+         * @summary List all accounts in wallet
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getAccounts: function (options) {
+            if (options === void 0) { options = {}; }
+            var localVarPath = "/accounts";
+            var localVarUrlObj = url.parse(localVarPath, true);
+            var localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            var localVarHeaderParameter = {};
+            var localVarQueryParameter = {};
+            // authentication basicAuth required
+            // http basic authentication required
+            if (configuration && (configuration.username || configuration.password)) {
+                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
+            }
+            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
+            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
+            delete localVarUrlObj.search;
+            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
+            return {
+                url: url.format(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Sign a message.
          * @summary Sign a message
          * @param {string} address Signing address. The address must exist in the wallet.data of this Semux node.
@@ -11676,7 +13233,7 @@ var SemuxApiFetchParamCreator = function (configuration) {
             }
             var localVarPath = "/sign-message";
             var localVarUrlObj = url.parse(localVarPath, true);
-            var localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            var localVarRequestOptions = Object.assign({ method: 'POST' }, options);
             var localVarHeaderParameter = {};
             var localVarQueryParameter = {};
             // authentication basicAuth required
@@ -11719,7 +13276,7 @@ var SemuxApiFetchParamCreator = function (configuration) {
             }
             var localVarPath = "/sign-raw-transaction";
             var localVarUrlObj = url.parse(localVarPath, true);
-            var localVarRequestOptions = Object.assign({ method: 'GET' }, options);
+            var localVarRequestOptions = Object.assign({ method: 'POST' }, options);
             var localVarHeaderParameter = {};
             var localVarQueryParameter = {};
             // authentication basicAuth required
@@ -11807,7 +13364,7 @@ var SemuxApiFetchParamCreator = function (configuration) {
         },
         /**
          * Unvotes for a delegate.
-         * @summary Unvote
+         * @summary Unvote for a delegate
          * @param {string} from Voter&#39;s address. The address must exist in the wallet.data of this Semux node.
          * @param {string} to Delegate address
          * @param {string} value Number of votes in nano SEM
@@ -11865,59 +13422,8 @@ var SemuxApiFetchParamCreator = function (configuration) {
             };
         },
         /**
-         * Verify a signed message.
-         * @summary Verify a message
-         * @param {string} address Address of the message signer
-         * @param {string} message Message in UTF-8 string
-         * @param {string} signature Signature to verify
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        verifyMessage: function (address, message, signature, options) {
-            if (options === void 0) { options = {}; }
-            // verify required parameter 'address' is not null or undefined
-            if (address === null || address === undefined) {
-                throw new RequiredError('address', 'Required parameter address was null or undefined when calling verifyMessage.');
-            }
-            // verify required parameter 'message' is not null or undefined
-            if (message === null || message === undefined) {
-                throw new RequiredError('message', 'Required parameter message was null or undefined when calling verifyMessage.');
-            }
-            // verify required parameter 'signature' is not null or undefined
-            if (signature === null || signature === undefined) {
-                throw new RequiredError('signature', 'Required parameter signature was null or undefined when calling verifyMessage.');
-            }
-            var localVarPath = "/verify-message";
-            var localVarUrlObj = url.parse(localVarPath, true);
-            var localVarRequestOptions = Object.assign({ method: 'GET' }, options);
-            var localVarHeaderParameter = {};
-            var localVarQueryParameter = {};
-            // authentication basicAuth required
-            // http basic authentication required
-            if (configuration && (configuration.username || configuration.password)) {
-                localVarHeaderParameter["Authorization"] = "Basic " + btoa(configuration.username + ":" + configuration.password);
-            }
-            if (address !== undefined) {
-                localVarQueryParameter['address'] = address;
-            }
-            if (message !== undefined) {
-                localVarQueryParameter['message'] = message;
-            }
-            if (signature !== undefined) {
-                localVarQueryParameter['signature'] = signature;
-            }
-            localVarUrlObj.query = Object.assign({}, localVarUrlObj.query, localVarQueryParameter, options.query);
-            // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-            delete localVarUrlObj.search;
-            localVarRequestOptions.headers = Object.assign({}, localVarHeaderParameter, options.headers);
-            return {
-                url: url.format(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
          * Votes for a delegate.
-         * @summary Vote
+         * @summary Vote for a delegate
          * @param {string} from Voter&#39;s address. The address must exist in the wallet.data of this Semux node.
          * @param {string} to Delegate address
          * @param {string} value Number of votes in nano SEM
@@ -11977,77 +13483,11 @@ var SemuxApiFetchParamCreator = function (configuration) {
     };
 };
 /**
- * SemuxApi - functional programming interface
+ * WalletApi - functional programming interface
  * @export
  */
-var SemuxApiFp = function (configuration) {
+var WalletApiFp = function (configuration) {
     return {
-        /**
-         * Adds a node to node manager.
-         * @summary Add node
-         * @param {string} node Address of the node in host:port format
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        addNode: function (node, options) {
-            var localVarFetchArgs = SemuxApiFetchParamCreator(configuration).addNode(node, options);
-            return function (fetch, basePath) {
-                if (fetch === void 0) { fetch = portableFetch; }
-                if (basePath === void 0) { basePath = BASE_PATH; }
-                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
-                    if (response.status >= 200 && response.status < 300) {
-                        return response.json();
-                    }
-                    else {
-                        throw response;
-                    }
-                });
-            };
-        },
-        /**
-         * Adds an IP address to blacklist.
-         * @summary Add to blacklist
-         * @param {string} ip IP address
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        addToBlacklist: function (ip, options) {
-            var localVarFetchArgs = SemuxApiFetchParamCreator(configuration).addToBlacklist(ip, options);
-            return function (fetch, basePath) {
-                if (fetch === void 0) { fetch = portableFetch; }
-                if (basePath === void 0) { basePath = BASE_PATH; }
-                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
-                    if (response.status >= 200 && response.status < 300) {
-                        return response.json();
-                    }
-                    else {
-                        throw response;
-                    }
-                });
-            };
-        },
-        /**
-         * Adds an IP address to whitelist.
-         * @summary Add to whitelist
-         * @param {string} ip IP address
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        addToWhitelist: function (ip, options) {
-            var localVarFetchArgs = SemuxApiFetchParamCreator(configuration).addToWhitelist(ip, options);
-            return function (fetch, basePath) {
-                if (fetch === void 0) { fetch = portableFetch; }
-                if (basePath === void 0) { basePath = BASE_PATH; }
-                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
-                    if (response.status >= 200 && response.status < 300) {
-                        return response.json();
-                    }
-                    else {
-                        throw response;
-                    }
-                });
-            };
-        },
         /**
          * Broadcasts a raw transaction to the network.
          * @summary Broadcast a raw transaction
@@ -12055,8 +13495,8 @@ var SemuxApiFp = function (configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        broadcastRawTransaction: function (raw, options) {
-            var localVarFetchArgs = SemuxApiFetchParamCreator(configuration).broadcastRawTransaction(raw, options);
+        broadcastRawTransactionDeprecated: function (raw, options) {
+            var localVarFetchArgs = WalletApiFetchParamCreator(configuration).broadcastRawTransactionDeprecated(raw, options);
             return function (fetch, basePath) {
                 if (fetch === void 0) { fetch = portableFetch; }
                 if (basePath === void 0) { basePath = BASE_PATH; }
@@ -12072,7 +13512,7 @@ var SemuxApiFp = function (configuration) {
         },
         /**
          * Call a VM contract.
-         * @summary Call a contract.
+         * @summary Call a contract
          * @param {string} from Sender&#39;s address. The address must exist in the wallet.data of this Semux node.
          * @param {string} to Recipient&#39;s address (the contract address)
          * @param {string} gas The gas limit for the call
@@ -12084,38 +13524,7 @@ var SemuxApiFp = function (configuration) {
          * @throws {RequiredError}
          */
         call: function (from, to, gas, gasPrice, value, nonce, data, options) {
-            var localVarFetchArgs = SemuxApiFetchParamCreator(configuration).call(from, to, gas, gasPrice, value, nonce, data, options);
-            return function (fetch, basePath) {
-                if (fetch === void 0) { fetch = portableFetch; }
-                if (basePath === void 0) { basePath = BASE_PATH; }
-                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
-                    if (response.status >= 200 && response.status < 300) {
-                        return response.json();
-                    }
-                    else {
-                        throw response;
-                    }
-                });
-            };
-        },
-        /**
-         * Compose an unsigned raw transaction then return its hexadecimal encoded string. An unsigned raw transaction can be signed using /sign-raw-transaction API.
-         * @summary Compose an unsigned raw transaction
-         * @param {&#39;MAINNET&#39; | &#39;TESTNET&#39; | &#39;DEVNET&#39;} network Network name
-         * @param {&#39;TRANSFER&#39; | &#39;DELEGATE&#39; | &#39;VOTE&#39; | &#39;UNVOTE&#39; | &#39;CREATE&#39; | &#39;CALL&#39;} type Transaction type
-         * @param {string} to Recipient&#39;s address
-         * @param {string} value Amount of value to transfer in nano SEM
-         * @param {string} [fee] Transaction fee in nano SEM, default to minimum fee if omitted
-         * @param {string} [nonce] Transaction nonce, default to sender&#39;s nonce if omitted
-         * @param {string} [timestamp] Transaction timestamp in milliseconds. Default to current time.
-         * @param {string} [data] Hexadecimal encoded transaction data.
-         * @param {string} [gas] The gas limit for the call
-         * @param {string} [gasPrice] The gas price
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        composeRawTransaction: function (network, type, to, value, fee, nonce, timestamp, data, gas, gasPrice, options) {
-            var localVarFetchArgs = SemuxApiFetchParamCreator(configuration).composeRawTransaction(network, type, to, value, fee, nonce, timestamp, data, gas, gasPrice, options);
+            var localVarFetchArgs = WalletApiFetchParamCreator(configuration).call(from, to, gas, gasPrice, value, nonce, data, options);
             return function (fetch, basePath) {
                 if (fetch === void 0) { fetch = portableFetch; }
                 if (basePath === void 0) { basePath = BASE_PATH; }
@@ -12131,7 +13540,7 @@ var SemuxApiFp = function (configuration) {
         },
         /**
          * Create a VM contract.
-         * @summary Create a contract
+         * @summary Deploy a contract
          * @param {string} from Sender&#39;s address. The address must exist in the wallet.data of this Semux node.
          * @param {string} data The contract data encoded in hexadecimal string
          * @param {string} gas The gas limit for the call
@@ -12142,7 +13551,30 @@ var SemuxApiFp = function (configuration) {
          * @throws {RequiredError}
          */
         create: function (from, data, gas, gasPrice, value, nonce, options) {
-            var localVarFetchArgs = SemuxApiFetchParamCreator(configuration).create(from, data, gas, gasPrice, value, nonce, options);
+            var localVarFetchArgs = WalletApiFetchParamCreator(configuration).create(from, data, gas, gasPrice, value, nonce, options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Creates a new account by generating a new private key or importing an existing private key when parameter 'privateKey' is provided.
+         * @summary Create or import an account to wallet
+         * @param {string} [name] Assigned alias to the created account.
+         * @param {string} [privateKey] The private key to be imported, create a new key if omitted
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createAccount: function (name, privateKey, options) {
+            var localVarFetchArgs = WalletApiFetchParamCreator(configuration).createAccount(name, privateKey, options);
             return function (fetch, basePath) {
                 if (fetch === void 0) { fetch = portableFetch; }
                 if (basePath === void 0) { basePath = BASE_PATH; }
@@ -12164,8 +13596,55 @@ var SemuxApiFp = function (configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createAccount: function (name, privateKey, options) {
-            var localVarFetchArgs = SemuxApiFetchParamCreator(configuration).createAccount(name, privateKey, options);
+        createAccountDeprecated: function (name, privateKey, options) {
+            var localVarFetchArgs = WalletApiFetchParamCreator(configuration).createAccountDeprecated(name, privateKey, options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Registers as a delegate
+         * @summary Register as delegate
+         * @param {string} from Registering address
+         * @param {string} data Delegate name in hexadecimal encoded UTF-8 string, 16 bytes of data at maximum
+         * @param {string} [fee] Transaction fee in nano SEM, default to minimum fee if omitted
+         * @param {string} [nonce] Transaction nonce, default to sender&#39;s nonce if omitted
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        delegate: function (from, data, fee, nonce, options) {
+            var localVarFetchArgs = WalletApiFetchParamCreator(configuration).delegate(from, data, fee, nonce, options);
+            return function (fetch, basePath) {
+                if (fetch === void 0) { fetch = portableFetch; }
+                if (basePath === void 0) { basePath = BASE_PATH; }
+                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json();
+                    }
+                    else {
+                        throw response;
+                    }
+                });
+            };
+        },
+        /**
+         * Deletes an account from this wallet.
+         * @summary Delete an account from wallet
+         * @param {string} address Address of the account
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteAccount: function (address, options) {
+            var localVarFetchArgs = WalletApiFetchParamCreator(configuration).deleteAccount(address, options);
             return function (fetch, basePath) {
                 if (fetch === void 0) { fetch = portableFetch; }
                 if (basePath === void 0) { basePath = BASE_PATH; }
@@ -12186,473 +13665,8 @@ var SemuxApiFp = function (configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteAccount: function (address, options) {
-            var localVarFetchArgs = SemuxApiFetchParamCreator(configuration).deleteAccount(address, options);
-            return function (fetch, basePath) {
-                if (fetch === void 0) { fetch = portableFetch; }
-                if (basePath === void 0) { basePath = BASE_PATH; }
-                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
-                    if (response.status >= 200 && response.status < 300) {
-                        return response.json();
-                    }
-                    else {
-                        throw response;
-                    }
-                });
-            };
-        },
-        /**
-         * Estimate the gas usage of a transaction.
-         * @summary Estimate gas
-         * @param {string} to Recipient&#39;s address (the contract address)
-         * @param {string} [from] Sender&#39;s address. The address must exist in the wallet.data of this Semux node.
-         * @param {string} [value] Amount of value to transfer in nano SEM
-         * @param {string} [nonce] Transaction nonce, default to sender&#39;s nonce if omitted
-         * @param {string} [data] Transaction data encoded in hexadecimal string
-         * @param {string} [gas] The gas limit for the call
-         * @param {string} [gasPrice] The gas price in SEM
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        estimateGas: function (to, from, value, nonce, data, gas, gasPrice, options) {
-            var localVarFetchArgs = SemuxApiFetchParamCreator(configuration).estimateGas(to, from, value, nonce, data, gas, gasPrice, options);
-            return function (fetch, basePath) {
-                if (fetch === void 0) { fetch = portableFetch; }
-                if (basePath === void 0) { basePath = BASE_PATH; }
-                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
-                    if (response.status >= 200 && response.status < 300) {
-                        return response.json();
-                    }
-                    else {
-                        throw response;
-                    }
-                });
-            };
-        },
-        /**
-         * Returns an account.
-         * @summary Get account
-         * @param {string} address Address of account
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getAccount: function (address, options) {
-            var localVarFetchArgs = SemuxApiFetchParamCreator(configuration).getAccount(address, options);
-            return function (fetch, basePath) {
-                if (fetch === void 0) { fetch = portableFetch; }
-                if (basePath === void 0) { basePath = BASE_PATH; }
-                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
-                    if (response.status >= 200 && response.status < 300) {
-                        return response.json();
-                    }
-                    else {
-                        throw response;
-                    }
-                });
-            };
-        },
-        /**
-         * Returns pending transactions from/to an account.
-         * @summary Get pending transactions of the account
-         * @param {string} address Address of account
-         * @param {string} from Starting range of transactions
-         * @param {string} to Ending range of transactions
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getAccountPendingTransactions: function (address, from, to, options) {
-            var localVarFetchArgs = SemuxApiFetchParamCreator(configuration).getAccountPendingTransactions(address, from, to, options);
-            return function (fetch, basePath) {
-                if (fetch === void 0) { fetch = portableFetch; }
-                if (basePath === void 0) { basePath = BASE_PATH; }
-                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
-                    if (response.status >= 200 && response.status < 300) {
-                        return response.json();
-                    }
-                    else {
-                        throw response;
-                    }
-                });
-            };
-        },
-        /**
-         * Returns transactions from/to an account.
-         * @summary Get account transactions
-         * @param {string} address Address of account
-         * @param {string} from Starting range of transactions
-         * @param {string} to Ending range of transactions
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getAccountTransactions: function (address, from, to, options) {
-            var localVarFetchArgs = SemuxApiFetchParamCreator(configuration).getAccountTransactions(address, from, to, options);
-            return function (fetch, basePath) {
-                if (fetch === void 0) { fetch = portableFetch; }
-                if (basePath === void 0) { basePath = BASE_PATH; }
-                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
-                    if (response.status >= 200 && response.status < 300) {
-                        return response.json();
-                    }
-                    else {
-                        throw response;
-                    }
-                });
-            };
-        },
-        /**
-         * Returns votes from the account.
-         * @summary Get account votes
-         * @param {string} address Address of account
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getAccountVotes: function (address, options) {
-            var localVarFetchArgs = SemuxApiFetchParamCreator(configuration).getAccountVotes(address, options);
-            return function (fetch, basePath) {
-                if (fetch === void 0) { fetch = portableFetch; }
-                if (basePath === void 0) { basePath = BASE_PATH; }
-                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
-                    if (response.status >= 200 && response.status < 300) {
-                        return response.json();
-                    }
-                    else {
-                        throw response;
-                    }
-                });
-            };
-        },
-        /**
-         * Returns a block by block hash.
-         * @summary Get block by hash
-         * @param {string} hash Hash of block
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getBlockByHash: function (hash, options) {
-            var localVarFetchArgs = SemuxApiFetchParamCreator(configuration).getBlockByHash(hash, options);
-            return function (fetch, basePath) {
-                if (fetch === void 0) { fetch = portableFetch; }
-                if (basePath === void 0) { basePath = BASE_PATH; }
-                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
-                    if (response.status >= 200 && response.status < 300) {
-                        return response.json();
-                    }
-                    else {
-                        throw response;
-                    }
-                });
-            };
-        },
-        /**
-         * Returns a block by block number.
-         * @summary Get block by number
-         * @param {string} number Number of block
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getBlockByNumber: function (number, options) {
-            var localVarFetchArgs = SemuxApiFetchParamCreator(configuration).getBlockByNumber(number, options);
-            return function (fetch, basePath) {
-                if (fetch === void 0) { fetch = portableFetch; }
-                if (basePath === void 0) { basePath = BASE_PATH; }
-                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
-                    if (response.status >= 200 && response.status < 300) {
-                        return response.json();
-                    }
-                    else {
-                        throw response;
-                    }
-                });
-            };
-        },
-        /**
-         * Returns a delegate.
-         * @summary Get a delegate
-         * @param {string} address Delegate address
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getDelegate: function (address, options) {
-            var localVarFetchArgs = SemuxApiFetchParamCreator(configuration).getDelegate(address, options);
-            return function (fetch, basePath) {
-                if (fetch === void 0) { fetch = portableFetch; }
-                if (basePath === void 0) { basePath = BASE_PATH; }
-                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
-                    if (response.status >= 200 && response.status < 300) {
-                        return response.json();
-                    }
-                    else {
-                        throw response;
-                    }
-                });
-            };
-        },
-        /**
-         * Returns a list of delegates.
-         * @summary Get all delegates
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getDelegates: function (options) {
-            var localVarFetchArgs = SemuxApiFetchParamCreator(configuration).getDelegates(options);
-            return function (fetch, basePath) {
-                if (fetch === void 0) { fetch = portableFetch; }
-                if (basePath === void 0) { basePath = BASE_PATH; }
-                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
-                    if (response.status >= 200 && response.status < 300) {
-                        return response.json();
-                    }
-                    else {
-                        throw response;
-                    }
-                });
-            };
-        },
-        /**
-         * Returns kernel info.
-         * @summary Get info
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getInfo: function (options) {
-            var localVarFetchArgs = SemuxApiFetchParamCreator(configuration).getInfo(options);
-            return function (fetch, basePath) {
-                if (fetch === void 0) { fetch = portableFetch; }
-                if (basePath === void 0) { basePath = BASE_PATH; }
-                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
-                    if (response.status >= 200 && response.status < 300) {
-                        return response.json();
-                    }
-                    else {
-                        throw response;
-                    }
-                });
-            };
-        },
-        /**
-         * Returns the latest block.
-         * @summary Get latest block
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getLatestBlock: function (options) {
-            var localVarFetchArgs = SemuxApiFetchParamCreator(configuration).getLatestBlock(options);
-            return function (fetch, basePath) {
-                if (fetch === void 0) { fetch = portableFetch; }
-                if (basePath === void 0) { basePath = BASE_PATH; }
-                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
-                    if (response.status >= 200 && response.status < 300) {
-                        return response.json();
-                    }
-                    else {
-                        throw response;
-                    }
-                });
-            };
-        },
-        /**
-         * Returns the number of the latest block.
-         * @summary Get latest block number
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getLatestBlockNumber: function (options) {
-            var localVarFetchArgs = SemuxApiFetchParamCreator(configuration).getLatestBlockNumber(options);
-            return function (fetch, basePath) {
-                if (fetch === void 0) { fetch = portableFetch; }
-                if (basePath === void 0) { basePath = BASE_PATH; }
-                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
-                    if (response.status >= 200 && response.status < 300) {
-                        return response.json();
-                    }
-                    else {
-                        throw response;
-                    }
-                });
-            };
-        },
-        /**
-         * Returns connected peers.
-         * @summary Get peers
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getPeers: function (options) {
-            var localVarFetchArgs = SemuxApiFetchParamCreator(configuration).getPeers(options);
-            return function (fetch, basePath) {
-                if (fetch === void 0) { fetch = portableFetch; }
-                if (basePath === void 0) { basePath = BASE_PATH; }
-                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
-                    if (response.status >= 200 && response.status < 300) {
-                        return response.json();
-                    }
-                    else {
-                        throw response;
-                    }
-                });
-            };
-        },
-        /**
-         * Returns all the pending transactions.
-         * @summary Get pending transactions
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getPendingTransactions: function (options) {
-            var localVarFetchArgs = SemuxApiFetchParamCreator(configuration).getPendingTransactions(options);
-            return function (fetch, basePath) {
-                if (fetch === void 0) { fetch = portableFetch; }
-                if (basePath === void 0) { basePath = BASE_PATH; }
-                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
-                    if (response.status >= 200 && response.status < 300) {
-                        return response.json();
-                    }
-                    else {
-                        throw response;
-                    }
-                });
-            };
-        },
-        /**
-         * Returns an object with data about the sync status
-         * @summary Get syncing progress
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getSyncingProgress: function (options) {
-            var localVarFetchArgs = SemuxApiFetchParamCreator(configuration).getSyncingProgress(options);
-            return function (fetch, basePath) {
-                if (fetch === void 0) { fetch = portableFetch; }
-                if (basePath === void 0) { basePath = BASE_PATH; }
-                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
-                    if (response.status >= 200 && response.status < 300) {
-                        return response.json();
-                    }
-                    else {
-                        throw response;
-                    }
-                });
-            };
-        },
-        /**
-         * Returns a transactions if exists.
-         * @summary Get transaction
-         * @param {string} hash Transaction hash
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getTransaction: function (hash, options) {
-            var localVarFetchArgs = SemuxApiFetchParamCreator(configuration).getTransaction(hash, options);
-            return function (fetch, basePath) {
-                if (fetch === void 0) { fetch = portableFetch; }
-                if (basePath === void 0) { basePath = BASE_PATH; }
-                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
-                    if (response.status >= 200 && response.status < 300) {
-                        return response.json();
-                    }
-                    else {
-                        throw response;
-                    }
-                });
-            };
-        },
-        /**
-         * Returns transaction limitations including minimum transaction fee and maximum transaction size.
-         * @summary Get transaction limits
-         * @param {&#39;COINBASE&#39; | &#39;TRANSFER&#39; | &#39;DELEGATE&#39; | &#39;VOTE&#39; | &#39;UNVOTE&#39; | &#39;CREATE&#39; | &#39;CALL&#39;} type Type of transaction
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getTransactionLimits: function (type, options) {
-            var localVarFetchArgs = SemuxApiFetchParamCreator(configuration).getTransactionLimits(type, options);
-            return function (fetch, basePath) {
-                if (fetch === void 0) { fetch = portableFetch; }
-                if (basePath === void 0) { basePath = BASE_PATH; }
-                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
-                    if (response.status >= 200 && response.status < 300) {
-                        return response.json();
-                    }
-                    else {
-                        throw response;
-                    }
-                });
-            };
-        },
-        /**
-         * Returns the result of the requested transaction.
-         * @summary Get transaction result
-         * @param {string} hash Transaction hash
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getTransactionResult: function (hash, options) {
-            var localVarFetchArgs = SemuxApiFetchParamCreator(configuration).getTransactionResult(hash, options);
-            return function (fetch, basePath) {
-                if (fetch === void 0) { fetch = portableFetch; }
-                if (basePath === void 0) { basePath = BASE_PATH; }
-                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
-                    if (response.status >= 200 && response.status < 300) {
-                        return response.json();
-                    }
-                    else {
-                        throw response;
-                    }
-                });
-            };
-        },
-        /**
-         * Returns a list of validators in Semux addresses.
-         * @summary Get validators
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getValidators: function (options) {
-            var localVarFetchArgs = SemuxApiFetchParamCreator(configuration).getValidators(options);
-            return function (fetch, basePath) {
-                if (fetch === void 0) { fetch = portableFetch; }
-                if (basePath === void 0) { basePath = BASE_PATH; }
-                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
-                    if (response.status >= 200 && response.status < 300) {
-                        return response.json();
-                    }
-                    else {
-                        throw response;
-                    }
-                });
-            };
-        },
-        /**
-         * Returns the vote from a voter to a delegate.
-         * @summary Get vote
-         * @param {string} delegate Delegate address
-         * @param {string} voter Voter address
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getVote: function (delegate, voter, options) {
-            var localVarFetchArgs = SemuxApiFetchParamCreator(configuration).getVote(delegate, voter, options);
-            return function (fetch, basePath) {
-                if (fetch === void 0) { fetch = portableFetch; }
-                if (basePath === void 0) { basePath = BASE_PATH; }
-                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
-                    if (response.status >= 200 && response.status < 300) {
-                        return response.json();
-                    }
-                    else {
-                        throw response;
-                    }
-                });
-            };
-        },
-        /**
-         * Returns all the votes to a delegate as a map of [voter address] => [votes]
-         * @summary Get a delegate's votes
-         * @param {string} delegate Delegate address
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        getVotes: function (delegate, options) {
-            var localVarFetchArgs = SemuxApiFetchParamCreator(configuration).getVotes(delegate, options);
+        deleteAccountDeprecated: function (address, options) {
+            var localVarFetchArgs = WalletApiFetchParamCreator(configuration).deleteAccountDeprecated(address, options);
             return function (fetch, basePath) {
                 if (fetch === void 0) { fetch = portableFetch; }
                 if (basePath === void 0) { basePath = BASE_PATH; }
@@ -12668,65 +13682,12 @@ var SemuxApiFp = function (configuration) {
         },
         /**
          * Returns accounts in the wallet.
-         * @summary List accounts
+         * @summary List all accounts in wallet
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listAccounts: function (options) {
-            var localVarFetchArgs = SemuxApiFetchParamCreator(configuration).listAccounts(options);
-            return function (fetch, basePath) {
-                if (fetch === void 0) { fetch = portableFetch; }
-                if (basePath === void 0) { basePath = BASE_PATH; }
-                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
-                    if (response.status >= 200 && response.status < 300) {
-                        return response.json();
-                    }
-                    else {
-                        throw response;
-                    }
-                });
-            };
-        },
-        /**
-         * Executes a new message call immediately without creating a transaction on the block chain.
-         * @summary Make a local call
-         * @param {string} to Recipient&#39;s address (the contract address)
-         * @param {string} [from] Sender&#39;s address. The address must exist in the wallet.data of this Semux node.
-         * @param {string} [value] Amount of value to transfer in nano SEM
-         * @param {string} [nonce] Transaction nonce, default to sender&#39;s nonce if omitted
-         * @param {string} [data] Transaction data encoded in hexadecimal string
-         * @param {string} [gas] The gas limit for the call
-         * @param {string} [gasPrice] The gas price in nanoSEM
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        localCall: function (to, from, value, nonce, data, gas, gasPrice, options) {
-            var localVarFetchArgs = SemuxApiFetchParamCreator(configuration).localCall(to, from, value, nonce, data, gas, gasPrice, options);
-            return function (fetch, basePath) {
-                if (fetch === void 0) { fetch = portableFetch; }
-                if (basePath === void 0) { basePath = BASE_PATH; }
-                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
-                    if (response.status >= 200 && response.status < 300) {
-                        return response.json();
-                    }
-                    else {
-                        throw response;
-                    }
-                });
-            };
-        },
-        /**
-         * Registers as a delegate
-         * @summary Register delegate
-         * @param {string} from Registering address
-         * @param {string} data Delegate name in hexadecimal encoded UTF-8 string, 16 bytes of data at maximum
-         * @param {string} [fee] Transaction fee in nano SEM, default to minimum fee if omitted
-         * @param {string} [nonce] Transaction nonce, default to sender&#39;s nonce if omitted
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        registerDelegate: function (from, data, fee, nonce, options) {
-            var localVarFetchArgs = SemuxApiFetchParamCreator(configuration).registerDelegate(from, data, fee, nonce, options);
+        getAccounts: function (options) {
+            var localVarFetchArgs = WalletApiFetchParamCreator(configuration).getAccounts(options);
             return function (fetch, basePath) {
                 if (fetch === void 0) { fetch = portableFetch; }
                 if (basePath === void 0) { basePath = BASE_PATH; }
@@ -12749,7 +13710,7 @@ var SemuxApiFp = function (configuration) {
          * @throws {RequiredError}
          */
         signMessage: function (address, message, options) {
-            var localVarFetchArgs = SemuxApiFetchParamCreator(configuration).signMessage(address, message, options);
+            var localVarFetchArgs = WalletApiFetchParamCreator(configuration).signMessage(address, message, options);
             return function (fetch, basePath) {
                 if (fetch === void 0) { fetch = portableFetch; }
                 if (basePath === void 0) { basePath = BASE_PATH; }
@@ -12772,7 +13733,7 @@ var SemuxApiFp = function (configuration) {
          * @throws {RequiredError}
          */
         signRawTransaction: function (raw, address, options) {
-            var localVarFetchArgs = SemuxApiFetchParamCreator(configuration).signRawTransaction(raw, address, options);
+            var localVarFetchArgs = WalletApiFetchParamCreator(configuration).signRawTransaction(raw, address, options);
             return function (fetch, basePath) {
                 if (fetch === void 0) { fetch = portableFetch; }
                 if (basePath === void 0) { basePath = BASE_PATH; }
@@ -12799,7 +13760,7 @@ var SemuxApiFp = function (configuration) {
          * @throws {RequiredError}
          */
         transfer: function (from, to, value, fee, nonce, data, options) {
-            var localVarFetchArgs = SemuxApiFetchParamCreator(configuration).transfer(from, to, value, fee, nonce, data, options);
+            var localVarFetchArgs = WalletApiFetchParamCreator(configuration).transfer(from, to, value, fee, nonce, data, options);
             return function (fetch, basePath) {
                 if (fetch === void 0) { fetch = portableFetch; }
                 if (basePath === void 0) { basePath = BASE_PATH; }
@@ -12815,7 +13776,7 @@ var SemuxApiFp = function (configuration) {
         },
         /**
          * Unvotes for a delegate.
-         * @summary Unvote
+         * @summary Unvote for a delegate
          * @param {string} from Voter&#39;s address. The address must exist in the wallet.data of this Semux node.
          * @param {string} to Delegate address
          * @param {string} value Number of votes in nano SEM
@@ -12825,31 +13786,7 @@ var SemuxApiFp = function (configuration) {
          * @throws {RequiredError}
          */
         unvote: function (from, to, value, fee, nonce, options) {
-            var localVarFetchArgs = SemuxApiFetchParamCreator(configuration).unvote(from, to, value, fee, nonce, options);
-            return function (fetch, basePath) {
-                if (fetch === void 0) { fetch = portableFetch; }
-                if (basePath === void 0) { basePath = BASE_PATH; }
-                return fetch(basePath + localVarFetchArgs.url, localVarFetchArgs.options).then(function (response) {
-                    if (response.status >= 200 && response.status < 300) {
-                        return response.json();
-                    }
-                    else {
-                        throw response;
-                    }
-                });
-            };
-        },
-        /**
-         * Verify a signed message.
-         * @summary Verify a message
-         * @param {string} address Address of the message signer
-         * @param {string} message Message in UTF-8 string
-         * @param {string} signature Signature to verify
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        verifyMessage: function (address, message, signature, options) {
-            var localVarFetchArgs = SemuxApiFetchParamCreator(configuration).verifyMessage(address, message, signature, options);
+            var localVarFetchArgs = WalletApiFetchParamCreator(configuration).unvote(from, to, value, fee, nonce, options);
             return function (fetch, basePath) {
                 if (fetch === void 0) { fetch = portableFetch; }
                 if (basePath === void 0) { basePath = BASE_PATH; }
@@ -12865,7 +13802,7 @@ var SemuxApiFp = function (configuration) {
         },
         /**
          * Votes for a delegate.
-         * @summary Vote
+         * @summary Vote for a delegate
          * @param {string} from Voter&#39;s address. The address must exist in the wallet.data of this Semux node.
          * @param {string} to Delegate address
          * @param {string} value Number of votes in nano SEM
@@ -12875,7 +13812,7 @@ var SemuxApiFp = function (configuration) {
          * @throws {RequiredError}
          */
         vote: function (from, to, value, fee, nonce, options) {
-            var localVarFetchArgs = SemuxApiFetchParamCreator(configuration).vote(from, to, value, fee, nonce, options);
+            var localVarFetchArgs = WalletApiFetchParamCreator(configuration).vote(from, to, value, fee, nonce, options);
             return function (fetch, basePath) {
                 if (fetch === void 0) { fetch = portableFetch; }
                 if (basePath === void 0) { basePath = BASE_PATH; }
@@ -12892,63 +13829,30 @@ var SemuxApiFp = function (configuration) {
     };
 };
 /**
- * SemuxApi - object-oriented interface
+ * WalletApi - object-oriented interface
  * @export
- * @class SemuxApi
+ * @class WalletApi
  * @extends {BaseAPI}
  */
-var SemuxApi = /** @class */ (function (_super) {
-    __extends(SemuxApi, _super);
-    function SemuxApi() {
+var WalletApi = /** @class */ (function (_super) {
+    __extends(WalletApi, _super);
+    function WalletApi() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    /**
-     * Adds a node to node manager.
-     * @summary Add node
-     * @param {} node Address of the node in host:port format
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof SemuxApi
-     */
-    SemuxApi.prototype.addNode = function (node, options) {
-        return SemuxApiFp(this.configuration).addNode(node, options)(this.fetch, this.basePath);
-    };
-    /**
-     * Adds an IP address to blacklist.
-     * @summary Add to blacklist
-     * @param {} ip IP address
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof SemuxApi
-     */
-    SemuxApi.prototype.addToBlacklist = function (ip, options) {
-        return SemuxApiFp(this.configuration).addToBlacklist(ip, options)(this.fetch, this.basePath);
-    };
-    /**
-     * Adds an IP address to whitelist.
-     * @summary Add to whitelist
-     * @param {} ip IP address
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof SemuxApi
-     */
-    SemuxApi.prototype.addToWhitelist = function (ip, options) {
-        return SemuxApiFp(this.configuration).addToWhitelist(ip, options)(this.fetch, this.basePath);
-    };
     /**
      * Broadcasts a raw transaction to the network.
      * @summary Broadcast a raw transaction
      * @param {} raw Raw transaction encoded in hexadecimal string.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof SemuxApi
+     * @memberof WalletApi
      */
-    SemuxApi.prototype.broadcastRawTransaction = function (raw, options) {
-        return SemuxApiFp(this.configuration).broadcastRawTransaction(raw, options)(this.fetch, this.basePath);
+    WalletApi.prototype.broadcastRawTransactionDeprecated = function (raw, options) {
+        return WalletApiFp(this.configuration).broadcastRawTransactionDeprecated(raw, options)(this.fetch, this.basePath);
     };
     /**
      * Call a VM contract.
-     * @summary Call a contract.
+     * @summary Call a contract
      * @param {} from Sender&#39;s address. The address must exist in the wallet.data of this Semux node.
      * @param {} to Recipient&#39;s address (the contract address)
      * @param {} gas The gas limit for the call
@@ -12958,34 +13862,14 @@ var SemuxApi = /** @class */ (function (_super) {
      * @param {} [data] Transaction data encoded in hexadecimal string
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof SemuxApi
+     * @memberof WalletApi
      */
-    SemuxApi.prototype.call = function (from, to, gas, gasPrice, value, nonce, data, options) {
-        return SemuxApiFp(this.configuration).call(from, to, gas, gasPrice, value, nonce, data, options)(this.fetch, this.basePath);
-    };
-    /**
-     * Compose an unsigned raw transaction then return its hexadecimal encoded string. An unsigned raw transaction can be signed using /sign-raw-transaction API.
-     * @summary Compose an unsigned raw transaction
-     * @param {} network Network name
-     * @param {} type Transaction type
-     * @param {} to Recipient&#39;s address
-     * @param {} value Amount of value to transfer in nano SEM
-     * @param {} [fee] Transaction fee in nano SEM, default to minimum fee if omitted
-     * @param {} [nonce] Transaction nonce, default to sender&#39;s nonce if omitted
-     * @param {} [timestamp] Transaction timestamp in milliseconds. Default to current time.
-     * @param {} [data] Hexadecimal encoded transaction data.
-     * @param {} [gas] The gas limit for the call
-     * @param {} [gasPrice] The gas price
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof SemuxApi
-     */
-    SemuxApi.prototype.composeRawTransaction = function (network, type, to, value, fee, nonce, timestamp, data, gas, gasPrice, options) {
-        return SemuxApiFp(this.configuration).composeRawTransaction(network, type, to, value, fee, nonce, timestamp, data, gas, gasPrice, options)(this.fetch, this.basePath);
+    WalletApi.prototype.call = function (from, to, gas, gasPrice, value, nonce, data, options) {
+        return WalletApiFp(this.configuration).call(from, to, gas, gasPrice, value, nonce, data, options)(this.fetch, this.basePath);
     };
     /**
      * Create a VM contract.
-     * @summary Create a contract
+     * @summary Deploy a contract
      * @param {} from Sender&#39;s address. The address must exist in the wallet.data of this Semux node.
      * @param {} data The contract data encoded in hexadecimal string
      * @param {} gas The gas limit for the call
@@ -12994,10 +13878,22 @@ var SemuxApi = /** @class */ (function (_super) {
      * @param {} [nonce] Transaction nonce, default to sender&#39;s nonce if omitted
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof SemuxApi
+     * @memberof WalletApi
      */
-    SemuxApi.prototype.create = function (from, data, gas, gasPrice, value, nonce, options) {
-        return SemuxApiFp(this.configuration).create(from, data, gas, gasPrice, value, nonce, options)(this.fetch, this.basePath);
+    WalletApi.prototype.create = function (from, data, gas, gasPrice, value, nonce, options) {
+        return WalletApiFp(this.configuration).create(from, data, gas, gasPrice, value, nonce, options)(this.fetch, this.basePath);
+    };
+    /**
+     * Creates a new account by generating a new private key or importing an existing private key when parameter 'privateKey' is provided.
+     * @summary Create or import an account to wallet
+     * @param {} [name] Assigned alias to the created account.
+     * @param {} [privateKey] The private key to be imported, create a new key if omitted
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof WalletApi
+     */
+    WalletApi.prototype.createAccount = function (name, privateKey, options) {
+        return WalletApiFp(this.configuration).createAccount(name, privateKey, options)(this.fetch, this.basePath);
     };
     /**
      * Creates a new account by generating a new private key or importing an existing private key when parameter 'privateKey' is provided.
@@ -13006,10 +13902,35 @@ var SemuxApi = /** @class */ (function (_super) {
      * @param {} [privateKey] The private key to be imported, create a new key if omitted
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof SemuxApi
+     * @memberof WalletApi
      */
-    SemuxApi.prototype.createAccount = function (name, privateKey, options) {
-        return SemuxApiFp(this.configuration).createAccount(name, privateKey, options)(this.fetch, this.basePath);
+    WalletApi.prototype.createAccountDeprecated = function (name, privateKey, options) {
+        return WalletApiFp(this.configuration).createAccountDeprecated(name, privateKey, options)(this.fetch, this.basePath);
+    };
+    /**
+     * Registers as a delegate
+     * @summary Register as delegate
+     * @param {} from Registering address
+     * @param {} data Delegate name in hexadecimal encoded UTF-8 string, 16 bytes of data at maximum
+     * @param {} [fee] Transaction fee in nano SEM, default to minimum fee if omitted
+     * @param {} [nonce] Transaction nonce, default to sender&#39;s nonce if omitted
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof WalletApi
+     */
+    WalletApi.prototype.delegate = function (from, data, fee, nonce, options) {
+        return WalletApiFp(this.configuration).delegate(from, data, fee, nonce, options)(this.fetch, this.basePath);
+    };
+    /**
+     * Deletes an account from this wallet.
+     * @summary Delete an account from wallet
+     * @param {} address Address of the account
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof WalletApi
+     */
+    WalletApi.prototype.deleteAccount = function (address, options) {
+        return WalletApiFp(this.configuration).deleteAccount(address, options)(this.fetch, this.basePath);
     };
     /**
      * Deletes an account from this wallet.
@@ -13017,285 +13938,20 @@ var SemuxApi = /** @class */ (function (_super) {
      * @param {} address Address of the account
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof SemuxApi
+     * @memberof WalletApi
      */
-    SemuxApi.prototype.deleteAccount = function (address, options) {
-        return SemuxApiFp(this.configuration).deleteAccount(address, options)(this.fetch, this.basePath);
-    };
-    /**
-     * Estimate the gas usage of a transaction.
-     * @summary Estimate gas
-     * @param {} to Recipient&#39;s address (the contract address)
-     * @param {} [from] Sender&#39;s address. The address must exist in the wallet.data of this Semux node.
-     * @param {} [value] Amount of value to transfer in nano SEM
-     * @param {} [nonce] Transaction nonce, default to sender&#39;s nonce if omitted
-     * @param {} [data] Transaction data encoded in hexadecimal string
-     * @param {} [gas] The gas limit for the call
-     * @param {} [gasPrice] The gas price in SEM
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof SemuxApi
-     */
-    SemuxApi.prototype.estimateGas = function (to, from, value, nonce, data, gas, gasPrice, options) {
-        return SemuxApiFp(this.configuration).estimateGas(to, from, value, nonce, data, gas, gasPrice, options)(this.fetch, this.basePath);
-    };
-    /**
-     * Returns an account.
-     * @summary Get account
-     * @param {} address Address of account
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof SemuxApi
-     */
-    SemuxApi.prototype.getAccount = function (address, options) {
-        return SemuxApiFp(this.configuration).getAccount(address, options)(this.fetch, this.basePath);
-    };
-    /**
-     * Returns pending transactions from/to an account.
-     * @summary Get pending transactions of the account
-     * @param {} address Address of account
-     * @param {} from Starting range of transactions
-     * @param {} to Ending range of transactions
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof SemuxApi
-     */
-    SemuxApi.prototype.getAccountPendingTransactions = function (address, from, to, options) {
-        return SemuxApiFp(this.configuration).getAccountPendingTransactions(address, from, to, options)(this.fetch, this.basePath);
-    };
-    /**
-     * Returns transactions from/to an account.
-     * @summary Get account transactions
-     * @param {} address Address of account
-     * @param {} from Starting range of transactions
-     * @param {} to Ending range of transactions
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof SemuxApi
-     */
-    SemuxApi.prototype.getAccountTransactions = function (address, from, to, options) {
-        return SemuxApiFp(this.configuration).getAccountTransactions(address, from, to, options)(this.fetch, this.basePath);
-    };
-    /**
-     * Returns votes from the account.
-     * @summary Get account votes
-     * @param {} address Address of account
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof SemuxApi
-     */
-    SemuxApi.prototype.getAccountVotes = function (address, options) {
-        return SemuxApiFp(this.configuration).getAccountVotes(address, options)(this.fetch, this.basePath);
-    };
-    /**
-     * Returns a block by block hash.
-     * @summary Get block by hash
-     * @param {} hash Hash of block
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof SemuxApi
-     */
-    SemuxApi.prototype.getBlockByHash = function (hash, options) {
-        return SemuxApiFp(this.configuration).getBlockByHash(hash, options)(this.fetch, this.basePath);
-    };
-    /**
-     * Returns a block by block number.
-     * @summary Get block by number
-     * @param {} number Number of block
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof SemuxApi
-     */
-    SemuxApi.prototype.getBlockByNumber = function (number, options) {
-        return SemuxApiFp(this.configuration).getBlockByNumber(number, options)(this.fetch, this.basePath);
-    };
-    /**
-     * Returns a delegate.
-     * @summary Get a delegate
-     * @param {} address Delegate address
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof SemuxApi
-     */
-    SemuxApi.prototype.getDelegate = function (address, options) {
-        return SemuxApiFp(this.configuration).getDelegate(address, options)(this.fetch, this.basePath);
-    };
-    /**
-     * Returns a list of delegates.
-     * @summary Get all delegates
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof SemuxApi
-     */
-    SemuxApi.prototype.getDelegates = function (options) {
-        return SemuxApiFp(this.configuration).getDelegates(options)(this.fetch, this.basePath);
-    };
-    /**
-     * Returns kernel info.
-     * @summary Get info
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof SemuxApi
-     */
-    SemuxApi.prototype.getInfo = function (options) {
-        return SemuxApiFp(this.configuration).getInfo(options)(this.fetch, this.basePath);
-    };
-    /**
-     * Returns the latest block.
-     * @summary Get latest block
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof SemuxApi
-     */
-    SemuxApi.prototype.getLatestBlock = function (options) {
-        return SemuxApiFp(this.configuration).getLatestBlock(options)(this.fetch, this.basePath);
-    };
-    /**
-     * Returns the number of the latest block.
-     * @summary Get latest block number
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof SemuxApi
-     */
-    SemuxApi.prototype.getLatestBlockNumber = function (options) {
-        return SemuxApiFp(this.configuration).getLatestBlockNumber(options)(this.fetch, this.basePath);
-    };
-    /**
-     * Returns connected peers.
-     * @summary Get peers
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof SemuxApi
-     */
-    SemuxApi.prototype.getPeers = function (options) {
-        return SemuxApiFp(this.configuration).getPeers(options)(this.fetch, this.basePath);
-    };
-    /**
-     * Returns all the pending transactions.
-     * @summary Get pending transactions
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof SemuxApi
-     */
-    SemuxApi.prototype.getPendingTransactions = function (options) {
-        return SemuxApiFp(this.configuration).getPendingTransactions(options)(this.fetch, this.basePath);
-    };
-    /**
-     * Returns an object with data about the sync status
-     * @summary Get syncing progress
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof SemuxApi
-     */
-    SemuxApi.prototype.getSyncingProgress = function (options) {
-        return SemuxApiFp(this.configuration).getSyncingProgress(options)(this.fetch, this.basePath);
-    };
-    /**
-     * Returns a transactions if exists.
-     * @summary Get transaction
-     * @param {} hash Transaction hash
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof SemuxApi
-     */
-    SemuxApi.prototype.getTransaction = function (hash, options) {
-        return SemuxApiFp(this.configuration).getTransaction(hash, options)(this.fetch, this.basePath);
-    };
-    /**
-     * Returns transaction limitations including minimum transaction fee and maximum transaction size.
-     * @summary Get transaction limits
-     * @param {} type Type of transaction
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof SemuxApi
-     */
-    SemuxApi.prototype.getTransactionLimits = function (type, options) {
-        return SemuxApiFp(this.configuration).getTransactionLimits(type, options)(this.fetch, this.basePath);
-    };
-    /**
-     * Returns the result of the requested transaction.
-     * @summary Get transaction result
-     * @param {} hash Transaction hash
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof SemuxApi
-     */
-    SemuxApi.prototype.getTransactionResult = function (hash, options) {
-        return SemuxApiFp(this.configuration).getTransactionResult(hash, options)(this.fetch, this.basePath);
-    };
-    /**
-     * Returns a list of validators in Semux addresses.
-     * @summary Get validators
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof SemuxApi
-     */
-    SemuxApi.prototype.getValidators = function (options) {
-        return SemuxApiFp(this.configuration).getValidators(options)(this.fetch, this.basePath);
-    };
-    /**
-     * Returns the vote from a voter to a delegate.
-     * @summary Get vote
-     * @param {} delegate Delegate address
-     * @param {} voter Voter address
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof SemuxApi
-     */
-    SemuxApi.prototype.getVote = function (delegate, voter, options) {
-        return SemuxApiFp(this.configuration).getVote(delegate, voter, options)(this.fetch, this.basePath);
-    };
-    /**
-     * Returns all the votes to a delegate as a map of [voter address] => [votes]
-     * @summary Get a delegate's votes
-     * @param {} delegate Delegate address
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof SemuxApi
-     */
-    SemuxApi.prototype.getVotes = function (delegate, options) {
-        return SemuxApiFp(this.configuration).getVotes(delegate, options)(this.fetch, this.basePath);
+    WalletApi.prototype.deleteAccountDeprecated = function (address, options) {
+        return WalletApiFp(this.configuration).deleteAccountDeprecated(address, options)(this.fetch, this.basePath);
     };
     /**
      * Returns accounts in the wallet.
-     * @summary List accounts
+     * @summary List all accounts in wallet
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof SemuxApi
+     * @memberof WalletApi
      */
-    SemuxApi.prototype.listAccounts = function (options) {
-        return SemuxApiFp(this.configuration).listAccounts(options)(this.fetch, this.basePath);
-    };
-    /**
-     * Executes a new message call immediately without creating a transaction on the block chain.
-     * @summary Make a local call
-     * @param {} to Recipient&#39;s address (the contract address)
-     * @param {} [from] Sender&#39;s address. The address must exist in the wallet.data of this Semux node.
-     * @param {} [value] Amount of value to transfer in nano SEM
-     * @param {} [nonce] Transaction nonce, default to sender&#39;s nonce if omitted
-     * @param {} [data] Transaction data encoded in hexadecimal string
-     * @param {} [gas] The gas limit for the call
-     * @param {} [gasPrice] The gas price in nanoSEM
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof SemuxApi
-     */
-    SemuxApi.prototype.localCall = function (to, from, value, nonce, data, gas, gasPrice, options) {
-        return SemuxApiFp(this.configuration).localCall(to, from, value, nonce, data, gas, gasPrice, options)(this.fetch, this.basePath);
-    };
-    /**
-     * Registers as a delegate
-     * @summary Register delegate
-     * @param {} from Registering address
-     * @param {} data Delegate name in hexadecimal encoded UTF-8 string, 16 bytes of data at maximum
-     * @param {} [fee] Transaction fee in nano SEM, default to minimum fee if omitted
-     * @param {} [nonce] Transaction nonce, default to sender&#39;s nonce if omitted
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof SemuxApi
-     */
-    SemuxApi.prototype.registerDelegate = function (from, data, fee, nonce, options) {
-        return SemuxApiFp(this.configuration).registerDelegate(from, data, fee, nonce, options)(this.fetch, this.basePath);
+    WalletApi.prototype.getAccounts = function (options) {
+        return WalletApiFp(this.configuration).getAccounts(options)(this.fetch, this.basePath);
     };
     /**
      * Sign a message.
@@ -13304,10 +13960,10 @@ var SemuxApi = /** @class */ (function (_super) {
      * @param {} message Message to sign in UTF-8 string
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof SemuxApi
+     * @memberof WalletApi
      */
-    SemuxApi.prototype.signMessage = function (address, message, options) {
-        return SemuxApiFp(this.configuration).signMessage(address, message, options)(this.fetch, this.basePath);
+    WalletApi.prototype.signMessage = function (address, message, options) {
+        return WalletApiFp(this.configuration).signMessage(address, message, options)(this.fetch, this.basePath);
     };
     /**
      * Sign an unsigned raw transaction then return its hexadecimal encoded string. An unsigned raw transaction can be created using /compose-raw-transaction API.
@@ -13316,10 +13972,10 @@ var SemuxApi = /** @class */ (function (_super) {
      * @param {} address Signer&#39;s address. This address must exist in the wallet.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof SemuxApi
+     * @memberof WalletApi
      */
-    SemuxApi.prototype.signRawTransaction = function (raw, address, options) {
-        return SemuxApiFp(this.configuration).signRawTransaction(raw, address, options)(this.fetch, this.basePath);
+    WalletApi.prototype.signRawTransaction = function (raw, address, options) {
+        return WalletApiFp(this.configuration).signRawTransaction(raw, address, options)(this.fetch, this.basePath);
     };
     /**
      * Transfers coins to another address.
@@ -13332,14 +13988,14 @@ var SemuxApi = /** @class */ (function (_super) {
      * @param {} [data] Transaction data encoded in hexadecimal string
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof SemuxApi
+     * @memberof WalletApi
      */
-    SemuxApi.prototype.transfer = function (from, to, value, fee, nonce, data, options) {
-        return SemuxApiFp(this.configuration).transfer(from, to, value, fee, nonce, data, options)(this.fetch, this.basePath);
+    WalletApi.prototype.transfer = function (from, to, value, fee, nonce, data, options) {
+        return WalletApiFp(this.configuration).transfer(from, to, value, fee, nonce, data, options)(this.fetch, this.basePath);
     };
     /**
      * Unvotes for a delegate.
-     * @summary Unvote
+     * @summary Unvote for a delegate
      * @param {} from Voter&#39;s address. The address must exist in the wallet.data of this Semux node.
      * @param {} to Delegate address
      * @param {} value Number of votes in nano SEM
@@ -13347,27 +14003,14 @@ var SemuxApi = /** @class */ (function (_super) {
      * @param {} [nonce] Transaction nonce, default to sender&#39;s nonce if omitted
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof SemuxApi
+     * @memberof WalletApi
      */
-    SemuxApi.prototype.unvote = function (from, to, value, fee, nonce, options) {
-        return SemuxApiFp(this.configuration).unvote(from, to, value, fee, nonce, options)(this.fetch, this.basePath);
-    };
-    /**
-     * Verify a signed message.
-     * @summary Verify a message
-     * @param {} address Address of the message signer
-     * @param {} message Message in UTF-8 string
-     * @param {} signature Signature to verify
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof SemuxApi
-     */
-    SemuxApi.prototype.verifyMessage = function (address, message, signature, options) {
-        return SemuxApiFp(this.configuration).verifyMessage(address, message, signature, options)(this.fetch, this.basePath);
+    WalletApi.prototype.unvote = function (from, to, value, fee, nonce, options) {
+        return WalletApiFp(this.configuration).unvote(from, to, value, fee, nonce, options)(this.fetch, this.basePath);
     };
     /**
      * Votes for a delegate.
-     * @summary Vote
+     * @summary Vote for a delegate
      * @param {} from Voter&#39;s address. The address must exist in the wallet.data of this Semux node.
      * @param {} to Delegate address
      * @param {} value Number of votes in nano SEM
@@ -13375,12 +14018,12 @@ var SemuxApi = /** @class */ (function (_super) {
      * @param {} [nonce] Transaction nonce, default to sender&#39;s nonce if omitted
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof SemuxApi
+     * @memberof WalletApi
      */
-    SemuxApi.prototype.vote = function (from, to, value, fee, nonce, options) {
-        return SemuxApiFp(this.configuration).vote(from, to, value, fee, nonce, options)(this.fetch, this.basePath);
+    WalletApi.prototype.vote = function (from, to, value, fee, nonce, options) {
+        return WalletApiFp(this.configuration).vote(from, to, value, fee, nonce, options)(this.fetch, this.basePath);
     };
-    return SemuxApi;
+    return WalletApi;
 }(BaseAPI));
 
 // tslint:disable
@@ -13388,7 +14031,7 @@ var SemuxApi = /** @class */ (function (_super) {
  * Semux API
  * Semux is an experimental high-performance blockchain platform that powers decentralized application.
  *
- * OpenAPI spec version: 2.3.0
+ * OpenAPI spec version: 2.4.0
  *
  *
  * NOTE: This class is auto generated by the swagger code generator program.
@@ -21290,5 +21933,5 @@ function hashTx(tx) {
     return Hash.h256(encodeTx(tx));
 }
 
-export { SemuxApi, Configuration as SemuxApiConfiguration, Bytes, Cast, Constants, Hash, Key, KeyCodec, Network, Signature, SimpleDecoder, SimpleEncoder, Transaction, TransactionType$1 as TransactionType };
+export { AccountApi, BlockchainApi, Configuration, DelegateApi, NodeApi, ToolApi, WalletApi, Bytes, Cast, Constants, Hash, Key, KeyCodec, Network, Signature, SimpleDecoder, SimpleEncoder, Transaction, TransactionType$1 as TransactionType };
 //# sourceMappingURL=semux.es6.js.map

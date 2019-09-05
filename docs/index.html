@@ -67,7 +67,8 @@
 				</a>
 				<p><a href="https://www.npmjs.com/package/semux-js"><img src="https://img.shields.io/npm/v/semux-js.svg" alt="NPM Status"></a>
 					<a href="https://travis-ci.org/semuxproject/semux-js"><img src="https://travis-ci.org/semuxproject/semux-js.svg?branch=master" alt="Travis Build Status"></a>
-				<a href="https://coveralls.io/github/semuxproject/semux-js?branch=master"><img src="https://coveralls.io/repos/github/semuxproject/semux-js/badge.svg?branch=master" alt="Coverage Status"></a></p>
+					<a href="https://coveralls.io/github/semuxproject/semux-js?branch=master"><img src="https://coveralls.io/repos/github/semuxproject/semux-js/badge.svg?branch=master" alt="Coverage Status"></a>
+				<a href="https://automate.browserstack.com/public-build/YlBOaW1nM3A0UnNSeGlWTkJ3dkJmTnFFZWJybGlJTmtENnB1ZStFSlNqbz0tLWIrdjN0TTh5S2lEdlVOSUoyQlRHOXc9PQ==--5c8afe70294da44aa09f8091b6f0c530bc8ec229"><img src="https://automate.browserstack.com/badge.svg?badge_key=YlBOaW1nM3A0UnNSeGlWTkJ3dkJmTnFFZWJybGlJTmtENnB1ZStFSlNqbz0tLWIrdjN0TTh5S2lEdlVOSUoyQlRHOXc9PQ==--5c8afe70294da44aa09f8091b6f0c530bc8ec229" alt="BrowserStack Status"></a></p>
 				<p>This library aims to providing javascript utilities for Semux client-side applications, such as web wallet.</p>
 				<p>Visit <a href="https://github.com/semuxproject/semux-js/issues">issues</a> page to see planned features or propose a feature request.</p>
 				<a href="#table-of-contents" id="table-of-contents" style="color: inherit; text-decoration: none;">
@@ -90,13 +91,13 @@
 				</a>
 				<p><strong>Node.js</strong></p>
 				<pre><code class="language-javascript"><span class="hljs-comment">// import semux module</span>
-<span class="hljs-keyword">const</span> {SemuxApi, SemuxApiConfiguration} = <span class="hljs-built_in">require</span>(<span class="hljs-string">"semux-js"</span>);
+<span class="hljs-keyword">const</span> {AccountApi, BlockchainApi, Configuration, DelegateApi, NodeApi, ToolApi, WalletApi} = <span class="hljs-built_in">require</span>(<span class="hljs-string">"semux-js"</span>);
 
 <span class="hljs-comment">// create an API client</span>
-<span class="hljs-keyword">const</span> api = <span class="hljs-keyword">new</span> SemuxApi(<span class="hljs-keyword">new</span> SemuxApiConfiguration({
+<span class="hljs-keyword">const</span> api = <span class="hljs-keyword">new</span> NodeApi(<span class="hljs-keyword">new</span> Configuration({
     <span class="hljs-attr">username</span>: <span class="hljs-string">"user"</span>,
     <span class="hljs-attr">password</span>: <span class="hljs-string">"pass"</span>,
-    <span class="hljs-attr">basePath</span>: <span class="hljs-string">"http://localhost:5171/v2.3.0"</span>
+    <span class="hljs-attr">basePath</span>: <span class="hljs-string">"http://localhost:5171/v2.4.0"</span>
 }));
 
 <span class="hljs-comment">// call GET /info API</span>
@@ -184,7 +185,13 @@ api
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-class tsd-is-external">
+						<a href="classes/accountapi.html" class="tsd-kind-icon">Account<wbr>Api</a>
+					</li>
+					<li class=" tsd-kind-class tsd-is-external">
 						<a href="classes/baseapi.html" class="tsd-kind-icon">BaseAPI</a>
+					</li>
+					<li class=" tsd-kind-class tsd-is-external">
+						<a href="classes/blockchainapi.html" class="tsd-kind-icon">Blockchain<wbr>Api</a>
 					</li>
 					<li class=" tsd-kind-class tsd-is-external">
 						<a href="classes/bytes.html" class="tsd-kind-icon">Bytes</a>
@@ -199,6 +206,9 @@ api
 						<a href="classes/constants.html" class="tsd-kind-icon">Constants</a>
 					</li>
 					<li class=" tsd-kind-class tsd-is-external">
+						<a href="classes/delegateapi.html" class="tsd-kind-icon">Delegate<wbr>Api</a>
+					</li>
+					<li class=" tsd-kind-class tsd-is-external">
 						<a href="classes/hash.html" class="tsd-kind-icon">Hash</a>
 					</li>
 					<li class=" tsd-kind-class tsd-is-external">
@@ -211,10 +221,10 @@ api
 						<a href="classes/network.html" class="tsd-kind-icon">Network</a>
 					</li>
 					<li class=" tsd-kind-class tsd-is-external">
-						<a href="classes/requirederror.html" class="tsd-kind-icon">Required<wbr>Error</a>
+						<a href="classes/nodeapi.html" class="tsd-kind-icon">Node<wbr>Api</a>
 					</li>
 					<li class=" tsd-kind-class tsd-is-external">
-						<a href="classes/semuxapi.html" class="tsd-kind-icon">Semux<wbr>Api</a>
+						<a href="classes/requirederror.html" class="tsd-kind-icon">Required<wbr>Error</a>
 					</li>
 					<li class=" tsd-kind-class tsd-is-external">
 						<a href="classes/signature.html" class="tsd-kind-icon">Signature</a>
@@ -226,10 +236,16 @@ api
 						<a href="classes/simpleencoder.html" class="tsd-kind-icon">Simple<wbr>Encoder</a>
 					</li>
 					<li class=" tsd-kind-class tsd-is-external">
+						<a href="classes/toolapi.html" class="tsd-kind-icon">Tool<wbr>Api</a>
+					</li>
+					<li class=" tsd-kind-class tsd-is-external">
 						<a href="classes/transaction.html" class="tsd-kind-icon">Transaction</a>
 					</li>
 					<li class=" tsd-kind-class tsd-is-external">
 						<a href="classes/transactiontype.html" class="tsd-kind-icon">Transaction<wbr>Type</a>
+					</li>
+					<li class=" tsd-kind-class tsd-is-external">
+						<a href="classes/walletapi.html" class="tsd-kind-icon">Wallet<wbr>Api</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-is-external">
 						<a href="interfaces/accounttype.html" class="tsd-kind-icon">Account<wbr>Type</a>
@@ -245,9 +261,6 @@ api
 					</li>
 					<li class=" tsd-kind-interface tsd-is-external">
 						<a href="interfaces/blocktype.html" class="tsd-kind-icon">Block<wbr>Type</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/callresponse.html" class="tsd-kind-icon">Call<wbr>Response</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-is-external">
 						<a href="interfaces/composerawtransactionresponse.html" class="tsd-kind-icon">Compose<wbr>Raw<wbr>Transaction<wbr>Response</a>
@@ -277,16 +290,28 @@ api
 						<a href="interfaces/fetchargs.html" class="tsd-kind-icon">Fetch<wbr>Args</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/getaccountcoderesponse.html" class="tsd-kind-icon">Get<wbr>Account<wbr>Code<wbr>Response</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/getaccountinternaltransactionsresponse.html" class="tsd-kind-icon">Get<wbr>Account<wbr>Internal<wbr>Transactions<wbr>Response</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
 						<a href="interfaces/getaccountpendingtransactionsresponse.html" class="tsd-kind-icon">Get<wbr>Account<wbr>Pending<wbr>Transactions<wbr>Response</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-is-external">
 						<a href="interfaces/getaccountresponse.html" class="tsd-kind-icon">Get<wbr>Account<wbr>Response</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/getaccountstorageresponse.html" class="tsd-kind-icon">Get<wbr>Account<wbr>Storage<wbr>Response</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
 						<a href="interfaces/getaccounttransactionsresponse.html" class="tsd-kind-icon">Get<wbr>Account<wbr>Transactions<wbr>Response</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-is-external">
 						<a href="interfaces/getaccountvotesresponse.html" class="tsd-kind-icon">Get<wbr>Account<wbr>Votes<wbr>Response</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/getaccountsresponse.html" class="tsd-kind-icon">Get<wbr>Accounts<wbr>Response</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-is-external">
 						<a href="interfaces/getblockresponse.html" class="tsd-kind-icon">Get<wbr>Block<wbr>Response</a>
@@ -316,7 +341,7 @@ api
 						<a href="interfaces/getrootresponse.html" class="tsd-kind-icon">Get<wbr>Root<wbr>Response</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/getsyncingprogressresponse.html" class="tsd-kind-icon">Get<wbr>Syncing<wbr>Progress<wbr>Response</a>
+						<a href="interfaces/getsyncingstatusresponse.html" class="tsd-kind-icon">Get<wbr>Syncing<wbr>Status<wbr>Response</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-is-external">
 						<a href="interfaces/gettransactionlimitsresponse.html" class="tsd-kind-icon">Get<wbr>Transaction<wbr>Limits<wbr>Response</a>
@@ -340,7 +365,10 @@ api
 						<a href="interfaces/internaltransactiontype.html" class="tsd-kind-icon">Internal<wbr>Transaction<wbr>Type</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/listaccountsresponse.html" class="tsd-kind-icon">List<wbr>Accounts<wbr>Response</a>
+						<a href="interfaces/localcallresponse.html" class="tsd-kind-icon">Local<wbr>Call<wbr>Response</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-is-external">
+						<a href="interfaces/localcreateresponse.html" class="tsd-kind-icon">Local<wbr>Create<wbr>Response</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-is-external">
 						<a href="interfaces/loginfotype.html" class="tsd-kind-icon">Log<wbr>Info<wbr>Type</a>
@@ -355,7 +383,7 @@ api
 						<a href="interfaces/signrawtransactionresponse.html" class="tsd-kind-icon">Sign<wbr>Raw<wbr>Transaction<wbr>Response</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-is-external">
-						<a href="interfaces/syncingprogresstype.html" class="tsd-kind-icon">Syncing<wbr>Progress<wbr>Type</a>
+						<a href="interfaces/syncingstatustype.html" class="tsd-kind-icon">Syncing<wbr>Status<wbr>Type</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-is-external">
 						<a href="interfaces/transactionlimitstype.html" class="tsd-kind-icon">Transaction<wbr>Limits<wbr>Type</a>
@@ -367,13 +395,58 @@ api
 						<a href="interfaces/verifymessageresponse.html" class="tsd-kind-icon">Verify<wbr>Message<wbr>Response</a>
 					</li>
 					<li class=" tsd-kind-function tsd-is-external">
-						<a href="globals.html#semuxapifactory" class="tsd-kind-icon">Semux<wbr>Api<wbr>Factory</a>
+						<a href="globals.html#accountapifactory" class="tsd-kind-icon">Account<wbr>Api<wbr>Factory</a>
 					</li>
 					<li class=" tsd-kind-function tsd-is-external">
-						<a href="globals.html#semuxapifetchparamcreator" class="tsd-kind-icon">Semux<wbr>Api<wbr>Fetch<wbr>Param<wbr>Creator</a>
+						<a href="globals.html#accountapifetchparamcreator" class="tsd-kind-icon">Account<wbr>Api<wbr>Fetch<wbr>Param<wbr>Creator</a>
 					</li>
 					<li class=" tsd-kind-function tsd-is-external">
-						<a href="globals.html#semuxapifp" class="tsd-kind-icon">Semux<wbr>Api<wbr>Fp</a>
+						<a href="globals.html#accountapifp" class="tsd-kind-icon">Account<wbr>Api<wbr>Fp</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-external">
+						<a href="globals.html#blockchainapifactory" class="tsd-kind-icon">Blockchain<wbr>Api<wbr>Factory</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-external">
+						<a href="globals.html#blockchainapifetchparamcreator" class="tsd-kind-icon">Blockchain<wbr>Api<wbr>Fetch<wbr>Param<wbr>Creator</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-external">
+						<a href="globals.html#blockchainapifp" class="tsd-kind-icon">Blockchain<wbr>Api<wbr>Fp</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-external">
+						<a href="globals.html#delegateapifactory" class="tsd-kind-icon">Delegate<wbr>Api<wbr>Factory</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-external">
+						<a href="globals.html#delegateapifetchparamcreator" class="tsd-kind-icon">Delegate<wbr>Api<wbr>Fetch<wbr>Param<wbr>Creator</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-external">
+						<a href="globals.html#delegateapifp" class="tsd-kind-icon">Delegate<wbr>Api<wbr>Fp</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-external">
+						<a href="globals.html#nodeapifactory" class="tsd-kind-icon">Node<wbr>Api<wbr>Factory</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-external">
+						<a href="globals.html#nodeapifetchparamcreator" class="tsd-kind-icon">Node<wbr>Api<wbr>Fetch<wbr>Param<wbr>Creator</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-external">
+						<a href="globals.html#nodeapifp" class="tsd-kind-icon">Node<wbr>Api<wbr>Fp</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-external">
+						<a href="globals.html#toolapifactory" class="tsd-kind-icon">Tool<wbr>Api<wbr>Factory</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-external">
+						<a href="globals.html#toolapifetchparamcreator" class="tsd-kind-icon">Tool<wbr>Api<wbr>Fetch<wbr>Param<wbr>Creator</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-external">
+						<a href="globals.html#toolapifp" class="tsd-kind-icon">Tool<wbr>Api<wbr>Fp</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-external">
+						<a href="globals.html#walletapifactory" class="tsd-kind-icon">Wallet<wbr>Api<wbr>Factory</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-external">
+						<a href="globals.html#walletapifetchparamcreator" class="tsd-kind-icon">Wallet<wbr>Api<wbr>Fetch<wbr>Param<wbr>Creator</a>
+					</li>
+					<li class=" tsd-kind-function tsd-is-external">
+						<a href="globals.html#walletapifp" class="tsd-kind-icon">Wallet<wbr>Api<wbr>Fp</a>
 					</li>
 					<li class=" tsd-kind-object-literal tsd-is-external">
 						<a href="globals.html#collection_formats" class="tsd-kind-icon">COLLECTION_<wbr>FORMATS</a>
