@@ -23,20 +23,24 @@ describe("Semux API Test", () => {
     basePath: "http://localhost:5171/v2.1.0"
   });
 
-  const api = new API.SemuxApi(config);
+  const nodeApi = new API.NodeApi(config);
+  const accountApi = new API.AccountApi(config);
+  const delegateApi = new API.DelegateApi(config);
+  const walletApi = new API.WalletApi(config);
+  const toolApi = new API.ToolApi(config);
 
   it("GET /info", async () => {
-    const response = await api.getInfo({ mode: 'cors', credentials: 'include' });
+    const response = await nodeApi.getInfo({ mode: 'cors', credentials: 'include' });
     chai.assert.isTrue(response.success)
   });
 
   it("PUT /whitelist", async () => {
-    const response = await api.addToWhitelist("1.2.3.4");
+    const response = await nodeApi.addToWhitelist("1.2.3.4");
     chai.assert.isTrue(response.success)
   });
 
   it("GET /accounts", async () => {
-    const response = await api.listAccounts();
+    const response = await walletApi.getAccounts();
     chai.assert.isTrue(response.success)
     chai.assert.deepEqual(response.result, [
       "0x2df87e6d8bc749574af35a65cf8d4a69844495ed",
@@ -45,12 +49,12 @@ describe("Semux API Test", () => {
   });
 
   it("GET /account", async() => {
-    const response = await api.getAccount(DEV_ADDRESS);
+    const response = await accountApi.getAccount(DEV_ADDRESS);
     chai.assert.isTrue(response.success);
   })
 
-  it("POST /transaction/raw", async () => {
-    const data = Buffer.from("POST /transaction/raw", "utf-8");
+  it("GET /broadcast-raw-transaction", async () => {
+    const data = Buffer.from("GET /broadcast-raw-transaction", "utf-8");
     const tx = new Transaction(
       Network.DEVNET,
       TransactionType.TRANSFER,
@@ -65,12 +69,12 @@ describe("Semux API Test", () => {
     ).sign(DEV_KEY);
 
     const encodedTx = Buffer.from(tx.toBytes().buffer).toString("hex");
-    const response = await api.broadcastRawTransaction(encodedTx);
+    const response = await toolApi.broadcastRawTransaction(encodedTx);
     chai.assert.isTrue(response.success);
 
     await sleep(500);
 
-    const responsePendingTxs = await api.getPendingTransactions();
+    const responsePendingTxs = await nodeApi.getPendingTransactions();
     const pendingTxs: API.TransactionType[] = [{
       "hash": `0x${Buffer.from(tx.getHash().buffer).toString('hex')}`,
       "type": API.TransactionType.TypeEnum.TRANSFER,

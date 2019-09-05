@@ -1,6 +1,6 @@
 {
   "name": "semux-js",
-  "version": "1.6.1",
+  "version": "1.7.0",
   "description": "Semux Javascript SDK Library",
   "main": "dist/semux.umd.js",
   "module": "dist/semux.es6.js",
@@ -17,7 +17,7 @@
     "build:docs": "cross-env-shell \"rimraf docs && npx typedoc index.ts\"",
     "build:test": "cross-env-shell \"rollup -c rollup.test.config.js\"",
     "build:test-api": "cross-env-shell \"rollup -c rollup.test-api.config.js\"",
-    "build:swagger": "$(npm bin)/swagger-codegen-cli generate -i semux/src/main/resources/org/semux/api/swagger/v2.3.0.json -c swagger/swagger-codegen.json -l typescript-fetch --additional-properties=classname=SemuxApi -t swagger/templates -o lib/api",
+    "build:swagger": "$(npm bin)/swagger-codegen-cli generate -i semux/src/main/resources/org/semux/api/swagger/v2.4.0.json -c swagger/swagger-codegen.json -l typescript-fetch --additional-properties=classname=SemuxApi -t swagger/templates -o lib/api",
     "test": "cross-env-shell \"npm run build:test && mocha --opts mocha.opts test/index.js\"",
     "test:browser": "cross-env-shell \"karma start --single-run\"",
     "test:browserstack": "cross-env-shell \"karma start karma.browserstack.conf.js --single-run\"",

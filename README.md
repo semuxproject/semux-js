@@ -30,13 +30,13 @@ npm install --save semux-js
 
 ```javascript
 // import semux module
-const {SemuxApi, SemuxApiConfiguration} = require("semux-js");
+const {AccountApi, BlockchainApi, Configuration, DelegateApi, NodeApi, ToolApi, WalletApi} = require("semux-js");
 
 // create an API client
-const api = new SemuxApi(new SemuxApiConfiguration({
+const api = new NodeApi(new Configuration({
     username: "user",
     password: "pass",
-    basePath: "http://localhost:5171/v2.3.0"
+    basePath: "http://localhost:5171/v2.4.0"
 }));
 
 // call GET /info API

@@ -1,6 +1,6 @@
 import "./shim";
 
-import {Configuration, SemuxApi} from "./lib/api";
+import {AccountApi, BlockchainApi, Configuration, DelegateApi, NodeApi, ToolApi, WalletApi} from "./lib/api";
 import Bytes from "./lib/Bytes";
 import Cast from "./lib/Cast";
 import Constants from "./lib/Constants";
@@ -16,8 +16,13 @@ import TransactionType from "./lib/TransactionType";
 
 // export Semux module
 export {
-  SemuxApi,
-  Configuration as SemuxApiConfiguration,
+  AccountApi, 
+  BlockchainApi,
+  Configuration,
+  DelegateApi,
+  NodeApi,
+  ToolApi,
+  WalletApi,
   Bytes,
   Cast,
   Constants,
