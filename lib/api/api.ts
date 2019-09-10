@@ -3096,7 +3096,7 @@ export const NodeApiFetchParamCreator = function (configuration?: Configuration)
          * @throws {RequiredError}
          */
         getSyncingStatus(options: any = {}): FetchArgs {
-            const localVarPath = `/syncing-status`;
+            const localVarPath = `/syncing`;
             const localVarUrlObj = url.parse(localVarPath, true);
             const localVarRequestOptions = Object.assign({ method: 'GET' }, options);
             const localVarHeaderParameter = {} as any;
