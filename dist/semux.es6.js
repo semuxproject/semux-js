@@ -11966,7 +11966,7 @@ var NodeApiFetchParamCreator = function (configuration) {
          */
         getSyncingStatus: function (options) {
             if (options === void 0) { options = {}; }
-            var localVarPath = "/syncing-status";
+            var localVarPath = "/syncing";
             var localVarUrlObj = url.parse(localVarPath, true);
             var localVarRequestOptions = Object.assign({ method: 'GET' }, options);
             var localVarHeaderParameter = {};
