@@ -213,7 +213,7 @@ function encodeTx(tx: Transaction): Uint8Array {
   encoder.writeLong(tx.getTimestamp());
   encoder.writeBytes(tx.getData());
 
-  const isVM = tx.getType() === TransactionType.CALL || tx.getType() === TransactionType.CREATE;
+  const isVM = tx.getType().getCode() === TransactionType.CALL.getCode() || tx.getType().getCode() === TransactionType.CREATE.getCode();
   if (isVM) {
     encoder.writeLong(tx.getGas());
     encoder.writeLong(tx.getGasPrice());
