@@ -1,12 +1,7 @@
 {
-  "files": [
-    "index.ts",
-    "shim.ts",
-    "test/index.ts",
-    "test/api/index.ts"
-  ],
   "include": [
-    "lib/**/*"
+    "src/**/*",
+    "test/**/*"
   ],
   "exclude": [
     "dist",

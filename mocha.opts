@@ -1,2 +1,0 @@
--t 100000
---require source-map-support/register

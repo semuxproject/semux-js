@@ -11,7 +11,7 @@ module.exports = {
   ignoreCompilerErrors: "lib",
   includeDeclarations: false,
   include: [
-    "index.ts"
+    "src/index.ts"
   ],
   exclude: [
     "node_modules/**/*",

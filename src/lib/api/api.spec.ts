@@ -21,7 +21,7 @@ describe("Semux API Test", () => {
   const config = new Configuration({
     username: "user",
     password: "pass",
-    basePath: "http://localhost:5171/v2.1.0"
+    basePath: "http://localhost:5171/v2.5.0"
   });
 
   const nodeApi = new API.NodeApi(config);

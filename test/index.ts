@@ -1,3 +1,3 @@
-import "../shim";
+import "../src/shim";
 
-import "../lib/*.spec.ts";
+import "../src/lib/*.spec.ts";
