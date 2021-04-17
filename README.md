@@ -47,11 +47,11 @@ api
 
 ## Usage
 
-- [Hash](https://github.com/semuxproject/semux-js/blob/master/lib/Hash.spec.ts)
-- [Key & Signature](https://github.com/semuxproject/semux-js/blob/master/lib/Key.spec.ts)
-- [Transaction Signing, Encoding or Decoding](https://github.com/semuxproject/semux-js/blob/master/lib/Transaction.spec.ts)
-- [Byte Encoder](https://github.com/semuxproject/semux-js/blob/master/lib/SimpleDecoder.spec.ts) / [Byte Decoder](https://github.com/semuxproject/semux-js/blob/master/lib/SimpleDecoder.spec.ts)
-- [API Client](https://github.com/semuxproject/semux-js/blob/master/lib/api/api.spec.ts)
+- [Hash](https://github.com/semuxproject/semux-js/blob/master/src/lib/Hash.spec.ts)
+- [Key & Signature](https://github.com/semuxproject/semux-js/blob/master/src/lib/Key.spec.ts)
+- [Transaction Signing, Encoding or Decoding](https://github.com/semuxproject/semux-js/blob/master/src/lib/Transaction.spec.ts)
+- [Byte Encoder](https://github.com/semuxproject/semux-js/blob/master/src/lib/SimpleDecoder.spec.ts) / [Byte Decoder](https://github.com/semuxproject/semux-js/blob/master/src/lib/SimpleDecoder.spec.ts)
+- [API Client](https://github.com/semuxproject/semux-js/blob/master/src/lib/api/api.spec.ts)
 
 ## Example Applications
 
