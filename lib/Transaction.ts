@@ -206,14 +206,18 @@ function encodeTx(tx: Transaction): Uint8Array {
   const encoder = new SimpleEncoder();
   encoder.writeByte(tx.getNetworkId());
   encoder.writeByte(tx.getType().getCode());
-  encoder.writeBytes(tx.getTo());
+  if(tx.getType().getCode() !== TransactionType.CREATE.getCode()) {
+    encoder.writeBytes(tx.getTo());
+  } else {
+    encoder.writeBytes(new Buffer(20));
+  }
   encoder.writeLong(tx.getValue());
   encoder.writeLong(tx.getFee());
   encoder.writeLong(tx.getNonce());
   encoder.writeLong(tx.getTimestamp());
   encoder.writeBytes(tx.getData());
-
-  const isVM = tx.getType() === TransactionType.CALL || tx.getType() === TransactionType.CREATE;
+  
+  const isVM = tx.getType().getCode() === TransactionType.CALL.getCode() || tx.getType().getCode() === TransactionType.CREATE.getCode();
   if (isVM) {
     encoder.writeLong(tx.getGas());
     encoder.writeLong(tx.getGasPrice());
