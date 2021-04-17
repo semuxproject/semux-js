@@ -7,4 +7,4 @@ services:
       - "5171:5171"
     volumes:
       - ./semux.properties:/semux/config/semux.properties
-      - ./wallet.data:/semux/wallet.data:rw
+      - ./wallet.data:/semux/wallet/wallet.data:rw
