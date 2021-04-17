@@ -27,17 +27,8 @@ jobs:
     script:
     - docker build test/api/ &&
       docker-compose -f test/api/docker-compose.yml up -d --build &&
-      $(npm bin)/wait-on http-get://user:pass@localhost:5171/v2.3.0/info &&
+      $(npm bin)/wait-on http-get://user:pass@localhost:5171/v2.5.0/info &&
       npm run test:api
-  - env: NAME="Linux Browser Tests (Chrome, Firefox, Electron)"
-    addons:
-      chrome: stable
-      firefox: latest
-    before_script:
-      - export DISPLAY=:99.0
-      - sh -e /etc/init.d/xvfb start
-    script:
-      - npm run test:browser
   - env: NAME="Coverage Report"
     script:
       - npm run build:test

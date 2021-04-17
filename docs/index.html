@@ -66,9 +66,8 @@
 					<h1>Semux Javascript SDK</h1>
 				</a>
 				<p><a href="https://www.npmjs.com/package/semux-js"><img src="https://img.shields.io/npm/v/semux-js.svg" alt="NPM Status"></a>
-					<a href="https://travis-ci.org/semuxproject/semux-js"><img src="https://travis-ci.org/semuxproject/semux-js.svg?branch=master" alt="Travis Build Status"></a>
-					<a href="https://coveralls.io/github/semuxproject/semux-js?branch=master"><img src="https://coveralls.io/repos/github/semuxproject/semux-js/badge.svg?branch=master" alt="Coverage Status"></a>
-				<a href="https://automate.browserstack.com/public-build/YlBOaW1nM3A0UnNSeGlWTkJ3dkJmTnFFZWJybGlJTmtENnB1ZStFSlNqbz0tLWIrdjN0TTh5S2lEdlVOSUoyQlRHOXc9PQ==--5c8afe70294da44aa09f8091b6f0c530bc8ec229"><img src="https://automate.browserstack.com/badge.svg?badge_key=YlBOaW1nM3A0UnNSeGlWTkJ3dkJmTnFFZWJybGlJTmtENnB1ZStFSlNqbz0tLWIrdjN0TTh5S2lEdlVOSUoyQlRHOXc9PQ==--5c8afe70294da44aa09f8091b6f0c530bc8ec229" alt="BrowserStack Status"></a></p>
+					<a href="https://travis-ci.com/semuxproject/semux-js"><img src="https://travis-ci.com/semuxproject/semux-js.svg?branch=master" alt="Travis Build Status"></a>
+				<a href="https://coveralls.io/github/semuxproject/semux-js?branch=master"><img src="https://coveralls.io/repos/github/semuxproject/semux-js/badge.svg?branch=master" alt="Coverage Status"></a></p>
 				<p>This library aims to providing javascript utilities for Semux client-side applications, such as web wallet.</p>
 				<p>Visit <a href="https://github.com/semuxproject/semux-js/issues">issues</a> page to see planned features or propose a feature request.</p>
 				<a href="#table-of-contents" id="table-of-contents" style="color: inherit; text-decoration: none;">
@@ -97,7 +96,7 @@
 <span class="hljs-keyword">const</span> api = <span class="hljs-keyword">new</span> NodeApi(<span class="hljs-keyword">new</span> Configuration({
     <span class="hljs-attr">username</span>: <span class="hljs-string">"user"</span>,
     <span class="hljs-attr">password</span>: <span class="hljs-string">"pass"</span>,
-    <span class="hljs-attr">basePath</span>: <span class="hljs-string">"http://localhost:5171/v2.4.0"</span>
+    <span class="hljs-attr">basePath</span>: <span class="hljs-string">"http://localhost:5171/v2.5.0"</span>
 }));
 
 <span class="hljs-comment">// call GET /info API</span>
@@ -124,16 +123,6 @@ api
 						</ul>
 					</li>
 				</ul>
-				<a href="#browser-compatibility" id="browser-compatibility" style="color: inherit; text-decoration: none;">
-					<h2>Browser Compatibility</h2>
-				</a>
-				<ul>
-					<li>Chrome &gt;= 65</li>
-					<li>Firefox &gt;= 59</li>
-					<li>IE &gt;= 11</li>
-					<li>Edge &gt;= 16</li>
-					<li>Safari &gt;= 6</li>
-				</ul>
 				<a href="#development" id="development" style="color: inherit; text-decoration: none;">
 					<h2>Development</h2>
 				</a>
@@ -145,11 +134,6 @@ api
 					<h3>Run Unit Tests</h3>
 				</a>
 				<pre><code>npm <span class="hljs-built_in">test</span></code></pre>
-				<a href="#run-browser-tests" id="run-browser-tests" style="color: inherit; text-decoration: none;">
-					<h3>Run Browser Tests</h3>
-				</a>
-				<p>Browser testing requires Chrome and Firefox installed.</p>
-				<pre><code>npm <span class="hljs-keyword">run</span><span class="bash">-script <span class="hljs-built_in">test</span>:browser</span></code></pre>
 				<a href="#format-source-code" id="format-source-code" style="color: inherit; text-decoration: none;">
 					<h3>Format Source Code</h3>
 				</a>

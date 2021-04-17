@@ -9,6 +9,6 @@ module.exports = {
   plugins: [
     require('rollup-plugin-glob-import')(),
   ].concat(require('./rollup.config').plugins).concat([require('rollup-plugin-istanbul')({
-    exclude: ['**/*.spec.ts', 'node_modules']
+    exclude: ['src/**/*.spec.ts', 'node_modules']
   })]),
 };

@@ -1,9 +1,8 @@
 # Semux Javascript SDK
 
 [![NPM Status](https://img.shields.io/npm/v/semux-js.svg)](https://www.npmjs.com/package/semux-js)
-[![Travis Build Status](https://travis-ci.org/semuxproject/semux-js.svg?branch=master)](https://travis-ci.org/semuxproject/semux-js)
+[![Travis Build Status](https://travis-ci.com/semuxproject/semux-js.svg?branch=master)](https://travis-ci.com/semuxproject/semux-js)
 [![Coverage Status](https://coveralls.io/repos/github/semuxproject/semux-js/badge.svg?branch=master)](https://coveralls.io/github/semuxproject/semux-js?branch=master)
-[![BrowserStack Status](https://automate.browserstack.com/badge.svg?badge_key=YlBOaW1nM3A0UnNSeGlWTkJ3dkJmTnFFZWJybGlJTmtENnB1ZStFSlNqbz0tLWIrdjN0TTh5S2lEdlVOSUoyQlRHOXc9PQ==--5c8afe70294da44aa09f8091b6f0c530bc8ec229)](https://automate.browserstack.com/public-build/YlBOaW1nM3A0UnNSeGlWTkJ3dkJmTnFFZWJybGlJTmtENnB1ZStFSlNqbz0tLWIrdjN0TTh5S2lEdlVOSUoyQlRHOXc9PQ==--5c8afe70294da44aa09f8091b6f0c530bc8ec229)
 
 This library aims to providing javascript utilities for Semux client-side applications, such as web wallet.
 
@@ -36,7 +35,7 @@ const {AccountApi, BlockchainApi, Configuration, DelegateApi, NodeApi, ToolApi, 
 const api = new NodeApi(new Configuration({
     username: "user",
     password: "pass",
-    basePath: "http://localhost:5171/v2.4.0"
+    basePath: "http://localhost:5171/v2.5.0"
 }));
 
 // call GET /info API
@@ -59,14 +58,6 @@ api
 - Web Wallets
   - https://github.com/witoldsz/semux-light
 
-## Browser Compatibility
-
-- Chrome >= 65
-- Firefox >= 59
-- IE >= 11
-- Edge >= 16
-- Safari >= 6
-
 ## Development
 
 ### Install Modules
@@ -79,14 +70,6 @@ npm install
 
 ```
 npm test
-```
-
-### Run Browser Tests
-
-Browser testing requires Chrome and Firefox installed.
-
-```
-npm run-script test:browser
 ```
 
 ### Format Source Code

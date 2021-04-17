@@ -7,7 +7,7 @@
     "typeCheck": true
   },
   "linterOptions": {
-    "exclude": ["lib/api/*"]
+    "exclude": ["src/lib/api/*"]
   },
   "rules": {
     "no-bitwise": false,

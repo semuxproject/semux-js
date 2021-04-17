@@ -1,4 +1,3 @@
-[submodule "semux"]
-	path = semux
+[submodule "semux-core"]
+	path = semux-core
 	url = https://github.com/semuxproject/semux-core.git
-	branch = master

@@ -1,2 +1,2 @@
-import "../../shim";
-import "../../lib/api/*.spec.ts";
+import "../../src/shim";
+import "../../src/lib/api/*.spec.ts";
