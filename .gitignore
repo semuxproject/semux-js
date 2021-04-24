@@ -63,3 +63,7 @@ yarn-error.log
 .rpt2_cache
 test/**/*.js
 test/**/*.js.map
+
+
+# The binaries
+dist/
